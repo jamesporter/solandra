@@ -1,13 +1,11 @@
 import React, { useState } from "react"
 import Canvas from "./../Canvas"
 import SelectFromChoice from "./../components/SelectFromChoice"
-import SelectFromOptions from "./../components/SelectFromOptions"
 import { aspectRatioChoices, defaultAspectRatio } from "./../config"
 import sketches from "../../sketches"
 import source from "../examples.json"
 import SyntaxHighlighter from "react-syntax-highlighter"
-import { getNumber, setNumber, getSketchIdx, setSketchIdxParam } from "../util"
-import Spacer from "../components/Spacer"
+import { getNumber, setNumber, getSketchIdx } from "../util"
 import Flex from "../components/Flex"
 import { Link } from "gatsby"
 import Header from "../components/Header"
@@ -23,17 +21,6 @@ function ViewSingle() {
 
   const [showSource, setShowSource] = useState(false)
   const [isPlaying, setPlaying] = useState(false)
-  const goToPrev = () => {
-    let nextNo = sketchNo - 1
-    if (nextNo < 0) nextNo = sketches.length - 1
-    setSketchIdxParam(nextNo)
-  }
-  const goToNext = () => {
-    let nextNo = sketchNo + 1
-    if (nextNo >= sketches.length) nextNo = 0
-    setSketchIdxParam(nextNo)
-  }
-
   const [aspectRatio, setAspectRatio] = useState(defaultAspectRatio)
 
   const [seed, setSeed] = useState(getNumber(SEED_KEY) || 1)
@@ -46,6 +33,53 @@ function ViewSingle() {
   return (
     <>
       <Header />
+      <div className="bg-gray-700 px-2 py-4 flex flex-row">
+        <button
+          className={`bg-gray-500 hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2`}
+          onClick={updateSeed}
+          title="Refresh"
+        >
+          ↻
+        </button>
+
+        <button
+          className={`${
+            isPlaying ? "bg-teal-700" : "bg-gray-500"
+          } hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2 items-center`}
+          onClick={() => setPlaying(!isPlaying)}
+          title={isPlaying ? "Pause" : "Play"}
+        >
+          {isPlaying ? "Pause" : "Play"}
+        </button>
+
+        <Flex />
+
+        <SelectFromChoice
+          value={aspectRatio}
+          choices={aspectRatioChoices}
+          onSelect={setAspectRatio}
+          tailwindContainerClasses="hidden md:flex"
+        />
+
+        <Flex />
+
+        <button
+          className={`${
+            showSource ? "bg-teal-700" : "bg-gray-500"
+          } hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2 items-center`}
+          onClick={() => setShowSource(!showSource)}
+          title="Toggle Source Code"
+        >
+          Source Code
+        </button>
+
+        <Link
+          to={`/export?sketch=${sketchNo}`}
+          className="bg-teal-500 hover:bg-teal-700 focus:outline-none focus:shadow-outline px-2 mr-2 py-3 rounded ml-2"
+        >
+          Export
+        </Link>
+      </div>
       <div className="flex-1 flex flex-row items-stretch">
         <Canvas
           aspectRatio={aspectRatio}
@@ -58,6 +92,7 @@ function ViewSingle() {
             className="fixed shadow-md bg-gray-700 overflow-scroll inset-y-0 right-0"
             style={{
               backgroundColor: "hsla(218,17%,20%,0.9)",
+              maxWidth: "95vw",
             }}
           >
             <div className="text-gray-100 px-8 pt-8 flex flex-row justify-between items-center">
@@ -79,85 +114,6 @@ function ViewSingle() {
             </div>
           </div>
         )}
-      </div>
-
-      <div className="bg-gray-300 px-8 py-4 flex flex-row">
-        <button
-          className={`bg-gray-500 hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded mr-2`}
-          onClick={goToPrev}
-          title="Previous"
-        >
-          ←
-        </button>
-
-        <SelectFromOptions
-          options={sketches.map(s => s.name)}
-          onSelect={name => {
-            const idx = sketches.findIndex(s => s.name === name)
-            setNumber(INDEX_KEY, idx)
-            if (idx !== null) setSketchIdxParam(idx)
-          }}
-          selection={sketches[sketchNo].name}
-        />
-
-        <button
-          className={`bg-gray-500 hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2`}
-          onClick={goToNext}
-          title="Next"
-        >
-          →
-        </button>
-
-        <Spacer />
-        <button
-          className={`bg-gray-500 hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2`}
-          onClick={updateSeed}
-          title="Refresh"
-        >
-          ↻
-        </button>
-
-        <Spacer />
-
-        <SelectFromChoice
-          value={aspectRatio}
-          choices={aspectRatioChoices}
-          onSelect={setAspectRatio}
-          tailwindContainerClasses="hidden md:flex"
-        />
-
-        <Flex />
-
-        <button
-          className={`${
-            isPlaying ? "bg-teal-700" : "bg-gray-500"
-          } hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2 hidden md:flex items-center`}
-          onClick={() => setPlaying(!isPlaying)}
-          title={isPlaying ? "Pause" : "Play"}
-        >
-          {isPlaying ? "Pause" : "Play"}
-        </button>
-
-        <Spacer />
-
-        <button
-          className={`${
-            showSource ? "bg-teal-700" : "bg-gray-500"
-          } hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2 hidden md:flex items-center`}
-          onClick={() => setShowSource(!showSource)}
-          title="Toggle Source Code"
-        >
-          Source Code
-        </button>
-
-        <Spacer />
-
-        <Link
-          to={`/export?sketch=${sketchNo}`}
-          className="bg-teal-500 hover:bg-teal-700 focus:outline-none focus:shadow-outline px-2 py-3 rounded ml-2"
-        >
-          Export
-        </Link>
       </div>
     </>
   )

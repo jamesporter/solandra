@@ -1508,7 +1508,7 @@ const arcChart = (p: PlayCanvas) => {
         at,
         a: n,
         a2: n + Math.PI / 32,
-        r: 0.1 + p.poisson(4) * 0.04 + Math.cos(p.t) * 0.025,
+        r: 0.1 + p.poisson(4) * 0.04 + Math.cos(p.t + n) * 0.025,
         r2: 0.05
       })
     );
