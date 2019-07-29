@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.hljs-keyword {
+  color: #f6ad55;
+}
+
+.hljs-string {
+  color: #c6f6d5;
+}
+
+.hljs-variable {
+  color: #81e6d9;
+}
+
+.hljs-function {
+  color: #63b3ed;
+}
+
+.hljs-number {
+  color: #f687b3;
+}
+
+.hljs-built_in {
+  color: #c3dafe;
+}

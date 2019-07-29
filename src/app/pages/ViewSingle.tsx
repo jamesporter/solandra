@@ -5,6 +5,7 @@ import SelectFromOptions from "./../components/SelectFromOptions"
 import { aspectRatioChoices, defaultAspectRatio } from "./../config"
 import sketches from "../../sketches"
 import source from "../examples.json"
+import SyntaxHighlighter from "react-syntax-highlighter"
 import { getNumber, setNumber, getSketchIdx, setSketchIdxParam } from "../util"
 import Spacer from "../components/Spacer"
 import Flex from "../components/Flex"
@@ -71,9 +72,11 @@ function ViewSingle() {
                 Close
               </button>
             </div>
-            <pre className="text-gray-300 p-8">
-              {source[sketches[sketchNo].name]}
-            </pre>
+            <div className="p-8 text-gray-300">
+              <SyntaxHighlighter language="typescript" useInlineStyles={false}>
+                {source[sketches[sketchNo].name]}
+              </SyntaxHighlighter>
+            </div>
           </div>
         )}
       </div>
