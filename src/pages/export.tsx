@@ -2,13 +2,13 @@ import React from "react"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import ViewSingle from "../app/pages/ViewSingle"
+import { Export } from "../app/pages/Export"
 
-const ViewPage = () => (
+const ExportPage = () => (
   <Layout>
     <SEO title="Solandra Algorithmic Art" />
-    <ViewSingle />
+    <Export />
   </Layout>
 )
 
-export default ViewPage
+export default ExportPage

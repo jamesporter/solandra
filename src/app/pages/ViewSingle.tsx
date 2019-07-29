@@ -150,7 +150,7 @@ function ViewSingle() {
         <Spacer />
 
         <Link
-          to={`/export/${sketchNo}`}
+          to={`/export?sketch=${sketchNo}`}
           className="bg-teal-500 hover:bg-teal-700 focus:outline-none focus:shadow-outline px-2 py-3 rounded ml-2"
         >
           Export
