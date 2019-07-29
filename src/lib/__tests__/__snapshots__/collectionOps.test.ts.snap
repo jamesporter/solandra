@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Pairwise should be able to do pairwise on simple array 1`] = `
+Array [
+  Array [
+    1,
+    2,
+  ],
+  Array [
+    2,
+    3,
+  ],
+  Array [
+    3,
+    4,
+  ],
+  Array [
+    4,
+    5,
+  ],
+]
+`;
+
+exports[`Triplewise should be able to do triplewise on simple array 1`] = `
+Array [
+  Array [
+    1,
+    2,
+    3,
+  ],
+  Array [
+    2,
+    3,
+    4,
+  ],
+  Array [
+    3,
+    4,
+    5,
+  ],
+]
+`;
