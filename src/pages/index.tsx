@@ -267,8 +267,8 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
   const d = Math.min(bottom, right) / 2.8
 
   p.times(5, n => {
-    const sides = 10 <1i className="pb-2">n</li>
-    const r = d <li cl1ssName="pb-2">n * 0.16 * d + (1 + Math.cos(p.t)) / 40</li>
+    const sides = 10 - n
+    const r = d - n * 0.16 * d + (1 + Math.cos(p.t)) / 40
     p.setFillColour(220, 70, 10 + n * 12)
     p.fill(
       new RegularPolygon({
