@@ -5,8 +5,11 @@ import SEO from "../components/seo"
 import Canvas from "../app/Canvas"
 import { RegularPolygon, Rect, PlayCanvas } from "../lib"
 import ViewAll from "../app/pages/ViewAll"
-import { H2, H3, P } from "../app/components/Text"
+import { H2, H3, P, H1 } from "../app/components/Text"
+import Container from "../app/components/Container"
 import CodeAndSketch from "../app/components/CodeAndSketch"
+import sketches from "../sketches"
+import { Link } from "gatsby"
 
 const logo = (p: PlayCanvas) => {
   p.background(220, 26, 14)
@@ -26,6 +29,12 @@ const logo = (p: PlayCanvas) => {
     )
   })
 }
+
+const HLink = ({ children, to }) => (
+  <Link className="text-white text-xl px-4 hover:text-blue-300" to={to}>
+    {children}
+  </Link>
+)
 
 const IndexPage = () => (
   <Layout>
@@ -51,9 +60,15 @@ const IndexPage = () => (
         <H2 tw="text-gray-400">
           A simple, modern TypeScript-first Algorithmic Art Tool
         </H2>
+        <div className="flex flex-row justify-center pt-4">
+          <HLink to="/main">Examples</HLink>
+          <HLink to="/viewAll">Slide Show</HLink>
+          <HLink to="/quickstart">Quick Start</HLink>
+        </div>
       </div>
 
-      <div className="flex flex-col m-auto mt-8 px-8" style={{ maxWidth: 800 }}>
+      <Container>
+        <H1>Slideshow</H1>
         <div
           style={{
             width: "100%",
@@ -63,13 +78,59 @@ const IndexPage = () => (
             flexDirection: "column",
             alignSelf: "center",
           }}
-          className="shadow-lg"
+          className="shadow-lg select-none"
         >
           <ViewAll />
         </div>
-        <H3 tw="py-2">Use Arrow keys or click to navigate</H3>
+        <H3 tw="py-2 pb-8">Use Arrow keys or click to navigate</H3>
 
-        <H2>Let's get started</H2>
+        <H1>Principles</H1>
+
+        <P>
+          Opionated, agile (code is easy to change) framework for algorithmic
+          art. See my{" "}
+          <a
+            href="https://www.amimetic.co.uk/art/"
+            className="text-blue-700 underline"
+          >
+            essays
+          </a>{" "}
+          for research/plans that went into this!
+        </P>
+        <ul className="list-inside list-disc">
+          <li className="pb-1">
+            Sketches always have width 1, height depends on aspect ratio.
+          </li>
+          <li className="pb-1">Angles in radians.</li>
+          <li className="pb-1">Points are [number, number].</li>
+          <li className="pb-1">Colours in hsl(a).</li>
+          <li className="pb-1">
+            Leverage TypeScript: you shouldn't need to learn much, autocomplete
+            and type checking should have your back.
+          </li>
+          <li className="pb-1">Not for beginners.</li>
+          <li className="pb-1">
+            Control flow at level of drawing (tiling, partitions etc).
+          </li>
+          <li className="pb-1">Few dependencies/mostly from scratch.</li>
+          <li className="pb-1">Performance is not the goal.</li>
+          <li className="pb-1">
+            Common algorthmic art things (e.g. randomness) should be easy.
+          </li>
+          <li className="pb-1">Should feel fun/powerful.</li>
+          <li className="pb-1">Life is too short to compile things.</li>
+          <li className="pb-1">
+            Rethink APIs e.g. standard bezier curve APIs make absolutely no
+            sense
+          </li>
+          <li className="pb-1">
+            Declarative when possible (especially anything configuration-y),
+            proceedural when pragmatic; make it easy to explore/change your
+            mind.
+          </li>
+        </ul>
+        <H1>Tutorial</H1>
+
         <P>
           Let's make the animated logo thing above to learn about how to use
           Solandra. Let's start with the background. The only way to do colours
@@ -206,8 +267,8 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
   const d = Math.min(bottom, right) / 2.8
 
   p.times(5, n => {
-    const sides = 10 - n
-    const r = d - n * 0.16 * d + (1 + Math.cos(p.t)) / 40
+    const sides = 10 <1i className="pb-2">n</li>
+    const r = d <li cl1ssName="pb-2">n * 0.16 * d + (1 + Math.cos(p.t)) / 40</li>
     p.setFillColour(220, 70, 10 + n * 12)
     p.fill(
       new RegularPolygon({
@@ -221,7 +282,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
           sketch={logo}
           playing
         />
-      </div>
+      </Container>
     </div>
   </Layout>
 )
