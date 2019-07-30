@@ -5,15 +5,19 @@ import { PlayCanvas } from "../../lib"
 
 export default function CodeAndSketch({
   sketch,
+  code,
+  playing = false,
 }: {
   sketch: (p: PlayCanvas) => void
+  code: string
+  playing?: boolean
 }) {
   return (
     <>
-      <Source code={sketch.toString()} />
+      <Source code={code} />
 
-      <div className="flex flex-col m-auto w-64 h-48">
-        <Canvas sketch={sketch} seed={1} />
+      <div className="flex flex-col m-auto w-64 h-48 mb-8 shadow-lg">
+        <Canvas sketch={sketch} seed={1} noShadow playing={playing} />
       </div>
     </>
   )

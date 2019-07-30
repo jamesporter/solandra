@@ -19,5 +19,5 @@ export const H3 = ({ children, tw }: TextProps) => (
 )
 
 export const P = ({ children, tw }: TextProps) => (
-  <h2 className={`${tw || ""} text-md pb-4`}>{children}</h2>
+  <h2 className={`${tw || ""} text-md pb-2`}>{children}</h2>
 )
