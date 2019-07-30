@@ -5,13 +5,14 @@ import statefulSketches from "../../stateful-sketches"
 import StatefulPreview from "../StatefulPreview"
 import Header from "../components/Header"
 import { Link } from "gatsby"
+import { H1 } from "../components/Text"
 
 export function Main() {
   return (
     <>
       <Header />
 
-      <h1 className="text-4xl text-center">Slide Show</h1>
+      <H1>Slide Show</H1>
 
       <p className="text-center max-w-xl m-auto">
         In slideshow like way. Click/tap to advance.
@@ -26,7 +27,7 @@ export function Main() {
         </Link>
       </div>
 
-      <h1 className="text-4xl text-center">Stateless Examples</h1>
+      <H1>Stateless Examples</H1>
       <p className="text-center max-w-xl m-auto">
         Examples of the framework, from very basic and specific examples of one
         part, to more complex examples composing different parts of the
@@ -45,9 +46,7 @@ export function Main() {
           )
         })}
       </div>
-      <h1 className="text-4xl text-center">
-        State(ful) and Interactive Examples
-      </h1>
+      <H1>State(ful) and Interactive Examples</H1>
       <p className="text-center max-w-xl m-auto">
         The below are proof of concepts and are not (at least for now) the main
         focus of this framework.
