@@ -149,7 +149,7 @@ export default function Canvas({
       <canvas
         id="myCanvas"
         ref={canvasRef}
-        className={`${noShadow ? "" : "shadow-md"} bg-white`}
+        className={`${noShadow ? "" : "shadow-md"}`}
       />
     </div>
   )

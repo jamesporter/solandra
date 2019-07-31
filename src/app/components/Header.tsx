@@ -1,5 +1,6 @@
 import React from "react"
 import { Link } from "gatsby"
+import HLink from "./HLink"
 
 export default function Header() {
   return (
@@ -13,18 +14,8 @@ export default function Header() {
         <span className="hidden md:inline text-gray-200">
           A simple, modern TypeScript-first Algorithmic Art Tool
         </span>
-        <Link
-          to="/main"
-          className="underline ml-2 text-blue-600 hover:text-blue-800"
-        >
-          Examples
-        </Link>
-        <Link
-          to="/viewAll"
-          className="underline ml-2 text-blue-600 hover:text-blue-800"
-        >
-          Slideshow
-        </Link>
+        <HLink to="/main">Examples</HLink>
+        <HLink to="/viewAll">Slideshow</HLink>
       </p>
     </div>
   )

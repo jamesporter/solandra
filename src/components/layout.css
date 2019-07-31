@@ -25,3 +25,11 @@
 .hljs-built_in {
   color: #c3dafe;
 }
+
+.main-link {
+  border-bottom: 4px solid rgb(26, 33, 45);
+}
+
+.main-link:hover {
+  border-bottom: 4px solid #90cdf4;
+}

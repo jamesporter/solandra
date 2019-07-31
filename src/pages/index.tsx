@@ -10,6 +10,7 @@ import Container from "../app/components/Container"
 import CodeAndSketch from "../app/components/CodeAndSketch"
 import sketches from "../sketches"
 import { Link } from "gatsby"
+import HLink from "../app/components/HLink"
 
 const logo = (p: PlayCanvas) => {
   p.background(220, 26, 14)
@@ -18,7 +19,7 @@ const logo = (p: PlayCanvas) => {
 
   p.times(5, n => {
     const sides = 10 - n
-    const r = d - n * 0.16 * d + (1 + Math.cos(p.t)) / 40
+    const r = d - n * 0.16 * d + (1 + Math.cos(p.t * 1.5)) / 45
     p.setFillColour(220, 70, 10 + n * 12)
     p.fill(
       new RegularPolygon({
@@ -29,12 +30,6 @@ const logo = (p: PlayCanvas) => {
     )
   })
 }
-
-const HLink = ({ children, to }) => (
-  <Link className="text-white text-xl px-4 hover:text-blue-300" to={to}>
-    {children}
-  </Link>
-)
 
 const IndexPage = () => (
   <Layout>
@@ -53,7 +48,7 @@ const IndexPage = () => (
         <Canvas sketch={logo} seed={1} noShadow playing />
       </div>
 
-      <div className="bg-gray-900 px-8 py-4 flex flex-col">
+      <div className="bg-gray-900 px-8 pt-4 flex flex-col">
         <h1 className="font-bold text-4xl mb-2 mr-4 text-white text-center">
           Solandra
         </h1>
@@ -283,6 +278,29 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
           playing
         />
       </Container>
+
+      <div className="bg-gray-900 px-8 pt-4 flex flex-col">
+        <Container>
+          <p className="text-xl mb-2 mr-4 text-white text-center">
+            Solandra was made by{" "}
+            <a className="text-blue-400 " href="https://www.complexview.com">
+              James Porter
+            </a>
+            .
+          </p>{" "}
+          <p className="text-xl mb-2 mr-4 text-white text-center mb-12">
+            Check out the{" "}
+            <a
+              className="text-blue-400 "
+              href="https://github.com/jamesporter/solandra"
+            >
+              GitHub page
+            </a>{" "}
+            or install with{" "}
+            <span className="text-gray-400 font-mono">npm i solandra</span>
+          </p>
+        </Container>
+      </div>
     </div>
   </Layout>
 )

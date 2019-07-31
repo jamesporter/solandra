@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import Canvas from "./../Canvas"
 import sketches from "../../sketches"
 import useKeypresses from "../hooks/useKeypresses"
+import useInterval from "../hooks/useInterval"
 import { navigate } from "@reach/router"
 
 export const INDEX_KEY = "play-ts.index"
@@ -52,6 +53,8 @@ function ViewAll() {
       goToNext()
     }
   }
+
+  useInterval(goToNext, 2000)
 
   useKeypresses([
     ["Escape", () => navigate("/")],

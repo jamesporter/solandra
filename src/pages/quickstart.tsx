@@ -26,7 +26,8 @@ const QuickStart = () => (
         </li>
         <li className="pb-2">
           On <a href="https://www.npmjs.com/package/typeplates">NPM</a>. Install
-          with npm i solandra or yarn add solandra.
+          with <span className="text-gray-500 font-mono">npm i solandra</span>{" "}
+          or <span className="text-gray-500 font-mono">yarn add solandra</span>.
         </li>
       </ul>
     </Container>

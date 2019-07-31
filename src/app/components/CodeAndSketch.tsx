@@ -16,7 +16,10 @@ export default function CodeAndSketch({
     <>
       <Source code={code} />
 
-      <div className="flex flex-col m-auto w-64 h-48 mb-8 shadow-lg">
+      <div
+        className="flex flex-col m-auto mb-4 shadow-lg"
+        style={{ width: 320, height: 240 }}
+      >
         <Canvas sketch={sketch} seed={1} noShadow playing={playing} />
       </div>
     </>
