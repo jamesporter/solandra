@@ -39,7 +39,7 @@ const whiteList = [
 
 const selectSketches = sketches.filter(s => whiteList.includes(s.name))
 
-function ViewAll() {
+function ViewAll({ playing }: { playing?: boolean }) {
   const [sketchNo, setSketchNo] = useState(0)
 
   const goToNext = () =>
@@ -66,7 +66,7 @@ function ViewAll() {
     <Canvas
       sketch={selectSketches[sketchNo].sketch}
       seed={12}
-      playing={true}
+      playing={playing}
       noShadow
       onClick={(evt, size) => onClick(evt.clientX, evt.clientY, size)}
     />

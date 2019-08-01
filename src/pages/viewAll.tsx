@@ -7,7 +7,7 @@ import ViewAll from "../app/pages/ViewAll"
 const ViewPage = () => (
   <Layout>
     <SEO title="Solandra Algorithmic Art" />
-    <ViewAll />
+    <ViewAll playing />
   </Layout>
 )
 
