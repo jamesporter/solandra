@@ -3,16 +3,14 @@ import React from "react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import Canvas from "../app/Canvas"
-import { RegularPolygon, Rect, PlayCanvas } from "../lib"
+import { RegularPolygon, Rect, SCanvas } from "../lib"
 import ViewAll from "../app/pages/ViewAll"
 import { H2, H3, P, H1 } from "../app/components/Text"
 import Container from "../app/components/Container"
 import CodeAndSketch from "../app/components/CodeAndSketch"
-import sketches from "../sketches"
-import { Link } from "gatsby"
 import HLink from "../app/components/HLink"
 
-const logo = (p: PlayCanvas) => {
+const logo = (p: SCanvas) => {
   p.background(220, 26, 14)
   const { bottom, right, center } = p.meta
   const d = Math.min(bottom, right) / 2.8
@@ -256,7 +254,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
         <P>Okay so let's put everything together and draw our animated logo.</P>
 
         <CodeAndSketch
-          code={`(p: PlayCanvas) => {
+          code={`(p: SCanvas) => {
   p.background(220, 26, 14)
   const { bottom, right, center } = p.meta
   const d = Math.min(bottom, right) / 2.8

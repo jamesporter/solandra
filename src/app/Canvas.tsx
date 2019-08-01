@@ -1,7 +1,7 @@
 import React, { useRef, useLayoutEffect, useState } from "react"
 import useDimensions from "react-use-dimensions"
 import { Sketch } from "../lib/types/play"
-import PlayCanvas from "../lib/play-canvas"
+import SCanvas from "../lib/sCanvas"
 import { setNumber, getNumber } from "./util"
 import { TIME_KEY } from "./pages/ViewSingle"
 
@@ -88,7 +88,7 @@ class CanvasPainterService {
   draw = () => {
     if (this.ctx) {
       this.ctx.clearRect(0, 0, this.width, this.height)
-      const pts = new PlayCanvas(
+      const pts = new SCanvas(
         this.ctx,
         {
           width: this.width,

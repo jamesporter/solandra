@@ -1,5 +1,5 @@
-import { Point2D, Play } from "./lib/types/play"
-import PlayCanvas from "./lib/play-canvas"
+import { Point2D } from "./lib/types/play"
+import SCanvas from "./lib/sCanvas"
 import {
   Path,
   SimplePath,
@@ -19,7 +19,7 @@ import { LinearGradient, RadialGradient } from "./lib/gradient"
 import { zip2, sum, arrayOf } from "./lib/collectionOps"
 import { clamp } from "./lib"
 
-const rainbow = (p: PlayCanvas) => {
+const rainbow = (p: SCanvas) => {
   p.withRandomOrder(
     p.forTiling,
     { n: 20, type: "square", margin: 0.1 },
@@ -39,7 +39,7 @@ const rainbow = (p: PlayCanvas) => {
   )
 }
 
-const horizontal = (p: PlayCanvas) => {
+const horizontal = (p: SCanvas) => {
   p.backgroundGradient(
     new LinearGradient({
       from: [0, 0],
@@ -53,7 +53,7 @@ const horizontal = (p: PlayCanvas) => {
   })
 }
 
-const vertical = (p: PlayCanvas) => {
+const vertical = (p: SCanvas) => {
   p.backgroundGradient(
     new LinearGradient({
       from: [0, 0],
@@ -71,7 +71,7 @@ const vertical = (p: PlayCanvas) => {
   })
 }
 
-const tiling = (p: PlayCanvas) => {
+const tiling = (p: SCanvas) => {
   p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
     p.setStrokeColour(120 + x * 120 + p.t * 50, 90 - 20 * y, 40)
     p.proportionately([
@@ -81,7 +81,7 @@ const tiling = (p: PlayCanvas) => {
   })
 }
 
-const flower = (p: PlayCanvas) => {
+const flower = (p: SCanvas) => {
   const horizonOffset = p.random() * 0.25
   p.backgroundGradient(
     new LinearGradient({
@@ -157,7 +157,7 @@ const flower = (p: PlayCanvas) => {
   )
 }
 
-const curves1 = (p: PlayCanvas) => {
+const curves1 = (p: SCanvas) => {
   p.backgroundGradient(
     new LinearGradient({
       from: [0, 0],
@@ -178,7 +178,7 @@ const curves1 = (p: PlayCanvas) => {
   })
 }
 
-const chaiken = (p: PlayCanvas) => {
+const chaiken = (p: SCanvas) => {
   const { right, bottom } = p.meta
 
   const midX = right / 2
@@ -205,7 +205,7 @@ const chaiken = (p: PlayCanvas) => {
   })
 }
 
-const tilesOfChaiken = (p: PlayCanvas) => {
+const tilesOfChaiken = (p: SCanvas) => {
   p.forTiling({ n: 6, type: "square", margin: 0.1 }, ([x, y], [dX, dY]) => {
     const midX = x + dX / 2
     const midY = y + dY / 2
@@ -232,7 +232,7 @@ const tilesOfChaiken = (p: PlayCanvas) => {
   })
 }
 
-const circle = (p: PlayCanvas) => {
+const circle = (p: SCanvas) => {
   p.times(10, n => {
     p.setStrokeColour(0, 0, n + 10, (0.75 * (n + 1)) / 10)
     const points = p.build(p.aroundCircle, { n: 20 }, pt => p.perturb(pt))
@@ -243,7 +243,7 @@ const circle = (p: PlayCanvas) => {
   })
 }
 
-const arcs = (p: PlayCanvas) => {
+const arcs = (p: SCanvas) => {
   const { bottom, right } = p.meta
 
   const cX = right / 2
@@ -262,7 +262,7 @@ const arcs = (p: PlayCanvas) => {
   })
 }
 
-const noise = (p: PlayCanvas) => {
+const noise = (p: SCanvas) => {
   p.forTiling({ n: 12, margin: 0.1 }, ([x, y], [dX, dY]) => {
     const v = perlin2(x, y) * Math.PI * 2
     p.setFillColour(p.t * 10 + 120 + v * 20, 80, 40)
@@ -277,7 +277,7 @@ const noise = (p: PlayCanvas) => {
   })
 }
 
-const noiseField = (p: PlayCanvas) => {
+const noiseField = (p: SCanvas) => {
   const delta = 0.01
   const s = 8
   p.lineWidth = 0.0025
@@ -300,7 +300,7 @@ const noiseField = (p: PlayCanvas) => {
   })
 }
 
-const rectangles = (p: PlayCanvas) => {
+const rectangles = (p: SCanvas) => {
   p.lineWidth = 0.005
 
   p.forTiling({ n: 12, margin: 0.1 }, ([x, y], [dX, dY]) => {
@@ -315,7 +315,7 @@ const rectangles = (p: PlayCanvas) => {
   })
 }
 
-const rectanglesDivided = (p: PlayCanvas) => {
+const rectanglesDivided = (p: SCanvas) => {
   p.lineWidth = 0.005
   const { right, bottom } = p.meta
 
@@ -337,7 +337,7 @@ const rectanglesDivided = (p: PlayCanvas) => {
     })
 }
 
-const mondrian = (p: PlayCanvas) => {
+const mondrian = (p: SCanvas) => {
   const { right, bottom } = p.meta
 
   let rs = [new Rect({ at: [0.1, 0.1], w: right - 0.2, h: bottom - 0.2 })]
@@ -378,7 +378,7 @@ const mondrian = (p: PlayCanvas) => {
   })
 }
 
-const helloWorld = (p: PlayCanvas) => {
+const helloWorld = (p: SCanvas) => {
   const { bottom, aspectRatio } = p.meta
   p.range(
     {
@@ -416,7 +416,7 @@ const helloWorld = (p: PlayCanvas) => {
   )
 }
 
-const circleText = (p: PlayCanvas) => {
+const circleText = (p: SCanvas) => {
   p.aroundCircle({ radius: 0.25, n: 12 }, ([x, y], i) => {
     p.times(5, n => {
       p.setFillColour(i * 5 + n, 75, 35, 0.2 * n)
@@ -432,7 +432,7 @@ const circleText = (p: PlayCanvas) => {
   })
 }
 
-const scriptLike = (p: PlayCanvas) => {
+const scriptLike = (p: SCanvas) => {
   const { bottom, aspectRatio } = p.meta
 
   p.range({ from: 0.1, to: bottom - 0.1, n: 5 }, m => {
@@ -448,7 +448,7 @@ const scriptLike = (p: PlayCanvas) => {
   })
 }
 
-const doodles = (p: PlayCanvas) => {
+const doodles = (p: SCanvas) => {
   p.forTiling({ n: 7, type: "square", margin: 0.1 }, ([x, y], [dX, dY]) => {
     const center = add([x, y], scale([dX, dY], 0.5))
     let path = Path.startAt(center)
@@ -464,7 +464,7 @@ const doodles = (p: PlayCanvas) => {
   })
 }
 
-const circles = (p: PlayCanvas) => {
+const circles = (p: SCanvas) => {
   p.background(120, 5, 95)
   p.forTiling({ n: 10, type: "square", margin: 0.1 }, (pt, delta) => {
     p.setFillColour(pt[0] * 100, 80, 50)
@@ -480,7 +480,7 @@ const circles = (p: PlayCanvas) => {
   })
 }
 
-const circles2 = (p: PlayCanvas) => {
+const circles2 = (p: SCanvas) => {
   p.background(220, 30, 90)
   p.withRandomOrder(
     p.forTiling,
@@ -502,7 +502,7 @@ const circles2 = (p: PlayCanvas) => {
   )
 }
 
-const ellipses = (p: PlayCanvas) => {
+const ellipses = (p: SCanvas) => {
   p.background(0, 0, 100)
   p.withRandomOrder(
     p.forTiling,
@@ -527,7 +527,7 @@ const ellipses = (p: PlayCanvas) => {
   )
 }
 
-const gradients1 = (p: PlayCanvas) => {
+const gradients1 = (p: SCanvas) => {
   const { right, bottom } = p.meta
   p.setFillGradient(
     new LinearGradient({
@@ -543,7 +543,7 @@ const gradients1 = (p: PlayCanvas) => {
   p.fill(new Rect({ at: [0, 0], w: right, h: bottom }))
 }
 
-const gradients2 = (p: PlayCanvas) => {
+const gradients2 = (p: SCanvas) => {
   const { right, bottom, center } = p.meta
 
   p.setFillGradient(
@@ -562,7 +562,7 @@ const gradients2 = (p: PlayCanvas) => {
   p.fill(new Rect({ at: [0, 0], w: right, h: bottom }))
 }
 
-const gradients3 = (p: PlayCanvas) => {
+const gradients3 = (p: SCanvas) => {
   const { right, bottom, center } = p.meta
   p.setFillGradient(
     new LinearGradient({
@@ -596,7 +596,7 @@ const gradients3 = (p: PlayCanvas) => {
   p.fill(new Rect({ at: [0, 0], w: right, h: bottom }))
 }
 
-const gradients4 = (p: PlayCanvas) => {
+const gradients4 = (p: SCanvas) => {
   const { right, bottom } = p.meta
   const corners: Point2D[] = [[0, 0], [right, 0], [right, bottom], [0, bottom]]
   const hues = [10, 215, 50, 190]
@@ -623,7 +623,7 @@ const gradients4 = (p: PlayCanvas) => {
   }
 }
 
-const gradients5 = (p: PlayCanvas) => {
+const gradients5 = (p: SCanvas) => {
   const { right, bottom } = p.meta
   const corners: Point2D[] = [[0, 0], [right, 0], [right, bottom], [0, bottom]]
   const hues = [10, 215, 50, 190]
@@ -648,7 +648,7 @@ const gradients5 = (p: PlayCanvas) => {
   })
 }
 
-const randomness1 = (p: PlayCanvas) => {
+const randomness1 = (p: SCanvas) => {
   const { bottom } = p.meta
   p.forHorizontal(
     {
@@ -681,7 +681,7 @@ const randomness1 = (p: PlayCanvas) => {
   )
 }
 
-const randomness1b = (p: PlayCanvas) => {
+const randomness1b = (p: SCanvas) => {
   p.times(25, n => {
     p.setFillColour(175 + n, 80, 50, 0.4)
     const values = p
@@ -709,7 +709,7 @@ const randomness1b = (p: PlayCanvas) => {
   })
 }
 
-const randomness1c = (p: PlayCanvas) => {
+const randomness1c = (p: SCanvas) => {
   p.background(205, 20, 85)
   p.forTiling({ n: 20, type: "square", margin: 0.1 }, (_pt, [w], at) => {
     p.setFillColour(195, 70, 40)
@@ -720,7 +720,7 @@ const randomness1c = (p: PlayCanvas) => {
   })
 }
 
-const randomness2 = (p: PlayCanvas) => {
+const randomness2 = (p: SCanvas) => {
   p.background(320, 10, 90)
   p.forTiling({ n: 50, margin: 0.1 }, (pt, delta) => {
     const v = p.poisson(4)
@@ -737,7 +737,7 @@ const randomness2 = (p: PlayCanvas) => {
   })
 }
 
-const sunsetThroughBlinds = (p: PlayCanvas) => {
+const sunsetThroughBlinds = (p: SCanvas) => {
   const { right, bottom, center } = p.meta
 
   p.setFillGradient(
@@ -772,7 +772,7 @@ const sunsetThroughBlinds = (p: PlayCanvas) => {
   })
 }
 
-const curves = (p: PlayCanvas) => {
+const curves = (p: SCanvas) => {
   p.background(215, 30, 20)
   p.forHorizontal({ n: 75 }, ([x, y], [dX, dY]) => {
     const vPts = [0, 0, 0, 0].map(_ => p.poisson(5) + 2)
@@ -790,7 +790,7 @@ const curves = (p: PlayCanvas) => {
   })
 }
 
-const transforms = (p: PlayCanvas) => {
+const transforms = (p: SCanvas) => {
   p.forTiling({ n: 8, type: "square", margin: 0.1 }, ([x, y], [dX, dY]) => {
     p.setFillColour(120 + x * 100, 90, 50)
     p.withTranslation([x + dX / 2, y + dY / 2], () =>
@@ -801,7 +801,7 @@ const transforms = (p: PlayCanvas) => {
   })
 }
 
-const transforms2 = (p: PlayCanvas) => {
+const transforms2 = (p: SCanvas) => {
   p.background(0, 0, 0)
   const baseSize = (1 + Math.sin(2 * p.t)) / 2
   const { bottom: h } = p.meta
@@ -823,7 +823,7 @@ const transforms2 = (p: PlayCanvas) => {
   })
 }
 
-const transforms3 = (p: PlayCanvas) => {
+const transforms3 = (p: SCanvas) => {
   const { bottom: h } = p.meta
   const a = Math.sin(p.t)
   p.forHorizontal({ n: 20, margin: 0.3 }, ([x, y], [dX, dY]) => {
@@ -838,7 +838,7 @@ const transforms3 = (p: PlayCanvas) => {
   })
 }
 
-const time = (p: PlayCanvas) => {
+const time = (p: SCanvas) => {
   p.background(50, 20, 90)
   const times = 4
   p.forHorizontal({ n: 20, margin: 0.1 }, ([x, y], [dX, dY]) => {
@@ -856,7 +856,7 @@ const time = (p: PlayCanvas) => {
   })
 }
 
-const clipping = (p: PlayCanvas) => {
+const clipping = (p: SCanvas) => {
   const { center, bottom, right } = p.meta
   const size = Math.min(bottom, right) * 0.8
   p.background(120 + p.t * 50, 40, 90)
@@ -882,7 +882,7 @@ const clipping = (p: PlayCanvas) => {
   )
 }
 
-const roundedRects = (p: PlayCanvas) => {
+const roundedRects = (p: SCanvas) => {
   p.forTiling(
     { n: 5, type: "proportionate", margin: 0.1 },
     ([x, y], [dX, dY]) => {
@@ -899,7 +899,7 @@ const roundedRects = (p: PlayCanvas) => {
   )
 }
 
-const cards = (p: PlayCanvas) => {
+const cards = (p: SCanvas) => {
   p.forTiling({ n: 6, type: "square", margin: 0.05 }, ([x, y], [dX, dY]) => {
     p.withClipping(
       new RoundedRect({
@@ -933,7 +933,7 @@ const cards = (p: PlayCanvas) => {
   })
 }
 
-const polygons = (p: PlayCanvas) => {
+const polygons = (p: SCanvas) => {
   p.background(330, 70, 30)
   let n = 3
   p.forTiling({ n: 4, type: "square", margin: 0.1 }, ([x, y], [dX, dY]) => {
@@ -950,7 +950,7 @@ const polygons = (p: PlayCanvas) => {
   })
 }
 
-const polygons2 = (p: PlayCanvas) => {
+const polygons2 = (p: SCanvas) => {
   p.background(330, 70, 10)
   p.times(5, n => {
     const sides = 10 - n
@@ -966,7 +966,7 @@ const polygons2 = (p: PlayCanvas) => {
   })
 }
 
-const polygons3 = (p: PlayCanvas) => {
+const polygons3 = (p: SCanvas) => {
   p.background(210, 70, 90)
   p.forHorizontal({ n: 4, margin: 0.1 }, (_pt, [dX], c, i) => {
     p.setFillColour([215, 225, 235, 245][i], 90, 30)
@@ -981,7 +981,7 @@ const polygons3 = (p: PlayCanvas) => {
   })
 }
 
-const stars = (p: PlayCanvas) => {
+const stars = (p: SCanvas) => {
   let n = 3
   p.background(30, 20, 80)
   p.forTiling({ n: 4, type: "square", margin: 0.1 }, ([x, y], [dX, dY]) => {
@@ -998,7 +998,7 @@ const stars = (p: PlayCanvas) => {
   })
 }
 
-const hatching = (p: PlayCanvas) => {
+const hatching = (p: SCanvas) => {
   p.lineWidth = 0.001
   p.range({ from: 1, to: 0.2, n: 4, inclusive: true }, n => {
     p.setStrokeColour(215 - n * 75, 90, 10 + n * 30)
@@ -1014,7 +1014,7 @@ const hatching = (p: PlayCanvas) => {
   })
 }
 
-const hatching2 = (p: PlayCanvas) => {
+const hatching2 = (p: SCanvas) => {
   p.background(0, 0, 10)
   p.lineWidth = 0.005
   const { center } = p.meta
@@ -1038,7 +1038,7 @@ const hatching2 = (p: PlayCanvas) => {
   })
 }
 
-const moreArcs = (p: PlayCanvas) => {
+const moreArcs = (p: SCanvas) => {
   const s = p.meta.right / 4
   p.times(100, () => {
     const a = p.random() * 2 * Math.PI
@@ -1056,7 +1056,7 @@ const moreArcs = (p: PlayCanvas) => {
   })
 }
 
-const evenMoreArcs = (p: PlayCanvas) => {
+const evenMoreArcs = (p: SCanvas) => {
   p.background(30, 50, 90)
   p.times(24, () => {
     const a = p.random() * Math.PI * 2
@@ -1089,7 +1089,7 @@ const evenMoreArcs = (p: PlayCanvas) => {
   })
 }
 
-const curls = (p: PlayCanvas) => {
+const curls = (p: SCanvas) => {
   const baseColour = p.uniformRandomInt({ from: 150, to: 250 })
   p.background(baseColour, 20, 90)
   p.lineStyle = {
@@ -1126,7 +1126,7 @@ const curls = (p: PlayCanvas) => {
   })
 }
 
-const colourWheel = (p: PlayCanvas) => {
+const colourWheel = (p: SCanvas) => {
   const dA = Math.PI / 20
   const dR = 0.05
   for (let a = 0; a < Math.PI * 2; a += dA) {
@@ -1147,7 +1147,7 @@ const colourWheel = (p: PlayCanvas) => {
   }
 }
 
-const colourPaletteGenerator = (p: PlayCanvas) => {
+const colourPaletteGenerator = (p: SCanvas) => {
   const baseColour = p.uniformRandomInt({ from: 0, to: 360 })
 
   p.proportionately([
@@ -1179,7 +1179,7 @@ const colourPaletteGenerator = (p: PlayCanvas) => {
   })
 }
 
-const sunburst = (p: PlayCanvas) => {
+const sunburst = (p: SCanvas) => {
   p.background(0, 0, 10)
 
   const nextLayer = (
@@ -1242,7 +1242,7 @@ const sunburst = (p: PlayCanvas) => {
   })
 }
 
-const stackPolys = (p: PlayCanvas) => {
+const stackPolys = (p: SCanvas) => {
   p.background(320, 10, 90)
   p.lineWidth = 0.0025
   const v = p.uniformRandomInt({ from: 5, to: 8 })
@@ -1263,7 +1263,7 @@ const stackPolys = (p: PlayCanvas) => {
   })
 }
 
-const blob = (p: PlayCanvas) => {
+const blob = (p: SCanvas) => {
   p.background(205, 55, 95)
   const paths = p.build(p.times, 3, n =>
     SimplePath.withPoints(
@@ -1295,7 +1295,7 @@ const blob = (p: PlayCanvas) => {
   })
 }
 
-const fancyTiling = (p: PlayCanvas) => {
+const fancyTiling = (p: SCanvas) => {
   const baseHue = p.uniformRandomInt({ from: 0, to: 360 })
 
   const generateTile = (): ((
@@ -1369,7 +1369,7 @@ const fancyTiling = (p: PlayCanvas) => {
   )
 }
 
-const anotherTiling = (p: PlayCanvas) => {
+const anotherTiling = (p: SCanvas) => {
   p.background(240, 20, 90)
   p.forTiling({ n: 25, margin: 0.1, type: "square" }, (at, [dX, dY]) => {
     p.withTranslation(add(at, scale([dX, dY], 0.5)), () =>
@@ -1387,7 +1387,7 @@ const anotherTiling = (p: PlayCanvas) => {
   })
 }
 
-const lissajous = (p: PlayCanvas) => {
+const lissajous = (p: SCanvas) => {
   p.background(140, 20, 10)
   p.lineWidth = 0.005
   p.setStrokeColour(140, 80, 60, 0.5)
@@ -1407,7 +1407,7 @@ const lissajous = (p: PlayCanvas) => {
   p.draw(sp.chaiken({ n: 3 }))
 }
 
-const sketchingCurves = (p: PlayCanvas) => {
+const sketchingCurves = (p: SCanvas) => {
   p.background(30, 30, 95)
   p.lineWidth = 0.005
   p.setStrokeColour(230, 90, 25, 0.6)
@@ -1432,7 +1432,7 @@ const sketchingCurves = (p: PlayCanvas) => {
   }
 }
 
-const shading = (p: PlayCanvas) => {
+const shading = (p: SCanvas) => {
   const delta = 0.005
   p.background(50, 80, 85)
   p.lineWidth = 0.0005
@@ -1447,7 +1447,7 @@ const shading = (p: PlayCanvas) => {
   })
 }
 
-const shading2 = (p: PlayCanvas) => {
+const shading2 = (p: SCanvas) => {
   const delta = 0.005
   p.background(0, 80, 85)
   p.lineWidth = 0.001
@@ -1466,7 +1466,7 @@ const shading2 = (p: PlayCanvas) => {
   })
 }
 
-const shadingArcs = (p: PlayCanvas) => {
+const shadingArcs = (p: SCanvas) => {
   const { center } = p.meta
   p.backgroundGradient(
     new RadialGradient({
@@ -1498,7 +1498,7 @@ const shadingArcs = (p: PlayCanvas) => {
   })
 }
 
-const arcChart = (p: PlayCanvas) => {
+const arcChart = (p: SCanvas) => {
   p.background(30, 30, 20)
   const { center: at } = p.meta
   p.range({ from: 0, to: Math.PI * 2, inclusive: false, n: 32 }, n => {
@@ -1515,7 +1515,7 @@ const arcChart = (p: PlayCanvas) => {
   })
 }
 
-const bars = (p: PlayCanvas) => {
+const bars = (p: SCanvas) => {
   p.background(150, 30, 20)
   p.forHorizontal({ n: 32, margin: 0.1 }, (at, [dX, dY]) => {
     const v = (dY * (1 + perlin2(at[0] + p.t, at[1]))) / 2
@@ -1530,7 +1530,7 @@ const bars = (p: PlayCanvas) => {
   })
 }
 
-const littleAbstracts = (p: PlayCanvas) => {
+const littleAbstracts = (p: SCanvas) => {
   p.background(200, 10, 20)
   p.forTiling({ n: 8, margin: 0.1, type: "square" }, (at, d, c, i) => {
     p.setFillColour(p.uniformRandomInt({ from: 200, to: 260 }), 50, 50)
@@ -1565,7 +1565,7 @@ const littleAbstracts = (p: PlayCanvas) => {
   })
 }
 
-const recordCoverish = (p: PlayCanvas) => {
+const recordCoverish = (p: SCanvas) => {
   const baseHue = p.uniformRandomInt({ from: 0, to: 360 })
   p.background(baseHue, 80, 10)
   p.withClipping(
@@ -1592,7 +1592,7 @@ const recordCoverish = (p: PlayCanvas) => {
   })
 }
 
-const recordCoverish2 = (p: PlayCanvas) => {
+const recordCoverish2 = (p: SCanvas) => {
   const { bottom, right } = p.meta
   const mainRect = new Rect({
     at: [right / 10, bottom / 10],
@@ -1630,7 +1630,7 @@ const recordCoverish2 = (p: PlayCanvas) => {
   })
 }
 
-const recordCoverish3 = (p: PlayCanvas) => {
+const recordCoverish3 = (p: SCanvas) => {
   p.background(30, 20, 5)
   p.lineWidth = 0.0015
   p.withTranslation(p.meta.center, () => {
@@ -1644,7 +1644,7 @@ const recordCoverish3 = (p: PlayCanvas) => {
   })
 }
 
-const recordCoverish4 = (p: PlayCanvas) => {
+const recordCoverish4 = (p: SCanvas) => {
   p.background(30, 10, 20)
   p.lineWidth = 0.001
   p.setStrokeColour(0, 0, 90)
@@ -1676,7 +1676,7 @@ const recordCoverish4 = (p: PlayCanvas) => {
   })
 }
 
-const sketches: { name: string; sketch: (p: PlayCanvas) => void }[] = [
+const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: tiling, name: "Tiling" },
   { sketch: rainbow, name: "Rainbow Drips" },
   { sketch: horizontal, name: "Horizontal" },

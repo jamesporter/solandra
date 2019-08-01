@@ -1,6 +1,6 @@
 import React, { useRef, useLayoutEffect } from "react"
 import { StatefulSketch } from "../lib/types/play"
-import PlayCanvas from "../lib/play-canvas"
+import SCanvas from "../lib/sCanvas"
 import { Link } from "gatsby"
 
 type CanvasProps<S> = {
@@ -32,7 +32,7 @@ export default function StatefulPreview<S>({
 
     if (ctx) {
       ctx.clearRect(0, 0, size, size)
-      const pts = new PlayCanvas(
+      const pts = new SCanvas(
         ctx,
         {
           width: size,

@@ -33,3 +33,7 @@
 .main-link:hover {
   border-bottom: 4px solid #90cdf4;
 }
+
+.main-link.active-link {
+  border-bottom: 4px solid #90cdf4;
+}

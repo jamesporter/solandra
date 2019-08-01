@@ -1,14 +1,14 @@
 import React from "react"
 import Source from "./Source"
 import Canvas from "../../app/Canvas"
-import { PlayCanvas } from "../../lib"
+import { SCanvas } from "../../lib"
 
 export default function CodeAndSketch({
   sketch,
   code,
   playing = false,
 }: {
-  sketch: (p: PlayCanvas) => void
+  sketch: (p: SCanvas) => void
   code: string
   playing?: boolean
 }) {

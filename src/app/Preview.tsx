@@ -1,6 +1,6 @@
 import React, { useRef, useLayoutEffect } from "react"
 import { Sketch } from "../lib/types/play"
-import PlayCanvas from "../lib/play-canvas"
+import SCanvas from "../lib/sCanvas"
 import { Link } from "gatsby"
 
 type CanvasProps = {
@@ -27,7 +27,7 @@ export default function Preview({ size = 200, sketch, id, name }: CanvasProps) {
 
     if (ctx) {
       ctx.clearRect(0, 0, size, size)
-      const pts = new PlayCanvas(
+      const pts = new SCanvas(
         ctx,
         {
           width: size,

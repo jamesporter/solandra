@@ -7,7 +7,7 @@ import {
 } from "../config"
 import SelectFromChoice from "../components/SelectFromChoice"
 import sketches from "../../sketches"
-import PlayCanvas from "../../lib/play-canvas"
+import SCanvas from "../../lib/sCanvas"
 import { getNumber, getSketchIdx } from "../util"
 import { SEED_KEY, TIME_KEY } from "./ViewSingle"
 import Header from "../components/Header"
@@ -30,7 +30,7 @@ export function Export() {
       (previewRef.current.getContext("2d") as CanvasRenderingContext2D)
     if (ctx) {
       ctx.clearRect(0, 0, w, h)
-      const pts = new PlayCanvas(
+      const pts = new SCanvas(
         ctx,
         {
           width: w,
