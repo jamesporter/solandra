@@ -11,4 +11,13 @@ const HLink = ({ children, to }) => (
   </Link>
 )
 
+export const HUrl = ({ children, to }) => (
+  <a
+    className="text-blue-200 text-xl px-4 hover:text-blue-500 w-48 p-4 main-link text-center"
+    href={to}
+  >
+    {children}
+  </a>
+)
+
 export default HLink
