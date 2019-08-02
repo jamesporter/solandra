@@ -64,6 +64,6 @@ p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
 
 ## Docs
 
-[API Documentation](docs/globals.md) though to be honest you are probably better looking at the [examples here](https://solandra.netlify.com/main), each of which includes source code.
+[API Documentation](docs/README.md) though to be honest you are probably better looking at the [examples here](https://solandra.netlify.com/main), each of which includes source code.
 
 ![An example](samples/2.png)
