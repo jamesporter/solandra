@@ -31,7 +31,7 @@ function ViewSingle() {
   }
 
   return (
-    <>
+    <div className="flex flex-col w-screen h-screen">
       <Header />
       <div className="bg-gray-700 px-2 py-4 flex flex-row">
         <button
@@ -115,7 +115,7 @@ function ViewSingle() {
           </div>
         )}
       </div>
-    </>
+    </div>
   )
 }
 
