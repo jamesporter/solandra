@@ -1,5 +1,5 @@
 import React, { useRef, useLayoutEffect } from "react"
-import { StatefulSketch } from "../lib/types/play"
+import { StatefulSketch } from "../lib/types/sol"
 import SCanvas from "../lib/sCanvas"
 import { Link } from "gatsby"
 

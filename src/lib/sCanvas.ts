@@ -1,4 +1,4 @@
-import { Size, Point2D, Vector2D } from "./types/play"
+import { Size, Point2D, Vector2D } from "./types/sol"
 import { hsla } from "./colours"
 import { Traceable, TextConfig, Text, Rect } from "./path"
 import Prando from "prando"

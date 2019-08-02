@@ -1,4 +1,4 @@
-import { Point2D } from "./lib/types/play"
+import { Point2D } from "./lib/types/sol"
 import SCanvas from "./lib/sCanvas"
 import {
   Path,

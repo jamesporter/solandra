@@ -1,4 +1,4 @@
-import { Point2D, Vector2D } from "./types/play"
+import { Point2D, Vector2D } from "./types/sol"
 import v from "./vectors"
 import { tripleWise } from "./collectionOps"
 
