@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.hljs-comment {
+  color: hsl(214, 32%, 60%);
+}
+
 .hljs-keyword {
   color: #f6ad55;
 }

@@ -285,7 +285,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
           . You can also read the{" "}
           <a
             className="text-blue-700 underline"
-            href="https://github.com/jamesporter/solandra/docs"
+            href="https://github.com/jamesporter/solandra/tree/master/docs"
           >
             docs
           </a>
@@ -318,7 +318,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
             Read the{" "}
             <a
               className="text-blue-400 "
-              href="https://github.com/jamesporter/solandra/docs"
+              href="https://github.com/jamesporter/solandra/tree/master/docs"
             >
               Docs
             </a>

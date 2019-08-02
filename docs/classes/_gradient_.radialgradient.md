@@ -28,7 +28,7 @@
 
 \+ **new RadialGradient**(`config`: object): *[RadialGradient](_gradient_.radialgradient.md)*
 
-*Defined in [gradient.ts:36](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/gradient.ts#L36)*
+*Defined in [gradient.ts:36](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/gradient.ts#L36)*
 
 **Parameters:**
 
@@ -52,7 +52,7 @@ Name | Type |
 
 *Implementation of [Gradientable](../interfaces/_scanvas_.gradientable.md)*
 
-*Defined in [gradient.ts:55](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/gradient.ts#L55)*
+*Defined in [gradient.ts:55](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/gradient.ts#L55)*
 
 **Parameters:**
 

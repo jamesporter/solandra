@@ -113,6 +113,16 @@ export default class SCanvas {
     new Text({ ...config, kind: "fill" }, text).textIn(this.ctx)
   }
 
+  forMargin = (
+    margin: number,
+    callback: (
+      point: Point2D,
+      delta: Vector2D,
+      center: Point2D,
+      i: number
+    ) => void
+  ) => this.forTiling({ n: 1, margin }, callback)
+
   forTiling = (
     config: { n: number; type?: "square" | "proportionate"; margin?: number },
     callback: (
@@ -251,6 +261,12 @@ export default class SCanvas {
 
   times(n: number, callback: (n: number) => void) {
     for (let i = 0; i < n; i++) {
+      callback(i)
+    }
+  }
+
+  downFrom(n: number, callback: (n: number) => void) {
+    for (let i = n; i > 0; i--) {
       callback(i)
     }
   }

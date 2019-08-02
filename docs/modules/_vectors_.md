@@ -25,7 +25,7 @@
 
 ▸ **add**(`__namedParameters`: [number, number], `__namedParameters`: [number, number]): *[Point2D](_types_play_.md#point2d)*
 
-*Defined in [vectors.ts:3](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/vectors.ts#L3)*
+*Defined in [vectors.ts:3](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/vectors.ts#L3)*
 
 **Parameters:**
 
@@ -42,7 +42,7 @@ ___
 
 ▸ **distance**(`a`: [Point2D](_types_play_.md#point2d), `b`: [Point2D](_types_play_.md#point2d)): *number*
 
-*Defined in [vectors.ts:16](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/vectors.ts#L16)*
+*Defined in [vectors.ts:16](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/vectors.ts#L16)*
 
 **Parameters:**
 
@@ -59,7 +59,7 @@ ___
 
 ▸ **dot**(`__namedParameters`: [number, number], `__namedParameters`: [number, number]): *number*
 
-*Defined in [vectors.ts:48](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/vectors.ts#L48)*
+*Defined in [vectors.ts:48](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/vectors.ts#L48)*
 
 **Parameters:**
 
@@ -76,7 +76,7 @@ ___
 
 ▸ **magnitude**(`__namedParameters`: [number, number]): *number*
 
-*Defined in [vectors.ts:13](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/vectors.ts#L13)*
+*Defined in [vectors.ts:13](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/vectors.ts#L13)*
 
 **Parameters:**
 
@@ -92,7 +92,7 @@ ___
 
 ▸ **normalise**(`p`: [Point2D](_types_play_.md#point2d)): *[Point2D](_types_play_.md#point2d)*
 
-*Defined in [vectors.ts:24](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/vectors.ts#L24)*
+*Defined in [vectors.ts:24](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/vectors.ts#L24)*
 
 **Parameters:**
 
@@ -108,7 +108,7 @@ ___
 
 ▸ **pointAlong**(`a`: [Point2D](_types_play_.md#point2d), `b`: [Point2D](_types_play_.md#point2d), `proportion`: number): *[Point2D](_types_play_.md#point2d)*
 
-*Defined in [vectors.ts:40](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/vectors.ts#L40)*
+*Defined in [vectors.ts:40](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/vectors.ts#L40)*
 
 **Parameters:**
 
@@ -126,7 +126,7 @@ ___
 
 ▸ **polarToCartesian**(`__namedParameters`: [number, number], `radius`: number, `angle`: number): *[Point2D](_types_play_.md#point2d)*
 
-*Defined in [vectors.ts:34](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/vectors.ts#L34)*
+*Defined in [vectors.ts:34](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/vectors.ts#L34)*
 
 **Parameters:**
 
@@ -144,7 +144,7 @@ ___
 
 ▸ **rotate**(`__namedParameters`: [number, number], `a`: number): *[Point2D](_types_play_.md#point2d)*
 
-*Defined in [vectors.ts:19](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/vectors.ts#L19)*
+*Defined in [vectors.ts:19](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/vectors.ts#L19)*
 
 **Parameters:**
 
@@ -161,7 +161,7 @@ ___
 
 ▸ **scale**(`__namedParameters`: [number, number], `scale`: number): *[Point2D](_types_play_.md#point2d)*
 
-*Defined in [vectors.ts:29](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/vectors.ts#L29)*
+*Defined in [vectors.ts:29](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/vectors.ts#L29)*
 
 **Parameters:**
 
@@ -178,7 +178,7 @@ ___
 
 ▸ **subtract**(`__namedParameters`: [number, number], `__namedParameters`: [number, number]): *[Point2D](_types_play_.md#point2d)*
 
-*Defined in [vectors.ts:8](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/vectors.ts#L8)*
+*Defined in [vectors.ts:8](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/vectors.ts#L8)*
 
 **Parameters:**
 

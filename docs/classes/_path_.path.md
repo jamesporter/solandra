@@ -27,7 +27,7 @@
 
 ▸ **addCurveTo**(`point`: [Point2D](../modules/_types_play_.md#point2d), `config`: [CurveConfig](../modules/_path_.md#curveconfig)): *[Path](_path_.path.md)*
 
-*Defined in [path.ts:127](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/path.ts#L127)*
+*Defined in [path.ts:127](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L127)*
 
 **Parameters:**
 
@@ -44,7 +44,7 @@ ___
 
 ▸ **addLineTo**(`point`: [Point2D](../modules/_types_play_.md#point2d)): *[Path](_path_.path.md)*
 
-*Defined in [path.ts:117](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/path.ts#L117)*
+*Defined in [path.ts:117](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L117)*
 
 **Parameters:**
 
@@ -62,7 +62,7 @@ ___
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:167](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/path.ts#L167)*
+*Defined in [path.ts:167](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L167)*
 
 **Parameters:**
 
@@ -78,7 +78,7 @@ ___
 
 ▸ **startAt**(`point`: [Point2D](../modules/_types_play_.md#point2d)): *[Path](_path_.path.md)*
 
-*Defined in [path.ts:113](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/path.ts#L113)*
+*Defined in [path.ts:113](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L113)*
 
 **Parameters:**
 
