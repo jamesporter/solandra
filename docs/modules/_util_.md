@@ -16,7 +16,7 @@
 
 ▸ **clamp**(`__namedParameters`: object, `n`: number): *number*
 
-*Defined in [util.ts:1](https://github.com/jamesporter/solandra/blob/0595850/src/lib/util.ts#L1)*
+*Defined in [util.ts:1](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/util.ts#L1)*
 
 **Parameters:**
 

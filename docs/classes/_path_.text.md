@@ -18,11 +18,6 @@
 
 * [constructor](_path_.text.md#constructor)
 
-### Properties
-
-* [config](_path_.text.md#private-config)
-* [text](_path_.text.md#private-text)
-
 ### Methods
 
 * [textIn](_path_.text.md#textin)
@@ -33,7 +28,7 @@
 
 \+ **new Text**(`config`: [TextConfigWithKind](../modules/_path_.md#textconfigwithkind), `text`: string): *[Text](_path_.text.md)*
 
-*Defined in [path.ts:678](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L678)*
+*Defined in [path.ts:678](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/path.ts#L678)*
 
 Text is always vertically aligned
 By default is fixed (specified vertcial font size) but can choose fitted, then will fit horizontally to size
@@ -47,24 +42,6 @@ Name | Type | Description |
 
 **Returns:** *[Text](_path_.text.md)*
 
-## Properties
-
-### `Private` config
-
-• **config**: *[TextConfigWithKind](../modules/_path_.md#textconfigwithkind)*
-
-*Defined in [path.ts:684](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L684)*
-
-Configuration
-
-___
-
-### `Private` text
-
-• **text**: *string*
-
-*Defined in [path.ts:684](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L684)*
-
 ## Methods
 
 ###  textIn
@@ -73,7 +50,7 @@ ___
 
 *Implementation of [Textable](../interfaces/_path_.textable.md)*
 
-*Defined in [path.ts:686](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L686)*
+*Defined in [path.ts:686](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/path.ts#L686)*
 
 **Parameters:**
 

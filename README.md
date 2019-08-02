@@ -60,10 +60,10 @@ p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
 })
 ```
 
-![An example](/samples/1.png)
+![An example](samples/1.png)
 
 ## Docs
 
-[API Documentation](/docs/globals.md) though to be honest you are probably better looking at the [examples here](https://solandra.netlify.com/main), each of which includes source code.
+[API Documentation](docs/globals.md) though to be honest you are probably better looking at the [examples here](https://solandra.netlify.com/main), each of which includes source code.
 
-![An example](/samples/2.png)
+![An example](samples/2.png)

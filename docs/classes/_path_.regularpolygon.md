@@ -18,10 +18,6 @@
 
 * [constructor](_path_.regularpolygon.md#constructor)
 
-### Properties
-
-* [config](_path_.regularpolygon.md#private-config)
-
 ### Methods
 
 * [traceIn](_path_.regularpolygon.md#tracein)
@@ -32,7 +28,7 @@
 
 \+ **new RegularPolygon**(`config`: object): *[RegularPolygon](_path_.regularpolygon.md)*
 
-*Defined in [path.ts:501](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L501)*
+*Defined in [path.ts:501](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/path.ts#L501)*
 
 **Parameters:**
 
@@ -47,24 +43,6 @@ Name | Type |
 
 **Returns:** *[RegularPolygon](_path_.regularpolygon.md)*
 
-## Properties
-
-### `Private` config
-
-• **config**: *object*
-
-*Defined in [path.ts:503](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L503)*
-
-#### Type declaration:
-
-* **a**? : *undefined | number*
-
-* **at**: *[Point2D](../modules/_types_play_.md#point2d)*
-
-* **n**: *number*
-
-* **r**: *number*
-
 ## Methods
 
 ###  traceIn
@@ -73,7 +51,7 @@ Name | Type |
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:516](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L516)*
+*Defined in [path.ts:516](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/path.ts#L516)*
 
 **Parameters:**
 

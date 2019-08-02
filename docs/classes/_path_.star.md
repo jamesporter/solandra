@@ -18,10 +18,6 @@
 
 * [constructor](_path_.star.md#constructor)
 
-### Properties
-
-* [config](_path_.star.md#private-config)
-
 ### Methods
 
 * [traceIn](_path_.star.md#tracein)
@@ -32,7 +28,7 @@
 
 \+ **new Star**(`config`: object): *[Star](_path_.star.md)*
 
-*Defined in [path.ts:537](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L537)*
+*Defined in [path.ts:537](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/path.ts#L537)*
 
 **Parameters:**
 
@@ -48,26 +44,6 @@ Name | Type |
 
 **Returns:** *[Star](_path_.star.md)*
 
-## Properties
-
-### `Private` config
-
-• **config**: *object*
-
-*Defined in [path.ts:539](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L539)*
-
-#### Type declaration:
-
-* **a**? : *undefined | number*
-
-* **at**: *[Point2D](../modules/_types_play_.md#point2d)*
-
-* **n**: *number*
-
-* **r**: *number*
-
-* **r2**? : *undefined | number*
-
 ## Methods
 
 ###  traceIn
@@ -76,7 +52,7 @@ Name | Type |
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:553](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L553)*
+*Defined in [path.ts:553](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/path.ts#L553)*
 
 **Parameters:**
 

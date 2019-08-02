@@ -18,10 +18,6 @@
 
 * [constructor](_gradient_.radialgradient.md#constructor)
 
-### Properties
-
-* [config](_gradient_.radialgradient.md#private-config)
-
 ### Methods
 
 * [gradient](_gradient_.radialgradient.md#gradient)
@@ -32,7 +28,7 @@
 
 \+ **new RadialGradient**(`config`: object): *[RadialGradient](_gradient_.radialgradient.md)*
 
-*Defined in [gradient.ts:36](https://github.com/jamesporter/solandra/blob/0595850/src/lib/gradient.ts#L36)*
+*Defined in [gradient.ts:36](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/gradient.ts#L36)*
 
 **Parameters:**
 
@@ -48,26 +44,6 @@ Name | Type |
 
 **Returns:** *[RadialGradient](_gradient_.radialgradient.md)*
 
-## Properties
-
-### `Private` config
-
-• **config**: *object*
-
-*Defined in [gradient.ts:38](https://github.com/jamesporter/solandra/blob/0595850/src/lib/gradient.ts#L38)*
-
-#### Type declaration:
-
-* **colours**: *[number, object][]*
-
-* **end**: *[Point2D](../modules/_types_play_.md#point2d)*
-
-* **rEnd**: *number*
-
-* **rStart**: *number*
-
-* **start**: *[Point2D](../modules/_types_play_.md#point2d)*
-
 ## Methods
 
 ###  gradient
@@ -76,7 +52,7 @@ Name | Type |
 
 *Implementation of [Gradientable](../interfaces/_scanvas_.gradientable.md)*
 
-*Defined in [gradient.ts:55](https://github.com/jamesporter/solandra/blob/0595850/src/lib/gradient.ts#L55)*
+*Defined in [gradient.ts:55](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/gradient.ts#L55)*
 
 **Parameters:**
 
