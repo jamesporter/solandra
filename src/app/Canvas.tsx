@@ -1,6 +1,6 @@
 import React, { useRef, useLayoutEffect, useState } from "react"
 import useDimensions from "react-use-dimensions"
-import { Sketch } from "../lib/types/play"
+import { Sketch } from "../lib/types/sol"
 import SCanvas from "../lib/sCanvas"
 import { setNumber, getNumber } from "./util"
 import { TIME_KEY } from "./pages/ViewSingle"

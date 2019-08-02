@@ -1,6 +1,6 @@
 import React, { useRef, useLayoutEffect, useState } from "react"
 import useDimensions from "react-use-dimensions"
-import { StatefulSketch } from "../lib/types/play"
+import { StatefulSketch } from "../lib/types/sol"
 import SCanvas from "../lib/sCanvas"
 import { getNumber } from "./util"
 import { TIME_KEY } from "./pages/ViewSingle"

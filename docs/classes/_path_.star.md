@@ -28,7 +28,7 @@
 
 \+ **new Star**(`config`: object): *[Star](_path_.star.md)*
 
-*Defined in [path.ts:537](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L537)*
+*Defined in [path.ts:537](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L537)*
 
 **Parameters:**
 
@@ -37,7 +37,7 @@
 Name | Type |
 ------ | ------ |
 `a?` | undefined \| number |
-`at` | [Point2D](../modules/_types_play_.md#point2d) |
+`at` | [Point2D](../modules/_types_sol_.md#point2d) |
 `n` | number |
 `r` | number |
 `r2?` | undefined \| number |
@@ -52,7 +52,7 @@ Name | Type |
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:553](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L553)*
+*Defined in [path.ts:553](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L553)*
 
 **Parameters:**
 

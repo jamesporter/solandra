@@ -20,7 +20,7 @@
 
 Ƭ **Colour**: *string*
 
-*Defined in [colours.ts:1](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/colours.ts#L1)*
+*Defined in [colours.ts:1](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/colours.ts#L1)*
 
 ## Functions
 
@@ -28,7 +28,7 @@
 
 ▸ **hsla**(`h`: number, `s`: number, `l`: number, `a`: number): *[Colour](_colours_.md#colour)*
 
-*Defined in [colours.ts:9](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/colours.ts#L9)*
+*Defined in [colours.ts:9](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/colours.ts#L9)*
 
 **Parameters:**
 

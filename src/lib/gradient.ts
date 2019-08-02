@@ -1,5 +1,5 @@
 import { Gradientable } from "./sCanvas"
-import { Point2D } from "./types/play"
+import { Point2D } from "./types/sol"
 import { hsla } from "./colours"
 
 export class LinearGradient implements Gradientable {
