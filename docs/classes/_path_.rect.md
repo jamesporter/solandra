@@ -35,7 +35,7 @@
 
 \+ **new Rect**(`config`: object): *[Rect](_path_.rect.md)*
 
-*Defined in [path.ts:304](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/path.ts#L304)*
+*Defined in [path.ts:304](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L304)*
 
 **Parameters:**
 
@@ -55,7 +55,7 @@ Name | Type |
 
 • **at**: *[Point2D](../modules/_types_play_.md#point2d)*
 
-*Defined in [path.ts:302](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/path.ts#L302)*
+*Defined in [path.ts:302](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L302)*
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 • **h**: *number*
 
-*Defined in [path.ts:304](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/path.ts#L304)*
+*Defined in [path.ts:304](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L304)*
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 • **w**: *number*
 
-*Defined in [path.ts:303](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/path.ts#L303)*
+*Defined in [path.ts:303](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L303)*
 
 ## Methods
 
@@ -79,7 +79,7 @@ ___
 
 ▸ **split**(`config`: object): *[Rect](_path_.rect.md)[]*
 
-*Defined in [path.ts:318](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/path.ts#L318)*
+*Defined in [path.ts:318](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L318)*
 
 **Parameters:**
 
@@ -100,7 +100,7 @@ ___
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:314](https://github.com/jamesporter/solandra/blob/50bf90a/src/lib/path.ts#L314)*
+*Defined in [path.ts:314](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L314)*
 
 **Parameters:**
 

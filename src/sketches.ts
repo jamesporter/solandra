@@ -1715,18 +1715,34 @@ const isometricExample2 = (p: SCanvas) => {
     const iso = isoTransform(0.05 * bottom)
     p.downFrom(10, n => {
       p.downFrom(10, m => {
-        const sp = SimplePath.withPoints([])
+        let sp = SimplePath.withPoints([])
         const h = clamp({ from: -3, to: 6 }, p.poisson(4) - 3)
+        sp.addPoint(iso([n, h, m]))
+        sp.addPoint(iso([n + 1, h, m]))
+        sp.addPoint(iso([n + 1, h, m + 1]))
+        sp.addPoint(iso([n, h, m + 1]))
+        sp.close()
+        p.setFillColour(10 + h * 10, 100, 70)
+        p.fill(sp)
+
+        sp = SimplePath.withPoints([])
+        sp.addPoint(iso([n, h, m + 1]))
+        sp.addPoint(iso([n, h - 1, m + 1]))
+        sp.addPoint(iso([n, h - 1, m]))
+        sp.addPoint(iso([n, h, m]))
+        sp.close()
+        p.setFillColour(10 + h * 10, 75, 60)
+        p.fill(sp)
+
+        sp = SimplePath.withPoints([])
         sp.addPoint(iso([n, h, m]))
         sp.addPoint(iso([n + 1, h, m]))
         sp.addPoint(iso([n + 1, h, m + 1]))
         sp.addPoint(iso([n, h, m + 1]))
         sp.addPoint(iso([n, h - 1, m + 1]))
         sp.addPoint(iso([n, h - 1, m]))
+        sp.addPoint(iso([n, h, m]))
         sp.close()
-
-        p.setFillColour(10 + h * 10, 80, 65)
-        p.fill(sp)
         p.draw(sp)
       })
     })
@@ -1758,7 +1774,7 @@ const isometricExample3 = (p: SCanvas) => {
         // sp.addPoint(iso([n + 1, h - 1, m + 1]))
         sp.close()
 
-        p.setFillColour(h * 10 + 10 * Math.cos(h * 3), 80, 65)
+        p.setFillColour(h * 10 + 10 * Math.cos(h * 3), 95, 65, 0.9)
         p.fill(sp)
         p.draw(sp)
       })
@@ -1785,7 +1801,7 @@ const isometricExample4 = (p: SCanvas) => {
         sp.addPoint(iso([n + 0.5, h, m + 0.5]))
         sp.close()
 
-        p.setFillColour(h * 10, 80, 65, 0.9)
+        p.setFillColour(h * 10, 100, 75, 0.95)
         p.fill(sp)
         p.draw(sp)
 
@@ -1795,7 +1811,7 @@ const isometricExample4 = (p: SCanvas) => {
         sp2.addPoint(iso([n + 0.5, h, m + 0.5]))
         sp2.close()
 
-        p.setFillColour(h * 10, 40, 65, 0.9)
+        p.setFillColour(h * 10, 60, 75, 0.95)
         p.fill(sp2)
         p.draw(sp2)
       })
