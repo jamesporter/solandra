@@ -3,7 +3,7 @@ import { Link } from "gatsby"
 
 const HLink = ({ children, to }) => (
   <Link
-    className="text-blue-200 text-xl px-4 hover:text-blue-500 w-48 p-4 main-link text-center"
+    className="text-blue-200 text-md px-4 hover:text-blue-500 w-32 p-2 main-link text-center"
     to={to}
     activeClassName="active-link"
   >
@@ -13,7 +13,7 @@ const HLink = ({ children, to }) => (
 
 export const HUrl = ({ children, to }) => (
   <a
-    className="text-blue-200 text-xl px-4 hover:text-blue-500 w-48 p-4 main-link text-center"
+    className="text-blue-200 text-md px-4 hover:text-blue-500 w-32 p-2 main-link text-center"
     href={to}
   >
     {children}

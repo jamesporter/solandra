@@ -28,7 +28,7 @@
 
 \+ **new RadialGradient**(`config`: object): *[RadialGradient](_gradient_.radialgradient.md)*
 
-*Defined in [gradient.ts:36](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/gradient.ts#L36)*
+*Defined in [gradient.ts:36](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/gradient.ts#L36)*
 
 **Parameters:**
 
@@ -37,10 +37,10 @@
 Name | Type |
 ------ | ------ |
 `colours` | [number, object][] |
-`end` | [Point2D](../modules/_types_play_.md#point2d) |
+`end` | [Point2D](../modules/_types_sol_.md#point2d) |
 `rEnd` | number |
 `rStart` | number |
-`start` | [Point2D](../modules/_types_play_.md#point2d) |
+`start` | [Point2D](../modules/_types_sol_.md#point2d) |
 
 **Returns:** *[RadialGradient](_gradient_.radialgradient.md)*
 
@@ -52,7 +52,7 @@ Name | Type |
 
 *Implementation of [Gradientable](../interfaces/_scanvas_.gradientable.md)*
 
-*Defined in [gradient.ts:55](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/gradient.ts#L55)*
+*Defined in [gradient.ts:55](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/gradient.ts#L55)*
 
 **Parameters:**
 

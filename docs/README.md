@@ -15,6 +15,6 @@
 * ["noise"](modules/_noise_.md)
 * ["path"](modules/_path_.md)
 * ["sCanvas"](modules/_scanvas_.md)
-* ["types/play"](modules/_types_play_.md)
+* ["types/sol"](modules/_types_sol_.md)
 * ["util"](modules/_util_.md)
 * ["vectors"](modules/_vectors_.md)

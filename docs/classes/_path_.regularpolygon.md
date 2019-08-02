@@ -28,7 +28,7 @@
 
 \+ **new RegularPolygon**(`config`: object): *[RegularPolygon](_path_.regularpolygon.md)*
 
-*Defined in [path.ts:501](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L501)*
+*Defined in [path.ts:501](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L501)*
 
 **Parameters:**
 
@@ -37,7 +37,7 @@
 Name | Type |
 ------ | ------ |
 `a?` | undefined \| number |
-`at` | [Point2D](../modules/_types_play_.md#point2d) |
+`at` | [Point2D](../modules/_types_sol_.md#point2d) |
 `n` | number |
 `r` | number |
 
@@ -51,7 +51,7 @@ Name | Type |
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:516](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L516)*
+*Defined in [path.ts:516](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L516)*
 
 **Parameters:**
 

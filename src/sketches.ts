@@ -1709,9 +1709,7 @@ const isometricExample2 = (p: SCanvas) => {
   const { bottom, right } = p.meta
   p.lineWidth = 0.01 * bottom
   p.background(30, 20, 85)
-  // make origin a point centred horizontally, but near bottom
   p.withTranslation([right / 2, bottom * 0.9], () => {
-    // 1/200 of width = height of 1 unit, scaled by height
     const iso = isoTransform(0.05 * bottom)
     p.downFrom(10, n => {
       p.downFrom(10, m => {
@@ -1754,9 +1752,7 @@ const isometricExample3 = (p: SCanvas) => {
   p.lineWidth = 0.01 * bottom
   p.background(210, 70, 30)
   p.setStrokeColour(30, 10, 30)
-  // make origin a point centred horizontally, but near bottom
   p.withTranslation([right / 2, bottom * 0.9], () => {
-    // 1/200 of width = height of 1 unit, scaled by height
     const iso = isoTransform(0.05 * bottom)
     p.downFrom(10, n => {
       p.downFrom(10, m => {
@@ -1787,9 +1783,7 @@ const isometricExample4 = (p: SCanvas) => {
   p.lineWidth = 0.005 * bottom
   p.background(340, 100, 40)
   p.setStrokeColour(30, 5, 20)
-  // make origin a point centred horizontally, but near bottom
   p.withTranslation([right / 2, bottom * 0.9], () => {
-    // 1/200 of width = height of 1 unit, scaled by height
     const iso = isoTransform(0.05 * bottom)
     p.downFrom(10, n => {
       p.downFrom(10, m => {
@@ -1814,6 +1808,85 @@ const isometricExample4 = (p: SCanvas) => {
         p.setFillColour(h * 10, 60, 75, 0.95)
         p.fill(sp2)
         p.draw(sp2)
+      })
+    })
+  })
+}
+
+const isometricExample5 = (p: SCanvas) => {
+  const { bottom, right } = p.meta
+  p.lineWidth = 0.005 * bottom
+  p.background(40, 40, 90)
+  p.setStrokeColour(30, 5, 20)
+  // make origin a point centred horizontally, but near bottom
+  p.withTranslation([right / 2, bottom * 0.95], () => {
+    const iso = isoTransform(0.05 * bottom)
+
+    const h = (x, y) => 2 + 5 * perlin2(x / 5 + p.t, y / 10 + p.t * 0.5)
+
+    p.downFrom(11, n => {
+      p.downFrom(11, m => {
+        p.doProportion(0.8, () => {
+          const sp = SimplePath.withPoints([])
+
+          sp.addPoint(iso([n, h(n, m), m]))
+          sp.addPoint(iso([n + 1, h(n + 1, m), m]))
+          sp.addPoint(iso([n + 1, h(n + 1, m + 1), m + 1]))
+          sp.addPoint(iso([n, h(n, m + 1), m + 1]))
+          sp.close()
+
+          p.proportionately([
+            [1, () => p.setFillColour(210, 100, 55 + 2.5 * h(n, m), 0.95)],
+            [1, () => p.setFillColour(0, 80, 50 + 2.5 * h(n, m), 0.95)],
+          ])
+
+          p.fill(sp)
+          p.draw(sp)
+        })
+      })
+    })
+  })
+}
+
+const isometricExample6 = (p: SCanvas) => {
+  const { bottom, right } = p.meta
+  p.lineWidth = 0.005 * bottom
+  p.background(0, 0, 90)
+  p.setStrokeColour(30, 5, 20)
+  // make origin a point centred horizontally, but near bottom
+  p.withTranslation([right / 2, bottom * 0.95], () => {
+    const iso = isoTransform(0.05 * bottom)
+    p.downFrom(11, n => {
+      p.downFrom(11, m => {
+        p.times(3, k => {
+          p.doProportion(1 - (k + 1) / 6, () => {
+            const h = (x, y) =>
+              k * 2 + 2 * perlin2(x / 5 + p.t, y / 10 + p.t * 0.5)
+
+            const sp = SimplePath.withPoints([])
+
+            sp.addPoint(iso([n, h(n, m), m]))
+            sp.addPoint(iso([n + 1, h(n + 1, m), m]))
+            sp.addPoint(iso([n + 1, h(n + 1, m + 1), m + 1]))
+            sp.addPoint(iso([n, h(n, m + 1), m + 1]))
+            sp.close()
+
+            p.proportionately([
+              [
+                1,
+                () =>
+                  p.setFillColour(210, 100, 55 + 2.5 * h(n, m), 0.95 - k / 8),
+              ],
+              [
+                1,
+                () => p.setFillColour(340, 100, 45 + 2.5 * h(n, m), 0.95 - k / 8),
+              ],
+            ])
+
+            p.fill(sp)
+            p.draw(sp)
+          })
+        })
       })
     })
   })
@@ -1892,6 +1965,8 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: isometricExample2, name: "Isometric 2" },
   { sketch: isometricExample3, name: "Isometric 3" },
   { sketch: isometricExample4, name: "Isometric 4" },
+  { sketch: isometricExample5, name: "Isometric 5" },
+  { sketch: isometricExample6, name: "Isometric 6" },
 ]
 
 export default sketches

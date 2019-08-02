@@ -38,7 +38,7 @@ Just an ellipse with width = height
 
 *Overrides [Ellipse](_path_.ellipse.md).[constructor](_path_.ellipse.md#constructor)*
 
-*Defined in [path.ts:486](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L486)*
+*Defined in [path.ts:486](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L486)*
 
 **Parameters:**
 
@@ -47,7 +47,7 @@ Just an ellipse with width = height
 Name | Type |
 ------ | ------ |
 `align?` | "center" \| "topLeft" |
-`at` | [Point2D](../modules/_types_play_.md#point2d) |
+`at` | [Point2D](../modules/_types_sol_.md#point2d) |
 `r` | number |
 
 **Returns:** *[Circle](_path_.circle.md)*
@@ -60,13 +60,13 @@ Name | Type |
 
 *Inherited from [Ellipse](_path_.ellipse.md).[config](_path_.ellipse.md#protected-config)*
 
-*Defined in [path.ts:429](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L429)*
+*Defined in [path.ts:429](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L429)*
 
 #### Type declaration:
 
 * **align**? : *"center" | "topLeft"*
 
-* **at**: *[Point2D](../modules/_types_play_.md#point2d)*
+* **at**: *[Point2D](../modules/_types_sol_.md#point2d)*
 
 * **h**: *number*
 
@@ -82,7 +82,7 @@ Name | Type |
 
 *Inherited from [Ellipse](_path_.ellipse.md)*
 
-*Defined in [path.ts:437](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L437)*
+*Defined in [path.ts:437](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L437)*
 
 **Parameters:**
 

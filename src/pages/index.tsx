@@ -56,8 +56,8 @@ const IndexPage = () => (
         </H2>
         <div className="flex flex-row justify-center pt-4">
           <HLink to="/main">Examples</HLink>
-          <HLink to="/viewAll">Slide Show</HLink>
-          <HLink to="/quickstart">Quick Start</HLink>
+          <HLink to="/viewAll">Slides</HLink>
+          <HLink to="/quickstart">Start</HLink>
         </div>
       </div>
 

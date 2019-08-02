@@ -40,7 +40,7 @@ https://stackoverflow.com/questions/1734745/how-to-create-circle-with-bézier-cu
 
 \+ **new Ellipse**(`config`: object): *[Ellipse](_path_.ellipse.md)*
 
-*Defined in [path.ts:427](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L427)*
+*Defined in [path.ts:427](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L427)*
 
 **Parameters:**
 
@@ -49,7 +49,7 @@ https://stackoverflow.com/questions/1734745/how-to-create-circle-with-bézier-cu
 Name | Type |
 ------ | ------ |
 `align?` | "center" \| "topLeft" |
-`at` | [Point2D](../modules/_types_play_.md#point2d) |
+`at` | [Point2D](../modules/_types_sol_.md#point2d) |
 `h` | number |
 `w` | number |
 
@@ -61,13 +61,13 @@ Name | Type |
 
 • **config**: *object*
 
-*Defined in [path.ts:429](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L429)*
+*Defined in [path.ts:429](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L429)*
 
 #### Type declaration:
 
 * **align**? : *"center" | "topLeft"*
 
-* **at**: *[Point2D](../modules/_types_play_.md#point2d)*
+* **at**: *[Point2D](../modules/_types_sol_.md#point2d)*
 
 * **h**: *number*
 
@@ -81,7 +81,7 @@ Name | Type |
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:437](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L437)*
+*Defined in [path.ts:437](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L437)*
 
 **Parameters:**
 

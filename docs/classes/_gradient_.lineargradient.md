@@ -28,7 +28,7 @@
 
 \+ **new LinearGradient**(`config`: object): *[LinearGradient](_gradient_.lineargradient.md)*
 
-*Defined in [gradient.ts:5](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/gradient.ts#L5)*
+*Defined in [gradient.ts:5](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/gradient.ts#L5)*
 
 **Parameters:**
 
@@ -37,8 +37,8 @@
 Name | Type |
 ------ | ------ |
 `colours` | [number, object][] |
-`from` | [Point2D](../modules/_types_play_.md#point2d) |
-`to` | [Point2D](../modules/_types_play_.md#point2d) |
+`from` | [Point2D](../modules/_types_sol_.md#point2d) |
+`to` | [Point2D](../modules/_types_sol_.md#point2d) |
 
 **Returns:** *[LinearGradient](_gradient_.lineargradient.md)*
 
@@ -50,7 +50,7 @@ Name | Type |
 
 *Implementation of [Gradientable](../interfaces/_scanvas_.gradientable.md)*
 
-*Defined in [gradient.ts:22](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/gradient.ts#L22)*
+*Defined in [gradient.ts:22](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/gradient.ts#L22)*
 
 **Parameters:**
 

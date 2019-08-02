@@ -17,7 +17,7 @@
 
 ▸ **clamp**(`__namedParameters`: object, `n`: number): *number*
 
-*Defined in [util.ts:1](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/util.ts#L1)*
+*Defined in [util.ts:1](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/util.ts#L1)*
 
 **Parameters:**
 
@@ -38,7 +38,7 @@ ___
 
 ▸ **isoTransform**(`height`: number): *`(Anonymous function)`*
 
-*Defined in [util.ts:12](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/util.ts#L12)*
+*Defined in [util.ts:12](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/util.ts#L12)*
 
 **Parameters:**
 

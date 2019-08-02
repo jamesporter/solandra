@@ -45,7 +45,7 @@ function ViewSingle() {
         <button
           className={`${
             isPlaying ? "bg-teal-700" : "bg-gray-500"
-          } hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2 items-center`}
+          } hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2 items-center w-20`}
           onClick={() => setPlaying(!isPlaying)}
           title={isPlaying ? "Pause" : "Play"}
         >

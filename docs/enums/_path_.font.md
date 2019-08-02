@@ -26,7 +26,7 @@
 
 • **Arial**: = "Arial"
 
-*Defined in [path.ts:651](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L651)*
+*Defined in [path.ts:651](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L651)*
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 • **AvantGarde**: = "Avant Garde"
 
-*Defined in [path.ts:660](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L660)*
+*Defined in [path.ts:660](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L660)*
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 • **Bookman**: = "Bookman"
 
-*Defined in [path.ts:659](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L659)*
+*Defined in [path.ts:659](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L659)*
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 • **Courier**: = "Courier"
 
-*Defined in [path.ts:656](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L656)*
+*Defined in [path.ts:656](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L656)*
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 • **CourierNew**: = "Courier New"
 
-*Defined in [path.ts:655](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L655)*
+*Defined in [path.ts:655](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L655)*
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 • **Garamond**: = "Garamond"
 
-*Defined in [path.ts:658](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L658)*
+*Defined in [path.ts:658](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L658)*
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 • **Helvetica**: = "Helvetica"
 
-*Defined in [path.ts:652](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L652)*
+*Defined in [path.ts:652](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L652)*
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 • **Palatino**: = "Palatino"
 
-*Defined in [path.ts:657](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L657)*
+*Defined in [path.ts:657](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L657)*
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 • **System**: = "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif"
 
-*Defined in [path.ts:661](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L661)*
+*Defined in [path.ts:661](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L661)*
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 • **Times**: = "Times"
 
-*Defined in [path.ts:654](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L654)*
+*Defined in [path.ts:654](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L654)*
 
 ___
 
@@ -106,4 +106,4 @@ ___
 
 • **TimesNewRoman**: = "Times New Roman"
 
-*Defined in [path.ts:653](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L653)*
+*Defined in [path.ts:653](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L653)*

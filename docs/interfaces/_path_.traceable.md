@@ -34,7 +34,7 @@
 
 ▸ **traceIn**(`ctx`: `CanvasRenderingContext2D`): *any*
 
-*Defined in [path.ts:6](https://github.com/jamesporter/solandra/blob/57eddd7/src/lib/path.ts#L6)*
+*Defined in [path.ts:6](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L6)*
 
 **Parameters:**
 
