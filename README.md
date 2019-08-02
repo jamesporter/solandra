@@ -19,7 +19,7 @@ Opionated, agile (code is easy to change) framework for algorithmic art. See my 
 - Rethink APIs e.g. standard bezier curve APIs make absolutely no sense
 - Declarative when possible (especially anything configuration-y), proceedural when pragmatic; make it easy to explore/change your mind.
 
-![Examples](samples/samples.png)
+![Examples](/samples/samples.png)
 
 ## Get Started
 
@@ -60,4 +60,10 @@ p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
 })
 ```
 
-![An example](samples/1.png)
+![An example](/samples/1.png)
+
+## Docs
+
+[API Documentation](/docs/docs/globals.md) though to be honest you are probably better looking at the [examples here](https://solandra.netlify.com/main), each of which includes source code.
+
+![An example](/samples/2.png)
