@@ -19,7 +19,7 @@ Opionated, agile (code is easy to change) framework for algorithmic art. See my 
 - Rethink APIs e.g. standard bezier curve APIs make absolutely no sense
 - Declarative when possible (especially anything configuration-y), proceedural when pragmatic; make it easy to explore/change your mind.
 
-![Examples](samples/samples.png)
+![Examples](/samples/samples.png)
 
 ## Get Started
 
@@ -61,3 +61,14 @@ p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
 ```
 
 ![An example](samples/1.png)
+
+## Docs
+
+[API Documentation](docs/README.md) though to be honest you are probably better looking at the [examples here](https://solandra.netlify.com/main), each of which includes source code. If you do want to look at the docs, the main things are:
+
+- [SCanvas](docs/classes/_scanvas_.scanvas.md) the main Solandra class that does drawing and (pseudo)random number generation
+- [Paths](docs/modules/_path_.md) which includes a bunch of pre-made, ready to draw things shapes.
+
+![An example](samples/2.png)
+
+![An example](samples/3.png)

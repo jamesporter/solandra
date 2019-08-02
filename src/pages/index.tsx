@@ -9,6 +9,7 @@ import { H2, H3, P, H1 } from "../app/components/Text"
 import Container from "../app/components/Container"
 import CodeAndSketch from "../app/components/CodeAndSketch"
 import HLink from "../app/components/HLink"
+import { Link } from "gatsby"
 
 const logo = (p: SCanvas) => {
   p.background(220, 26, 14)
@@ -198,7 +199,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
 
         <P>
           Now let's use our tiling. That's a lot of arguments. But it doesn't
-          matter. TypeScript keeps track of them. The are the position, tile
+          matter. TypeScript keeps track of them. They are the position, tile
           size, tile centre and iteration count. We'll use the last one to pick
           a colour.
         </P>
@@ -275,6 +276,21 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
           sketch={logo}
           playing
         />
+
+        <p className="pb-8">
+          Now what?{" "}
+          <Link to="/main" className="text-blue-700 underline">
+            There are loads of examples with source code to learn from
+          </Link>
+          . You can also read the{" "}
+          <a
+            className="text-blue-700 underline"
+            href="https://github.com/jamesporter/solandra/docs"
+          >
+            docs
+          </a>
+          .
+        </p>
       </Container>
 
       <div className="bg-gray-900 px-8 pt-4 flex flex-col">
@@ -286,7 +302,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
             </a>
             .
           </p>{" "}
-          <p className="text-xl mb-2 mr-4 text-white text-center mb-12">
+          <p className="text-xl mb-2 mr-4 text-white text-center">
             Check out the{" "}
             <a
               className="text-blue-400 "
@@ -296,6 +312,16 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
             </a>{" "}
             or install with{" "}
             <span className="text-gray-400 font-mono">npm i solandra</span>
+          </p>
+          <p className="text-xl mb-2 mr-4 text-white text-center mb-12">
+            {" "}
+            Read the{" "}
+            <a
+              className="text-blue-400 "
+              href="https://github.com/jamesporter/solandra/docs"
+            >
+              Docs
+            </a>
           </p>
         </Container>
       </div>
