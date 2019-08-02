@@ -1,6 +1,6 @@
 > **[solandra](../README.md)**
 
-[Globals](../globals.md) / ["gradient"](_gradient_.md) /
+[Globals](../README.md) / ["gradient"](_gradient_.md) /
 
 # External module: "gradient"
 

@@ -1,6 +1,6 @@
 > **[solandra](../README.md)**
 
-[Globals](../globals.md) / ["util"](_util_.md) /
+[Globals](../README.md) / ["util"](_util_.md) /
 
 # External module: "util"
 
@@ -16,7 +16,7 @@
 
 ▸ **clamp**(`__namedParameters`: object, `n`: number): *number*
 
-*Defined in [util.ts:1](https://github.com/jamesporter/solandra/blob/c698086/src/lib/util.ts#L1)*
+*Defined in [util.ts:1](https://github.com/jamesporter/solandra/blob/0595850/src/lib/util.ts#L1)*
 
 **Parameters:**
 

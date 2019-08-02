@@ -1,6 +1,6 @@
 > **[solandra](../README.md)**
 
-[Globals](../globals.md) / ["sCanvas"](_scanvas_.md) /
+[Globals](../README.md) / ["sCanvas"](_scanvas_.md) /
 
 # External module: "sCanvas"
 

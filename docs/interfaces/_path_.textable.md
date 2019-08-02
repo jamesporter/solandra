@@ -1,6 +1,6 @@
 > **[solandra](../README.md)**
 
-[Globals](../globals.md) / ["path"](../modules/_path_.md) / [Textable](_path_.textable.md) /
+[Globals](../README.md) / ["path"](../modules/_path_.md) / [Textable](_path_.textable.md) /
 
 # Interface: Textable
 
@@ -24,7 +24,7 @@
 
 ▸ **textIn**(`ctx`: `CanvasRenderingContext2D`): *any*
 
-*Defined in [path.ts:10](https://github.com/jamesporter/solandra/blob/c698086/src/lib/path.ts#L10)*
+*Defined in [path.ts:10](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L10)*
 
 **Parameters:**
 

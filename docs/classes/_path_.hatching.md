@@ -1,6 +1,6 @@
 > **[solandra](../README.md)**
 
-[Globals](../globals.md) / ["path"](../modules/_path_.md) / [Hatching](_path_.hatching.md) /
+[Globals](../README.md) / ["path"](../modules/_path_.md) / [Hatching](_path_.hatching.md) /
 
 # Class: Hatching
 
@@ -34,7 +34,7 @@ Hatching in a circle around a point, with a radius and delta between lines
 
 \+ **new Hatching**(`config`: object): *[Hatching](_path_.hatching.md)*
 
-*Defined in [path.ts:587](https://github.com/jamesporter/solandra/blob/c698086/src/lib/path.ts#L587)*
+*Defined in [path.ts:587](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L587)*
 
 **Parameters:**
 
@@ -55,7 +55,7 @@ Name | Type |
 
 • **config**: *object*
 
-*Defined in [path.ts:589](https://github.com/jamesporter/solandra/blob/c698086/src/lib/path.ts#L589)*
+*Defined in [path.ts:589](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L589)*
 
 #### Type declaration:
 
@@ -75,7 +75,7 @@ Name | Type |
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:597](https://github.com/jamesporter/solandra/blob/c698086/src/lib/path.ts#L597)*
+*Defined in [path.ts:597](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L597)*
 
 **Parameters:**
 

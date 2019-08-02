@@ -1,6 +1,6 @@
 > **[solandra](../README.md)**
 
-[Globals](../globals.md) / ["path"](../modules/_path_.md) / [Traceable](_path_.traceable.md) /
+[Globals](../README.md) / ["path"](../modules/_path_.md) / [Traceable](_path_.traceable.md) /
 
 # Interface: Traceable
 
@@ -34,7 +34,7 @@
 
 ▸ **traceIn**(`ctx`: `CanvasRenderingContext2D`): *any*
 
-*Defined in [path.ts:6](https://github.com/jamesporter/solandra/blob/c698086/src/lib/path.ts#L6)*
+*Defined in [path.ts:6](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L6)*
 
 **Parameters:**
 

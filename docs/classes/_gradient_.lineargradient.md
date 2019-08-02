@@ -1,6 +1,6 @@
 > **[solandra](../README.md)**
 
-[Globals](../globals.md) / ["gradient"](../modules/_gradient_.md) / [LinearGradient](_gradient_.lineargradient.md) /
+[Globals](../README.md) / ["gradient"](../modules/_gradient_.md) / [LinearGradient](_gradient_.lineargradient.md) /
 
 # Class: LinearGradient
 
@@ -32,7 +32,7 @@
 
 \+ **new LinearGradient**(`config`: object): *[LinearGradient](_gradient_.lineargradient.md)*
 
-*Defined in [gradient.ts:5](https://github.com/jamesporter/solandra/blob/c698086/src/lib/gradient.ts#L5)*
+*Defined in [gradient.ts:5](https://github.com/jamesporter/solandra/blob/0595850/src/lib/gradient.ts#L5)*
 
 **Parameters:**
 
@@ -52,7 +52,7 @@ Name | Type |
 
 • **config**: *object*
 
-*Defined in [gradient.ts:7](https://github.com/jamesporter/solandra/blob/c698086/src/lib/gradient.ts#L7)*
+*Defined in [gradient.ts:7](https://github.com/jamesporter/solandra/blob/0595850/src/lib/gradient.ts#L7)*
 
 #### Type declaration:
 
@@ -70,7 +70,7 @@ Name | Type |
 
 *Implementation of [Gradientable](../interfaces/_scanvas_.gradientable.md)*
 
-*Defined in [gradient.ts:22](https://github.com/jamesporter/solandra/blob/c698086/src/lib/gradient.ts#L22)*
+*Defined in [gradient.ts:22](https://github.com/jamesporter/solandra/blob/0595850/src/lib/gradient.ts#L22)*
 
 **Parameters:**
 

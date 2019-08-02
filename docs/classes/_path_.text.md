@@ -1,6 +1,6 @@
 > **[solandra](../README.md)**
 
-[Globals](../globals.md) / ["path"](../modules/_path_.md) / [Text](_path_.text.md) /
+[Globals](../README.md) / ["path"](../modules/_path_.md) / [Text](_path_.text.md) /
 
 # Class: Text
 
@@ -33,7 +33,7 @@
 
 \+ **new Text**(`config`: [TextConfigWithKind](../modules/_path_.md#textconfigwithkind), `text`: string): *[Text](_path_.text.md)*
 
-*Defined in [path.ts:678](https://github.com/jamesporter/solandra/blob/c698086/src/lib/path.ts#L678)*
+*Defined in [path.ts:678](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L678)*
 
 Text is always vertically aligned
 By default is fixed (specified vertcial font size) but can choose fitted, then will fit horizontally to size
@@ -53,7 +53,7 @@ Name | Type | Description |
 
 • **config**: *[TextConfigWithKind](../modules/_path_.md#textconfigwithkind)*
 
-*Defined in [path.ts:684](https://github.com/jamesporter/solandra/blob/c698086/src/lib/path.ts#L684)*
+*Defined in [path.ts:684](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L684)*
 
 Configuration
 
@@ -63,7 +63,7 @@ ___
 
 • **text**: *string*
 
-*Defined in [path.ts:684](https://github.com/jamesporter/solandra/blob/c698086/src/lib/path.ts#L684)*
+*Defined in [path.ts:684](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L684)*
 
 ## Methods
 
@@ -73,7 +73,7 @@ ___
 
 *Implementation of [Textable](../interfaces/_path_.textable.md)*
 
-*Defined in [path.ts:686](https://github.com/jamesporter/solandra/blob/c698086/src/lib/path.ts#L686)*
+*Defined in [path.ts:686](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L686)*
 
 **Parameters:**
 

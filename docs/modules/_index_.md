@@ -1,5 +1,5 @@
 > **[solandra](../README.md)**
 
-[Globals](../globals.md) / ["index"](_index_.md) /
+[Globals](../README.md) / ["index"](_index_.md) /
 
 # External module: "index"

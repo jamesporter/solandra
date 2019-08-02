@@ -1,6 +1,6 @@
 > **[solandra](../README.md)**
 
-[Globals](../globals.md) / ["path"](../modules/_path_.md) / [Star](_path_.star.md) /
+[Globals](../README.md) / ["path"](../modules/_path_.md) / [Star](_path_.star.md) /
 
 # Class: Star
 
@@ -32,7 +32,7 @@
 
 \+ **new Star**(`config`: object): *[Star](_path_.star.md)*
 
-*Defined in [path.ts:537](https://github.com/jamesporter/solandra/blob/c698086/src/lib/path.ts#L537)*
+*Defined in [path.ts:537](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L537)*
 
 **Parameters:**
 
@@ -54,7 +54,7 @@ Name | Type |
 
 • **config**: *object*
 
-*Defined in [path.ts:539](https://github.com/jamesporter/solandra/blob/c698086/src/lib/path.ts#L539)*
+*Defined in [path.ts:539](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L539)*
 
 #### Type declaration:
 
@@ -76,7 +76,7 @@ Name | Type |
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:553](https://github.com/jamesporter/solandra/blob/c698086/src/lib/path.ts#L553)*
+*Defined in [path.ts:553](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L553)*
 
 **Parameters:**
 

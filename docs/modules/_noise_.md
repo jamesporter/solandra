@@ -1,6 +1,6 @@
 > **[solandra](../README.md)**
 
-[Globals](../globals.md) / ["noise"](_noise_.md) /
+[Globals](../README.md) / ["noise"](_noise_.md) /
 
 # External module: "noise"
 
@@ -39,7 +39,7 @@
   [0, -1, -1]
 ]
 
-*Defined in [noise.ts:13](https://github.com/jamesporter/solandra/blob/c698086/src/lib/noise.ts#L13)*
+*Defined in [noise.ts:13](https://github.com/jamesporter/solandra/blob/0595850/src/lib/noise.ts#L13)*
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 • **gradP**: *any[]* =  new Array(512)
 
-*Defined in [noise.ts:288](https://github.com/jamesporter/solandra/blob/c698086/src/lib/noise.ts#L288)*
+*Defined in [noise.ts:288](https://github.com/jamesporter/solandra/blob/0595850/src/lib/noise.ts#L288)*
 
 ___
 
@@ -312,7 +312,7 @@ ___
   180
 ]
 
-*Defined in [noise.ts:28](https://github.com/jamesporter/solandra/blob/c698086/src/lib/noise.ts#L28)*
+*Defined in [noise.ts:28](https://github.com/jamesporter/solandra/blob/0595850/src/lib/noise.ts#L28)*
 
 ___
 
@@ -320,7 +320,7 @@ ___
 
 • **perm**: *any[]* =  new Array(512)
 
-*Defined in [noise.ts:287](https://github.com/jamesporter/solandra/blob/c698086/src/lib/noise.ts#L287)*
+*Defined in [noise.ts:287](https://github.com/jamesporter/solandra/blob/0595850/src/lib/noise.ts#L287)*
 
 ## Functions
 
@@ -328,7 +328,7 @@ ___
 
 ▸ **fade**(`t`: number): *number*
 
-*Defined in [noise.ts:5](https://github.com/jamesporter/solandra/blob/c698086/src/lib/noise.ts#L5)*
+*Defined in [noise.ts:5](https://github.com/jamesporter/solandra/blob/0595850/src/lib/noise.ts#L5)*
 
 **Parameters:**
 
@@ -344,7 +344,7 @@ ___
 
 ▸ **lerp**(`a`: number, `b`: number, `t`: number): *number*
 
-*Defined in [noise.ts:9](https://github.com/jamesporter/solandra/blob/c698086/src/lib/noise.ts#L9)*
+*Defined in [noise.ts:9](https://github.com/jamesporter/solandra/blob/0595850/src/lib/noise.ts#L9)*
 
 **Parameters:**
 
@@ -362,7 +362,7 @@ ___
 
 ▸ **perlin2**(`ax`: number, `ay`: number): *number*
 
-*Defined in [noise.ts:315](https://github.com/jamesporter/solandra/blob/c698086/src/lib/noise.ts#L315)*
+*Defined in [noise.ts:315](https://github.com/jamesporter/solandra/blob/0595850/src/lib/noise.ts#L315)*
 
 **Parameters:**
 
@@ -379,7 +379,7 @@ ___
 
 ▸ **seedNoise**(`seed`: number): *void*
 
-*Defined in [noise.ts:290](https://github.com/jamesporter/solandra/blob/c698086/src/lib/noise.ts#L290)*
+*Defined in [noise.ts:290](https://github.com/jamesporter/solandra/blob/0595850/src/lib/noise.ts#L290)*
 
 **Parameters:**
 

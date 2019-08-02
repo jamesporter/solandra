@@ -1,6 +1,6 @@
 > **[solandra](../README.md)**
 
-[Globals](../globals.md) / ["sCanvas"](../modules/_scanvas_.md) / [Gradientable](_scanvas_.gradientable.md) /
+[Globals](../README.md) / ["sCanvas"](../modules/_scanvas_.md) / [Gradientable](_scanvas_.gradientable.md) /
 
 # Interface: Gradientable
 
@@ -25,7 +25,7 @@
 
 ▸ **gradient**(`ctx`: `CanvasRenderingContext2D`): *`CanvasGradient`*
 
-*Defined in [sCanvas.ts:7](https://github.com/jamesporter/solandra/blob/c698086/src/lib/sCanvas.ts#L7)*
+*Defined in [sCanvas.ts:7](https://github.com/jamesporter/solandra/blob/0595850/src/lib/sCanvas.ts#L7)*
 
 **Parameters:**
 

@@ -1,6 +1,6 @@
 > **[solandra](../README.md)**
 
-[Globals](../globals.md) / ["path"](../modules/_path_.md) / [RegularPolygon](_path_.regularpolygon.md) /
+[Globals](../README.md) / ["path"](../modules/_path_.md) / [RegularPolygon](_path_.regularpolygon.md) /
 
 # Class: RegularPolygon
 
@@ -32,7 +32,7 @@
 
 \+ **new RegularPolygon**(`config`: object): *[RegularPolygon](_path_.regularpolygon.md)*
 
-*Defined in [path.ts:501](https://github.com/jamesporter/solandra/blob/c698086/src/lib/path.ts#L501)*
+*Defined in [path.ts:501](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L501)*
 
 **Parameters:**
 
@@ -53,7 +53,7 @@ Name | Type |
 
 • **config**: *object*
 
-*Defined in [path.ts:503](https://github.com/jamesporter/solandra/blob/c698086/src/lib/path.ts#L503)*
+*Defined in [path.ts:503](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L503)*
 
 #### Type declaration:
 
@@ -73,7 +73,7 @@ Name | Type |
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:516](https://github.com/jamesporter/solandra/blob/c698086/src/lib/path.ts#L516)*
+*Defined in [path.ts:516](https://github.com/jamesporter/solandra/blob/0595850/src/lib/path.ts#L516)*
 
 **Parameters:**
 

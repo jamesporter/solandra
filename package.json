@@ -50,7 +50,7 @@
     "test": "jest",
     "build:package": "node pre-publish && yarn tsc ./src/lib/index.ts --outDir ./package --lib dom,esnext --target ES2016 --moduleResolution Node -d",
     "build:source": "node extract-source.js",
-    "build:docs": "typedoc --theme markdown --out ./docs ./src/lib"
+    "build:docs": "node pre-docs && yarn typedoc --theme markdown --out ./docs ./src/lib --readme none"
   },
   "repository": {
     "type": "git",
