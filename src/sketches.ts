@@ -17,7 +17,7 @@ import { add, pointAlong, scale, distance } from "./lib/vectors"
 import { perlin2 } from "./lib/noise"
 import { LinearGradient, RadialGradient } from "./lib/gradient"
 import { zip2, sum, arrayOf } from "./lib/collectionOps"
-import { clamp } from "./lib"
+import { clamp, isoTransform } from "./lib"
 
 const rainbow = (p: SCanvas) => {
   p.withRandomOrder(
@@ -1676,6 +1676,99 @@ const recordCoverish4 = (p: SCanvas) => {
   })
 }
 
+const isometricExample = (p: SCanvas) => {
+  const { bottom, right } = p.meta
+  p.background(0, 0, 95)
+  // make origin a point centred horizontally, but near bottom
+  p.withTranslation([right / 2, bottom * 0.8], () => {
+    // 1/200 of width = height of 1 unit
+    const iso = isoTransform(0.005)
+    p.times(10, n => {
+      const sp = SimplePath.withPoints([])
+      p.times(100, m => {
+        // adjust all x,y,z for vertical size: as in isometric all get scaled linearly in vertical direction
+        sp.addPoint(
+          iso([
+            bottom * (10 - n) * 10,
+            bottom * 20 * Math.cos(p.t + (n * 4 + m) / 10),
+            bottom * m,
+          ])
+        )
+      })
+      p.setStrokeColour(0, 0, 95)
+      p.lineWidth = 0.015
+      p.draw(sp)
+      p.setStrokeColour(215 - n * 3, 90, 60)
+      p.lineWidth = 0.005
+      p.draw(sp)
+    })
+  })
+}
+
+const isometricExample2 = (p: SCanvas) => {
+  const { bottom, right } = p.meta
+  p.lineWidth = 0.01 * bottom
+  p.background(30, 20, 85)
+  // make origin a point centred horizontally, but near bottom
+  p.withTranslation([right / 2, bottom * 0.9], () => {
+    // 1/200 of width = height of 1 unit, scaled by height
+    const iso = isoTransform(0.05 * bottom)
+    p.downFrom(10, n => {
+      p.downFrom(10, m => {
+        const sp = SimplePath.withPoints([])
+        const h = clamp({ from: -3, to: 6 }, p.poisson(4) - 3)
+        // adjust all x,y,z for vertical size: as in isometric all get scaled linearly in vertical direction
+        sp.addPoint(iso([n, h, m]))
+        sp.addPoint(iso([n + 1, h, m]))
+        sp.addPoint(iso([n + 1, h, m + 1]))
+        sp.addPoint(iso([n, h, m + 1]))
+        sp.addPoint(iso([n, h - 1, m + 1]))
+        sp.addPoint(iso([n, h - 1, m]))
+        // sp.addPoint(iso([n + 1, h - 1, m + 1]))
+        sp.close()
+
+        p.setFillColour(10 + h * 10, 80, 65)
+        p.fill(sp)
+        p.draw(sp)
+      })
+    })
+  })
+}
+
+const isometricExample3 = (p: SCanvas) => {
+  const { bottom, right } = p.meta
+  p.lineWidth = 0.01 * bottom
+  p.background(210, 70, 30)
+  p.setStrokeColour(30, 10, 30)
+  // make origin a point centred horizontally, but near bottom
+  p.withTranslation([right / 2, bottom * 0.9], () => {
+    // 1/200 of width = height of 1 unit, scaled by height
+    const iso = isoTransform(0.05 * bottom)
+    p.downFrom(10, n => {
+      p.downFrom(10, m => {
+        const sp = SimplePath.withPoints([])
+        const h = clamp(
+          { from: -2, to: 5 },
+          p.poisson(4) - 3 + Math.cos(p.t + n + m)
+        )
+        // adjust all x,y,z for vertical size: as in isometric all get scaled linearly in vertical direction
+        sp.addPoint(iso([n, h, m]))
+        sp.addPoint(iso([n + 1, h, m]))
+        sp.addPoint(iso([n + 1, h, m + 1]))
+        sp.addPoint(iso([n, h, m + 1]))
+        sp.addPoint(iso([n, h - 1, m + 1]))
+        sp.addPoint(iso([n, h - 1, m]))
+        // sp.addPoint(iso([n + 1, h - 1, m + 1]))
+        sp.close()
+
+        p.setFillColour(h * 10 + 10 * Math.cos(h * 3), 80, 65)
+        p.fill(sp)
+        p.draw(sp)
+      })
+    })
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: tiling, name: "Tiling" },
   { sketch: rainbow, name: "Rainbow Drips" },
@@ -1745,6 +1838,9 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: recordCoverish2, name: "Record Cover 2" },
   { sketch: recordCoverish3, name: "Record Cover 3" },
   { sketch: recordCoverish4, name: "Record Cover 4" },
+  { sketch: isometricExample, name: "Isometric" },
+  { sketch: isometricExample2, name: "Isometric 2" },
+  { sketch: isometricExample3, name: "Isometric 3" },
 ]
 
 export default sketches
