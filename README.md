@@ -23,8 +23,8 @@ Opionated, agile (code is easy to change) framework for algorithmic art. See my 
 
 ## Get Started
 
-- Probably best to clone this project to try out as add React powered GUI around stuff but first see: [Live Demo](https://solandra.netlify.com/).
-- On CodeSandbox, quickly get started: [Simple editable sketch](https://codesandbox.io/embed/festive-boyd-db9n3)
+- On CodeSandbox, quickly get started: [Simple editable sketch](https://codesandbox.io/s/simple-solandra-example-2-wy7nx?fontsize=14)
+- Clone [this project](https://github.com/jamesporter/solandra) to try out as add React powered GUI around stuff but first see: [Live Demo](https://solandra.netlify.com/).
 - On [NPM](https://www.npmjs.com/package/solandra). Install with `npm i solandra` or `yarn add solandra`.
 
 Or if you want to play, install gatsby cli, clone this repo and start by
@@ -62,6 +62,8 @@ p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
 
 ![An example](samples/1.png)
 
+![An example](samples/2.png)
+
 ## Docs
 
 [API Documentation](docs/README.md) though to be honest you are probably better looking at the [examples here](https://solandra.netlify.com/main), each of which includes source code. If you do want to look at the docs, the main things are:
@@ -69,6 +71,6 @@ p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
 - [SCanvas](docs/classes/_scanvas_.scanvas.md) the main Solandra class that does drawing and (pseudo)random number generation
 - [Paths](docs/modules/_path_.md) which includes a bunch of pre-made, ready to draw things shapes.
 
-![An example](samples/2.png)
-
 ![An example](samples/3.png)
+
+![An example](samples/4.png)
