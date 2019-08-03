@@ -35,7 +35,7 @@ const QuickStart = () => (
           On CodeSandbox, quickly get started:{" "}
           <a
             className="text-blue-700 underline"
-            href="https://codesandbox.io/embed/festive-boyd-db9n3"
+            href="https://codesandbox.io/s/simple-solandra-example-2-wy7nx?fontsize=14"
           >
             {" "}
             Simple editable sketch
