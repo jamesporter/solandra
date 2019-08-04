@@ -7,7 +7,9 @@ import ViewStateful from "../app/pages/ViewStateful"
 const ViewPage = () => (
   <Layout>
     <SEO title="Solandra Algorithmic Art" />
-    <ViewStateful />
+    <div className="flex flex-col w-screen h-screen">
+      <ViewStateful />
+    </div>
   </Layout>
 )
 
