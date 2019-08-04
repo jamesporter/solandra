@@ -1879,7 +1879,8 @@ const isometricExample6 = (p: SCanvas) => {
               ],
               [
                 1,
-                () => p.setFillColour(340, 100, 45 + 2.5 * h(n, m), 0.95 - k / 8),
+                () =>
+                  p.setFillColour(340, 100, 45 + 2.5 * h(n, m), 0.95 - k / 8),
               ],
             ])
 
@@ -1888,6 +1889,84 @@ const isometricExample6 = (p: SCanvas) => {
           })
         })
       })
+    })
+  })
+}
+
+const isometricExample7 = (p: SCanvas) => {
+  const { bottom, right } = p.meta
+  p.lineWidth = 0.005 * bottom
+  p.background(0, 0, 90)
+  p.setStrokeColour(30, 5, 20)
+  // make origin a point centred horizontally, but near bottom
+  p.withTranslation([right / 2, bottom * 0.95], () => {
+    const iso = isoTransform(0.05 * bottom)
+
+    p.times(7, h => {
+      p.setFillColour(h * 10, 90, 50, 0.95)
+      const sp = SimplePath.withPoints([])
+
+      p.proportionately([
+        [
+          1,
+          () => {
+            sp.addPoint(iso([5, h, 0]))
+            sp.addPoint(iso([0, h, 0]))
+            sp.addPoint(iso([0, h, 1]))
+            sp.addPoint(iso([0, 5, 3]))
+            sp.addPoint(iso([1, 5, 3]))
+            sp.addPoint(iso([1, h, 1]))
+
+            sp.addPoint(iso([4, h, 1]))
+          },
+        ],
+        [
+          1,
+          () => {
+            sp.addPoint(iso([8, h, 1]))
+            sp.addPoint(iso([8, h, 0]))
+            sp.addPoint(iso([8, 0, -2]))
+            sp.addPoint(iso([7, 0, -2]))
+            sp.addPoint(iso([7, h, 0]))
+            sp.addPoint(iso([4, h, 0]))
+            sp.addPoint(iso([4, h, 1]))
+          },
+        ],
+      ])
+
+      sp.addPoint(iso([4, h + 1, 3]))
+
+      p.proportionately([
+        [
+          1,
+          () => {
+            sp.addPoint(iso([4, h + 1, 7]))
+            sp.addPoint(iso([0, h, 7]))
+            sp.addPoint(iso([-2, 0, 7]))
+            sp.addPoint(iso([-2, 0, 8]))
+            sp.addPoint(iso([0, h, 8]))
+            sp.addPoint(iso([5, h + 1, 8]))
+          },
+        ],
+        [
+          1,
+          () => {
+            sp.addPoint(iso([4, h + 1, 10]))
+            sp.addPoint(iso([5, h + 1, 10]))
+            sp.addPoint(iso([9, h + 2, 10]))
+            sp.addPoint(iso([11, 7, 10]))
+            sp.addPoint(iso([11, 7, 9]))
+            sp.addPoint(iso([9, h + 2, 9]))
+            sp.addPoint(iso([4, h + 2, 8]))
+          },
+        ],
+      ])
+
+      sp.addPoint(iso([5, h + 1, 3]))
+      sp.addPoint(iso([5, h, 1]))
+      sp.close()
+      p.fill(sp)
+      p.draw(sp)
     })
   })
 }
@@ -1967,6 +2046,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: isometricExample4, name: "Isometric 4" },
   { sketch: isometricExample5, name: "Isometric 5" },
   { sketch: isometricExample6, name: "Isometric 6" },
+  { sketch: isometricExample7, name: "Isometric Tapes" },
 ]
 
 export default sketches
