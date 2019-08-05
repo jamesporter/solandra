@@ -2080,6 +2080,61 @@ const isometricExample9 = (p: SCanvas) => {
   })
 }
 
+const isometricExample10 = (p: SCanvas) => {
+  p.background(175, 60, 10)
+  const { bottom, right: r } = p.meta
+  p.lineWidth = 0.005 * bottom
+  p.setStrokeColour(0, 0, 90)
+  const tracePoints = (points: Point2D[]) => {
+    const sp = SimplePath.withPoints(points).close()
+    p.draw(sp)
+  }
+
+  const sub3 = (
+    [a, b, c]: [number, number, number],
+    [d, e, f]: [number, number, number]
+  ): [number, number, number] => [a - d, b - e, c - f]
+
+  p.withTranslation([r / 2, bottom * 0.5], () => {
+    const iso = isoTransform(0.2 * bottom)
+
+    const a: [number, number, number] = [
+      Math.cos(p.t) + Math.sin(p.t),
+      1,
+      -Math.sin(p.t) + Math.cos(p.t),
+    ]
+    const b: [number, number, number] = [
+      Math.cos(p.t) - Math.sin(p.t),
+      1,
+      -Math.sin(p.t) - Math.cos(p.t),
+    ]
+    const c: [number, number, number] = [
+      -Math.cos(p.t) - Math.sin(p.t),
+      1,
+      Math.sin(p.t) - Math.cos(p.t),
+    ]
+    const d: [number, number, number] = [
+      -Math.cos(p.t) + Math.sin(p.t),
+      1,
+      Math.sin(p.t) + Math.cos(p.t),
+    ]
+
+    const dH: [number, number, number] = [0, 2, 0]
+
+    tracePoints([
+      iso(sub3(a, dH)),
+      iso(sub3(b, dH)),
+      iso(sub3(c, dH)),
+      iso(sub3(d, dH)),
+    ])
+    tracePoints([iso(a), iso(b), iso(sub3(b, dH)), iso(sub3(a, dH))])
+    tracePoints([iso(b), iso(c), iso(sub3(c, dH)), iso(sub3(b, dH))])
+    tracePoints([iso(c), iso(d), iso(sub3(d, dH)), iso(sub3(c, dH))])
+    tracePoints([iso(d), iso(a), iso(sub3(a, dH)), iso(sub3(d, dH))])
+    tracePoints([iso(a), iso(b), iso(c), iso(d)])
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: tiling, name: "Tiling" },
   { sketch: rainbow, name: "Rainbow Drips" },
@@ -2158,6 +2213,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: isometricExample7, name: "Isometric Tapes" },
   { sketch: isometricExample8, name: "Isometric Fragments" },
   { sketch: isometricExample9, name: "Isometric Cube Examples" },
+  { sketch: isometricExample10, name: "Isometric Rotation" },
 ]
 
 export default sketches
