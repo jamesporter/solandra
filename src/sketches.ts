@@ -2135,6 +2135,115 @@ const isometricExample10 = (p: SCanvas) => {
   })
 }
 
+const painting = (p: SCanvas) => {
+  p.backgroundGradient(
+    new LinearGradient({
+      from: [0, 0],
+      to: [0, p.meta.bottom],
+      colours: [[0, { h: 45, s: 30, l: 95 }], [1, { h: 55, s: 30, l: 90 }]],
+    })
+  )
+  p.forVertical({ n: 100, margin: 0.15 }, ([x, y], [dX, dY]) => {
+    const h = p.gaussian({ mean: dY, sd: (1.5 * dY) / p.meta.bottom })
+    const curveSize = p.gaussian({ sd: 0.35 * p.meta.right })
+    const xOffset = p.gaussian({ sd: dX / 20 })
+
+    const h1 = p.uniformRandomInt({ from: 180, to: 240 })
+    const h2 = p.uniformRandomInt({ from: 0, to: 40 })
+
+    p.setFillGradient(
+      new LinearGradient({
+        from: [x + xOffset, y],
+        to: [x + dX + xOffset, y + dY],
+        colours: [
+          [0, { h: h1, s: 60, l: 65, a: 0 }],
+          [0.05, { h: h1, s: 60, l: 65, a: 0 }],
+          [0.1, { h: h1, s: 60, l: 65, a: 0.9 }],
+          [
+            0.5,
+            {
+              h: p.gaussian({ mean: 10 }) + (h1 + h2) / 2,
+              s: 60,
+              l: 65,
+              a: 0.8,
+            },
+          ],
+          [0.9, { h: h2, s: 60, l: 65, a: 0.9 }],
+          [0.95, { h: h2, s: 60, l: 65, a: 0 }],
+          [1, { h: h2, s: 60, l: 65, a: 0 }],
+        ],
+      })
+    )
+    p.fill(
+      Path.startAt([x, y])
+        .addCurveTo([x + dX, y], { curveSize })
+        .addLineTo([x + dX, y + h])
+        .addCurveTo([x, y + h], { curveSize, polarlity: -1 })
+        .addLineTo([x, y])
+    )
+  })
+}
+
+const painting2 = (p: SCanvas) => {
+  const bh = p.uniformRandomInt({ from: 0, to: 360 })
+  p.backgroundGradient(
+    new LinearGradient({
+      from: [0, 0],
+      to: [0, p.meta.bottom],
+      colours: [
+        [0, { h: bh + 15, s: 30, l: 95 }],
+        [1, { h: bh + 25, s: 30, l: 90 }],
+      ],
+    })
+  )
+  p.forVertical({ n: 100, margin: 0.1 }, ([x, y], [dX, dY], _c, i) => {
+    const h = p.gaussian({ mean: dY, sd: (1.5 * dY) / p.meta.bottom })
+    const curveSize = p.gaussian({ sd: 0.35 * p.meta.right })
+    const xOffset = p.gaussian({ sd: dX / 20 })
+
+    const h1 = p.uniformRandomInt({ from: bh, to: bh + 40 })
+    const h2 = p.uniformRandomInt({ from: bh + 30, to: bh + 70 })
+
+    p.withTranslation(p.meta.center, () => {
+      p.withRotation((i * Math.PI) / 50, () => {
+        p.setFillGradient(
+          new LinearGradient({
+            from: [x + xOffset, y],
+            to: [x + dX + xOffset, y + dY],
+            colours: [
+              [0, { h: h1, s: 60, l: 65, a: 0 }],
+              [0.05, { h: h1, s: 60, l: 65, a: 0 }],
+              [0.1, { h: h1, s: 60, l: 65, a: 0.9 }],
+              [
+                0.5,
+                {
+                  h: p.gaussian({ mean: 10 }) + (h1 + h2) / 2,
+                  s: 60,
+                  l: 65,
+                  a: 0.4,
+                },
+              ],
+              [0.9, { h: h2, s: 60, l: 65, a: 0.9 }],
+              [0.95, { h: h2, s: 60, l: 65, a: 0 }],
+              [1, { h: h2, s: 60, l: 65, a: 0 }],
+            ],
+          })
+        )
+        p.fill(
+          Path.startAt([0, 0])
+            .addCurveTo([dX, 0], { curveSize })
+            .addLineTo([dX, h])
+            .addCurveTo([0, h], {
+              curveSize: curveSize + p.gaussian({ sd: 0.1 }),
+              polarlity: -1,
+            })
+            .addLineTo([0, 0])
+        )
+      })
+    })
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: tiling, name: "Tiling" },
   { sketch: rainbow, name: "Rainbow Drips" },
@@ -2214,6 +2323,8 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: isometricExample8, name: "Isometric Fragments" },
   { sketch: isometricExample9, name: "Isometric Cube Examples" },
   { sketch: isometricExample10, name: "Isometric Rotation" },
+  { sketch: painting, name: "Paint Strokes" },
+  { sketch: painting2, name: "Round Paint Strokes" },
 ]
 
 export default sketches
