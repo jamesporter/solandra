@@ -1902,7 +1902,8 @@ const isometricExample7 = (p: SCanvas) => {
   p.withTranslation([right / 2, bottom * 0.95], () => {
     const iso = isoTransform(0.05 * bottom)
 
-    p.times(7, h => {
+    p.times(7, hr => {
+      const h = hr + Math.cos(p.t)
       p.setFillColour(h * 10, 90, 50, 0.95)
       const sp = SimplePath.withPoints([])
 
@@ -1968,6 +1969,114 @@ const isometricExample7 = (p: SCanvas) => {
       p.fill(sp)
       p.draw(sp)
     })
+  })
+}
+
+const isometricExample8 = (p: SCanvas) => {
+  p.backgroundGradient(
+    new RadialGradient({
+      start: p.meta.center,
+      rStart: 0,
+      end: p.meta.center,
+      rEnd: 0.6,
+      colours: [[0, { h: 0, s: 0, l: 90 }], [1, { h: 215, s: 80, l: 30 }]],
+    })
+  )
+
+  const { bottom, right } = p.meta
+  p.lineWidth = 0.005 * bottom
+  p.setStrokeColour(30, 5, 20)
+  // make origin a point centred horizontally, but near bottom
+  p.withTranslation([right / 2, bottom * 0.95], () => {
+    const iso = isoTransform(0.05 * bottom)
+
+    const top = (x, y, z) => [
+      iso([x + 0, y, z + 0]),
+      iso([x + 1, y, z + 0]),
+      iso([x + 1, y, z + 1]),
+      iso([x + 0, y, z + 1]),
+    ]
+
+    const left = (x, y, z) => [
+      iso([x, y, z + 0]),
+      iso([x, y - 0.5, z + 0]),
+      iso([x, y - 0.5, z + 1]),
+      iso([x, y, z + 1]),
+    ]
+    p.times(7, y => {
+      p.times(7, () => {
+        const x = p.uniformRandomInt({ from: 0, to: 10 })
+        const z = p.uniformRandomInt({ from: 0, to: 10 })
+
+        p.setFillColour(200, 40, 50)
+        const sp = SimplePath.withPoints(top(x, y, z)).close()
+        p.fill(sp)
+        p.draw(sp)
+
+        p.setFillColour(180, 40, 50, 0.8)
+        const sp2 = SimplePath.withPoints(left(x, y, z)).close()
+        p.fill(sp2)
+        p.draw(sp2)
+
+        p.setFillColour(350, 40, 50, 0.8)
+        const sp3 = SimplePath.withPoints(left(x + 1, y + 0.5, z)).close()
+        p.fill(sp3)
+        p.draw(sp3)
+      })
+    })
+  })
+}
+
+const isometricExample9 = (p: SCanvas) => {
+  p.background(215, 80, 10)
+  const { bottom, right: r } = p.meta
+  p.lineWidth = 0.005 * bottom
+  p.setStrokeColour(0, 0, 90)
+  p.withTranslation([r / 2, bottom * 0.5], () => {
+    const iso = isoTransform(0.1 * bottom)
+
+    // Experimenting with helper functions... probably want to include in framework or as helpers somehow?
+    const top = (x, y, z, s) => [
+      iso([x, y, z]),
+      iso([x + s, y, z]),
+      iso([x + s, y, z + s]),
+      iso([x, y, z + s]),
+    ]
+
+    const left = (x, y, z, s) => [
+      iso([x, y, z]),
+      iso([x, y - s, z + 0]),
+      iso([x, y - s, z + s]),
+      iso([x, y, z + s]),
+    ]
+
+    const right = (x, y, z, s) => [
+      iso([x, y, z]),
+      iso([x + s, y, z]),
+      iso([x + s, y - s, z]),
+      iso([x, y - s, z]),
+    ]
+
+    const shade = (fn, x, y, z, s, h, sat = 40, l = 50) => {
+      p.setFillColour(h, sat, l, 0.95)
+      const sp = SimplePath.withPoints(fn(x, y, z, s)).close()
+      p.fill(sp)
+      p.draw(sp)
+    }
+
+    const cube = (x, y, z, s) => {
+      shade(top, x, y, z, s, 200)
+      shade(left, x, y, z, s, 180)
+      shade(right, x, y, z, s, 350)
+    }
+
+    shade(top, -1.5, -2, -1.5, 5, 30, 20, 50)
+
+    cube(0, 0, 0, 2)
+    cube(1, -1, -1, 1)
+    cube(0.5, -1.5, -0.5, 0.5)
+    cube(-1, -1, 1, 1)
+    cube(-0.5, -1.5, 0.5, 0.5)
   })
 }
 
@@ -2047,6 +2156,8 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: isometricExample5, name: "Isometric 5" },
   { sketch: isometricExample6, name: "Isometric 6" },
   { sketch: isometricExample7, name: "Isometric Tapes" },
+  { sketch: isometricExample8, name: "Isometric Fragments" },
+  { sketch: isometricExample9, name: "Isometric Cube Examples" },
 ]
 
 export default sketches
