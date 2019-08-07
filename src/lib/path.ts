@@ -82,6 +82,18 @@ export class SimplePath implements Traceable {
     this.points = this.points.map(transform)
     return this
   }
+
+  get reversed(): SimplePath {
+    return new SimplePath(this.points.slice().reverse())
+  }
+
+  transformed(transform: (point: Point2D) => Point2D): SimplePath {
+    return new SimplePath(this.points.map(transform))
+  }
+
+  withAppended(other: SimplePath): SimplePath {
+    return new SimplePath(this.points.concat(other.points))
+  }
 }
 
 type PathEdge =

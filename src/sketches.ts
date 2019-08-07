@@ -2244,6 +2244,64 @@ const painting2 = (p: SCanvas) => {
   })
 }
 
+const stackedCurves = (p: SCanvas) => {
+  p.background(210, 40, 15)
+  p.withRandomOrder(
+    p.forHorizontal,
+    { n: 20, margin: 0.1 },
+    ([x, y], [dX, dY], c, i) => {
+      let sp = SimplePath.withPoints([])
+      p.times(10, n => {
+        sp.addPoint([x + dX / 2 + p.gaussian({ sd: 0.01 }), y + (n * dY) / 10])
+      })
+      p.downFrom(10, n => {
+        sp.addPoint([x - dX / 2 - p.gaussian({ sd: 0.01 }), y + (n * dY) / 10])
+      })
+      sp.close()
+      p.setFillColour(120 + i * 5, 60, 50, 0.85)
+
+      p.fill(sp.chaiken({ n: 5, looped: true }))
+    }
+  )
+}
+
+const stackedCurves2 = (p: SCanvas) => {
+  const M = 0.075
+  const N = 20
+  const HUES = [190, 195, 200, 210, 215, 220, 170, 30, 40]
+  p.background(40, 80, 95)
+  let sp = SimplePath.withPoints([])
+  p.times(p.meta.bottom * 13, n => {
+    sp.addPoint([-0.2 + p.gaussian({ sd: 0.01 }), n / 10])
+  })
+  p.draw(sp)
+
+  const paths: SimplePath[] = [sp]
+  for (let i = 0; i < N; i++) {
+    paths.push(paths[i].transformed(([x, y]) => [x + 0.02 * p.poisson(4), y]))
+  }
+
+  p.withClipping(
+    new Rect({ at: [M, M], w: p.meta.right - 2 * M, h: p.meta.bottom - 2 * M }),
+    () => {
+      for (let i = 0; i < N - 1; i++) {
+        p.proportionately([
+          [1, () => p.setFillColour(p.sample(HUES), 95, 50)],
+          [1, () => p.setFillColour(p.sample(HUES), 40, 80)],
+        ])
+
+        p.fill(
+          paths[i]
+            .withAppended(
+              paths[i + 1].reversed.transformed(([x, y]) => [x + 0.01, y])
+            )
+            .chaiken({ n: 4 })
+        )
+      }
+    }
+  )
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: tiling, name: "Tiling" },
   { sketch: rainbow, name: "Rainbow Drips" },
@@ -2325,6 +2383,8 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: isometricExample10, name: "Isometric Rotation" },
   { sketch: painting, name: "Paint Strokes" },
   { sketch: painting2, name: "Round Paint Strokes" },
+  { sketch: stackedCurves, name: "Stacked Curves" },
+  { sketch: stackedCurves2, name: "Stacked Curves 2" },
 ]
 
 export default sketches
