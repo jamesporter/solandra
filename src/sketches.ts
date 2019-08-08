@@ -2302,6 +2302,21 @@ const stackedCurves2 = (p: SCanvas) => {
   )
 }
 
+const minis = (s: SCanvas) => {
+  s.background(215, 60, 90)
+  s.forTiling({ n: 7 }, ([x, y], [dX, dY], [cX, cY], i) => {
+    s.withClipping(new Rect({ at: [x, y], w: dX, h: dY }), () => {
+      s.background(i * 27, 20, 70)
+      let nPt: Point2D = [cX, cY]
+      s.times(6, j => {
+        s.setFillColour(i * 27 + j * 12, 90, 30, 0.3)
+        nPt = s.perturb(nPt, { magnitude: dX / 1.5 })
+        s.fill(new Circle({ at: nPt, r: dX / 2 }))
+      })
+    })
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: tiling, name: "Tiling" },
   { sketch: rainbow, name: "Rainbow Drips" },
@@ -2385,6 +2400,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: painting2, name: "Round Paint Strokes" },
   { sketch: stackedCurves, name: "Stacked Curves" },
   { sketch: stackedCurves2, name: "Stacked Curves 2" },
+  { sketch: minis, name: "Minis" },
 ]
 
 export default sketches
