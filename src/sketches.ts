@@ -2303,10 +2303,10 @@ const stackedCurves2 = (p: SCanvas) => {
 }
 
 const minis = (s: SCanvas) => {
-  s.background(215, 60, 90)
-  s.forTiling({ n: 7 }, ([x, y], [dX, dY], [cX, cY], i) => {
+  s.background(45, 20, 10)
+  s.forTiling({ n: 7, margin: 0.075 }, ([x, y], [dX, dY], [cX, cY], i) => {
     s.withClipping(new Rect({ at: [x, y], w: dX, h: dY }), () => {
-      s.background(i * 27, 20, 70)
+      s.background(i * 27, 20, 65)
       let nPt: Point2D = [cX, cY]
       s.times(6, j => {
         s.setFillColour(i * 27 + j * 12, 90, 30, 0.3)
@@ -2315,6 +2315,32 @@ const minis = (s: SCanvas) => {
       })
     })
   })
+}
+
+const minis2 = (s: SCanvas) => {
+  s.background(215, 60, 10)
+  s.forTiling(
+    { n: 6, type: "square", margin: 0.1 },
+    ([x, y], [dX, dY], [cX, cY], i) => {
+      s.withClipping(new Rect({ at: [x, y], w: dX, h: dY }), () => {
+        s.background(i * 27, 20, 10)
+        let nPt: Point2D = [cX, cY]
+        s.times(6, j => {
+          s.setFillColour(i * 27 + j * 12, 90, 40, 0.3)
+          nPt = s.perturb(nPt, { magnitude: dX / 1.5 })
+          s.fill(new Circle({ at: nPt, r: dX / 2 }))
+        })
+      })
+
+      let frame: Point2D = [x, y]
+      s.lineWidth = 0.001
+      s.setStrokeColour(0, 0, 90)
+      s.times(3, () => {
+        s.draw(new Rect({ at: frame, w: dX, h: dY }))
+        frame = s.perturb(frame, { magnitude: 0.015 })
+      })
+    }
+  )
 }
 
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
@@ -2401,6 +2427,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: stackedCurves, name: "Stacked Curves" },
   { sketch: stackedCurves2, name: "Stacked Curves 2" },
   { sketch: minis, name: "Minis" },
+  { sketch: minis2, name: "Minis 2" },
 ]
 
 export default sketches
