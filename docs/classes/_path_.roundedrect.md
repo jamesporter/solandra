@@ -35,7 +35,7 @@
 
 \+ **new RoundedRect**(`config`: object): *[RoundedRect](_path_.roundedrect.md)*
 
-*Defined in [path.ts:391](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L391)*
+*Defined in [path.ts:403](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L403)*
 
 **Parameters:**
 
@@ -56,7 +56,7 @@ Name | Type |
 
 • **at**: *[Point2D](../modules/_types_sol_.md#point2d)*
 
-*Defined in [path.ts:388](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L388)*
+*Defined in [path.ts:400](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L400)*
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 • **h**: *number*
 
-*Defined in [path.ts:390](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L390)*
+*Defined in [path.ts:402](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L402)*
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 • **r**: *number*
 
-*Defined in [path.ts:391](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L391)*
+*Defined in [path.ts:403](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L403)*
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 • **w**: *number*
 
-*Defined in [path.ts:389](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L389)*
+*Defined in [path.ts:401](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L401)*
 
 ## Methods
 
@@ -90,7 +90,7 @@ ___
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:402](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L402)*
+*Defined in [path.ts:414](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L414)*
 
 **Parameters:**
 

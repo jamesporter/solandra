@@ -38,7 +38,7 @@ Just an ellipse with width = height
 
 *Overrides [Ellipse](_path_.ellipse.md).[constructor](_path_.ellipse.md#constructor)*
 
-*Defined in [path.ts:486](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L486)*
+*Defined in [path.ts:498](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L498)*
 
 **Parameters:**
 
@@ -60,7 +60,7 @@ Name | Type |
 
 *Inherited from [Ellipse](_path_.ellipse.md).[config](_path_.ellipse.md#protected-config)*
 
-*Defined in [path.ts:429](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L429)*
+*Defined in [path.ts:441](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L441)*
 
 #### Type declaration:
 
@@ -82,7 +82,7 @@ Name | Type |
 
 *Inherited from [Ellipse](_path_.ellipse.md)*
 
-*Defined in [path.ts:437](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L437)*
+*Defined in [path.ts:449](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L449)*
 
 **Parameters:**
 

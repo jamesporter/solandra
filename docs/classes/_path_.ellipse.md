@@ -40,7 +40,7 @@ https://stackoverflow.com/questions/1734745/how-to-create-circle-with-bézier-cu
 
 \+ **new Ellipse**(`config`: object): *[Ellipse](_path_.ellipse.md)*
 
-*Defined in [path.ts:427](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L427)*
+*Defined in [path.ts:439](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L439)*
 
 **Parameters:**
 
@@ -61,7 +61,7 @@ Name | Type |
 
 • **config**: *object*
 
-*Defined in [path.ts:429](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L429)*
+*Defined in [path.ts:441](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L441)*
 
 #### Type declaration:
 
@@ -81,7 +81,7 @@ Name | Type |
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:437](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L437)*
+*Defined in [path.ts:449](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L449)*
 
 **Parameters:**
 

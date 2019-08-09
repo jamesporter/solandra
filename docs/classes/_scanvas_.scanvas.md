@@ -76,7 +76,7 @@
 
 \+ **new SCanvas**(`ctx`: `CanvasRenderingContext2D`, `__namedParameters`: object, `rngSeed?`: string | number, `time?`: undefined | number): *[SCanvas](_scanvas_.scanvas.md)*
 
-*Defined in [sCanvas.ts:14](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L14)*
+*Defined in [sCanvas.ts:14](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L14)*
 
 **Parameters:**
 
@@ -101,7 +101,7 @@ Name | Type |
 
 • **aspectRatio**: *number*
 
-*Defined in [sCanvas.ts:11](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L11)*
+*Defined in [sCanvas.ts:11](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L11)*
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 • **originalScale**: *number*
 
-*Defined in [sCanvas.ts:12](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L12)*
+*Defined in [sCanvas.ts:12](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L12)*
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 • **rng**: *`Prando`*
 
-*Defined in [sCanvas.ts:13](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L13)*
+*Defined in [sCanvas.ts:13](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L13)*
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 • **t**: *number*
 
-*Defined in [sCanvas.ts:14](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L14)*
+*Defined in [sCanvas.ts:14](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L14)*
 
 ## Accessors
 
@@ -133,7 +133,7 @@ ___
 
 • **set lineStyle**(`__namedParameters`: object): *void*
 
-*Defined in [sCanvas.ts:56](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L56)*
+*Defined in [sCanvas.ts:56](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L56)*
 
 **Parameters:**
 
@@ -151,7 +151,7 @@ ___
 
 • **set lineWidth**(`width`: number): *void*
 
-*Defined in [sCanvas.ts:52](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L52)*
+*Defined in [sCanvas.ts:52](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L52)*
 
 **Parameters:**
 
@@ -167,7 +167,7 @@ ___
 
 • **get meta**(): *object*
 
-*Defined in [sCanvas.ts:41](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L41)*
+*Defined in [sCanvas.ts:41](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L41)*
 
 **Returns:** *object*
 
@@ -189,7 +189,7 @@ ___
 
 • **get randomPoint**(): *[Point2D](../modules/_types_sol_.md#point2d)*
 
-*Defined in [sCanvas.ts:316](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L316)*
+*Defined in [sCanvas.ts:316](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L316)*
 
 **Returns:** *[Point2D](../modules/_types_sol_.md#point2d)*
 
@@ -199,7 +199,7 @@ ___
 
 ▸ **aroundCircle**(`config`: object, `callback`: function): *void*
 
-*Defined in [sCanvas.ts:274](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L274)*
+*Defined in [sCanvas.ts:274](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L274)*
 
 **Parameters:**
 
@@ -230,7 +230,7 @@ ___
 
 ▸ **background**(`h`: number, `s`: number, `l`: number, `a`: number): *void*
 
-*Defined in [sCanvas.ts:60](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L60)*
+*Defined in [sCanvas.ts:60](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L60)*
 
 **Parameters:**
 
@@ -249,7 +249,7 @@ ___
 
 ▸ **backgroundGradient**(`gradient`: [Gradientable](../interfaces/_scanvas_.gradientable.md)): *void*
 
-*Defined in [sCanvas.ts:66](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L66)*
+*Defined in [sCanvas.ts:66](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L66)*
 
 **Parameters:**
 
@@ -265,7 +265,7 @@ ___
 
 ▸ **build**<**C**, **T**, **U**>(`iterFn`: function, `config`: `C`, `cb`: function): *`U`[]*
 
-*Defined in [sCanvas.ts:225](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L225)*
+*Defined in [sCanvas.ts:225](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L225)*
 
 **Type parameters:**
 
@@ -315,7 +315,7 @@ ___
 
 ▸ **doProportion**(`p`: number, `callback`: function): *void*
 
-*Defined in [sCanvas.ts:256](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L256)*
+*Defined in [sCanvas.ts:256](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L256)*
 
 **Parameters:**
 
@@ -333,7 +333,7 @@ ___
 
 ▸ **downFrom**(`n`: number, `callback`: function): *void*
 
-*Defined in [sCanvas.ts:268](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L268)*
+*Defined in [sCanvas.ts:268](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L268)*
 
 **Parameters:**
 
@@ -357,7 +357,7 @@ ___
 
 ▸ **draw**(`traceable`: [Traceable](../interfaces/_path_.traceable.md)): *void*
 
-*Defined in [sCanvas.ts:96](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L96)*
+*Defined in [sCanvas.ts:96](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L96)*
 
 **Parameters:**
 
@@ -373,7 +373,7 @@ ___
 
 ▸ **drawLine**(`from`: [Point2D](../modules/_types_sol_.md#point2d), `to`: [Point2D](../modules/_types_sol_.md#point2d)): *void*
 
-*Defined in [sCanvas.ts:89](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L89)*
+*Defined in [sCanvas.ts:89](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L89)*
 
 **Parameters:**
 
@@ -390,7 +390,7 @@ ___
 
 ▸ **drawText**(`config`: [TextConfig](../modules/_path_.md#textconfig), `text`: string): *void*
 
-*Defined in [sCanvas.ts:108](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L108)*
+*Defined in [sCanvas.ts:108](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L108)*
 
 **Parameters:**
 
@@ -407,7 +407,7 @@ ___
 
 ▸ **fill**(`traceable`: [Traceable](../interfaces/_path_.traceable.md)): *void*
 
-*Defined in [sCanvas.ts:102](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L102)*
+*Defined in [sCanvas.ts:102](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L102)*
 
 **Parameters:**
 
@@ -423,7 +423,7 @@ ___
 
 ▸ **fillText**(`config`: [TextConfig](../modules/_path_.md#textconfig), `text`: string): *void*
 
-*Defined in [sCanvas.ts:112](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L112)*
+*Defined in [sCanvas.ts:112](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L112)*
 
 **Parameters:**
 
@@ -440,7 +440,7 @@ ___
 
 ▸ **forHorizontal**(`config`: object, `callback`: function): *void*
 
-*Defined in [sCanvas.ts:160](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L160)*
+*Defined in [sCanvas.ts:160](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L160)*
 
 **Parameters:**
 
@@ -472,7 +472,7 @@ ___
 
 ▸ **forMargin**(`margin`: number, `callback`: function): *void*
 
-*Defined in [sCanvas.ts:116](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L116)*
+*Defined in [sCanvas.ts:116](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L116)*
 
 **Parameters:**
 
@@ -499,7 +499,7 @@ ___
 
 ▸ **forTiling**(`config`: object, `callback`: function): *void*
 
-*Defined in [sCanvas.ts:126](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L126)*
+*Defined in [sCanvas.ts:126](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L126)*
 
 **Parameters:**
 
@@ -532,7 +532,7 @@ ___
 
 ▸ **forVertical**(`config`: object, `callback`: function): *void*
 
-*Defined in [sCanvas.ts:190](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L190)*
+*Defined in [sCanvas.ts:190](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L190)*
 
 **Parameters:**
 
@@ -564,7 +564,7 @@ ___
 
 ▸ **gaussian**(`config?`: undefined | object): *number*
 
-*Defined in [sCanvas.ts:492](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L492)*
+*Defined in [sCanvas.ts:492](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L492)*
 
 Gaussian random number, default mean 0, default standard deviation 1
 
@@ -582,7 +582,7 @@ ___
 
 ▸ **inDrawing**(`point`: [Point2D](../modules/_types_sol_.md#point2d)): *boolean*
 
-*Defined in [sCanvas.ts:333](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L333)*
+*Defined in [sCanvas.ts:333](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L333)*
 
 **Parameters:**
 
@@ -598,7 +598,7 @@ ___
 
 ▸ **perturb**(`__namedParameters`: [number, number], `config`: object): *[Point2D](../modules/_types_sol_.md#point2d)*
 
-*Defined in [sCanvas.ts:481](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L481)*
+*Defined in [sCanvas.ts:481](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L481)*
 
 Perturb a point by a random amount (by default uniform random changes in
 -0.05 to 0.05, optional magnitude scales this e.g. magnitude 1 is perturbations
@@ -622,7 +622,7 @@ ___
 
 ▸ **poisson**(`lambda`: number): *number*
 
-*Defined in [sCanvas.ts:503](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L503)*
+*Defined in [sCanvas.ts:503](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L503)*
 
 Poisson random number, lambda (the mean and variance) is only parameter
 
@@ -640,7 +640,7 @@ ___
 
 ▸ **proportionately**<**T**>(`cases`: [number, function][]): *`T`*
 
-*Defined in [sCanvas.ts:300](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L300)*
+*Defined in [sCanvas.ts:300](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L300)*
 
 **Type parameters:**
 
@@ -660,7 +660,7 @@ ___
 
 ▸ **random**(): *number*
 
-*Defined in [sCanvas.ts:412](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L412)*
+*Defined in [sCanvas.ts:412](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L412)*
 
 A uniform random number betweeon 0 and 1
 
@@ -672,7 +672,7 @@ ___
 
 ▸ **randomPolarity**(): *`1` | `-1`*
 
-*Defined in [sCanvas.ts:433](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L433)*
+*Defined in [sCanvas.ts:433](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L433)*
 
 A coin toss with result either -1 or 1
 
@@ -684,7 +684,7 @@ ___
 
 ▸ **range**(`config`: object, `callback`: function): *void*
 
-*Defined in [sCanvas.ts:320](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L320)*
+*Defined in [sCanvas.ts:320](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L320)*
 
 **Parameters:**
 
@@ -715,7 +715,7 @@ ___
 
 ▸ **sample**<**T**>(`from`: `T`[]): *`T`*
 
-*Defined in [sCanvas.ts:440](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L440)*
+*Defined in [sCanvas.ts:440](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L440)*
 
 Sample uniformly from an array
 
@@ -737,7 +737,7 @@ ___
 
 ▸ **samples**<**T**>(`n`: number, `from`: `T`[]): *`T`[]*
 
-*Defined in [sCanvas.ts:447](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L447)*
+*Defined in [sCanvas.ts:447](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L447)*
 
 n uniform samples from an array
 
@@ -760,7 +760,7 @@ ___
 
 ▸ **setFillColour**(`h`: number, `s`: number, `l`: number, `a`: number): *void*
 
-*Defined in [sCanvas.ts:76](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L76)*
+*Defined in [sCanvas.ts:76](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L76)*
 
 **Parameters:**
 
@@ -779,7 +779,7 @@ ___
 
 ▸ **setFillGradient**(`gradient`: [Gradientable](../interfaces/_scanvas_.gradientable.md)): *void*
 
-*Defined in [sCanvas.ts:84](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L84)*
+*Defined in [sCanvas.ts:84](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L84)*
 
 **Parameters:**
 
@@ -795,7 +795,7 @@ ___
 
 ▸ **setStrokeColour**(`h`: number, `s`: number, `l`: number, `a`: number): *void*
 
-*Defined in [sCanvas.ts:72](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L72)*
+*Defined in [sCanvas.ts:72](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L72)*
 
 **Parameters:**
 
@@ -814,7 +814,7 @@ ___
 
 ▸ **setStrokeGradient**(`gradient`: [Gradientable](../interfaces/_scanvas_.gradientable.md)): *void*
 
-*Defined in [sCanvas.ts:80](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L80)*
+*Defined in [sCanvas.ts:80](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L80)*
 
 **Parameters:**
 
@@ -830,7 +830,7 @@ ___
 
 ▸ **shuffle**<**T**>(`items`: `T`[]): *`T`[]*
 
-*Defined in [sCanvas.ts:458](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L458)*
+*Defined in [sCanvas.ts:458](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L458)*
 
 Shuffle an array
 
@@ -852,7 +852,7 @@ ___
 
 ▸ **times**(`n`: number, `callback`: function): *void*
 
-*Defined in [sCanvas.ts:262](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L262)*
+*Defined in [sCanvas.ts:262](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L262)*
 
 **Parameters:**
 
@@ -876,7 +876,7 @@ ___
 
 ▸ **uniformRandomInt**(`config`: object): *number*
 
-*Defined in [sCanvas.ts:420](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L420)*
+*Defined in [sCanvas.ts:420](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L420)*
 
 A uniform random integer. Default lower bound is 0.
 Upper bound can be inclusive (default) or exclusive
@@ -899,7 +899,7 @@ ___
 
 ▸ **withClipping**(`clipArea`: [Traceable](../interfaces/_path_.traceable.md), `callback`: function): *void*
 
-*Defined in [sCanvas.ts:350](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L350)*
+*Defined in [sCanvas.ts:350](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L350)*
 
 **Parameters:**
 
@@ -917,7 +917,7 @@ ___
 
 ▸ **withContext**(`callback`: function): *void*
 
-*Defined in [sCanvas.ts:362](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L362)*
+*Defined in [sCanvas.ts:362](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L362)*
 
 Within a context all style/colour changes are local.
 
@@ -935,7 +935,7 @@ ___
 
 ▸ **withRandomOrder**<**C**, **T**>(`iterFn`: function, `config`: `C`, `cb`: function): *void*
 
-*Defined in [sCanvas.ts:240](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L240)*
+*Defined in [sCanvas.ts:240](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L240)*
 
 **Type parameters:**
 
@@ -983,7 +983,7 @@ ___
 
 ▸ **withRotation**(`angle`: number, `callback`: function): *void*
 
-*Defined in [sCanvas.ts:368](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L368)*
+*Defined in [sCanvas.ts:368](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L368)*
 
 **Parameters:**
 
@@ -1001,7 +1001,7 @@ ___
 
 ▸ **withScale**(`scale`: [Vector2D](../modules/_types_sol_.md#vector2d), `callback`: function): *void*
 
-*Defined in [sCanvas.ts:375](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L375)*
+*Defined in [sCanvas.ts:375](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L375)*
 
 **Parameters:**
 
@@ -1019,7 +1019,7 @@ ___
 
 ▸ **withTransform**(`config`: object, `callback`: function): *void*
 
-*Defined in [sCanvas.ts:389](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L389)*
+*Defined in [sCanvas.ts:389](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L389)*
 
 **Parameters:**
 
@@ -1046,7 +1046,7 @@ ___
 
 ▸ **withTranslation**(`translation`: [Vector2D](../modules/_types_sol_.md#vector2d), `callback`: function): *void*
 
-*Defined in [sCanvas.ts:382](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/sCanvas.ts#L382)*
+*Defined in [sCanvas.ts:382](https://github.com/jamesporter/solandra/blob/2971925/src/lib/sCanvas.ts#L382)*
 
 **Parameters:**
 

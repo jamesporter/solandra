@@ -28,7 +28,7 @@
 
 \+ **new Star**(`config`: object): *[Star](_path_.star.md)*
 
-*Defined in [path.ts:537](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L537)*
+*Defined in [path.ts:549](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L549)*
 
 **Parameters:**
 
@@ -52,7 +52,7 @@ Name | Type |
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:553](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L553)*
+*Defined in [path.ts:565](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L565)*
 
 **Parameters:**
 

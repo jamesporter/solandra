@@ -28,7 +28,7 @@
 
 \+ **new RegularPolygon**(`config`: object): *[RegularPolygon](_path_.regularpolygon.md)*
 
-*Defined in [path.ts:501](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L501)*
+*Defined in [path.ts:513](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L513)*
 
 **Parameters:**
 
@@ -51,7 +51,7 @@ Name | Type |
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:516](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L516)*
+*Defined in [path.ts:528](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L528)*
 
 **Parameters:**
 

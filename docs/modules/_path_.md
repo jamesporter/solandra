@@ -48,7 +48,7 @@
 
 Ƭ **CurveConfig**: *object*
 
-*Defined in [path.ts:97](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L97)*
+*Defined in [path.ts:109](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L109)*
 
 #### Type declaration:
 
@@ -68,7 +68,7 @@ ___
 
 Ƭ **FontStyle**: *"normal" | "italic" | "oblique"*
 
-*Defined in [path.ts:634](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L634)*
+*Defined in [path.ts:646](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L646)*
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 Ƭ **FontVariant**: *"normal" | "small-caps"*
 
-*Defined in [path.ts:635](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L635)*
+*Defined in [path.ts:647](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L647)*
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 Ƭ **FontWeight**: *"normal" | "bold" | "bolder" | "lighter" | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900"*
 
-*Defined in [path.ts:636](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L636)*
+*Defined in [path.ts:648](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L648)*
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 Ƭ **PathEdge**: *object | object*
 
-*Defined in [path.ts:87](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L87)*
+*Defined in [path.ts:99](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L99)*
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 Ƭ **TextConfig**: *`Omit<TextConfigWithKind, "kind">`*
 
-*Defined in [path.ts:676](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L676)*
+*Defined in [path.ts:688](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L688)*
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 Ƭ **TextConfigWithKind**: *object*
 
-*Defined in [path.ts:664](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L664)*
+*Defined in [path.ts:676](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L676)*
 
 #### Type declaration:
 
@@ -136,7 +136,7 @@ ___
 
 Ƭ **TextHorizontalAlign**: *"center" | "start" | "end" | "left" | "right"*
 
-*Defined in [path.ts:633](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L633)*
+*Defined in [path.ts:645](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L645)*
 
 ___
 
@@ -144,4 +144,4 @@ ___
 
 Ƭ **TextSizing**: *"fixed" | "fitted"*
 
-*Defined in [path.ts:632](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/path.ts#L632)*
+*Defined in [path.ts:644](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L644)*

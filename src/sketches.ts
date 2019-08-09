@@ -2302,42 +2302,42 @@ const stackedCurves2 = (p: SCanvas) => {
   )
 }
 
-const minis = (s: SCanvas) => {
-  s.background(45, 20, 10)
-  s.forTiling({ n: 7, margin: 0.075 }, ([x, y], [dX, dY], [cX, cY], i) => {
-    s.withClipping(new Rect({ at: [x, y], w: dX, h: dY }), () => {
-      s.background(i * 27, 20, 65)
+const minis = (p: SCanvas) => {
+  p.background(45, 20, 10)
+  p.forTiling({ n: 7, margin: 0.075 }, ([x, y], [dX, dY], [cX, cY], i) => {
+    p.withClipping(new Rect({ at: [x, y], w: dX, h: dY }), () => {
+      p.background(i * 27, 20, 65)
       let nPt: Point2D = [cX, cY]
-      s.times(6, j => {
-        s.setFillColour(i * 27 + j * 12, 90, 30, 0.3)
-        nPt = s.perturb(nPt, { magnitude: dX / 1.5 })
-        s.fill(new Circle({ at: nPt, r: dX / 2 }))
+      p.times(6, j => {
+        p.setFillColour(i * 27 + j * 12, 90, 30, 0.3)
+        nPt = p.perturb(nPt, { magnitude: dX / 1.5 })
+        p.fill(new Circle({ at: nPt, r: dX / 2 }))
       })
     })
   })
 }
 
-const minis2 = (s: SCanvas) => {
-  s.background(215, 60, 10)
-  s.forTiling(
+const minis2 = (p: SCanvas) => {
+  p.background(215, 60, 10)
+  p.forTiling(
     { n: 6, type: "square", margin: 0.1 },
     ([x, y], [dX, dY], [cX, cY], i) => {
-      s.withClipping(new Rect({ at: [x, y], w: dX, h: dY }), () => {
-        s.background(i * 27, 20, 10)
+      p.withClipping(new Rect({ at: [x, y], w: dX, h: dY }), () => {
+        p.background(i * 27, 20, 10)
         let nPt: Point2D = [cX, cY]
-        s.times(6, j => {
-          s.setFillColour(i * 27 + j * 12, 90, 40, 0.3)
-          nPt = s.perturb(nPt, { magnitude: dX / 1.5 })
-          s.fill(new Circle({ at: nPt, r: dX / 2 }))
+        p.times(6, j => {
+          p.setFillColour(i * 27 + j * 12, 90, 40, 0.3)
+          nPt = p.perturb(nPt, { magnitude: dX / 1.5 })
+          p.fill(new Circle({ at: nPt, r: dX / 2 }))
         })
       })
 
       let frame: Point2D = [x, y]
-      s.lineWidth = 0.001
-      s.setStrokeColour(0, 0, 90)
-      s.times(3, () => {
-        s.draw(new Rect({ at: frame, w: dX, h: dY }))
-        frame = s.perturb(frame, { magnitude: 0.015 })
+      p.lineWidth = 0.001
+      p.setStrokeColour(0, 0, 90)
+      p.times(3, () => {
+        p.draw(new Rect({ at: frame, w: dX, h: dY }))
+        frame = p.perturb(frame, { magnitude: 0.015 })
       })
     }
   )

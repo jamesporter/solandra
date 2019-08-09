@@ -20,7 +20,7 @@
 
 ▸ **arrayOf**<**T**>(`n`: number, `init`: function): *`T`[]*
 
-*Defined in [collectionOps.ts:35](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/collectionOps.ts#L35)*
+*Defined in [collectionOps.ts:35](https://github.com/jamesporter/solandra/blob/2971925/src/lib/collectionOps.ts#L35)*
 
 **Type parameters:**
 
@@ -42,7 +42,7 @@ ___
 
 ▸ **pairWise**<**T**>(`items`: `T`[]): *[`T`, `T`][]*
 
-*Defined in [collectionOps.ts:1](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/collectionOps.ts#L1)*
+*Defined in [collectionOps.ts:1](https://github.com/jamesporter/solandra/blob/2971925/src/lib/collectionOps.ts#L1)*
 
 **Type parameters:**
 
@@ -62,7 +62,7 @@ ___
 
 ▸ **sum**(`numbers`: number[]): *number*
 
-*Defined in [collectionOps.ts:31](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/collectionOps.ts#L31)*
+*Defined in [collectionOps.ts:31](https://github.com/jamesporter/solandra/blob/2971925/src/lib/collectionOps.ts#L31)*
 
 **Parameters:**
 
@@ -78,7 +78,7 @@ ___
 
 ▸ **tripleWise**<**T**>(`items`: `T`[], `looped?`: undefined | false | true): *[`T`, `T`, `T`][]*
 
-*Defined in [collectionOps.ts:10](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/collectionOps.ts#L10)*
+*Defined in [collectionOps.ts:10](https://github.com/jamesporter/solandra/blob/2971925/src/lib/collectionOps.ts#L10)*
 
 **Type parameters:**
 
@@ -99,7 +99,7 @@ ___
 
 ▸ **zip2**<**T**, **S**>(`items`: `T`[], `other`: `S`[]): *[`T`, `S`][]*
 
-*Defined in [collectionOps.ts:23](https://github.com/jamesporter/solandra/blob/9c7ec25/src/lib/collectionOps.ts#L23)*
+*Defined in [collectionOps.ts:23](https://github.com/jamesporter/solandra/blob/2971925/src/lib/collectionOps.ts#L23)*
 
 **Type parameters:**
 
