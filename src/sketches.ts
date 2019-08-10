@@ -2600,18 +2600,40 @@ const contoured3 = (p: SCanvas) => {
 }
 
 const compoundPath = (p: SCanvas) => {
-  p.times(10, n => {
-    p.setFillColour(5 + n * 2, 90, 55, 0.2)
+  p.background(45, 80, 75)
+  p.setFillColour(220, 9, 45, 0.4)
+  // To remove a shape from another shape the path winding order must be opposite (hence the reversed)
+  p.times(4, n => {
     p.fill(
       CompoundPath.withPaths(
-        SimplePath.withPoints([[0.2, 0.2], [0.8, 0.2], [0.8, 0.8], [0.2, 0.8]])
-          .transformPoints(p.perturb)
-          .close(),
-        SimplePath.withPoints([[0.4, 0.4], [0.6, 0.4], [0.6, 0.6], [0.4, 0.6]])
-          .transformPoints(p.perturb)
-          .close().reversed
+        new RegularPolygon({ at: p.meta.center, r: 0.3 + n * 0.05, n: 8 }).path,
+        new Star({ at: p.meta.center, r: 0.3 + n * 0.05, n: 4 }).path.reversed
       )
     )
+  })
+}
+
+const compoundPath2 = (p: SCanvas) => {
+  p.background(45, 20, 95)
+  p.forTiling({ n: 3, type: "square" }, (at, [dX], c, i) => {
+    p.setFillColour(220 - i * 40, 30, 45, 0.4)
+    const s = 1 + 0.5 * p.random()
+    p.times(4, n => {
+      p.fill(
+        CompoundPath.withPaths(
+          new RegularPolygon({
+            at: c,
+            r: dX / 4 + dX * n * 0.05,
+            n: 2 * (i + 3),
+          }).path,
+          new Star({
+            at: c,
+            r: (s * dX) / 4 + dX * n * 0.05,
+            n: i + 3,
+          }).path.transformed(pt => p.perturb(pt, { magnitude: 0.05 })).reversed
+        )
+      )
+    })
   })
 }
 
@@ -2708,6 +2730,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: contoured2, name: "Contoured 2" },
   { sketch: contoured3, name: "Contoured 3" },
   { sketch: compoundPath, name: "Compound Path" },
+  { sketch: compoundPath2, name: "Compound Path 2" },
 ]
 
 export default sketches

@@ -566,6 +566,10 @@ export class RegularPolygon implements Traceable {
     }
     ctx.lineTo(x + r * Math.cos(startAngle), y + r * Math.sin(startAngle))
   }
+
+  get path(): SimplePath {
+    return traceSimplePath(this)
+  }
 }
 
 /**
@@ -631,6 +635,10 @@ export class Star implements Traceable {
       y + r2 * Math.sin(startAngle + -0.5 * dA)
     )
     ctx.lineTo(x + r * Math.cos(startAngle), y + r * Math.sin(startAngle))
+  }
+
+  get path(): SimplePath {
+    return traceSimplePath(this)
   }
 }
 
