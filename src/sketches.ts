@@ -2343,6 +2343,261 @@ const minis2 = (p: SCanvas) => {
   )
 }
 
+const weave = (p: SCanvas) => {
+  const s = 0.01
+  const h2 = 220
+  p.background(45, 50, 75)
+  p.forTiling(
+    { n: 20, type: "square", margin: 0.1 },
+    ([x, y], [dX, dY], [cX, cY]) => {
+      p.proportionately([
+        [
+          1,
+          () => {
+            p.setFillColour(0, 0, 50)
+            p.fill(new Rect({ at: [x, cY - s], w: dX, h: 2 * s }))
+            p.setFillColour(h2, 80, 10)
+            p.fill(new Rect({ at: [cX - s, y], w: 2 * s, h: dY }))
+          },
+        ],
+        [
+          1,
+          () => {
+            p.setFillColour(h2, 80, 10)
+            p.fill(new Rect({ at: [cX - s, y], w: 2 * s, h: dY }))
+            p.setFillColour(0, 0, 50)
+            p.fill(new Rect({ at: [x, cY - s], w: dX, h: 2 * s }))
+          },
+        ],
+      ])
+    }
+  )
+}
+
+const weave2 = (p: SCanvas) => {
+  const s = 0.01
+  const h1 = 220
+  const h2 = 0
+  p.background(35, 80, 65)
+  p.forTiling(
+    { n: 15, type: "square", margin: 0.1 },
+    ([x, y], [dX, dY], [cX, cY]) => {
+      p.proportionately([
+        [
+          1,
+          () => {
+            p.setFillColour(h1, 60, 30)
+            p.fill(new Rect({ at: [x, cY - s], w: dX, h: 2 * s }))
+          },
+        ],
+        [
+          1,
+          () => {
+            p.setFillColour(h1, 60, 30)
+            p.fill(new Rect({ at: [x, cY - s], w: dX, h: 2 * s }))
+            p.setFillColour(h2, 80, 50)
+            p.fill(new Rect({ at: [cX - s, y], w: 2 * s, h: dY }))
+          },
+        ],
+        [
+          1,
+          () => {
+            p.setFillColour(h2, 80, 50)
+            p.fill(new Rect({ at: [cX - s, y], w: 2 * s, h: dY }))
+            p.setFillColour(h1, 60, 30)
+            p.fill(new Rect({ at: [x, cY - s], w: dX, h: 2 * s }))
+          },
+        ],
+        [
+          1,
+          () => {
+            p.setFillColour(h2, 80, 50)
+            p.fill(new Rect({ at: [cX - s, y], w: 2 * s, h: dY }))
+          },
+        ],
+      ])
+    }
+  )
+}
+
+const scaled = (p: SCanvas) => {
+  p.withTranslation(add([0, 0.1], p.meta.center), () => {
+    p.times(16, n => {
+      p.withRotation((Math.PI * n) / 8, () => {
+        p.withScale([1, 1 - 0.05 * n], () => {
+          p.withTranslation([n * 0.02, 0], () => {
+            p.setFillColour(90, 80, 40 + 3 * n, 0.75)
+            const c = new Circle({ at: [0, 0], r: p.meta.bottom / 5 })
+            p.fill(c)
+            p.draw(c)
+          })
+        })
+      })
+    })
+  })
+}
+
+const explosion = (p: SCanvas) => {
+  p.background(355, 70, 32)
+  const N = 45
+  p.withTranslation(p.meta.center, () => {
+    p.times(5, m => {
+      const sp = SimplePath.withPoints([])
+      p.aroundCircle(
+        { at: [0, 0], radius: 0.1 + 0.08 * m, n: 30 },
+        ([x, y]) => {
+          sp.addPoint(p.perturb([x, y]))
+        }
+      )
+      sp.close()
+      p.setFillColour(210, 45, 90, 0.2)
+      p.fill(sp.chaiken({ n: 2, looped: true }))
+    })
+
+    p.setFillColour(45, 90, 100)
+    p.times(N, n => {
+      p.withRotation((2 * Math.PI * n) / N, () => {
+        const start = p.perturb([0.1 + p.random() * 0.2, 0], {
+          magnitude: 0.03,
+        })
+        const end = p.perturb([0.4, 0], { magnitude: 0.1 })
+        p.fill(
+          Path.startAt(start)
+            .addCurveTo(end, { curveSize: 0.05 })
+            .addCurveTo(start, { curveSize: 0.05, polarlity: 1 })
+        )
+      })
+    })
+  })
+}
+
+const contoured = (p: SCanvas) => {
+  let e = 0.01
+  let s = 3
+  p.lineWidth = 0.005
+  p.background(0, 30, 96)
+  const sPerlin = (x, y) => perlin2(x * s, y * s)
+  p.times(40, () => {
+    p.setStrokeColour(
+      p.sample([215, 200, 0]),
+      p.sample([50, 80]),
+      p.sample([40, 20, 10])
+    )
+    let spt = p.randomPoint
+    let pt: Point2D = [spt[0], spt[1]]
+    let p1 = SimplePath.withPoints([spt])
+    while (p.inDrawing(pt)) {
+      let newPt = add(pt, [
+        e * Math.cos(sPerlin(...pt)),
+        e * Math.sin(sPerlin(...pt)),
+      ])
+      p1.addPoint(newPt)
+      pt = newPt
+    }
+    p.draw(p1)
+
+    let p2 = SimplePath.withPoints([spt])
+    pt = [spt[0], spt[1]]
+    while (p.inDrawing(pt)) {
+      let newPt = add(pt, [
+        -e * Math.cos(sPerlin(...pt)),
+        -e * Math.sin(sPerlin(...pt)),
+      ])
+      p2.addPoint(newPt)
+      pt = newPt
+    }
+    p.draw(p2)
+  })
+}
+
+const contoured2 = (p: SCanvas) => {
+  let e = 0.01
+  let s = 3
+  p.lineWidth = 0.005
+  p.background(170, 40, 95)
+
+  p.times(30, n => {
+    const sPerlin = (x, y) => perlin2(x * s + n / 50, y * s + n / 100)
+    p.setStrokeColour(
+      p.sample([150, 170, 75]),
+      p.sample([50, 80]),
+      p.sample([40, 20, 10]),
+      0.75
+    )
+    let spt = p.randomPoint
+    let pt: Point2D = [spt[0], spt[1]]
+    let p1 = SimplePath.withPoints([spt])
+    while (p.inDrawing(pt)) {
+      let newPt = add(pt, [
+        e * Math.cos(sPerlin(...pt)),
+        e * Math.sin(sPerlin(...pt)),
+      ])
+      p1.addPoint(newPt)
+      pt = newPt
+    }
+    p.draw(p1)
+
+    let p2 = SimplePath.withPoints([spt])
+    pt = [spt[0], spt[1]]
+    while (p.inDrawing(pt)) {
+      let newPt = add(pt, [
+        -e * Math.cos(sPerlin(...pt)),
+        -e * Math.sin(sPerlin(...pt)),
+      ])
+      p2.addPoint(newPt)
+      pt = newPt
+    }
+    p.draw(p2)
+  })
+}
+
+const contoured3 = (p: SCanvas) => {
+  let e = 0.01
+  let s = 3
+  p.lineWidth = 0.005
+  p.background(190, 80, 80)
+
+  p.times(20, n => {
+    const sPerlin = (x, y) =>
+      perlin2(p.random() + x * s + n / 50, y * s + n / 100)
+    p.setFillColour(
+      p.sample([220, 170]),
+      p.sample([50, 80]),
+      p.sample([50, 40, 30]),
+      0.25
+    )
+    let spt = p.randomPoint
+    let pt: Point2D = [spt[0], spt[1]]
+    const points: Point2D[] = [spt]
+    while (p.inDrawing(pt)) {
+      let newPt = add(pt, [
+        e * Math.cos(sPerlin(...pt)),
+        e * Math.sin(sPerlin(...pt)),
+      ])
+      points.push(newPt)
+      pt = newPt
+    }
+    pt = [spt[0], spt[1]]
+    while (p.inDrawing(pt)) {
+      let newPt = add(pt, [
+        -e * Math.cos(sPerlin(...pt)),
+        -e * Math.sin(sPerlin(...pt)),
+      ])
+      points.unshift(newPt)
+      pt = newPt
+    }
+
+    const { right, left } = p.meta
+    if (points[0][0] < left && points[points.length - 1][0] > right) {
+      points.unshift([right, 0], [0, 0])
+      p.fill(SimplePath.withPoints(points).close())
+    } else if (points[0][0] > right && points[points.length - 1][0] < left) {
+      points.unshift([right, 0], [0, 0])
+      p.fill(SimplePath.withPoints(points).close())
+    }
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: tiling, name: "Tiling" },
   { sketch: rainbow, name: "Rainbow Drips" },
@@ -2428,6 +2683,13 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: stackedCurves2, name: "Stacked Curves 2" },
   { sketch: minis, name: "Minis" },
   { sketch: minis2, name: "Minis 2" },
+  { sketch: weave, name: "Weave" },
+  { sketch: weave2, name: "Weave 2" },
+  { sketch: scaled, name: "Discs" },
+  { sketch: explosion, name: "Explosion" },
+  { sketch: contoured, name: "Contoured" },
+  { sketch: contoured2, name: "Contoured 2" },
+  { sketch: contoured3, name: "Contoured 3" },
 ]
 
 export default sketches
