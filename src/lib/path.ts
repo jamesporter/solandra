@@ -201,6 +201,18 @@ export class Path implements Traceable {
   }
 }
 
+export class CompoundPath implements Traceable {
+  private constructor(private paths: Traceable[]) {}
+
+  static withPaths(...paths: Traceable[]) {
+    return new CompoundPath(paths)
+  }
+
+  traceIn(ctx: CanvasRenderingContext2D) {
+    this.paths.forEach(p => p.traceIn(ctx))
+  }
+}
+
 export class Arc implements Traceable {
   readonly cX: number
   readonly cY: number
@@ -325,6 +337,16 @@ export class Rect implements Traceable {
 
   traceIn = (ctx: CanvasRenderingContext2D) => {
     ctx.rect(this.at[0], this.at[1], this.w, this.h)
+  }
+
+  get path(): SimplePath {
+    const [x, y] = this.at
+    return SimplePath.withPoints([
+      this.at,
+      [x + this.w, y],
+      [x + this.w, y + this.h],
+      [x, y + this.h],
+    ]).close()
   }
 
   split = (config: {
@@ -544,6 +566,25 @@ export class RegularPolygon implements Traceable {
     }
     ctx.lineTo(x + r * Math.cos(startAngle), y + r * Math.sin(startAngle))
   }
+}
+
+/**
+ * NB Not all canvas stuff supported, don't export this!
+ * Good enough for some things
+ * @param traceable
+ */
+function traceSimplePath(traceable: Traceable): SimplePath {
+  const sp = SimplePath.withPoints([])
+
+  traceable.traceIn({
+    moveTo(x, y) {
+      sp.addPoint([x, y])
+    },
+    lineTo(x, y) {
+      sp.addPoint([x, y])
+    },
+  } as CanvasRenderingContext2D)
+  return sp
 }
 
 export class Star implements Traceable {

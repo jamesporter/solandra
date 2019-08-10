@@ -12,6 +12,7 @@ import {
   Hatching,
   HollowArc,
   Circle,
+  CompoundPath,
 } from "./lib/path"
 import { add, pointAlong, scale, distance } from "./lib/vectors"
 import { perlin2 } from "./lib/noise"
@@ -2598,6 +2599,22 @@ const contoured3 = (p: SCanvas) => {
   })
 }
 
+const compoundPath = (p: SCanvas) => {
+  p.times(10, n => {
+    p.setFillColour(5 + n * 2, 90, 55, 0.2)
+    p.fill(
+      CompoundPath.withPaths(
+        SimplePath.withPoints([[0.2, 0.2], [0.8, 0.2], [0.8, 0.8], [0.2, 0.8]])
+          .transformPoints(p.perturb)
+          .close(),
+        SimplePath.withPoints([[0.4, 0.4], [0.6, 0.4], [0.6, 0.6], [0.4, 0.6]])
+          .transformPoints(p.perturb)
+          .close().reversed
+      )
+    )
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: tiling, name: "Tiling" },
   { sketch: rainbow, name: "Rainbow Drips" },
@@ -2690,6 +2707,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: contoured, name: "Contoured" },
   { sketch: contoured2, name: "Contoured 2" },
   { sketch: contoured3, name: "Contoured 3" },
+  { sketch: compoundPath, name: "Compound Path" },
 ]
 
 export default sketches
