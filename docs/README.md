@@ -8,6 +8,7 @@
 
 * ["__tests__/collectionOps.test"](modules/___tests___collectionops_test_.md)
 * ["__tests__/random.test"](modules/___tests___random_test_.md)
+* ["__tests__/util.test"](modules/___tests___util_test_.md)
 * ["collectionOps"](modules/_collectionops_.md)
 * ["colours"](modules/_colours_.md)
 * ["gradient"](modules/_gradient_.md)

@@ -14,6 +14,7 @@
 
 * [Arc](../classes/_path_.arc.md)
 * [Circle](../classes/_path_.circle.md)
+* [CompoundPath](../classes/_path_.compoundpath.md)
 * [Ellipse](../classes/_path_.ellipse.md)
 * [Hatching](../classes/_path_.hatching.md)
 * [HollowArc](../classes/_path_.hollowarc.md)
@@ -42,13 +43,17 @@
 * [TextHorizontalAlign](_path_.md#texthorizontalalign)
 * [TextSizing](_path_.md#textsizing)
 
+### Functions
+
+* [traceSimplePath](_path_.md#tracesimplepath)
+
 ## Type aliases
 
 ###  CurveConfig
 
 Ƭ **CurveConfig**: *object*
 
-*Defined in [path.ts:109](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L109)*
+*Defined in [path.ts:109](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L109)*
 
 #### Type declaration:
 
@@ -68,7 +73,7 @@ ___
 
 Ƭ **FontStyle**: *"normal" | "italic" | "oblique"*
 
-*Defined in [path.ts:646](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L646)*
+*Defined in [path.ts:695](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L695)*
 
 ___
 
@@ -76,7 +81,7 @@ ___
 
 Ƭ **FontVariant**: *"normal" | "small-caps"*
 
-*Defined in [path.ts:647](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L647)*
+*Defined in [path.ts:696](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L696)*
 
 ___
 
@@ -84,7 +89,7 @@ ___
 
 Ƭ **FontWeight**: *"normal" | "bold" | "bolder" | "lighter" | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900"*
 
-*Defined in [path.ts:648](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L648)*
+*Defined in [path.ts:697](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L697)*
 
 ___
 
@@ -92,7 +97,7 @@ ___
 
 Ƭ **PathEdge**: *object | object*
 
-*Defined in [path.ts:99](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L99)*
+*Defined in [path.ts:99](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L99)*
 
 ___
 
@@ -100,7 +105,7 @@ ___
 
 Ƭ **TextConfig**: *`Omit<TextConfigWithKind, "kind">`*
 
-*Defined in [path.ts:688](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L688)*
+*Defined in [path.ts:737](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L737)*
 
 ___
 
@@ -108,7 +113,7 @@ ___
 
 Ƭ **TextConfigWithKind**: *object*
 
-*Defined in [path.ts:676](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L676)*
+*Defined in [path.ts:725](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L725)*
 
 #### Type declaration:
 
@@ -136,7 +141,7 @@ ___
 
 Ƭ **TextHorizontalAlign**: *"center" | "start" | "end" | "left" | "right"*
 
-*Defined in [path.ts:645](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L645)*
+*Defined in [path.ts:694](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L694)*
 
 ___
 
@@ -144,4 +149,23 @@ ___
 
 Ƭ **TextSizing**: *"fixed" | "fitted"*
 
-*Defined in [path.ts:644](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L644)*
+*Defined in [path.ts:693](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L693)*
+
+## Functions
+
+###  traceSimplePath
+
+▸ **traceSimplePath**(`traceable`: [Traceable](../interfaces/_path_.traceable.md)): *[SimplePath](../classes/_path_.simplepath.md)*
+
+*Defined in [path.ts:580](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L580)*
+
+NB Not all canvas stuff supported, don't export this!
+Good enough for some things
+
+**Parameters:**
+
+Name | Type | Description |
+------ | ------ | ------ |
+`traceable` | [Traceable](../interfaces/_path_.traceable.md) |   |
+
+**Returns:** *[SimplePath](../classes/_path_.simplepath.md)*

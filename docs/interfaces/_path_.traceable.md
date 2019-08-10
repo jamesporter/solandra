@@ -12,6 +12,7 @@
 
 * [Arc](../classes/_path_.arc.md)
 * [Circle](../classes/_path_.circle.md)
+* [CompoundPath](../classes/_path_.compoundpath.md)
 * [Ellipse](../classes/_path_.ellipse.md)
 * [Hatching](../classes/_path_.hatching.md)
 * [HollowArc](../classes/_path_.hollowarc.md)
@@ -34,7 +35,7 @@
 
 ▸ **traceIn**(`ctx`: `CanvasRenderingContext2D`): *any*
 
-*Defined in [path.ts:6](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L6)*
+*Defined in [path.ts:6](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L6)*
 
 **Parameters:**
 

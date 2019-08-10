@@ -18,6 +18,10 @@
 
 * [constructor](_path_.star.md#constructor)
 
+### Accessors
+
+* [path](_path_.star.md#path)
+
 ### Methods
 
 * [traceIn](_path_.star.md#tracein)
@@ -28,7 +32,7 @@
 
 \+ **new Star**(`config`: object): *[Star](_path_.star.md)*
 
-*Defined in [path.ts:549](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L549)*
+*Defined in [path.ts:594](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L594)*
 
 **Parameters:**
 
@@ -44,6 +48,16 @@ Name | Type |
 
 **Returns:** *[Star](_path_.star.md)*
 
+## Accessors
+
+###  path
+
+• **get path**(): *[SimplePath](_path_.simplepath.md)*
+
+*Defined in [path.ts:640](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L640)*
+
+**Returns:** *[SimplePath](_path_.simplepath.md)*
+
 ## Methods
 
 ###  traceIn
@@ -52,7 +66,7 @@ Name | Type |
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:565](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L565)*
+*Defined in [path.ts:610](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L610)*
 
 **Parameters:**
 

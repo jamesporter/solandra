@@ -24,7 +24,7 @@
 
 ▸ **textIn**(`ctx`: `CanvasRenderingContext2D`): *any*
 
-*Defined in [path.ts:10](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L10)*
+*Defined in [path.ts:10](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L10)*
 
 **Parameters:**
 

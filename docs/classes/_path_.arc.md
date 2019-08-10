@@ -37,7 +37,7 @@
 
 \+ **new Arc**(`config`: object): *[Arc](_path_.arc.md)*
 
-*Defined in [path.ts:210](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L210)*
+*Defined in [path.ts:222](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L222)*
 
 **Parameters:**
 
@@ -58,7 +58,7 @@ Name | Type |
 
 • **antiClockwise**: *boolean*
 
-*Defined in [path.ts:210](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L210)*
+*Defined in [path.ts:222](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L222)*
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 • **cX**: *number*
 
-*Defined in [path.ts:205](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L205)*
+*Defined in [path.ts:217](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L217)*
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 • **cY**: *number*
 
-*Defined in [path.ts:206](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L206)*
+*Defined in [path.ts:218](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L218)*
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 • **endAngle**: *number*
 
-*Defined in [path.ts:209](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L209)*
+*Defined in [path.ts:221](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L221)*
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 • **radius**: *number*
 
-*Defined in [path.ts:207](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L207)*
+*Defined in [path.ts:219](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L219)*
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 • **startAngle**: *number*
 
-*Defined in [path.ts:208](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L208)*
+*Defined in [path.ts:220](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L220)*
 
 ## Methods
 
@@ -108,7 +108,7 @@ ___
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:228](https://github.com/jamesporter/solandra/blob/2971925/src/lib/path.ts#L228)*
+*Defined in [path.ts:240](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L240)*
 
 **Parameters:**
 
