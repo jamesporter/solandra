@@ -288,7 +288,6 @@ export default class SCanvas {
 
     let a = -Math.PI * 0.5
     for (let i = 0; i < n; i++) {
-      const rr = 2 * this.rng.next() + 1
       callback(
         [cX + radius * Math.cos(a + da), cY + radius * Math.sin(a + da)],
         i
