@@ -2637,6 +2637,97 @@ const compoundPath2 = (p: SCanvas) => {
   })
 }
 
+const central = (p: SCanvas) => {
+  const N = 80
+  p.background(220, 90, 10)
+  p.setFillGradient(
+    new RadialGradient({
+      start: [0, 0],
+      end: [0, 0],
+      rStart: 0,
+      rEnd: 0.8,
+      colours: [
+        [0, { h: 0, s: 0, l: 100 }],
+        [0.25, { h: 220, s: 10, l: 50 }],
+        [0.35, { h: 0, s: 0, l: 100 }],
+        [0.45, { h: p.sample([0, 45, 170, 215]), s: 50, l: 50 }],
+        [0.8, { h: 0, s: 0, l: 100 }],
+      ],
+    })
+  )
+  p.withTranslation(p.meta.center, () => {
+    p.aroundCircle({ at: [0, 0], radius: 0.1, n: N }, (pt, i) => {
+      if ((i + 2) % 20 > 2) {
+        p.fill(
+          Path.startAt(pt)
+            .addCurveTo(scale(pt, p.gaussian({ mean: 4, sd: 0.1 })), {
+              curveSize: 0.05,
+            })
+            .addCurveTo(pt, { curveSize: 0.05 })
+        )
+      }
+    })
+  })
+}
+
+const centralCurves = (p: SCanvas) => {
+  const N = 80
+  p.background(20, 90, 10)
+  p.setFillGradient(
+    new RadialGradient({
+      start: [0, 0],
+      end: [0, 0],
+      rStart: 0,
+      rEnd: 0.8,
+      colours: [
+        [0, { h: 0, s: 0, l: 100 }],
+        [0.25, { h: 220, s: 10, l: 50 }],
+        [0.35, { h: 0, s: 0, l: 100 }],
+        [0.45, { h: p.sample([0, 45, 215, 340]), s: 50, l: 50 }],
+        [0.8, { h: 0, s: 0, l: 100 }],
+      ],
+    })
+  )
+  p.withTranslation(p.meta.center, () => {
+    p.aroundCircle({ at: [0, 0], radius: 0.1, n: N }, (pt, i) => {
+      if ((i + p.uniformRandomInt({ from: 4, to: 16 })) % 20 > 2) {
+        const r = p.gaussian({ mean: 0.4, sd: 0.04 })
+        const a = ((i + 2) * Math.PI * 2) / N
+        const t: Point2D = [r * Math.cos(a), r * Math.sin(a)]
+        p.fill(
+          Path.startAt(pt)
+            .addCurveTo(t, {
+              curveSize: 0.8,
+            })
+            .addCurveTo(pt, { curveSize: -0.75 })
+        )
+      }
+    })
+  })
+}
+
+const lineOfCurves = (p: SCanvas) => {
+  p.background(170, 90, 10)
+  p.forHorizontal({ n: 120, margin: 0.2 }, ([x, y], [dX, dY], [cX, cY]) => {
+    const height = p.gaussian({ mean: 0.5 * p.meta.bottom, sd: 0.1 })
+    const dH = p.gaussian({ sd: 0.1 })
+    const cS = p.gaussian({ mean: 0.3, sd: 0.1 })
+    const pol = p.randomPolarity()
+    const yBase = y + dY + 0.2
+    p.setFillColour(p.sample([45, 55, 60, 65]), 30, 85, 0.6)
+    p.fill(
+      Path.startAt([x, yBase])
+        .addCurveTo([cX + dH, y + dY - height + 0.1], {
+          curveSize: cS * pol,
+        })
+        .addCurveTo([x + dX + 0.02, yBase], {
+          curveSize: (cS - 0.05) * pol * -1,
+        })
+        .addLineTo([x - 0.1, yBase])
+    )
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: tiling, name: "Tiling" },
   { sketch: rainbow, name: "Rainbow Drips" },
@@ -2731,6 +2822,9 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: contoured3, name: "Contoured 3" },
   { sketch: compoundPath, name: "Compound Path" },
   { sketch: compoundPath2, name: "Compound Path 2" },
+  { sketch: central, name: "Centrality" },
+  { sketch: centralCurves, name: "Central Curves" },
+  { sketch: lineOfCurves, name: "Line of Curves" },
 ]
 
 export default sketches
