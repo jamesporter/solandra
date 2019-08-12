@@ -1421,12 +1421,12 @@ const sketchingCurves = (p: SCanvas) => {
     }
   )
 
-  const curve = SimplePath.withPoints(points).chaiken({ n: 2 })
+  let curve = SimplePath.withPoints(points).chaiken({ n: 2 })
   for (let i = 1; i < 200; i += i / 4) {
     p.draw(curve)
-    curve
-      .move([0, (-i * p.meta.bottom) / 1024])
-      .transformPoints(pt => [
+    curve = curve
+      .moved([0, (-i * p.meta.bottom) / 1024])
+      .transformed(pt => [
         pt[0],
         pt[1] + 0.017 * p.meta.bottom * perlin2(pt[0] * 4, pt[1] + p.t),
       ])
@@ -2728,6 +2728,176 @@ const lineOfCurves = (p: SCanvas) => {
   })
 }
 
+const dividing = (p: SCanvas) => {
+  p.background(40, 25, 95)
+  const ss = new RegularPolygon({
+    at: p.meta.center,
+    n: 14,
+    r: 0.4,
+  }).path.segmented.flatMap(s => s.segmented)
+  ss.forEach((s, i) => {
+    p.setFillColour(i * 5, 70, 60)
+    p.fill(s)
+  })
+  p.lineWidth = 0.005
+  ss.forEach(s => {
+    p.draw(s)
+  })
+}
+
+const dividing2 = (p: SCanvas) => {
+  p.background(0, 0, 5)
+  new RegularPolygon({ at: p.meta.center, r: 0.4, n: 20 }).path.segmented
+    .flatMap(s => s.exploded({ scale: 0.75, magnitude: 1.1 }))
+    .flatMap(s => s.exploded({ scale: 0.8, magnitude: 1.5 }))
+    .forEach((s, i) => {
+      p.setFillColour(i * 5, 80, 60, 0.9)
+      p.fill(s)
+    })
+}
+
+const dividing3 = (p: SCanvas) => {
+  p.background(0, 0, 5)
+  new RegularPolygon({ at: p.meta.center, r: 0.4, n: 20 }).path.segmented
+    .flatMap(s => s.exploded({ scale: 0.75, magnitude: 1.1 }))
+    .map((s, i) => s.rotated((i * Math.PI) / 2))
+    .forEach((s, i) => {
+      p.setFillColour(i * 5, 80, 60, 0.9)
+      p.fill(s)
+    })
+}
+
+const dividing4 = (p: SCanvas) => {
+  p.background(45, 20, 95)
+  new RegularPolygon({ at: p.meta.center, r: 0.4, n: 24 }).path.segmented
+    .flatMap(s => s.exploded({ scale: 0.8, magnitude: 1.1 }))
+    .map((s, i) =>
+      s
+        .rotated((i * Math.PI) / 4)
+        .moved([p.gaussian({ sd: 0.06 }), p.gaussian({ sd: 0.04 })])
+    )
+    .forEach((s, i) => {
+      p.setFillColour(210 + (i % 40), 80, 60, 0.8)
+      p.fill(s)
+    })
+}
+
+const dividing5 = (p: SCanvas) => {
+  p.background(210, 20, 95)
+  p.setFillColour(215, 95, 20, 0.8)
+  p.forMargin(0.1, (at, [w, h]) => {
+    new Rect({ at, w, h })
+      .split({ orientation: "horizontal", split: arrayOf(10, () => 1) })
+      .flatMap(r =>
+        r.split({ orientation: "vertical", split: arrayOf(10, () => 1) })
+      )
+      .flatMap(r => r.path.exploded({ scale: 0.85, magnitude: 1.0 }))
+      .map(s => s.rotated(p.gaussian({ sd: Math.PI / 8 })))
+      .forEach(s => p.fill(s))
+  })
+}
+
+const dividing6 = (p: SCanvas) => {
+  p.background(175, 20, 95)
+
+  new Star({ at: p.meta.center, n: 16, r: 0.4 }).path
+    .exploded({ magnitude: 1.05, scale: 0.99 })
+    .flatMap(s => s.exploded({ magnitude: 1.05, scale: 0.99 }))
+    .forEach((s, i) => {
+      p.setFillColour(215 - i * 3, 90, 40)
+      p.fill(s.rotated(p.gaussian({ sd: Math.PI / 12 })))
+    })
+}
+
+const dividing7 = (p: SCanvas) => {
+  p.background(90, 20, 95)
+  p.lineWidth = 0.004
+
+  p.forMargin(0.1, (at, [w, h]) => {
+    new Rect({ at, w, h })
+      .split({ orientation: "horizontal", split: arrayOf(8, () => 1) })
+      .flatMap(r =>
+        r.split({ orientation: "vertical", split: arrayOf(8, () => 1) })
+      )
+      .map(r => r.path)
+      .flatMap(s => s.exploded({ scale: 0.9, magnitude: 1 }))
+      .filter(_ => p.random() > 0.2)
+      .map(s =>
+        s
+          .scaled(p.gaussian({ mean: 1, sd: 0.2 }))
+          .rotated(p.gaussian({ sd: Math.PI / 4 }))
+      )
+      .flatMap(s => s.exploded({ scale: 0.9, magnitude: 1 }))
+      .forEach((s, i) => {
+        p.setFillColour(0 + (i % 60), 90, 50)
+        p.draw(s)
+        p.fill(s)
+      })
+  })
+}
+
+const dividing8 = (p: SCanvas) => {
+  p.background(0, 0, 85)
+  p.setFillColour(0, 0, 20)
+  p.fill(new RegularPolygon({ n: 6, at: p.meta.center, r: 0.44 }))
+  new RegularPolygon({ n: 6, at: p.meta.center, r: 0.4 }).path
+    .subdivide({ m: 1, n: 5 })
+    .forEach((s, i) => {
+      p.setFillColour(i * 20, 50, 50)
+      p.fill(s)
+    })
+  new RegularPolygon({ n: 6, at: p.meta.center, r: 0.4 }).path
+    .subdivide({ m: 0, n: 3 })
+    .forEach((s, i) => {
+      p.setFillColour(i * 20, 50, 50, 0.5)
+      p.fill(s)
+    })
+
+  p.setFillColour(60, 50, 20, 0.1)
+  p.fill(
+    new RegularPolygon({ n: 6, at: p.meta.center, r: 0.4 }).path.subdivide({
+      m: 2,
+      n: 5,
+    })[0]
+  )
+}
+
+const dividing9 = (p: SCanvas) => {
+  p.background(45, 20, 85)
+  p.setFillColour(0, 0, 20)
+  const hue = p.sample([160, 0, 190])
+
+  p.downFrom(2, n => {
+    const s = n / 2
+    new Star({ at: p.meta.center, r: s * 0.4, r2: s * 0.2, n: 12 }).path
+      .subdivide({ m: 0, n: 12 })
+      .forEach((s, i) => {
+        p.setFillColour(hue + i * 40, 90, 40)
+        p.fill(s)
+      })
+    p.setFillColour(45, 20, 70 + 5 * n)
+    p.fill(new Star({ at: p.meta.center, r: s * 0.3, r2: s * 0.15, n: 12 }))
+  })
+}
+
+const dividing10 = (p: SCanvas) => {
+  p.background(0, 0, 85)
+  p.setFillColour(0, 0, 0, 0.5)
+  const points: Point2D[] = []
+  new RegularPolygon({ n: 24, r: 0.4, at: p.meta.center }).path
+    .exploded({ scale: 0.95, magnitude: 1 })
+    .flatMap(s => s.exploded({ scale: 0.95, magnitude: 1 }))
+    .map(s => s.rotated(p.gaussian({ sd: Math.PI / 2 })))
+    .forEach(s => {
+      p.fill(s)
+      points.push(s.centroid)
+    })
+  
+  p.lineWidth = 0.01
+  p.setStrokeColour(0,0,0,0.2)
+  p.draw(SimplePath.withPoints(p.shuffle(points)))
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: tiling, name: "Tiling" },
   { sketch: rainbow, name: "Rainbow Drips" },
@@ -2825,6 +2995,16 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: central, name: "Centrality" },
   { sketch: centralCurves, name: "Central Curves" },
   { sketch: lineOfCurves, name: "Line of Curves" },
+  { sketch: dividing, name: "Dividing 1" },
+  { sketch: dividing2, name: "Dividing 2" },
+  { sketch: dividing3, name: "Dividing 3" },
+  { sketch: dividing4, name: "Dividing 4" },
+  { sketch: dividing5, name: "Dividing 5" },
+  { sketch: dividing6, name: "Dividing 6" },
+  { sketch: dividing7, name: "Dividing 7" },
+  { sketch: dividing8, name: "Dividing 8" },
+  { sketch: dividing9, name: "Dividing 9" },
+  { sketch: dividing10, name: "Dividing 10" },
 ]
 
 export default sketches
