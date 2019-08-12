@@ -159,6 +159,22 @@ export class SimplePath implements Traceable {
       ]
     })
   }
+
+  subdivide(config: { m: number; n: number }): SimplePath[] {
+    const l = this.points.length
+    const { n, m } = config
+    if (m > n || n >= l || m >= l || n < 0 || m < 0)
+      new Error(
+        "Requires two indices, ordered, each less than the total points in this path"
+      )
+    const p1 = [...this.points.slice(m, n + 1), this.points[m]]
+    const p2 = [
+      ...this.points.slice(n - 1),
+      ...this.points.slice(0, m + 1),
+      this.points[n],
+    ]
+    return [SimplePath.withPoints(p1), SimplePath.withPoints(p2)]
+  }
 }
 
 type PathEdge =
