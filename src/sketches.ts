@@ -2777,8 +2777,35 @@ const dividing4 = (p: SCanvas) => {
         .moved([p.gaussian({ sd: 0.06 }), p.gaussian({ sd: 0.04 })])
     )
     .forEach((s, i) => {
-      p.setFillColour( 210 + (i % 40), 80, 60, 0.8)
+      p.setFillColour(210 + (i % 40), 80, 60, 0.8)
       p.fill(s)
+    })
+}
+
+const dividing5 = (p: SCanvas) => {
+  p.background(210, 20, 95)
+  p.setFillColour(215, 95, 20, 0.8)
+  p.forMargin(0.1, (at, [w, h]) => {
+    new Rect({ at, w, h })
+      .split({ orientation: "horizontal", split: arrayOf(10, () => 1) })
+      .flatMap(r =>
+        r.split({ orientation: "vertical", split: arrayOf(10, () => 1) })
+      )
+      .flatMap(r => r.path.exploded({ scale: 0.85, magnitude: 1.0 }))
+      .map(s => s.rotated(p.gaussian({ sd: Math.PI / 8 })))
+      .forEach(s => p.fill(s))
+  })
+}
+
+const dividing6 = (p: SCanvas) => {
+  p.background(175, 20, 95)
+
+  new Star({ at: p.meta.center, n: 16, r: 0.4 }).path
+    .exploded({ magnitude: 1.05, scale: 0.99 })
+    .flatMap(s => s.exploded({ magnitude: 1.05, scale: 0.99 }))
+    .forEach((s, i) => {
+      p.setFillColour(215 - i * 3, 90, 40)
+      p.fill(s.rotated(p.gaussian({ sd: Math.PI / 8 })))
     })
 }
 
@@ -2883,6 +2910,8 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: dividing2, name: "Dividing 2" },
   { sketch: dividing3, name: "Dividing 3" },
   { sketch: dividing4, name: "Dividing 4" },
+  { sketch: dividing5, name: "Dividing 5" },
+  { sketch: dividing6, name: "Dividing 6" },
 ]
 
 export default sketches
