@@ -1,3 +1,5 @@
+import { Point2D } from "./types/sol"
+
 export const clamp = (
   { from, to }: { from: number; to: number },
   n: number
@@ -31,4 +33,26 @@ export const isoTransform = (height: number) => {
     -w * (z - x),
     -height * (x / 2 + y + z / 2),
   ]
+}
+
+export const centroid = (points: Point2D[]): Point2D => {
+  const n = points.length
+  if (n === 0) {
+    throw new Error("centroid must have at least one point")
+  } else if (n === 1) {
+    return points[0]
+  } else {
+    let m =
+      points[0][0] == points[n - 1][0] && points[0][1] == points[n - 1][1]
+        ? n - 1
+        : n
+
+    let x = 0
+    let y = 0
+    for (let i = 0; i < m; i++) {
+      x += points[i][0]
+      y += points[i][1]
+    }
+    return [x / m, y / m]
+  }
 }

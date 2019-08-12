@@ -1421,12 +1421,12 @@ const sketchingCurves = (p: SCanvas) => {
     }
   )
 
-  const curve = SimplePath.withPoints(points).chaiken({ n: 2 })
+  let curve = SimplePath.withPoints(points).chaiken({ n: 2 })
   for (let i = 1; i < 200; i += i / 4) {
     p.draw(curve)
-    curve
-      .move([0, (-i * p.meta.bottom) / 1024])
-      .transformPoints(pt => [
+    curve = curve
+      .moved([0, (-i * p.meta.bottom) / 1024])
+      .transformed(pt => [
         pt[0],
         pt[1] + 0.017 * p.meta.bottom * perlin2(pt[0] * 4, pt[1] + p.t),
       ])
@@ -2728,6 +2728,60 @@ const lineOfCurves = (p: SCanvas) => {
   })
 }
 
+const dividing = (p: SCanvas) => {
+  p.background(40, 25, 95)
+  const ss = new RegularPolygon({
+    at: p.meta.center,
+    n: 14,
+    r: 0.4,
+  }).path.segmented.flatMap(s => s.segmented)
+  ss.forEach((s, i) => {
+    p.setFillColour(i * 5, 70, 60)
+    p.fill(s)
+  })
+  p.lineWidth = 0.005
+  ss.forEach(s => {
+    p.draw(s)
+  })
+}
+
+const dividing2 = (p: SCanvas) => {
+  p.background(0, 0, 5)
+  new RegularPolygon({ at: p.meta.center, r: 0.4, n: 20 }).path.segmented
+    .flatMap(s => s.exploded({ scale: 0.75, magnitude: 1.1 }))
+    .flatMap(s => s.exploded({ scale: 0.8, magnitude: 1.5 }))
+    .forEach((s, i) => {
+      p.setFillColour(i * 5, 80, 60, 0.9)
+      p.fill(s)
+    })
+}
+
+const dividing3 = (p: SCanvas) => {
+  p.background(0, 0, 5)
+  new RegularPolygon({ at: p.meta.center, r: 0.4, n: 20 }).path.segmented
+    .flatMap(s => s.exploded({ scale: 0.75, magnitude: 1.1 }))
+    .map((s, i) => s.rotated((i * Math.PI) / 2))
+    .forEach((s, i) => {
+      p.setFillColour(i * 5, 80, 60, 0.9)
+      p.fill(s)
+    })
+}
+
+const dividing4 = (p: SCanvas) => {
+  p.background(45, 20, 95)
+  new RegularPolygon({ at: p.meta.center, r: 0.4, n: 24 }).path.segmented
+    .flatMap(s => s.exploded({ scale: 0.8, magnitude: 1.1 }))
+    .map((s, i) =>
+      s
+        .rotated((i * Math.PI) / 4)
+        .moved([p.gaussian({ sd: 0.06 }), p.gaussian({ sd: 0.04 })])
+    )
+    .forEach((s, i) => {
+      p.setFillColour( 210 + (i % 40), 80, 60, 0.8)
+      p.fill(s)
+    })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: tiling, name: "Tiling" },
   { sketch: rainbow, name: "Rainbow Drips" },
@@ -2825,6 +2879,10 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: central, name: "Centrality" },
   { sketch: centralCurves, name: "Central Curves" },
   { sketch: lineOfCurves, name: "Line of Curves" },
+  { sketch: dividing, name: "Dividing 1" },
+  { sketch: dividing2, name: "Dividing 2" },
+  { sketch: dividing3, name: "Dividing 3" },
+  { sketch: dividing4, name: "Dividing 4" },
 ]
 
 export default sketches
