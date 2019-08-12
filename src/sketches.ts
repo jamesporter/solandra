@@ -2805,8 +2805,31 @@ const dividing6 = (p: SCanvas) => {
     .flatMap(s => s.exploded({ magnitude: 1.05, scale: 0.99 }))
     .forEach((s, i) => {
       p.setFillColour(215 - i * 3, 90, 40)
-      p.fill(s.rotated(p.gaussian({ sd: Math.PI / 8 })))
+      p.fill(s.rotated(p.gaussian({ sd: Math.PI / 12 })))
     })
+}
+
+const dividing7 = (p: SCanvas) => {
+  p.background(90, 20, 95)
+  p.lineWidth = 0.004
+
+  p.forMargin(0.1, (at, [w, h]) => {
+    new Rect({ at, w, h })
+      .split({ orientation: "horizontal", split: arrayOf(8, () => 1) })
+      .flatMap(r =>
+        r.split({ orientation: "vertical", split: arrayOf(8, () => 1) })
+      )
+      .map(r => r.path)
+      .flatMap(s => s.exploded({ scale: 0.9, magnitude: 1 }))
+      .filter(_ => p.random() > 0.2)
+      .map(s => s.scaled(p.gaussian({ mean: 1, sd: 0.2 })).rotated(p.gaussian({ sd: Math.PI / 4 })))
+      .flatMap(s => s.exploded({ scale: 0.9, magnitude: 1 }))
+      .forEach((s, i) => {
+        p.setFillColour(0 + (i % 60), 90, 50)
+        p.draw(s)
+        p.fill(s)
+      })
+  })
 }
 
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
@@ -2912,6 +2935,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: dividing4, name: "Dividing 4" },
   { sketch: dividing5, name: "Dividing 5" },
   { sketch: dividing6, name: "Dividing 6" },
+  { sketch: dividing7, name: "Dividing 7" },
 ]
 
 export default sketches
