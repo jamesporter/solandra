@@ -58,15 +58,19 @@ export default class SCanvas {
   }
 
   background(h: number, s: number, l: number, a: number = 1) {
+    this.pushState()
     this.ctx.fillStyle = hsla(h, s, l, a)
     const { right, bottom } = this.meta
     this.fill(new Rect({ at: [0, 0], w: right, h: bottom }))
+    this.popState()
   }
 
   backgroundGradient(gradient: Gradientable) {
+    this.pushState()
     this.ctx.fillStyle = gradient.gradient(this.ctx)
     const { right, bottom } = this.meta
     this.fill(new Rect({ at: [0, 0], w: right, h: bottom }))
+    this.popState()
   }
 
   setStrokeColour(h: number, s: number, l: number, a: number = 1) {
