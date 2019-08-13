@@ -19,6 +19,7 @@ import { perlin2 } from "./lib/noise"
 import { LinearGradient, RadialGradient } from "./lib/gradient"
 import { zip2, sum, arrayOf } from "./lib/collectionOps"
 import { clamp, isoTransform } from "./lib"
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from "constants"
 
 const rainbow = (p: SCanvas) => {
   p.withRandomOrder(
@@ -2892,10 +2893,58 @@ const dividing10 = (p: SCanvas) => {
       p.fill(s)
       points.push(s.centroid)
     })
-  
+
   p.lineWidth = 0.01
-  p.setStrokeColour(0,0,0,0.2)
+  p.setStrokeColour(0, 0, 0, 0.2)
   p.draw(SimplePath.withPoints(p.shuffle(points)))
+}
+
+const night = (p: SCanvas) => {
+  p.background(0, 0, 5)
+  p.forTiling({ n: 15, type: "square" }, (_pt, [dX], c) => {
+    const hue = p.sample([45, 55, 60])
+    const loc = p.perturb(c, { magnitude: 0.4 })
+    p.setFillGradient(
+      new RadialGradient({
+        start: loc,
+        end: loc,
+        rStart: 0,
+        rEnd: dX,
+        colours: [
+          [0, { h: hue, s: 80, l: 70 }],
+          [p.sample([0.1, 0.2, 0.3, 0.5]), { h: hue, s: 80, l: 90, a: 0 }],
+        ],
+      })
+    )
+    p.fill(new Circle({ at: loc, r: dX }))
+  })
+}
+
+const bokeh = (p: SCanvas) => {
+  p.backgroundGradient(
+    new LinearGradient({
+      from: [0, 0],
+      to: [0, p.meta.bottom],
+      colours: [[0, { h: 0, s: 0, l: 30 }], [1, { h: 0, s: 0, l: 0 }]],
+    })
+  )
+  p.forTiling({ n: 20, type: "square", margin: 0.2 }, (_pt, [dX], c) => {
+    const hue = p.sample([5, 25, 210])
+    const loc = p.perturb(c, { magnitude: 0.4 })
+    p.setFillGradient(
+      new RadialGradient({
+        start: loc,
+        end: loc,
+        rStart: 0,
+        rEnd: dX * 2.2,
+        colours: [
+          [0, { h: hue, s: 80, l: 70 }],
+          [p.sample([0.1, 0.2, 0.3, 0.5]), { h: hue, s: 80, l: 70, a: 0 }],
+        ],
+      })
+    )
+    p.fill(new Circle({ at: loc, r: dX }))
+  })
 }
 
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
@@ -3005,6 +3054,8 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: dividing8, name: "Dividing 8" },
   { sketch: dividing9, name: "Dividing 9" },
   { sketch: dividing10, name: "Dividing 10" },
+  { sketch: night, name: "Night" },
+  { sketch: bokeh, name: "Bokeh" },
 ]
 
 export default sketches
