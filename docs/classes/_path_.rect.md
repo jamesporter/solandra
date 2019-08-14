@@ -39,7 +39,7 @@
 
 \+ **new Rect**(`config`: object): *[Rect](_path_.rect.md)*
 
-*Defined in [path.ts:328](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L328)*
+*Defined in [path.ts:563](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L563)*
 
 **Parameters:**
 
@@ -59,7 +59,7 @@ Name | Type |
 
 • **at**: *[Point2D](../modules/_types_sol_.md#point2d)*
 
-*Defined in [path.ts:326](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L326)*
+*Defined in [path.ts:561](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L561)*
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 • **h**: *number*
 
-*Defined in [path.ts:328](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L328)*
+*Defined in [path.ts:563](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L563)*
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 • **w**: *number*
 
-*Defined in [path.ts:327](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L327)*
+*Defined in [path.ts:562](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L562)*
 
 ## Accessors
 
@@ -83,7 +83,7 @@ ___
 
 • **get path**(): *[SimplePath](_path_.simplepath.md)*
 
-*Defined in [path.ts:342](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L342)*
+*Defined in [path.ts:577](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L577)*
 
 **Returns:** *[SimplePath](_path_.simplepath.md)*
 
@@ -93,7 +93,7 @@ ___
 
 ▸ **split**(`config`: object): *[Rect](_path_.rect.md)[]*
 
-*Defined in [path.ts:352](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L352)*
+*Defined in [path.ts:587](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L587)*
 
 **Parameters:**
 
@@ -114,7 +114,7 @@ ___
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:338](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L338)*
+*Defined in [path.ts:573](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L573)*
 
 **Parameters:**
 

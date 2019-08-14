@@ -419,7 +419,7 @@ const helloWorld = (p: SCanvas) => {
 }
 
 const circleText = (p: SCanvas) => {
-  p.aroundCircle({ radius: 0.25, n: 12 }, ([x, y], i) => {
+  p.aroundCircle({ r: 0.25, n: 12 }, ([x, y], i) => {
     p.times(5, n => {
       p.setFillColour(i * 5 + n, 75, 35, 0.2 * n)
       p.fillText(
@@ -456,10 +456,8 @@ const doodles = (p: SCanvas) => {
     let path = Path.startAt(center)
     p.setStrokeColour(100 * x + y * 33, 60 + 45 * y, 40)
     p.lineWidth = 0.005
-    p.withRandomOrder(
-      p.aroundCircle,
-      { at: center, radius: dX / 2.8, n: 7 },
-      pt => path.addCurveTo(pt)
+    p.withRandomOrder(p.aroundCircle, { at: center, r: dX / 2.8, n: 7 }, pt =>
+      path.addCurveTo(pt)
     )
     path.addCurveTo(center)
     p.draw(path)
@@ -2445,12 +2443,9 @@ const explosion = (p: SCanvas) => {
   p.withTranslation(p.meta.center, () => {
     p.times(5, m => {
       const sp = SimplePath.withPoints([])
-      p.aroundCircle(
-        { at: [0, 0], radius: 0.1 + 0.08 * m, n: 30 },
-        ([x, y]) => {
-          sp.addPoint(p.perturb([x, y]))
-        }
-      )
+      p.aroundCircle({ at: [0, 0], r: 0.1 + 0.08 * m, n: 30 }, ([x, y]) => {
+        sp.addPoint(p.perturb([x, y]))
+      })
       sp.close()
       p.setFillColour(210, 45, 90, 0.2)
       p.fill(sp.chaiken({ n: 2, looped: true }))
@@ -2657,7 +2652,7 @@ const central = (p: SCanvas) => {
     })
   )
   p.withTranslation(p.meta.center, () => {
-    p.aroundCircle({ at: [0, 0], radius: 0.1, n: N }, (pt, i) => {
+    p.aroundCircle({ at: [0, 0], r: 0.1, n: N }, (pt, i) => {
       if ((i + 2) % 20 > 2) {
         p.fill(
           Path.startAt(pt)
@@ -2690,7 +2685,7 @@ const centralCurves = (p: SCanvas) => {
     })
   )
   p.withTranslation(p.meta.center, () => {
-    p.aroundCircle({ at: [0, 0], radius: 0.1, n: N }, (pt, i) => {
+    p.aroundCircle({ at: [0, 0], r: 0.1, n: N }, (pt, i) => {
       if ((i + p.uniformRandomInt({ from: 4, to: 16 })) % 20 > 2) {
         const r = p.gaussian({ mean: 0.4, sd: 0.04 })
         const a = ((i + 2) * Math.PI * 2) / N
@@ -2947,6 +2942,113 @@ const bokeh = (p: SCanvas) => {
   })
 }
 
+const advancedDivisions = (p: SCanvas) => {
+  p.background(45, 100, 94)
+  const path = Path.startAt([0.5, p.meta.center[1] - 0.3])
+  p.aroundCircle({ at: p.meta.center, r: 0.3, n: 20 }, (pt, i) => {
+    path.addCurveTo(pt, { curveSize: p.gaussian({ mean: 1.5, sd: 0.2 }) })
+  })
+
+  path.subdivide({ m: 0, n: 10 }).forEach((part, i) => {
+    p.setFillColour(10 + i * 40, 90, 60, p.sample([0.4, 0.5]))
+    p.fill(part)
+  })
+
+  path.exploded().forEach((part, i) => {
+    p.setFillColour(10 + i * 2, 90, 60, p.sample([0.4, 0.5]))
+    p.fill(part)
+  })
+
+  path
+    .exploded()
+    .flatMap(part => part.exploded())
+    .forEach((part, i) => {
+      p.setFillColour(10 + (i * 2) / 3, 90, 60, p.sample([0.2, 0.3]))
+      p.fill(part)
+    })
+}
+
+const advancedDivisions2 = (p: SCanvas) => {
+  p.background(215, 90, 10)
+  const points: Point2D[] = []
+  p.forMargin(0.1, ([x, y], [dX, dY]) => {
+    p.times(10, n => {
+      points.push([x + (n * dX) / 10, y])
+    })
+    p.times(10, n => {
+      points.push([x + dX, y + (n * dY) / 10])
+    })
+    p.times(10, n => {
+      points.push([x + dX - (n * dX) / 10, y + dY])
+    })
+    p.times(10, n => {
+      points.push([x, y + dY - (n * dY) / 10])
+    })
+  })
+
+  const path = Path.startAt(points[0])
+  for (let i = 1; i < points.length; i++) {
+    path.addCurveTo(points[i], {
+      curveSize: p.gaussian({ mean: 0.6, sd: 0.15 }),
+    })
+  }
+  path.addCurveTo(points[0])
+
+  path.exploded().forEach(s => {
+    p.setFillColour(0, 0, 95, p.sample([0.2, 0.4]))
+    p.fill(s)
+  })
+
+  path.subdivide({ m: 5, n: 25, curve: { curveSize: 0.5 } }).forEach(s => {
+    p.fill(s.scaled(0.8))
+    p.fill(s.rotated(Math.PI / 2))
+  })
+
+  path.subdivide({ m: 5, n: 25, curve: { curveSize: -0.5 } }).forEach(s => {
+    p.fill(s.scaled(0.8))
+    p.fill(s.rotated(Math.PI / 2))
+    p.fill(s.rotated(-Math.PI / 2))
+  })
+
+  path
+    .exploded()
+    .flatMap(s => s.exploded())
+    .filter(_ => p.random() < 0.4)
+    .forEach(s => {
+      p.setFillColour(0, 0, 95, p.sample([0.1, 0.2]))
+      p.fill(s)
+    })
+}
+
+const transformingPaths = (p: SCanvas) => {
+  p.background(30, 80, 40)
+  const { center, bottom, right } = p.meta
+  const [cX, cY] = center
+  const r = 0.3 * Math.min(bottom, right)
+  const path = Path.startAt([cX + r * Math.cos(p.t), cY + r * Math.sin(p.t)])
+  p.times(33, n => {
+    path.addCurveTo(
+      [
+        cX + (n % 2 === 0 ? 1 : 0.8) * r * Math.cos(p.t + (n * Math.PI) / 16),
+        cY + (n % 2 === 0 ? 1 : 0.8) * r * Math.sin(p.t + (n * Math.PI) / 16),
+      ],
+      {
+        polarlity: n % 2 === 0 ? 1 : -1,
+      }
+    )
+  })
+
+  p.times(4, sc => {
+    const scale = (sc ** 1.5 + 1) * 0.22
+    p.lineWidth = (sc + 1) * 0.002
+
+    p.setStrokeColour(0, 0, 0, 0.9)
+    p.draw(path.scaled(scale))
+    p.setStrokeColour(0, 0, 0, 0.3)
+    p.draw(path.rotated(0.234234 + p.t/10).scaled(scale))
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: tiling, name: "Tiling" },
   { sketch: rainbow, name: "Rainbow Drips" },
@@ -3056,6 +3158,9 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: dividing10, name: "Dividing 10" },
   { sketch: night, name: "Night" },
   { sketch: bokeh, name: "Bokeh" },
+  { sketch: advancedDivisions, name: "Advanced Divisions" },
+  { sketch: advancedDivisions2, name: "Advanced Divisions 2" },
+  { sketch: transformingPaths, name: "Transforming Paths" },
 ]
 
 export default sketches

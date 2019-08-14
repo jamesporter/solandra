@@ -53,7 +53,7 @@
 
 Ƭ **CurveConfig**: *object*
 
-*Defined in [path.ts:109](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L109)*
+*Defined in [path.ts:190](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L190)*
 
 #### Type declaration:
 
@@ -73,7 +73,7 @@ ___
 
 Ƭ **FontStyle**: *"normal" | "italic" | "oblique"*
 
-*Defined in [path.ts:695](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L695)*
+*Defined in [path.ts:930](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L930)*
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 Ƭ **FontVariant**: *"normal" | "small-caps"*
 
-*Defined in [path.ts:696](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L696)*
+*Defined in [path.ts:931](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L931)*
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 Ƭ **FontWeight**: *"normal" | "bold" | "bolder" | "lighter" | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900"*
 
-*Defined in [path.ts:697](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L697)*
+*Defined in [path.ts:932](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L932)*
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 Ƭ **PathEdge**: *object | object*
 
-*Defined in [path.ts:99](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L99)*
+*Defined in [path.ts:180](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L180)*
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 Ƭ **TextConfig**: *`Omit<TextConfigWithKind, "kind">`*
 
-*Defined in [path.ts:737](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L737)*
+*Defined in [path.ts:972](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L972)*
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 Ƭ **TextConfigWithKind**: *object*
 
-*Defined in [path.ts:725](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L725)*
+*Defined in [path.ts:960](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L960)*
 
 #### Type declaration:
 
@@ -141,7 +141,7 @@ ___
 
 Ƭ **TextHorizontalAlign**: *"center" | "start" | "end" | "left" | "right"*
 
-*Defined in [path.ts:694](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L694)*
+*Defined in [path.ts:929](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L929)*
 
 ___
 
@@ -149,7 +149,7 @@ ___
 
 Ƭ **TextSizing**: *"fixed" | "fitted"*
 
-*Defined in [path.ts:693](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L693)*
+*Defined in [path.ts:928](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L928)*
 
 ## Functions
 
@@ -157,7 +157,7 @@ ___
 
 ▸ **traceSimplePath**(`traceable`: [Traceable](../interfaces/_path_.traceable.md)): *[SimplePath](../classes/_path_.simplepath.md)*
 
-*Defined in [path.ts:580](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L580)*
+*Defined in [path.ts:815](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L815)*
 
 NB Not all canvas stuff supported, don't export this!
 Good enough for some things

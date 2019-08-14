@@ -257,10 +257,6 @@ export class Path implements Traceable {
     return this
   }
 
-  /*
-New stuff
-*/
-
   /**
    * @param delta Vector to move path by
    */
@@ -388,23 +384,32 @@ New stuff
     const es2 = [...this.edges.slice(n), ...this.edges.slice(0, m)]
 
     if (config.curve) {
-      throw new Error("Not yet implemented")
+      const path1 = new Path(es1[es1.length - 1].to)
+      const path2 = new Path(es2[es2.length - 1].to)
+
+      path1.edges = es1
+      path2.edges = es2
+
+      const polarlity: 1 | -1 = (config.curve && config.curve.polarlity) || 1
+
+      path1.addCurveTo(es1[0].from, config.curve)
+      path2.addCurveTo(es2[0].from, {
+        ...config.curve,
+        polarlity: -polarlity as (1 | -1),
+      })
+
+      return [path1, path2]
     } else {
       es1.push({ to: es1[0].from, from: es1[es1.length - 1].to, kind: "line" })
       es2.push({ from: es1[0].from, to: es1[es1.length - 1].to, kind: "line" })
+      const path1 = new Path(es1[es1.length - 1].to)
+      path1.edges = es1
+      const path2 = new Path(es2[es2.length - 1].to)
+      path2.edges = es2
+
+      return [path1, path2]
     }
-
-    const path1 = new Path(es1[es1.length - 1].to)
-    path1.edges = es1
-    const path2 = new Path(es2[es2.length - 1].to)
-    path2.edges = es2
-
-    return [path1, path2]
   }
-
-  /*
-^ New stuff
-  */
 
   traceIn = (ctx: CanvasRenderingContext2D) => {
     const { from } = this.edges[0]
