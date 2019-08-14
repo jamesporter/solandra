@@ -32,7 +32,7 @@
 
 \+ **new Star**(`config`: object): *[Star](_path_.star.md)*
 
-*Defined in [path.ts:594](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L594)*
+*Defined in [path.ts:829](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L829)*
 
 **Parameters:**
 
@@ -54,7 +54,7 @@ Name | Type |
 
 • **get path**(): *[SimplePath](_path_.simplepath.md)*
 
-*Defined in [path.ts:640](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L640)*
+*Defined in [path.ts:875](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L875)*
 
 **Returns:** *[SimplePath](_path_.simplepath.md)*
 
@@ -66,7 +66,7 @@ Name | Type |
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:610](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L610)*
+*Defined in [path.ts:845](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L845)*
 
 **Parameters:**
 

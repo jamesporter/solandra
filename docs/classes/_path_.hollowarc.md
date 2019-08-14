@@ -38,7 +38,7 @@
 
 \+ **new HollowArc**(`config`: object): *[HollowArc](_path_.hollowarc.md)*
 
-*Defined in [path.ts:263](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L263)*
+*Defined in [path.ts:498](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L498)*
 
 **Parameters:**
 
@@ -60,7 +60,7 @@ Name | Type |
 
 • **antiClockwise**: *boolean*
 
-*Defined in [path.ts:263](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L263)*
+*Defined in [path.ts:498](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L498)*
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 • **cX**: *number*
 
-*Defined in [path.ts:257](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L257)*
+*Defined in [path.ts:492](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L492)*
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 • **cY**: *number*
 
-*Defined in [path.ts:258](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L258)*
+*Defined in [path.ts:493](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L493)*
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 • **endAngle**: *number*
 
-*Defined in [path.ts:262](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L262)*
+*Defined in [path.ts:497](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L497)*
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 • **innerRadius**: *number*
 
-*Defined in [path.ts:260](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L260)*
+*Defined in [path.ts:495](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L495)*
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 • **radius**: *number*
 
-*Defined in [path.ts:259](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L259)*
+*Defined in [path.ts:494](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L494)*
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 • **startAngle**: *number*
 
-*Defined in [path.ts:261](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L261)*
+*Defined in [path.ts:496](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L496)*
 
 ## Methods
 
@@ -118,7 +118,7 @@ ___
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:289](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L289)*
+*Defined in [path.ts:524](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L524)*
 
 **Parameters:**
 

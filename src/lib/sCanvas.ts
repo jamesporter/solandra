@@ -278,24 +278,17 @@ export default class SCanvas {
   aroundCircle = (
     config: {
       at?: Point2D
-      radius?: number
+      r?: number
       n: number
     },
     callback: (point: Point2D, i: number) => void
   ) => {
-    const {
-      n,
-      at: [cX, cY] = [0.5, 0.5 / this.aspectRatio],
-      radius = 0.25,
-    } = config
+    const { n, at: [cX, cY] = [0.5, 0.5 / this.aspectRatio], r = 0.25 } = config
     const da = (Math.PI * 2) / n
 
     let a = -Math.PI * 0.5
     for (let i = 0; i < n; i++) {
-      callback(
-        [cX + radius * Math.cos(a + da), cY + radius * Math.sin(a + da)],
-        i
-      )
+      callback([cX + r * Math.cos(a + da), cY + r * Math.sin(a + da)], i)
       a += da
     }
   }

@@ -30,7 +30,7 @@ Hatching in a circle around a point, with a radius and delta between lines
 
 \+ **new Hatching**(`config`: object): *[Hatching](_path_.hatching.md)*
 
-*Defined in [path.ts:648](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L648)*
+*Defined in [path.ts:883](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L883)*
 
 **Parameters:**
 
@@ -53,7 +53,7 @@ Name | Type |
 
 *Implementation of [Traceable](../interfaces/_path_.traceable.md)*
 
-*Defined in [path.ts:658](https://github.com/jamesporter/solandra/blob/18f919a/src/lib/path.ts#L658)*
+*Defined in [path.ts:893](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L893)*
 
 **Parameters:**
 
