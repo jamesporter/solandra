@@ -1,13 +1,14 @@
-import React from "react"
-import sketches from "../../sketches"
+import React, { useState } from "react"
+import sketches from "../../examples/sketches"
 import Preview from "../Preview"
 import statefulSketches from "../../stateful-sketches"
 import StatefulPreview from "../StatefulPreview"
 import Header from "../components/Header"
-import { Link } from "gatsby"
 import { H1 } from "../components/Text"
+import SelectFromChoice from "../components/SelectFromChoice"
 
 export function Main() {
+  const [category, setCategory] = useState("Highlights")
   return (
     <>
       <Header />
@@ -18,8 +19,15 @@ export function Main() {
         part, to more complex examples composing different parts of the
         framework. Click on Source Code to see how things work.
       </p>
+
+      <SelectFromChoice
+        choices={Object.keys(sketches).map(c => ({ label: c, value: c }))}
+        onSelect={setCategory}
+        value={category}
+      />
+
       <div className="flex flex-row flex-wrap justify-center container m-auto">
-        {sketches.map((s, id) => {
+        {sketches[category].map((s, id) => {
           return (
             <Preview
               sketch={s.sketch}

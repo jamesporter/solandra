@@ -6,7 +6,7 @@ import {
   sizeChoices,
 } from "../config"
 import SelectFromChoice from "../components/SelectFromChoice"
-import sketches from "../../sketches"
+import sketches from "../../examples/sketches"
 import SCanvas from "../../lib/sCanvas"
 import { getNumber, getSketchIdx } from "../util"
 import { SEED_KEY, TIME_KEY } from "./ViewSingle"

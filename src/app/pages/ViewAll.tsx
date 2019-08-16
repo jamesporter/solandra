@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import Canvas from "./../Canvas"
-import sketches from "../../sketches"
+import sketches from "../../examples/sketches"
 import useKeypresses from "../hooks/useKeypresses"
 import useInterval from "../hooks/useInterval"
 import { navigate } from "@reach/router"
@@ -9,36 +9,7 @@ export const INDEX_KEY = "play-ts.index"
 export const SEED_KEY = "play-ts.seed"
 export const TIME_KEY = "play-ts.time"
 
-const whiteList = [
-  "Tiling",
-  "Tiled Curves",
-  "Script-ish",
-  "Doodles",
-  "Circles",
-  "Ellipses Demo",
-  "Gradient Demo 1",
-  "Gradient Demo 2",
-  "Gaussian 3",
-  "Poisson",
-  "Curves",
-  "Transforms Demo 2",
-  "Time",
-  "Polygons 3",
-  "Stack Polygons",
-  "Fancy Tiling",
-  "Another Tiling",
-  "Lissajous",
-  "Sketching Curves",
-  "Shading In",
-  "Shading Again",
-  "Shaded Arcs",
-  "Arc Chart",
-  "Bars",
-  "Little Abstracts",
-]
-
-const selectSketches = sketches.filter(s => whiteList.includes(s.name))
-
+const selectSketches = sketches.Highlights
 function ViewAll({ playing }: { playing?: boolean }) {
   const [sketchNo, setSketchNo] = useState(0)
 
