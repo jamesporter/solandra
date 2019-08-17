@@ -2,7 +2,7 @@ import SCanvas from "../lib/sCanvas"
 import { SimplePath, Rect } from "../lib/paths"
 import { add, scale } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
-import { scaler } from "../lib"
+import { scaler, scaler2d } from "../lib"
 
 const blob = (p: SCanvas) => {
   p.background(205, 55, 95)
@@ -81,26 +81,25 @@ const lowResAnimation = (p: SCanvas) => {
 }
 
 const lowResAnimation2 = (p: SCanvas) => {
-  const scaleX = scaler({
-    minDomain: 0.1,
-    maxDomain: 0.9,
-    minRange: -2 * Math.PI,
-    maxRange: Math.PI,
-  })
-
-  const scaleY = scaler({
-    minDomain: 0.1,
-    maxDomain: p.meta.bottom - 0.1,
-    minRange: -1.6,
-    maxRange: 1.6,
-  })
+  const scaleXY = scaler2d(
+    {
+      minDomain: 0.1,
+      maxDomain: 0.9,
+      minRange: -2 * Math.PI,
+      maxRange: Math.PI,
+    },
+    {
+      minDomain: 0.1,
+      maxDomain: p.meta.bottom - 0.1,
+      minRange: -1.6,
+      maxRange: 1.6,
+    }
+  )
   const d = 0.001
   p.background(215, 20, 20)
   p.forTiling({ n: 35, type: "square", margin: 0.1 }, ([x, y], [w, h]) => {
-    if (
-      scaleY(y) >
-      Math.cos(p.t + scaleX(x)) + 0.5 * Math.sin(p.t * 2.23 + scaleX(x))
-    ) {
+    const [sX, sY] = scaleXY([x, y])
+    if (sY > Math.cos(p.t + sX) + 0.5 * Math.sin(p.t * 2.23 + sX)) {
       p.setFillColour(5 + y * 40, 90, 40)
       p.fill(new Rect({ at: [x + d, y + d], w: w - 2 * d, h: h - 2 * d }))
     }
