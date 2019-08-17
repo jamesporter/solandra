@@ -11,10 +11,7 @@ type CanvasProps = {
   seed: number
   playing?: boolean
   noShadow?: boolean
-  onClick?: (
-    evt: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    size: [number, number]
-  ) => void
+  onClick?: (position: [number, number], size: [number, number]) => void
 }
 
 /**
@@ -144,7 +141,12 @@ export default function Canvas({
     <div
       className="flex-1 self-stretch flex items-center justify-center"
       ref={ref}
-      onClick={evt => onClick(evt, [width, height])}
+      onClick={(evt: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+        const { top, left } = canvasRef.current.getBoundingClientRect()
+        const x = evt.clientX - left
+        const y = evt.clientY - top
+        onClick([x, y], [width, height])
+      }}
     >
       <canvas
         id="myCanvas"
