@@ -33,6 +33,9 @@ export default class Path implements Traceable {
     return new Path(point)
   }
 
+  /**
+   * Add a line to a point
+   */
   addLineTo = (point: Point2D): Path => {
     this.edges.push({
       kind: "line",
@@ -43,6 +46,22 @@ export default class Path implements Traceable {
     return this
   }
 
+  /**
+   * Add a curve
+   */
+  addCurve = (config: CurveConfig & { to: Point2D }): Path => {
+    const { to, ...other } = config
+    return this.addCurveTo(to, other)
+  }
+
+  /**
+   * Adds a curve to a point
+   * with optional configuration
+   *
+   * Admittedly this is inconsistent with APIs elsewhere (where typically config
+   * goes first) but I found in practice this is nice. addCurve is also available
+   * and more consistent.
+   */
   addCurveTo = (point: Point2D, config: CurveConfig = {}): Path => {
     const {
       curveSize = 1,
@@ -90,6 +109,10 @@ export default class Path implements Traceable {
     return this.transformed(pt => v.add(pt, delta))
   }
 
+  /**
+   * Scale a path around its (vertex-wise) centroid
+   * @param scale
+   */
   scaled(scale: number): Path {
     const c = this.centroid
     return this.transformed(p => v.add(c, v.scale(v.subtract(p, c), scale)))
@@ -117,6 +140,9 @@ export default class Path implements Traceable {
     return newPath
   }
 
+  /**
+   * Vertex-wise centroid
+   */
   get centroid(): Point2D {
     return centroid(this.edges.map(e => e.from))
   }
@@ -161,6 +187,10 @@ export default class Path implements Traceable {
     return paths
   }
 
+  /**
+   * A new path transforming the current one in a pointwise manner
+   * @param transform
+   */
   transformed(transform: (point: Point2D) => Point2D): Path {
     const newPath = new Path(this.currentPoint)
 
@@ -187,6 +217,10 @@ export default class Path implements Traceable {
     return newPath
   }
 
+  /**
+   * Rotate a path about its vertex-wise centroid
+   * @param angle radians as alway
+   */
   rotated(angle: number): Path {
     const c = this.centroid
     const [cX, cY] = c
@@ -199,6 +233,11 @@ export default class Path implements Traceable {
     })
   }
 
+  /**
+   * Split a path into two, supply a curve configuration to split with a curve
+   * otherwise will be split with a straight line.
+   * @param config
+   */
   subdivide(config: { m: number; n: number; curve?: CurveConfig }): Path[] {
     const l = this.edges.length
     const { n, m } = config
