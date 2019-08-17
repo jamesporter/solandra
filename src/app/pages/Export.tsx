@@ -30,7 +30,7 @@ export function Export() {
   const previewRef = useRef<HTMLCanvasElement | null>(null)
   const sketchNo = getSketchIdx()
   const category = getSketchCategory() || "Highlights"
-  const sketch = sketches[category][sketchNo || 0]
+  const sketch = sketches[category].sketches[sketchNo || 0]
 
   const w = size
   const h = Math.floor(size / aspectRatio)

@@ -854,7 +854,7 @@ const dividing2 = (p: SCanvas) => {
   p.background(0, 0, 5)
   new RegularPolygon({ at: p.meta.center, r: 0.4, n: 20 }).path.segmented
     .flatMap(s => s.exploded({ scale: 0.75, magnitude: 1.1 }))
-    .flatMap(s => s.exploded({ scale: 0.8, magnitude: 1.5 }))
+    .flatMap(s => s.exploded({ scale: 0.75, magnitude: 1.3 }))
     .forEach((s, i) => {
       p.setFillColour(i * 5, 80, 60, 0.9)
       p.fill(s)
