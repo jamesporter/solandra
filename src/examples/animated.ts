@@ -2,7 +2,7 @@ import SCanvas from "../lib/sCanvas"
 import { SimplePath, Rect } from "../lib/paths"
 import { add, scale } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
-import { scaler, scaler2d } from "../lib"
+import { scaler, scaler2d, Circle, clamp } from "../lib"
 
 const blob = (p: SCanvas) => {
   p.background(205, 55, 95)
@@ -106,11 +106,37 @@ const lowResAnimation2 = (p: SCanvas) => {
   })
 }
 
+const lowResAnimation3 = (p: SCanvas) => {
+  const scaleXY = scaler2d(
+    {
+      minDomain: 0.1,
+      maxDomain: 0.9,
+      minRange: -2 * Math.PI,
+      maxRange: Math.PI,
+    },
+    {
+      minDomain: 0.1,
+      maxDomain: p.meta.bottom - 0.1,
+      minRange: -1,
+      maxRange: 1,
+    }
+  )
+  p.background(p.t * 20 + 95, 15, 10)
+  p.forTiling({ n: 35, type: "square", margin: 0.05 }, ([x, y], [w], at) => {
+    const [sX, sY] = scaleXY([x, y])
+    const eqn = Math.cos(p.t / 1.2 + sX)
+    const alpha = clamp({ from: 0.15, to: 1 }, 1 - Math.abs(sY - eqn))
+    p.setFillColour(p.t * 20 + 120 + y * 40, 90, 50, alpha)
+    p.fill(new Circle({ at, r: w / 2.1 }))
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: blob, name: "Blob" },
   { sketch: lissajous, name: "Lissajous" },
   { sketch: lowResAnimation, name: "Low Resolution" },
   { sketch: lowResAnimation2, name: "Low Resolution 2" },
+  { sketch: lowResAnimation3, name: "Low Resolution 3" },
 ]
 
 export default sketches
