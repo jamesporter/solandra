@@ -7,20 +7,31 @@ export const clamp = (
   return Math.min(to, Math.max(from, n))
 }
 
+type ScaleConfig = {
+  minDomain: number
+  maxDomain: number
+  minRange: number
+  maxRange: number
+}
+
 export const scaler = ({
   minDomain,
   maxDomain,
   minRange,
   maxRange,
-}: {
-  minDomain: number
-  maxDomain: number
-  minRange: number
-  maxRange: number
-}): ((n: number) => number) => {
+}: ScaleConfig): ((n: number) => number) => {
   const rangeS = maxRange - minRange
   const domainS = maxDomain - minDomain
   return n => minRange + (rangeS * (n - minDomain)) / domainS
+}
+
+export const scaler2d = (
+  c1: ScaleConfig,
+  c2: ScaleConfig
+): ((point: Point2D) => Point2D) => {
+  const s1 = scaler(c1)
+  const s2 = scaler(c2)
+  return ([x, y]: Point2D) => [s1(x), s2(y)]
 }
 
 /**
