@@ -10,6 +10,7 @@ import Container from "../app/components/Container"
 import CodeAndSketch from "../app/components/CodeAndSketch"
 import HLink from "../app/components/HLink"
 import { Link } from "gatsby"
+import A from "../app/components/A"
 
 const logo = (p: SCanvas) => {
   p.background(220, 26, 14)
@@ -285,12 +286,9 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
             There are loads of examples with source code to learn from
           </Link>
           . You can also read the{" "}
-          <a
-            className="text-blue-700 underline"
-            href="https://github.com/jamesporter/solandra/tree/master/docs"
-          >
+          <A href="https://github.com/jamesporter/solandra/tree/master/docs">
             docs
-          </a>
+          </A>
           .
         </p>
       </Container>

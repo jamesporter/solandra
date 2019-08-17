@@ -24,7 +24,7 @@ export function Main() {
         choices={Object.keys(sketches).map(c => ({ label: c, value: c }))}
         onSelect={setCategory}
         value={category}
-        tailwindContainerClasses="m-auto"
+        tailwindContainerClasses="m-auto px-2"
         tailwindItemContainerClasses="my-2"
       />
 
