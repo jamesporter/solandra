@@ -48,6 +48,7 @@ const dividing5 = (p: SCanvas) => {
 const dividing7 = (p: SCanvas) => {
   p.background(90, 20, 95)
   p.lineWidth = 0.004
+  const explosionSize = 2 + Math.cos(p.t)
 
   p.forMargin(0.1, (at, [w, h]) => {
     new Rect({ at, w, h })
@@ -63,7 +64,12 @@ const dividing7 = (p: SCanvas) => {
           .scaled(p.gaussian({ mean: 1, sd: 0.2 }))
           .rotated(p.gaussian({ sd: Math.PI / 4 }))
       )
-      .flatMap(s => s.exploded({ scale: 0.9, magnitude: 1 }))
+      .flatMap(s =>
+        s.exploded({
+          scale: 0.6 + 0.3 * explosionSize,
+          magnitude: explosionSize,
+        })
+      )
       .forEach((s, i) => {
         p.setFillColour(0 + (i % 60), 90, 50)
         p.draw(s)
