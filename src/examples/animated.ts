@@ -117,8 +117,8 @@ const lowResAnimation3 = (p: SCanvas) => {
     {
       minDomain: 0.1,
       maxDomain: p.meta.bottom - 0.1,
-      minRange: -1,
-      maxRange: 1,
+      minRange: -1.5,
+      maxRange: 1.5,
     }
   )
   p.background(p.t * 20 + 95, 15, 10)
