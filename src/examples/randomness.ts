@@ -5,6 +5,7 @@ import { RegularPolygon, Circle, Rect } from "../lib/paths"
 import { add, scale } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
 import { RadialGradient } from "../lib/gradient"
+import { clamp } from "../lib"
 
 const noiseField = (p: SCanvas) => {
   const delta = 0.01
@@ -446,6 +447,22 @@ const night = (p: SCanvas) => {
   })
 }
 
+const noiseGlow = (p: SCanvas) => {
+  p.background(0, 0, 10)
+  p.forTiling({ n: 50, type: "square" }, ([x, y], [dX], at) => {
+    const maxR = dX / 1.8
+    const value = clamp(
+      { from: 0.2, to: 1 },
+      1.5 * perlin2(x * 6 + 0.3, y * 15 + 0.5)
+    )
+    const h = 120 - 120 * value
+    p.setFillColour(h, 80, 50, 0.2)
+    p.fill(new Circle({ at, r: maxR * value * 1.5 }))
+    p.setFillColour(h, 90, 50)
+    p.fill(new Circle({ at, r: maxR * value }))
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: noiseField, name: "Noise Field" },
   { sketch: rectangles, name: "Rectangles" },
@@ -463,6 +480,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: contoured, name: "Contoured" },
   { sketch: contoured2, name: "Contoured 2" },
   { sketch: night, name: "Night" },
+  { sketch: noiseGlow, name: "Noise Glow" },
 ]
 
 export default sketches
