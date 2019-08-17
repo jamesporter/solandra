@@ -6,8 +6,8 @@ import { Main } from "../app/pages/Main"
 
 const MainPage = () => (
   <Layout>
-    <SEO title="Solandra Algorithmic Art: Highlights" />
-    <Main category="Highlights" />
+    <SEO title="Solandra Algorithmic Art: API Samples" />
+    <Main category="API Samples" />
   </Layout>
 )
 

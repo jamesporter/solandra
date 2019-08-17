@@ -11,6 +11,7 @@ import CodeAndSketch from "../app/components/CodeAndSketch"
 import HLink from "../app/components/HLink"
 import { Link } from "gatsby"
 import A from "../app/components/A"
+import ExampleLinks from "../app/components/ExampleLinks"
 
 const logo = (p: SCanvas) => {
   p.background(220, 26, 14)
@@ -280,6 +281,8 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
           playing
         />
 
+        <H2>Examples</H2>
+
         <p className="pb-8">
           Now what?{" "}
           <Link to="/main" className="text-blue-700 underline">
@@ -291,6 +294,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
           </A>
           .
         </p>
+        <ExampleLinks />
       </Container>
 
       <div className="bg-gray-900 px-8 pt-4 flex flex-col">
