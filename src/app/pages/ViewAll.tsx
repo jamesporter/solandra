@@ -13,6 +13,7 @@ const selectSketches = sketches.Highlights.sketches
 function ViewAll({ playing }: { playing?: boolean }) {
   const [sketchNo, setSketchNo] = useState(0)
   const [haveInteracted, setHaveInteracted] = useState(false)
+  const [seed, setSeed] = useState(0)
 
   const goToNext = () => {
     setSketchNo(sketchNo < selectSketches.length - 1 ? sketchNo + 1 : 0)
@@ -50,12 +51,18 @@ function ViewAll({ playing }: { playing?: boolean }) {
         goToPrev()
       },
     ],
+    [
+      "r",
+      () => {
+        setSeed(seed + 131)
+      },
+    ],
   ])
 
   return (
     <Canvas
       sketch={selectSketches[sketchNo].sketch}
-      seed={12}
+      seed={seed}
       playing={playing}
       noShadow
       onClick={([x, y], size) => onClick(x, y, size)}

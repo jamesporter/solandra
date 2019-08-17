@@ -21,7 +21,8 @@ const QuickStart = () => (
         <li className="pb-2">
           Recommended:{" "}
           <Link to="/main" className="text-blue-700 underline">
-            loads of examples with source code to learn from
+            over 100 examples with source code to learn from (click on the
+            Source Code button)
           </Link>
         </li>
         <li className="pb-2">
@@ -66,7 +67,7 @@ const QuickStart = () => (
               })
             )
 
-            const n = Math.floor(50 * (1 + Math.sin(p.t * 0.5)))
+            const n = Math.floor(50 * (1 + Math.sin(p.t * 0.8)))
 
             p.forVertical(
               { n: 100, margin: 0.15 },
