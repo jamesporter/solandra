@@ -1,8 +1,9 @@
-import { Traceable } from "."
+import { Traceable, Path } from "."
 import { Point2D, Vector2D } from "../types/sol"
 import { tripleWise } from "../collectionOps"
 import { v } from ".."
 import { centroid } from "../util"
+import { CurveConfig } from "./Path"
 
 export default class SimplePath implements Traceable {
   private constructor(private points: Point2D[] = []) {}
@@ -167,5 +168,24 @@ export default class SimplePath implements Traceable {
       this.points[n],
     ]
     return [SimplePath.withPoints(p1), SimplePath.withPoints(p2)]
+  }
+
+  /**
+   * Convert a simple path to a curved path
+   * @param style
+   */
+  curvify(style: (i: number) => CurveConfig | null): Path {
+    if (this.points.length < 2) throw new Error("Must have at least 2 points")
+    const startAt = this.points[0]
+    const path = Path.startAt(startAt)
+    for (let i = 0; i < this.points.length - 1; i++) {
+      const cs = style(i)
+      if (cs) {
+        path.addCurveTo(this.points[i + 1], cs)
+      } else {
+        path.addLineTo(this.points[i + 1])
+      }
+    }
+    return path
   }
 }

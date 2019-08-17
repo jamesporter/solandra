@@ -2,6 +2,7 @@ import { Point2D } from "../lib/types/sol"
 import SCanvas from "../lib/sCanvas"
 import { Path, SimplePath, Star, RegularPolygon, Rect } from "../lib/paths"
 import { arrayOf } from "../lib/collectionOps"
+import { scale } from "../lib/vectors"
 
 const dividing3 = (p: SCanvas) => {
   p.background(0, 0, 5)
@@ -185,6 +186,39 @@ const advancedDivisions2 = (p: SCanvas) => {
     })
 }
 
+const curvify = (p: SCanvas) => {
+  p.background(150, 90, 30)
+  p.setStrokeColour(0, 0, 95, 0.4)
+  p.times(20, () => {
+    p.draw(
+      new RegularPolygon({ at: p.meta.center, r: 0.3, n: 11 }).path.curvify(
+        () => ({
+          curveSize: p.gaussian({ mean: 2, sd: 0.5 }),
+          polarlity: p.randomPolarity(),
+        })
+      )
+    )
+  })
+}
+
+const curvify2 = (p: SCanvas) => {
+  p.background(150, 20, 20)
+  p.setStrokeColour(0, 0, 95)
+  new RegularPolygon({ at: p.meta.center, r: 0.3, n: 12 }).path
+    .exploded({ magnitude: 1.2, scale: 0.8 })
+    .map((sp, i) => sp.curvify(() => ({ curveSize: -0.25 })))
+    .forEach(s => p.draw(s))
+  const middle = new RegularPolygon({
+    at: p.meta.center,
+    r: 0.25,
+    n: 12,
+  }).path.curvify(i => (i % 2 === 0 ? { curveSize: -0.9 } : null))
+  p.setFillColour(0, 0, 75, 0.4)
+  p.fill(middle)
+  p.setStrokeColour(0, 0, 75)
+  p.draw(middle)
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: dividing3, name: "Dividing 3" },
   { sketch: dividing4, name: "Dividing 4" },
@@ -194,6 +228,8 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: dividing9, name: "Dividing 9" },
   { sketch: dividing10, name: "Dividing 10" },
   { sketch: advancedDivisions2, name: "Advanced Divisions 2" },
+  { sketch: curvify, name: "Paths to Curves" },
+  { sketch: curvify2, name: "Paths to Curves 2" },
 ]
 
 export default sketches

@@ -13,7 +13,7 @@ type PathEdge =
       control2: Point2D
     }
 
-type CurveConfig = {
+export type CurveConfig = {
   polarlity?: 1 | -1
   curveSize?: number
   curveAngle?: number

@@ -4,11 +4,11 @@ const fs = require("fs"),
 let exampleScripts = {}
 
 const files = fs.readdirSync(path.join("src", "examples"))
-console.log(files)
+// console.log(files)
 
 for (let f of files) {
   if (f === "sketches.ts") break
-  console.log(`Process: ${f}\n\n`)
+  // console.log(`Process: ${f}\n\n`)
 
   const filePath = path.join("src", "examples", f)
   const source = fs.readFileSync(filePath).toString()
@@ -36,7 +36,7 @@ for (let f of files) {
     .map(nm => nm.match(/{ sketch: ([^,]*), name: "([^"]*)" }/i).slice(1, 3))
     .forEach(([n, l]) => (names[n] = l))
 
-  console.log(names)
+  // console.log(names)
 
   const esForF = {}
   Object.keys(names).forEach(name => {
@@ -45,10 +45,10 @@ for (let f of files) {
 
   exampleScripts[f] = esForF
 
-  console.log(`Done: ${f}\n\n`)
+  // console.log(`Done: ${f}\n\n`)
 }
 
-console.log(exampleScripts)
+// console.log(exampleScripts)
 
 fs.writeFileSync(
   path.join("src", "app", "examples.json"),
