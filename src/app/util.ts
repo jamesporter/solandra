@@ -45,6 +45,15 @@ export const getSketchIdx = (): null | number => {
   }
 }
 
+export const getSketchCategory = (): null | number => {
+  try {
+    const params = new URL(document.location).searchParams
+    return params.get("category")
+  } catch (ex) {
+    return null
+  }
+}
+
 export const setSketchIdxParam = (idx: number) => {
   if ("URLSearchParams" in window) {
     var searchParams = new URLSearchParams(window.location.search)

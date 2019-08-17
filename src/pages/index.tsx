@@ -10,6 +10,8 @@ import Container from "../app/components/Container"
 import CodeAndSketch from "../app/components/CodeAndSketch"
 import HLink from "../app/components/HLink"
 import { Link } from "gatsby"
+import A from "../app/components/A"
+import ExampleLinks from "../app/components/ExampleLinks"
 
 const logo = (p: SCanvas) => {
   p.background(220, 26, 14)
@@ -76,7 +78,9 @@ const IndexPage = () => (
         >
           <ViewAll />
         </div>
-        <H3 tw="py-2 pb-8">Use Arrow keys or click to navigate</H3>
+        <p className="py-2 pb-8 text-sm text-center">
+          Use Arrow keys or click to navigate
+        </p>
 
         <H1>Principles</H1>
 
@@ -277,20 +281,20 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
           playing
         />
 
+        <H2>Examples</H2>
+
         <p className="pb-8">
           Now what?{" "}
           <Link to="/main" className="text-blue-700 underline">
             There are loads of examples with source code to learn from
           </Link>
           . You can also read the{" "}
-          <a
-            className="text-blue-700 underline"
-            href="https://github.com/jamesporter/solandra/tree/master/docs"
-          >
+          <A href="https://github.com/jamesporter/solandra/tree/master/docs">
             docs
-          </a>
+          </A>
           .
         </p>
+        <ExampleLinks />
       </Container>
 
       <div className="bg-gray-900 px-8 pt-4 flex flex-col">

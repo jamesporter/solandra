@@ -25,7 +25,7 @@
 
 ▸ **gradient**(`ctx`: `CanvasRenderingContext2D`): *`CanvasGradient`*
 
-*Defined in [sCanvas.ts:7](https://github.com/jamesporter/solandra/blob/a654911/src/lib/sCanvas.ts#L7)*
+*Defined in [sCanvas.ts:7](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/sCanvas.ts#L7)*
 
 **Parameters:**
 
