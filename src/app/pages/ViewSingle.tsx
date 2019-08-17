@@ -5,7 +5,7 @@ import { aspectRatioChoices, defaultAspectRatio } from "./../config"
 import sketches from "../../examples/sketches"
 import source from "../examples.json"
 import SyntaxHighlighter from "react-syntax-highlighter"
-import { getNumber, setNumber, getSketchIdx } from "../util"
+import { getNumber, setNumber, getSketchIdx, getSketchCategory } from "../util"
 import Flex from "../components/Flex"
 import { Link } from "gatsby"
 import Header from "../components/Header"
@@ -16,6 +16,7 @@ export const TIME_KEY = "play-ts.time"
 
 function ViewSingle() {
   const parsedInt = getSketchIdx()
+  const category = getSketchCategory() || "Highlights"
   const idx = getNumber(INDEX_KEY)
   const sketchNo = parsedInt !== null ? parsedInt : idx || 0
 
@@ -74,7 +75,7 @@ function ViewSingle() {
         </button>
 
         <Link
-          to={`/export?sketch=${sketchNo}`}
+          to={`/export?sketch=${sketchNo}&category=${category}`}
           className="bg-teal-500 hover:bg-teal-700 focus:outline-none focus:shadow-outline px-2 mr-2 py-3 rounded ml-2"
         >
           Export
@@ -83,7 +84,7 @@ function ViewSingle() {
       <div className="flex-1 flex flex-row items-stretch">
         <Canvas
           aspectRatio={aspectRatio}
-          sketch={sketches[sketchNo].sketch}
+          sketch={sketches[category][sketchNo].sketch}
           seed={seed}
           playing={isPlaying}
         />
@@ -97,7 +98,7 @@ function ViewSingle() {
           >
             <div className="text-gray-100 px-8 pt-8 flex flex-row justify-between items-center">
               <h2 className="text-gray-100 font-bold text-xl">
-                {sketches[sketchNo].name}
+                {sketches[category][sketchNo].name}
               </h2>
               <button
                 className={`bg-gray-500 hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded`}

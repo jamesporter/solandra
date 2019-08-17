@@ -8,9 +8,16 @@ type CanvasProps = {
   size?: number
   id: number
   name: string
+  category: string
 }
 
-export default function Preview({ size = 200, sketch, id, name }: CanvasProps) {
+export default function Preview({
+  size = 200,
+  sketch,
+  id,
+  name,
+  category,
+}: CanvasProps) {
   const canvasRef = useRef(null)
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
 
@@ -42,7 +49,7 @@ export default function Preview({ size = 200, sketch, id, name }: CanvasProps) {
   return (
     <div className="m-4">
       <h3 className="text-md text-center font-semibold pb-4">{name}</h3>
-      <Link to={`/view?sketch=${id}`}>
+      <Link to={`/view?sketch=${id}&category=${category}`}>
         <canvas
           width={size}
           height={size}

@@ -8,7 +8,7 @@ import {
 import SelectFromChoice from "../components/SelectFromChoice"
 import sketches from "../../examples/sketches"
 import SCanvas from "../../lib/sCanvas"
-import { getNumber, getSketchIdx } from "../util"
+import { getNumber, getSketchIdx, getSketchCategory } from "../util"
 import { SEED_KEY, TIME_KEY } from "./ViewSingle"
 import Header from "../components/Header"
 
@@ -29,7 +29,8 @@ export function Export() {
   const [data, setData] = useState<string | null>(null)
   const previewRef = useRef<HTMLCanvasElement | null>(null)
   const sketchNo = getSketchIdx()
-  const sketch = sketches[sketchNo || 0]
+  const category = getSketchCategory() || "Highlights"
+  const sketch = sketches[category][sketchNo || 0]
 
   const w = size
   const h = Math.floor(size / aspectRatio)

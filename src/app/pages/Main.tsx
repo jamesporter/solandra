@@ -24,6 +24,8 @@ export function Main() {
         choices={Object.keys(sketches).map(c => ({ label: c, value: c }))}
         onSelect={setCategory}
         value={category}
+        tailwindContainerClasses="m-auto"
+        tailwindItemContainerClasses="my-4"
       />
 
       <div className="flex flex-row flex-wrap justify-center container m-auto">
@@ -35,6 +37,7 @@ export function Main() {
               size={240}
               id={id}
               key={id}
+              category={category}
             />
           )
         })}
