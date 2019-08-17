@@ -1,6 +1,6 @@
 > **[solandra](../README.md)**
 
-[Globals](../README.md) / ["path"](../modules/_path_.md) / [Textable](_path_.textable.md) /
+[Globals](../README.md) / ["paths/index"](../modules/_paths_index_.md) / [Textable](_paths_index_.textable.md) /
 
 # Interface: Textable
 
@@ -10,13 +10,13 @@
 
 ## Implemented by
 
-* [Text](../classes/_path_.text.md)
+* [Text](../classes/_paths_text_.text.md)
 
 ## Index
 
 ### Methods
 
-* [textIn](_path_.textable.md#textin)
+* [textIn](_paths_index_.textable.md#textin)
 
 ## Methods
 
@@ -24,7 +24,7 @@
 
 ▸ **textIn**(`ctx`: `CanvasRenderingContext2D`): *any*
 
-*Defined in [path.ts:11](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L11)*
+*Defined in [paths/index.ts:6](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/index.ts#L6)*
 
 **Parameters:**
 

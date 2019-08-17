@@ -1,6 +1,6 @@
 > **[solandra](../README.md)**
 
-[Globals](../README.md) / ["path"](../modules/_path_.md) / [Ellipse](_path_.ellipse.md) /
+[Globals](../README.md) / ["paths/Ellipse"](../modules/_paths_ellipse_.md) / [Ellipse](_paths_ellipse_.ellipse.md) /
 
 # Class: Ellipse
 
@@ -14,33 +14,33 @@ https://stackoverflow.com/questions/1734745/how-to-create-circle-with-bézier-cu
 
 * **Ellipse**
 
-  * [Circle](_path_.circle.md)
+  * [Circle](_paths_circle_.circle.md)
 
 ## Implements
 
-* [Traceable](../interfaces/_path_.traceable.md)
+* [Traceable](../interfaces/_paths_index_.traceable.md)
 
 ## Index
 
 ### Constructors
 
-* [constructor](_path_.ellipse.md#constructor)
+* [constructor](_paths_ellipse_.ellipse.md#constructor)
 
 ### Properties
 
-* [config](_path_.ellipse.md#protected-config)
+* [config](_paths_ellipse_.ellipse.md#protected-config)
 
 ### Methods
 
-* [traceIn](_path_.ellipse.md#tracein)
+* [traceIn](_paths_ellipse_.ellipse.md#tracein)
 
 ## Constructors
 
 ###  constructor
 
-\+ **new Ellipse**(`config`: object): *[Ellipse](_path_.ellipse.md)*
+\+ **new Ellipse**(`config`: object): *[Ellipse](_paths_ellipse_.ellipse.md)*
 
-*Defined in [path.ts:696](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L696)*
+*Defined in [paths/Ellipse.ts:10](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/Ellipse.ts#L10)*
 
 **Parameters:**
 
@@ -53,7 +53,7 @@ Name | Type |
 `h` | number |
 `w` | number |
 
-**Returns:** *[Ellipse](_path_.ellipse.md)*
+**Returns:** *[Ellipse](_paths_ellipse_.ellipse.md)*
 
 ## Properties
 
@@ -61,7 +61,7 @@ Name | Type |
 
 • **config**: *object*
 
-*Defined in [path.ts:698](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L698)*
+*Defined in [paths/Ellipse.ts:12](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/Ellipse.ts#L12)*
 
 #### Type declaration:
 
@@ -79,9 +79,9 @@ Name | Type |
 
 ▸ **traceIn**(`ctx`: `CanvasRenderingContext2D`): *void*
 
-*Implementation of [Traceable](../interfaces/_path_.traceable.md)*
+*Implementation of [Traceable](../interfaces/_paths_index_.traceable.md)*
 
-*Defined in [path.ts:706](https://github.com/jamesporter/solandra/blob/a654911/src/lib/path.ts#L706)*
+*Defined in [paths/Ellipse.ts:19](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/Ellipse.ts#L19)*
 
 **Parameters:**
 
