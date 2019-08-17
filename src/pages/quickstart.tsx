@@ -52,7 +52,7 @@ const QuickStart = () => (
 
       <div className="flex flex-col" style={{ height: 640 }}>
         <Canvas
-          seed={5}
+          seed={8}
           playing
           sketch={(p: SCanvas) => {
             p.backgroundGradient(
@@ -60,8 +60,8 @@ const QuickStart = () => (
                 from: [0, 0],
                 to: [0, p.meta.bottom],
                 colours: [
-                  [0, { h: 45, s: 30, l: 95 }],
-                  [1, { h: 55, s: 30, l: 90 }],
+                  [0, { h: 215, s: 30, l: 35 }],
+                  [1, { h: 230, s: 30, l: 20 }],
                 ],
               })
             )
@@ -77,11 +77,11 @@ const QuickStart = () => (
                   mean: dY,
                   sd: (1.5 * dY) / p.meta.bottom,
                 })
-                const curveSize = p.gaussian({ sd: 0.35 * p.meta.right })
-                const xOffset = p.gaussian({ sd: dX / 20 })
+                const curveSize = p.gaussian({ sd: 0.25 * p.meta.right })
+                const xOffset = p.gaussian({ sd: dX / 25 })
 
-                const h1 = p.uniformRandomInt({ from: 180, to: 240 })
-                const h2 = p.uniformRandomInt({ from: 0, to: 40 })
+                const h1 = p.uniformRandomInt({ from: 280, to: 350 })
+                const h2 = p.uniformRandomInt({ from: 0, to: 30 })
 
                 p.setFillGradient(
                   new LinearGradient({
@@ -90,17 +90,17 @@ const QuickStart = () => (
                     colours: [
                       [0, { h: h1, s: 60, l: 65, a: 0 }],
                       [0.05, { h: h1, s: 60, l: 65, a: 0 }],
-                      [0.1, { h: h1, s: 60, l: 65, a: 0.9 }],
+                      [0.1, { h: h1, s: 60, l: 65, a: 0.8 }],
                       [
                         0.5,
                         {
                           h: p.gaussian({ mean: 10 }) + (h1 + h2) / 2,
                           s: 60,
                           l: 65,
-                          a: 0.8,
+                          a: 0.7,
                         },
                       ],
-                      [0.9, { h: h2, s: 60, l: 65, a: 0.9 }],
+                      [0.9, { h: h2, s: 60, l: 65, a: 0.8 }],
                       [0.95, { h: h2, s: 60, l: 65, a: 0 }],
                       [1, { h: h2, s: 60, l: 65, a: 0 }],
                     ],
