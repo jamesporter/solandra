@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import Canvas from "./../Canvas"
 import SelectFromChoice from "./../components/SelectFromChoice"
 import { aspectRatioChoices, defaultAspectRatio } from "./../config"
-import sketches from "../../examples/sketches"
+import sketches, { sketchFileNames } from "../../examples/sketches"
 import source from "../examples.json"
 import SyntaxHighlighter from "react-syntax-highlighter"
 import { getNumber, setNumber, getSketchIdx, getSketchCategory } from "../util"
@@ -110,7 +110,11 @@ function ViewSingle() {
             </div>
             <div className="p-8 text-gray-300">
               <SyntaxHighlighter language="typescript" useInlineStyles={false}>
-                {source[sketches[sketchNo].name]}
+                {
+                  source[sketchFileNames[category]][
+                    sketches[category][sketchNo].name
+                  ]
+                }
               </SyntaxHighlighter>
             </div>
           </div>

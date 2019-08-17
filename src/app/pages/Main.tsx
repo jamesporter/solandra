@@ -25,7 +25,7 @@ export function Main() {
         onSelect={setCategory}
         value={category}
         tailwindContainerClasses="m-auto"
-        tailwindItemContainerClasses="my-4"
+        tailwindItemContainerClasses="my-2"
       />
 
       <div className="flex flex-row flex-wrap justify-center container m-auto">

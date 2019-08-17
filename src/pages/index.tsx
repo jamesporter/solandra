@@ -76,7 +76,9 @@ const IndexPage = () => (
         >
           <ViewAll />
         </div>
-        <H3 tw="py-2 pb-8">Use Arrow keys or click to navigate</H3>
+        <p className="py-2 pb-8 text-sm text-center">
+          Use Arrow keys or click to navigate
+        </p>
 
         <H1>Principles</H1>
 
