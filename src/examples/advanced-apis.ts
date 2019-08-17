@@ -1,5 +1,5 @@
 import SCanvas from "../lib/sCanvas"
-import { Path, RegularPolygon, Star, CompoundPath } from "../lib/path"
+import { Path, CompoundPath, Star, RegularPolygon } from "../lib/paths"
 
 const compoundPath = (p: SCanvas) => {
   p.background(45, 80, 75)

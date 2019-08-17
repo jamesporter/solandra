@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import Canvas from "./../Canvas"
 import SelectFromChoice from "./../components/SelectFromChoice"
 import { aspectRatioChoices, defaultAspectRatio } from "./../config"
-import sketches, { sketchFileNames } from "../../examples/sketches"
+import sketches from "../../examples/sketches"
 import source from "../examples.json"
 import SyntaxHighlighter from "react-syntax-highlighter"
 import { getNumber, setNumber, getSketchIdx, getSketchCategory } from "../util"
@@ -30,6 +30,15 @@ function ViewSingle() {
     setNumber(SEED_KEY, newSeed)
     setSeed(newSeed)
   }
+
+  console.log(source[sketches[category].fileName])
+  console.log(sketches[category].sketches[sketchNo].name)
+
+  console.log(
+    source[sketches[category].fileName][
+      sketches[category].sketches[sketchNo].name
+    ]
+  )
 
   return (
     <div className="flex flex-col w-screen h-screen">
@@ -84,7 +93,7 @@ function ViewSingle() {
       <div className="flex-1 flex flex-row items-stretch">
         <Canvas
           aspectRatio={aspectRatio}
-          sketch={sketches[category][sketchNo].sketch}
+          sketch={sketches[category].sketches[sketchNo].sketch}
           seed={seed}
           playing={isPlaying}
         />
@@ -98,7 +107,7 @@ function ViewSingle() {
           >
             <div className="text-gray-100 px-8 pt-8 flex flex-row justify-between items-center">
               <h2 className="text-gray-100 font-bold text-xl">
-                {sketches[category][sketchNo].name}
+                {sketches[category].sketches[sketchNo].name}
               </h2>
               <button
                 className={`bg-gray-500 hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded`}
@@ -111,8 +120,8 @@ function ViewSingle() {
             <div className="p-8 text-gray-300">
               <SyntaxHighlighter language="typescript" useInlineStyles={false}>
                 {
-                  source[sketchFileNames[category]][
-                    sketches[category][sketchNo].name
+                  source[sketches[category].fileName][
+                    sketches[category].sketches[sketchNo].name
                   ]
                 }
               </SyntaxHighlighter>

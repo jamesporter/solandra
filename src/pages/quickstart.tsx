@@ -25,9 +25,11 @@ const QuickStart = () => (
           </Link>
         </li>
         <li className="pb-2">
-          To start coding: clone{" "}
-          <A href="https://github.com/jamesporter/solandra">this project</A> to
-          try out as add React/Gatsby powered GUI around stuff.
+          Or an{" "}
+          <A href="https://www.amimetic.co.uk/art/solving-sol-with-solandra">
+            unconventional tutorial introduction based on instructions from Sol
+            LeWitt
+          </A>
         </li>
         <li className="pb-2">
           On CodeSandbox, quickly get started:{" "}
@@ -37,16 +39,14 @@ const QuickStart = () => (
           </A>
         </li>
         <li className="pb-2">
+          To start coding: clone{" "}
+          <A href="https://github.com/jamesporter/solandra">this project</A> to
+          try out as add React/Gatsby powered GUI around stuff.
+        </li>
+        <li className="pb-2">
           On <A href="https://www.npmjs.com/package/typeplates">NPM</A>. Install
           with <span className="text-gray-500 font-mono">npm i solandra</span>{" "}
           or <span className="text-gray-500 font-mono">yarn add solandra</span>.
-        </li>
-        <li className="pb-2">
-          An{" "}
-          <A href="https://www.amimetic.co.uk/art/solving-sol-with-solandra">
-            unconventional tutorial introduction based on instructions from Sol
-            LeWitt
-          </A>
         </li>
       </ul>
 
@@ -66,12 +66,20 @@ const QuickStart = () => (
               })
             )
 
-            const n = Math.floor(50 * (1 + Math.sin(p.t)))
+            const n = Math.floor(50 * (1 + Math.sin(p.t * 0.5)))
 
             p.forVertical(
               { n: 100, margin: 0.15 },
               ([x, y], [dX, dY], c, i) => {
-                if (i >= n) return
+                const revCounts = parseInt(
+                  i
+                    .toString()
+                    .split("")
+                    .map(i => parseInt(i))
+                    .reverse()
+                    .join("")
+                )
+                if (revCounts >= n) return
 
                 const h = p.gaussian({
                   mean: dY,

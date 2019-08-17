@@ -1,6 +1,6 @@
 export { default as SCanvas } from "./sCanvas"
 export * from "./noise"
-export * from "./path"
+export * from "./paths"
 export * from "./colours"
 export { default as v } from "./vectors"
 export * from "./gradient"

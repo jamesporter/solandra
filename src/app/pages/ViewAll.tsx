@@ -9,7 +9,7 @@ export const INDEX_KEY = "play-ts.index"
 export const SEED_KEY = "play-ts.seed"
 export const TIME_KEY = "play-ts.time"
 
-const selectSketches = sketches.Highlights
+const selectSketches = sketches.Highlights.sketches
 function ViewAll({ playing }: { playing?: boolean }) {
   const [sketchNo, setSketchNo] = useState(0)
 

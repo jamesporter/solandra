@@ -7,21 +7,23 @@ import isometric from "./isometric"
 import randomness from "./randomness"
 
 export default {
-  Highlights: highlights,
-  "API Samples": samples,
-  Animated: animated,
-  "Advanced APIs": advancedApis,
-  "Advanced Paths": advancedPaths,
-  Isometric: isometric,
-  "Randomness and Noise": randomness,
-}
-
-export const sketchFileNames = {
-  "Advanced APIs": "advanced-apis.ts",
-  "Advanced Paths": "advanced-paths.ts",
-  Animated: "animated.ts",
-  "API Samples": "api-samples.ts",
-  Highlights: "highlights.ts",
-  Isometric: "isometric.ts",
-  "Randomness and Noise": "randomness.ts",
+  Highlights: { sketches: highlights, fileName: "highlights.ts" },
+  "API Samples": {
+    sketches: samples,
+    fileName: "api-samples.ts",
+  },
+  Animated: { sketches: animated, fileName: "animated.ts" },
+  "Advanced APIs": {
+    sketches: advancedApis,
+    fileName: "advanced-apis.ts",
+  },
+  "Advanced Paths": {
+    sketches: advancedPaths,
+    fileName: "advanced-paths.ts",
+  },
+  Isometric: { sketches: isometric, fileName: "isometric.ts" },
+  "Randomness and Noise": {
+    sketches: randomness,
+    fileName: "randomness.ts",
+  },
 }

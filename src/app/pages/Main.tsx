@@ -29,7 +29,7 @@ export function Main() {
       />
 
       <div className="flex flex-row flex-wrap justify-center container m-auto">
-        {sketches[category].map((s, id) => {
+        {sketches[category].sketches.map((s, id) => {
           return (
             <Preview
               sketch={s.sketch}

@@ -1,5 +1,5 @@
 import SCanvas from "../lib/sCanvas"
-import { SimplePath } from "../lib/path"
+import { SimplePath } from "../lib/paths"
 import { add, scale } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
 

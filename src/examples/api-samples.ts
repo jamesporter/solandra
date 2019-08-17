@@ -1,18 +1,17 @@
 import { Point2D } from "../lib/types/sol"
 import SCanvas from "../lib/sCanvas"
+import { Path, SimplePath } from "../lib/paths"
 import {
-  Path,
-  SimplePath,
-  Arc,
-  Rect,
+  Hatching,
+  Star,
+  RegularPolygon,
+  Circle,
   Ellipse,
   RoundedRect,
-  RegularPolygon,
-  Star,
-  Hatching,
+  Rect,
   HollowArc,
-  Circle,
-} from "../lib/path"
+  Arc,
+} from "../lib/paths"
 import { add, pointAlong, scale, distance } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
 import { LinearGradient, RadialGradient } from "../lib/gradient"

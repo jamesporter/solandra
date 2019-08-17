@@ -1,6 +1,6 @@
 import { Size, Point2D, Vector2D } from "./types/sol"
 import { hsla } from "./colours"
-import { Traceable, TextConfig, Text, Rect } from "./path"
+import { Traceable, TextConfig, Text, Rect } from "./paths"
 import Prando from "prando"
 
 export interface Gradientable {

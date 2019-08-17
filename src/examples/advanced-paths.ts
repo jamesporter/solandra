@@ -1,6 +1,6 @@
 import { Point2D } from "../lib/types/sol"
 import SCanvas from "../lib/sCanvas"
-import { Path, SimplePath, Rect, RegularPolygon, Star } from "../lib/path"
+import { Path, SimplePath, Star, RegularPolygon, Rect } from "../lib/paths"
 import { arrayOf } from "../lib/collectionOps"
 
 const dividing3 = (p: SCanvas) => {
