@@ -9,13 +9,14 @@ import { Link } from "gatsby"
 import A from "../app/components/A"
 import Canvas from "../app/Canvas"
 import { SCanvas, LinearGradient, Path } from "../lib"
+import Footer from "../app/components/Footer"
 
 const QuickStart = () => (
   <Layout>
     <Header />
     <SEO title="Solandra Algorithmic Art" />
 
-    <Container>
+    <Container minHeight="calc(100vh - 260px)">
       <H1>Quickstart</H1>
       <ul className="list-inside list-disc">
         <li className="pb-2">
@@ -45,9 +46,22 @@ const QuickStart = () => (
           try out as add React/Gatsby powered GUI around stuff.
         </li>
         <li className="pb-2">
-          On <A href="https://www.npmjs.com/package/typeplates">NPM</A>. Install
+          On <A href="https://www.npmjs.com/package/solandra">NPM</A>. Install
           with <span className="text-gray-500 font-mono">npm i solandra</span>{" "}
           or <span className="text-gray-500 font-mono">yarn add solandra</span>.
+        </li>
+        <li className="pb-2">
+          There is a React wrapper for those using the most popular front end
+          framework, install from{" "}
+          <A href="https://www.npmjs.com/package/solandra-react">NPM</A> with{" "}
+          <span className="text-gray-500 font-mono">
+            npm i solandra-react solandra react react-dom
+          </span>{" "}
+          or{" "}
+          <span className="text-gray-500 font-mono">
+            yarn add solandra-react solandra react react-dom
+          </span>
+          .
         </li>
       </ul>
 
@@ -128,6 +142,7 @@ const QuickStart = () => (
         />
       </div>
     </Container>
+    <Footer />
   </Layout>
 )
 

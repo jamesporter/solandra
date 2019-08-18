@@ -4,6 +4,7 @@ import Preview from "../Preview"
 import Header from "../components/Header"
 import { H1 } from "../components/Text"
 import ExampleLinks from "../components/ExampleLinks"
+import Footer from "../components/Footer"
 
 export function Main({ category }: { category: string }) {
   return (
@@ -31,6 +32,8 @@ export function Main({ category }: { category: string }) {
           )
         })}
       </div>
+
+      <Footer />
     </>
   )
 }

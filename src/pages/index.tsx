@@ -12,6 +12,7 @@ import HLink from "../app/components/HLink"
 import { Link } from "gatsby"
 import A from "../app/components/A"
 import ExampleLinks from "../app/components/ExampleLinks"
+import Footer from "../app/components/Footer"
 
 const logo = (p: SCanvas) => {
   p.background(220, 26, 14)
@@ -297,38 +298,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
         <ExampleLinks />
       </Container>
 
-      <div className="bg-gray-900 px-8 pt-4 flex flex-col">
-        <Container>
-          <p className="text-xl mb-2 mr-4 text-white text-center">
-            Solandra was made by{" "}
-            <a className="text-blue-400 " href="https://www.complexview.com">
-              James Porter
-            </a>
-            .
-          </p>{" "}
-          <p className="text-xl mb-2 mr-4 text-white text-center">
-            Check out the{" "}
-            <a
-              className="text-blue-400 "
-              href="https://github.com/jamesporter/solandra"
-            >
-              GitHub page
-            </a>{" "}
-            or install with{" "}
-            <span className="text-gray-400 font-mono">npm i solandra</span>
-          </p>
-          <p className="text-xl mb-2 mr-4 text-white text-center mb-12">
-            {" "}
-            Read the{" "}
-            <a
-              className="text-blue-400 "
-              href="https://github.com/jamesporter/solandra/tree/master/docs"
-            >
-              Docs
-            </a>
-          </p>
-        </Container>
-      </div>
+      <Footer />
     </div>
   </Layout>
 )
