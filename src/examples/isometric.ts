@@ -464,6 +464,49 @@ const isometricExample10 = (p: SCanvas) => {
   })
 }
 
+const lorenz = (p: SCanvas) => {
+  const { bottom, right: r, center } = p.meta
+  p.backgroundGradient(
+    new RadialGradient({
+      start: center,
+      end: center,
+      rStart: 0,
+      rEnd: 0.65,
+      colours: [[0, { h: 215, s: 80, l: 40 }], [1, { h: 215, s: 80, l: 10 }]],
+    })
+  )
+  p.lineWidth = 0.005 * bottom
+
+  const points: Point2D[] = []
+  p.withTranslation([r / 2, bottom * 0.2], () => {
+    const iso = isoTransform(0.01 * bottom)
+
+    let x = 0.82
+    let y = 0.12
+    let z = 0
+    let a = 10.0
+    let b = 30.0
+    let c = 8.0 / 3.0
+    let t = 0.01
+    const N = 3000
+
+    for (let i = 0; i < N; i++) {
+      points.push(iso([x, y - 35, z - 25]))
+      const x_ = x + t * a * (y - x)
+      const y_ = y + t * (x * (b - z) - y)
+      const z_ = z + t * (x * y - c * z)
+      x = x_
+      y = y_
+      z = z_
+    }
+
+    for (let j = 0; j < N / 10; j++) {
+      p.setStrokeColour(30 * Math.cos(j / 10), 100, 70)
+      p.draw(SimplePath.withPoints(points.slice(j * 10, (j + 1) * 10 + 1)))
+    }
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: isometricExample, name: "Isometric" },
   { sketch: isometricExample2, name: "Isometric 2" },
@@ -475,6 +518,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: isometricExample8, name: "Isometric Fragments" },
   { sketch: isometricExample9, name: "Isometric Cube Examples" },
   { sketch: isometricExample10, name: "Isometric Rotation" },
+  { sketch: lorenz, name: "Lorenz Attractor" },
 ]
 
 export default sketches
