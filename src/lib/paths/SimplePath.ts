@@ -1,6 +1,6 @@
 import { Traceable, Path } from "."
 import { Point2D, Vector2D } from "../types/sol"
-import { tripleWise } from "../collectionOps"
+import { tripleWise, pairWise } from "../collectionOps"
 import { v } from ".."
 import { centroid } from "../util"
 import { CurveConfig } from "./Path"
@@ -187,5 +187,9 @@ export default class SimplePath implements Traceable {
       }
     }
     return path
+  }
+
+  get edges(): SimplePath[] {
+    return pairWise(this.points).map(SimplePath.withPoints)
   }
 }
