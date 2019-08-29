@@ -506,4 +506,13 @@ export default class SCanvas {
     }
     return n
   }
+
+  oscillate = (config?: {
+    from?: number
+    to?: number
+    rate?: number
+  }): number => {
+    const { from = 0, to = 1, rate = 1 } = config || {}
+    return from + ((to - from) * (1 + Math.cos(this.t * rate))) / 2
+  }
 }

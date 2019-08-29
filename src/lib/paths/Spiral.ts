@@ -9,11 +9,13 @@ export default class Spiral implements Traceable {
     a: sA = 0,
     l,
     n,
+    rate = 0.005,
   }: {
     at: Point2D
     a?: number
     l: number
     n: number
+    rate?: number
   }) {
     this.path = SimplePath.withPoints([])
     let a = sA
@@ -21,7 +23,7 @@ export default class Spiral implements Traceable {
     this.path.addPoint(v.add(at, [r * Math.cos(a), r * Math.sin(a)]))
     for (let i = 0; i < n; i++) {
       const dA = 2 * Math.asin(l / (r * 2))
-      r += 0.005 * dA
+      r += rate * dA
       a += dA
       this.path.addPoint(v.add(at, [r * Math.cos(a), r * Math.sin(a)]))
     }
