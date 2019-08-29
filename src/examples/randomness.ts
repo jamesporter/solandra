@@ -463,6 +463,27 @@ const noiseGlow = (p: SCanvas) => {
   })
 }
 
+const perturbedSpiral = (p: SCanvas) => {
+  let r = 0.001
+  let a = 0
+  const {
+    center: [cX, cY],
+  } = p.meta
+
+  p.background(45, 85, 97)
+  p.lineWidth = 0.001
+  p.times(800, n => {
+    p.setStrokeColour(p.sample([220, 190, 215]), 50, p.sample([20, 40]))
+    const pA = a + p.gaussian({ sd: Math.PI })
+    p.drawLine(
+      [cX + Math.cos(pA) * r, cY + Math.sin(pA) * r],
+      [cX + Math.cos(pA) * (r + 0.1), cY + Math.sin(pA) * (r + 0.1)]
+    )
+    r += 0.001
+    a += 0.1
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: noiseField, name: "Noise Field" },
   { sketch: rectangles, name: "Rectangles" },
@@ -481,6 +502,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: contoured2, name: "Contoured 2" },
   { sketch: night, name: "Night" },
   { sketch: noiseGlow, name: "Noise Glow" },
+  { sketch: perturbedSpiral, name: "Perturbed Spiral" },
 ]
 
 export default sketches
