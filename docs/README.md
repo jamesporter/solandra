@@ -26,6 +26,7 @@
 * ["paths/RegularPolygon"](modules/_paths_regularpolygon_.md)
 * ["paths/RoundedRect"](modules/_paths_roundedrect_.md)
 * ["paths/SimplePath"](modules/_paths_simplepath_.md)
+* ["paths/Spiral"](modules/_paths_spiral_.md)
 * ["paths/Star"](modules/_paths_star_.md)
 * ["paths/Text"](modules/_paths_text_.md)
 * ["paths/index"](modules/_paths_index_.md)

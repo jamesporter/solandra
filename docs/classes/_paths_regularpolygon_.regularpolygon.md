@@ -32,7 +32,7 @@
 
 \+ **new RegularPolygon**(`config`: object): *[RegularPolygon](_paths_regularpolygon_.regularpolygon.md)*
 
-*Defined in [paths/RegularPolygon.ts:5](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/RegularPolygon.ts#L5)*
+*Defined in [paths/RegularPolygon.ts:5](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/RegularPolygon.ts#L5)*
 
 **Parameters:**
 
@@ -53,7 +53,7 @@ Name | Type |
 
 • **get path**(): *[SimplePath](_paths_simplepath_.simplepath.md)*
 
-*Defined in [paths/RegularPolygon.ts:40](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/RegularPolygon.ts#L40)*
+*Defined in [paths/RegularPolygon.ts:40](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/RegularPolygon.ts#L40)*
 
 **Returns:** *[SimplePath](_paths_simplepath_.simplepath.md)*
 
@@ -65,7 +65,7 @@ Name | Type |
 
 *Implementation of [Traceable](../interfaces/_paths_index_.traceable.md)*
 
-*Defined in [paths/RegularPolygon.ts:20](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/RegularPolygon.ts#L20)*
+*Defined in [paths/RegularPolygon.ts:20](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/RegularPolygon.ts#L20)*
 
 **Parameters:**
 

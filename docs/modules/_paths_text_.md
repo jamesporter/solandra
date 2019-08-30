@@ -30,7 +30,7 @@
 
 Ƭ **FontStyle**: *"normal" | "italic" | "oblique"*
 
-*Defined in [paths/Text.ts:6](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/Text.ts#L6)*
+*Defined in [paths/Text.ts:6](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Text.ts#L6)*
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 Ƭ **FontVariant**: *"normal" | "small-caps"*
 
-*Defined in [paths/Text.ts:7](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/Text.ts#L7)*
+*Defined in [paths/Text.ts:7](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Text.ts#L7)*
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 Ƭ **FontWeight**: *"normal" | "bold" | "bolder" | "lighter" | "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900"*
 
-*Defined in [paths/Text.ts:8](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/Text.ts#L8)*
+*Defined in [paths/Text.ts:8](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Text.ts#L8)*
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 Ƭ **TextConfig**: *`Omit<TextConfigWithKind, "kind">`*
 
-*Defined in [paths/Text.ts:48](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/Text.ts#L48)*
+*Defined in [paths/Text.ts:48](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Text.ts#L48)*
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 Ƭ **TextConfigWithKind**: *object*
 
-*Defined in [paths/Text.ts:36](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/Text.ts#L36)*
+*Defined in [paths/Text.ts:36](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Text.ts#L36)*
 
 #### Type declaration:
 
@@ -90,7 +90,7 @@ ___
 
 Ƭ **TextHorizontalAlign**: *"center" | "start" | "end" | "left" | "right"*
 
-*Defined in [paths/Text.ts:5](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/Text.ts#L5)*
+*Defined in [paths/Text.ts:5](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Text.ts#L5)*
 
 ___
 
@@ -98,4 +98,4 @@ ___
 
 Ƭ **TextSizing**: *"fixed" | "fitted"*
 
-*Defined in [paths/Text.ts:4](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/Text.ts#L4)*
+*Defined in [paths/Text.ts:4](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Text.ts#L4)*

@@ -237,14 +237,14 @@ const spirals = (p: SCanvas) => {
     rate: p.oscillate({ from: 0.004, to: 0.005, rate: 0.15 }),
   }).path.edges.forEach((edge, i) => {
     p.setStrokeColour(i / 3, 70, 30)
-    p.draw(edge.rotated(Math.PI / 2 + (i * Math.PI) / 2))
+    p.draw(edge.rotated(Math.PI / 4 + (i * Math.PI) / 2))
   })
 }
 
 const spirals2 = (p: SCanvas) => {
   p.background(195, 10, 95)
   p.lineWidth = 0.0025
-  p.setStrokeColour(0, 0, 20, 0.9)
+  p.setStrokeColour(0, 50, 20, 0.9)
   new Spiral({
     at: p.meta.center,
     l: 0.04,
