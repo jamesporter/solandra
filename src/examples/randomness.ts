@@ -6,6 +6,7 @@ import { add, scale } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
 import { RadialGradient } from "../lib/gradient"
 import { clamp } from "../lib"
+import Spiral from "../lib/paths/Spiral"
 
 const noiseField = (p: SCanvas) => {
   const delta = 0.01
@@ -463,6 +464,65 @@ const noiseGlow = (p: SCanvas) => {
   })
 }
 
+const perturbedSpiral = (p: SCanvas) => {
+  let r = 0.001
+  let a = 0
+  const {
+    center: [cX, cY],
+  } = p.meta
+
+  p.background(45, 85, 97)
+  p.lineWidth = 0.001
+  p.times(800, n => {
+    p.setStrokeColour(p.sample([220, 190, 215]), 50, p.sample([20, 40]))
+    const pA = a + p.gaussian({ sd: Math.PI })
+    p.drawLine(
+      [cX + Math.cos(pA) * r, cY + Math.sin(pA) * r],
+      [cX + Math.cos(pA) * (r + 0.1), cY + Math.sin(pA) * (r + 0.1)]
+    )
+    r += 0.001
+    a += 0.1
+  })
+}
+
+const perturbedSpiral2 = (p: SCanvas) => {
+  p.background(25, 40, 95)
+  p.lineWidth = 0.002
+  p.setStrokeColour(205, 70, 40)
+  p.withTranslation(p.meta.center, () => {
+    const path = SimplePath.withPoints([])
+    let a = 0
+    let l = 0.05
+    let r = l
+    path.addPoint([r * Math.cos(a), r * Math.sin(a)])
+    p.times(400, () => {
+      const dA = 2 * Math.asin(l / (r * 2))
+      r += 0.005 * dA
+      a += dA
+      path.addPoint(
+        p.perturb([r * Math.cos(a), r * Math.sin(a)], {
+          magnitude: 0.0125 * (1.1 + Math.cos(p.t)),
+        })
+      )
+    })
+    p.draw(path)
+  })
+}
+
+const perturbedSpiral3 = (p: SCanvas) => {
+  p.background(0, 0, 95)
+  p.lineWidth = 0.002
+  p.setStrokeColour(165, 70, 30)
+
+  new Spiral({ at: p.meta.center, l: 0.05, n: 400 }).path.edges.forEach(
+    edge => {
+      p.draw(
+        edge.rotated(p.gaussian({ sd: Math.PI / (10 + Math.cos(p.t * 2) * 8) }))
+      )
+    }
+  )
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: noiseField, name: "Noise Field" },
   { sketch: rectangles, name: "Rectangles" },
@@ -481,6 +541,9 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: contoured2, name: "Contoured 2" },
   { sketch: night, name: "Night" },
   { sketch: noiseGlow, name: "Noise Glow" },
+  { sketch: perturbedSpiral, name: "Perturbed Spiral" },
+  { sketch: perturbedSpiral2, name: "Perturbed Spiral 2" },
+  { sketch: perturbedSpiral3, name: "Perturbed Spiral 3" },
 ]
 
 export default sketches

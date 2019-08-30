@@ -3,6 +3,8 @@ import SCanvas from "../lib/sCanvas"
 import { Path, SimplePath, Star, RegularPolygon, Rect } from "../lib/paths"
 import { arrayOf } from "../lib/collectionOps"
 import { scale } from "../lib/vectors"
+import Spiral from "../lib/paths/Spiral"
+import { perlin2, v } from "../lib"
 
 const dividing3 = (p: SCanvas) => {
   p.background(0, 0, 5)
@@ -225,6 +227,36 @@ const curvify2 = (p: SCanvas) => {
   p.draw(middle)
 }
 
+const spirals = (p: SCanvas) => {
+  p.background(195, 30, 95)
+  p.lineWidth = 0.0025
+  new Spiral({
+    at: p.meta.center,
+    l: 0.05,
+    n: 400,
+    rate: p.oscillate({ from: 0.004, to: 0.005, rate: 0.15 }),
+  }).path.edges.forEach((edge, i) => {
+    p.setStrokeColour(i / 3, 70, 30)
+    p.draw(edge.rotated(Math.PI / 4 + (i * Math.PI) / 2))
+  })
+}
+
+const spirals2 = (p: SCanvas) => {
+  p.background(195, 10, 95)
+  p.lineWidth = 0.0025
+  p.setStrokeColour(0, 50, 20, 0.9)
+  new Spiral({
+    at: p.meta.center,
+    l: 0.04,
+    n: 500,
+    rate: p.oscillate({ from: 0.004, to: 0.005, rate: 0.15 }),
+  }).path.edges.forEach(edge => {
+    const offsetA = 2 * Math.PI * perlin2(...edge.points[0])
+    const offset = v.scale([Math.cos(offsetA), Math.sin(offsetA)], 0.1)
+    p.draw(edge.rotated(Math.PI / 4).moved(offset))
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: dividing3, name: "Dividing 3" },
   { sketch: dividing4, name: "Dividing 4" },
@@ -236,6 +268,8 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: advancedDivisions2, name: "Advanced Divisions 2" },
   { sketch: curvify, name: "Paths to Curves" },
   { sketch: curvify2, name: "Paths to Curves 2" },
+  { sketch: spirals, name: "Spirals" },
+  { sketch: spirals2, name: "Spirals 2" },
 ]
 
 export default sketches

@@ -17,6 +17,7 @@
 ### Accessors
 
 * [centroid](_paths_simplepath_.simplepath.md#centroid)
+* [edges](_paths_simplepath_.simplepath.md#edges)
 * [reversed](_paths_simplepath_.simplepath.md#reversed)
 * [segmented](_paths_simplepath_.simplepath.md#segmented)
 
@@ -44,9 +45,19 @@
 
 • **get centroid**(): *[Point2D](../modules/_types_sol_.md#point2d)*
 
-*Defined in [paths/SimplePath.ts:88](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L88)*
+*Defined in [paths/SimplePath.ts:88](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L88)*
 
 **Returns:** *[Point2D](../modules/_types_sol_.md#point2d)*
+
+___
+
+###  edges
+
+• **get edges**(): *[SimplePath](_paths_simplepath_.simplepath.md)[]*
+
+*Defined in [paths/SimplePath.ts:192](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L192)*
+
+**Returns:** *[SimplePath](_paths_simplepath_.simplepath.md)[]*
 
 ___
 
@@ -54,7 +65,7 @@ ___
 
 • **get reversed**(): *[SimplePath](_paths_simplepath_.simplepath.md)*
 
-*Defined in [paths/SimplePath.ts:84](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L84)*
+*Defined in [paths/SimplePath.ts:84](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L84)*
 
 **Returns:** *[SimplePath](_paths_simplepath_.simplepath.md)*
 
@@ -64,7 +75,7 @@ ___
 
 • **get segmented**(): *[SimplePath](_paths_simplepath_.simplepath.md)[]*
 
-*Defined in [paths/SimplePath.ts:95](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L95)*
+*Defined in [paths/SimplePath.ts:95](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L95)*
 
 Split the path into triangular segments, around the centroid
 
@@ -76,7 +87,7 @@ Split the path into triangular segments, around the centroid
 
 ▸ **addPoint**(`point`: [Point2D](../modules/_types_sol_.md#point2d)): *[SimplePath](_paths_simplepath_.simplepath.md)*
 
-*Defined in [paths/SimplePath.ts:19](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L19)*
+*Defined in [paths/SimplePath.ts:19](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L19)*
 
 **Parameters:**
 
@@ -92,7 +103,7 @@ ___
 
 ▸ **chaiken**(`__namedParameters`: object): *[SimplePath](_paths_simplepath_.simplepath.md)*
 
-*Defined in [paths/SimplePath.ts:33](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L33)*
+*Defined in [paths/SimplePath.ts:33](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L33)*
 
 Smooth out path by adding more points to give curvy result
 
@@ -113,7 +124,7 @@ ___
 
 ▸ **close**(): *[SimplePath](_paths_simplepath_.simplepath.md)*
 
-*Defined in [paths/SimplePath.ts:24](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L24)*
+*Defined in [paths/SimplePath.ts:24](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L24)*
 
 **Returns:** *[SimplePath](_paths_simplepath_.simplepath.md)*
 
@@ -123,7 +134,7 @@ ___
 
 ▸ **curvify**(`style`: function): *[Path](_paths_path_.path.md)*
 
-*Defined in [paths/SimplePath.ts:177](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L177)*
+*Defined in [paths/SimplePath.ts:177](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L177)*
 
 Convert a simple path to a curved path
 
@@ -147,7 +158,7 @@ ___
 
 ▸ **exploded**(`config`: object): *[SimplePath](_paths_simplepath_.simplepath.md)[]*
 
-*Defined in [paths/SimplePath.ts:117](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L117)*
+*Defined in [paths/SimplePath.ts:117](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L117)*
 
 Split the path into triangular segments, around the centroid.
 displaced by magnitude and scaled by scale
@@ -169,7 +180,7 @@ ___
 
 ▸ **moved**(`delta`: [Vector2D](../modules/_types_sol_.md#vector2d)): *[SimplePath](_paths_simplepath_.simplepath.md)*
 
-*Defined in [paths/SimplePath.ts:66](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L66)*
+*Defined in [paths/SimplePath.ts:66](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L66)*
 
 **Parameters:**
 
@@ -185,7 +196,7 @@ ___
 
 ▸ **rotated**(`angle`: number): *[SimplePath](_paths_simplepath_.simplepath.md)*
 
-*Defined in [paths/SimplePath.ts:145](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L145)*
+*Defined in [paths/SimplePath.ts:145](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L145)*
 
 **Parameters:**
 
@@ -201,7 +212,7 @@ ___
 
 ▸ **scaled**(`scale`: number): *[SimplePath](_paths_simplepath_.simplepath.md)*
 
-*Defined in [paths/SimplePath.ts:70](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L70)*
+*Defined in [paths/SimplePath.ts:70](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L70)*
 
 **Parameters:**
 
@@ -217,7 +228,7 @@ ___
 
 ▸ **subdivide**(`config`: object): *[SimplePath](_paths_simplepath_.simplepath.md)[]*
 
-*Defined in [paths/SimplePath.ts:157](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L157)*
+*Defined in [paths/SimplePath.ts:157](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L157)*
 
 **Parameters:**
 
@@ -238,7 +249,7 @@ ___
 
 *Implementation of [Traceable](../interfaces/_paths_index_.traceable.md)*
 
-*Defined in [paths/SimplePath.ts:55](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L55)*
+*Defined in [paths/SimplePath.ts:55](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L55)*
 
 **Parameters:**
 
@@ -254,7 +265,7 @@ ___
 
 ▸ **transformPoints**(`transform`: function): *[SimplePath](_paths_simplepath_.simplepath.md)*
 
-*Defined in [paths/SimplePath.ts:79](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L79)*
+*Defined in [paths/SimplePath.ts:79](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L79)*
 
 Warning mutates
 
@@ -278,7 +289,7 @@ ___
 
 ▸ **transformed**(`transform`: function): *[SimplePath](_paths_simplepath_.simplepath.md)*
 
-*Defined in [paths/SimplePath.ts:137](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L137)*
+*Defined in [paths/SimplePath.ts:137](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L137)*
 
 **Parameters:**
 
@@ -300,7 +311,7 @@ ___
 
 ▸ **withAppended**(`other`: [SimplePath](_paths_simplepath_.simplepath.md)): *[SimplePath](_paths_simplepath_.simplepath.md)*
 
-*Defined in [paths/SimplePath.ts:141](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L141)*
+*Defined in [paths/SimplePath.ts:141](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L141)*
 
 **Parameters:**
 
@@ -316,7 +327,7 @@ ___
 
 ▸ **startAt**(`point`: [Point2D](../modules/_types_sol_.md#point2d)): *[SimplePath](_paths_simplepath_.simplepath.md)*
 
-*Defined in [paths/SimplePath.ts:11](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L11)*
+*Defined in [paths/SimplePath.ts:11](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L11)*
 
 **Parameters:**
 
@@ -332,7 +343,7 @@ ___
 
 ▸ **withPoints**(`points`: [Point2D](../modules/_types_sol_.md#point2d)[]): *[SimplePath](_paths_simplepath_.simplepath.md)*
 
-*Defined in [paths/SimplePath.ts:15](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/SimplePath.ts#L15)*
+*Defined in [paths/SimplePath.ts:15](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/SimplePath.ts#L15)*
 
 **Parameters:**
 

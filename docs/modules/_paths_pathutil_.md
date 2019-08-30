@@ -16,7 +16,7 @@
 
 ▸ **traceSimplePath**(`traceable`: [Traceable](../interfaces/_paths_index_.traceable.md)): *[SimplePath](../classes/_paths_simplepath_.simplepath.md)*
 
-*Defined in [paths/pathUtil.ts:8](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/pathUtil.ts#L8)*
+*Defined in [paths/pathUtil.ts:8](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/pathUtil.ts#L8)*
 
 NB Not all canvas stuff supported, don't export this!
 Good enough for some things

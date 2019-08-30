@@ -38,7 +38,7 @@
 
 \+ **new HollowArc**(`config`: object): *[HollowArc](_paths_hollowarc_.hollowarc.md)*
 
-*Defined in [paths/HollowArc.ts:10](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/HollowArc.ts#L10)*
+*Defined in [paths/HollowArc.ts:10](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/HollowArc.ts#L10)*
 
 **Parameters:**
 
@@ -60,7 +60,7 @@ Name | Type |
 
 • **antiClockwise**: *boolean*
 
-*Defined in [paths/HollowArc.ts:10](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/HollowArc.ts#L10)*
+*Defined in [paths/HollowArc.ts:10](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/HollowArc.ts#L10)*
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 • **cX**: *number*
 
-*Defined in [paths/HollowArc.ts:4](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/HollowArc.ts#L4)*
+*Defined in [paths/HollowArc.ts:4](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/HollowArc.ts#L4)*
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 • **cY**: *number*
 
-*Defined in [paths/HollowArc.ts:5](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/HollowArc.ts#L5)*
+*Defined in [paths/HollowArc.ts:5](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/HollowArc.ts#L5)*
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 • **endAngle**: *number*
 
-*Defined in [paths/HollowArc.ts:9](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/HollowArc.ts#L9)*
+*Defined in [paths/HollowArc.ts:9](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/HollowArc.ts#L9)*
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 • **innerRadius**: *number*
 
-*Defined in [paths/HollowArc.ts:7](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/HollowArc.ts#L7)*
+*Defined in [paths/HollowArc.ts:7](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/HollowArc.ts#L7)*
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 • **radius**: *number*
 
-*Defined in [paths/HollowArc.ts:6](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/HollowArc.ts#L6)*
+*Defined in [paths/HollowArc.ts:6](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/HollowArc.ts#L6)*
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 • **startAngle**: *number*
 
-*Defined in [paths/HollowArc.ts:8](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/HollowArc.ts#L8)*
+*Defined in [paths/HollowArc.ts:8](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/HollowArc.ts#L8)*
 
 ## Methods
 
@@ -118,7 +118,7 @@ ___
 
 *Implementation of [Traceable](../interfaces/_paths_index_.traceable.md)*
 
-*Defined in [paths/HollowArc.ts:34](https://github.com/jamesporter/solandra/blob/511cfc3/src/lib/paths/HollowArc.ts#L34)*
+*Defined in [paths/HollowArc.ts:34](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/HollowArc.ts#L34)*
 
 **Parameters:**
 
