@@ -2,7 +2,7 @@ import React from "react"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import { H1, P } from "../app/components/Text"
+import { H1, H2, P } from "../app/components/Text"
 import Header from "../app/components/Header"
 import Container from "../app/components/Container"
 import { Link } from "gatsby"
@@ -17,7 +17,9 @@ const QuickStart = () => (
     <SEO title="Solandra Algorithmic Art" />
 
     <Container minHeight="calc(100vh - 260px)">
-      <H1>Quickstart</H1>
+      <H1>Getting Started</H1>
+
+      <H2>Examples and Tutorials</H2>
       <ul className="list-inside list-disc">
         <li className="pb-2">
           Recommended:{" "}
@@ -33,6 +35,22 @@ const QuickStart = () => (
             LeWitt
           </A>
         </li>
+        <li className="pb-2">
+          This tutorial shows how you might use Solandra as a way to do{" "}
+          <A href="https://www.amimetic.co.uk/art/generative-icon-design-a-solandra-tutorial/">
+            Generative design for App Icons
+          </A>
+        </li>
+        <li className="pb-2">
+          Alternatively, why not{" "}
+          <A href="https://www.amimetic.co.uk/art/apple-style-wallpaper/">
+            create iOS 13 style wallpapers with Solandra
+          </A>
+          .
+        </li>
+      </ul>
+      <ul className="list-inside list-disc">
+        <H2>Code</H2>
         <li className="pb-2">
           On CodeSandbox, quickly get started:{" "}
           <A href="https://codesandbox.io/s/simple-solandra-example-2-wy7nx?fontsize=14">
