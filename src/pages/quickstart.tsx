@@ -11,6 +11,12 @@ import Canvas from "../app/Canvas"
 import { SCanvas, LinearGradient, Path } from "../lib"
 import Footer from "../app/components/Footer"
 
+import imgIcons from "../images/icons.png"
+import imgSol from "../images/sol.png"
+import imgWall from "../images/wallpaper.png"
+import imgWater from "../images/watercolour.png"
+import ViewAll from "../app/pages/ViewAll"
+
 const QuickStart = () => (
   <Layout>
     <Header />
@@ -20,68 +26,104 @@ const QuickStart = () => (
       <H1>Getting Started</H1>
 
       <H2>Examples and Tutorials</H2>
-      <ul className="list-inside list-disc">
-        <li className="pb-2">
-          Recommended:{" "}
-          <Link to="/main" className="text-blue-700 underline">
-            over 100 examples with source code to learn from (click on the
-            Source Code button)
-          </Link>
-        </li>
-        <li className="pb-2">
-          Or an{" "}
-          <A href="https://www.amimetic.co.uk/art/solving-sol-with-solandra">
-            unconventional tutorial introduction based on instructions from Sol
-            LeWitt
-          </A>
-        </li>
-        <li className="pb-2">
-          This tutorial shows how you might use Solandra as a way to do{" "}
-          <A href="https://www.amimetic.co.uk/art/generative-icon-design-a-solandra-tutorial/">
-            Generative design for App Icons
-          </A>
-        </li>
-        <li className="pb-2">
-          Alternatively, why not{" "}
-          <A href="https://www.amimetic.co.uk/art/apple-style-wallpaper/">
-            create iOS 13 style wallpapers with Solandra
-          </A>
-          .
-        </li>
-      </ul>
-      <ul className="list-inside list-disc">
-        <H2>Code</H2>
-        <li className="pb-2">
-          On CodeSandbox, quickly get started:{" "}
-          <A href="https://codesandbox.io/s/simple-solandra-example-2-wy7nx?fontsize=14">
-            {" "}
-            Simple editable sketch
-          </A>
-        </li>
-        <li className="pb-2">
-          To start coding: clone{" "}
-          <A href="https://github.com/jamesporter/solandra">this project</A> to
-          try out as add React/Gatsby powered GUI around stuff.
-        </li>
-        <li className="pb-2">
-          On <A href="https://www.npmjs.com/package/solandra">NPM</A>. Install
-          with <span className="text-gray-500 font-mono">npm i solandra</span>{" "}
-          or <span className="text-gray-500 font-mono">yarn add solandra</span>.
-        </li>
-        <li className="pb-2">
-          There is a React wrapper for those using the most popular front end
-          framework, install from{" "}
-          <A href="https://www.npmjs.com/package/solandra-react">NPM</A> with{" "}
-          <span className="text-gray-500 font-mono">
-            npm i solandra-react solandra react react-dom
-          </span>{" "}
-          or{" "}
-          <span className="text-gray-500 font-mono">
-            yarn add solandra-react solandra react react-dom
-          </span>
-          .
-        </li>
-      </ul>
+      <div className="start-item">
+        <div
+          style={{
+            width: 340,
+            height: 340,
+            padding: 10,
+            margin: "auto",
+            marginTop: 20,
+            marginBottom: 20,
+            display: "flex",
+            flexDirection: "column",
+            alignSelf: "center",
+          }}
+          className="shadow-2xl select-none"
+        >
+          <ViewAll />
+        </div>
+        Recommended:{" "}
+        <Link to="/main" className="text-blue-700 underline">
+          over 100 examples with source code to learn from (click on the Source
+          Code button)
+        </Link>
+      </div>
+      <div className="start-item">
+        <img
+          src={imgSol}
+          alt="Sol LeWitt Solandra Tutorial"
+          className="shadow-2xl"
+        />
+        Or an{" "}
+        <A href="https://www.amimetic.co.uk/art/solving-sol-with-solandra">
+          unconventional tutorial introduction based on instructions from Sol
+          LeWitt
+        </A>
+      </div>
+      <div className="start-item">
+        <img src={imgIcons} alt="Icon design" className="shadow-2xl" />
+        This tutorial shows how you might use Solandra as a way to do{" "}
+        <A href="https://www.amimetic.co.uk/art/generative-icon-design-a-solandra-tutorial/">
+          Generative design for App Icons
+        </A>
+      </div>
+      <div className="start-item">
+        <img
+          src={imgWall}
+          alt="Wallpaper Solandra Tutorial"
+          className="shadow-2xl"
+        />
+        Alternatively, why not{" "}
+        <A href="https://www.amimetic.co.uk/art/apple-style-wallpaper/">
+          create iOS 13 style wallpapers with Solandra
+        </A>
+        .
+      </div>
+
+      <div className="start-item">
+        <img
+          src={imgWater}
+          alt="Watercolours with Solandra"
+          className="shadow-2xl"
+        />
+        Create{" "}
+        <A href="https://www.amimetic.co.uk/art/watercolour">
+          watercolour style
+        </A>{" "}
+        graphics with Solandra.
+      </div>
+      <H2>Code</H2>
+      <div className="start-item-text">
+        On CodeSandbox, quickly get started:{" "}
+        <A href="https://codesandbox.io/s/simple-solandra-example-2-wy7nx?fontsize=14">
+          {" "}
+          Simple editable sketch
+        </A>
+      </div>
+      <div className="start-item-text">
+        To start coding: clone{" "}
+        <A href="https://github.com/jamesporter/solandra">this project</A> to
+        try out as add React/Gatsby powered GUI around stuff.
+      </div>
+      <div className="start-item-text">
+        On <A href="https://www.npmjs.com/package/solandra">NPM</A>. Install
+        with <span className="text-gray-500 font-mono">npm i solandra</span> or{" "}
+        <span className="text-gray-500 font-mono">yarn add solandra</span>.
+      </div>
+      <div className="start-item-text">
+        There is a React wrapper for those using the most popular front end
+        framework, install from{" "}
+        <A href="https://www.npmjs.com/package/solandra-react">NPM</A> with{" "}
+        <span className="text-gray-500 font-mono">
+          npm i solandra-react solandra react react-dom
+        </span>{" "}
+        or{" "}
+        <span className="text-gray-500 font-mono">
+          yarn add solandra-react solandra react react-dom
+        </span>
+        .
+      </div>
 
       <div className="flex flex-col" style={{ height: 640 }}>
         <Canvas

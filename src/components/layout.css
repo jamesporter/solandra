@@ -41,3 +41,15 @@
 .main-link.active-link {
   border-bottom: 4px solid #90cdf4;
 }
+
+.start-item img {
+  margin: auto;
+  display: block;
+  padding: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.start-item-text {
+  padding-bottom: 10px;
+}
