@@ -1,5 +1,6 @@
 import SCanvas from "../lib/sCanvas"
-import { Path, CompoundPath, Star, RegularPolygon } from "../lib/paths"
+import { Path, CompoundPath, Star, RegularPolygon, Circle } from "../lib/paths"
+import { v } from "../lib"
 
 const compoundPath = (p: SCanvas) => {
   p.background(45, 80, 75)
@@ -68,10 +69,29 @@ const transformingPaths = (p: SCanvas) => {
   })
 }
 
+const orderedTiles = (p: SCanvas) => {
+  p.background(0, 0, 20)
+  p.forTiling(
+    { n: 10, type: "square", margin: 0.1, order: "columnFirst" },
+    (_, [dX], c, i) => {
+      p.setFillColour(i * 3, 80, 60, 0.6)
+      p.fill(new Circle({ at: v.subtract(c, [dX / 8, 0]), r: dX / 3 }))
+    }
+  )
+  p.forTiling(
+    { n: 10, type: "square", margin: 0.1, order: "rowFirst" },
+    (_, [dX], c, i) => {
+      p.setFillColour(i * 3, 80, 60, 0.6)
+      p.fill(new Circle({ at: v.add(c, [dX / 8, 0]), r: dX / 3 }))
+    }
+  )
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: compoundPath, name: "Compound Path" },
   { sketch: compoundPath2, name: "Compound Path 2" },
   { sketch: transformingPaths, name: "Transforming Paths" },
+  { sketch: orderedTiles, name: "Ordering of Tiles" },
 ]
 
 export default sketches
