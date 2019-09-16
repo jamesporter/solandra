@@ -6,7 +6,7 @@ import { centroid } from "../util"
 import { CurveConfig } from "./Path"
 
 export default class SimplePath implements Traceable {
-  private constructor(public points: Point2D[] = []) {}
+  constructor(public points: Point2D[] = []) {}
 
   static startAt(point: Point2D): SimplePath {
     return new SimplePath([point])

@@ -38,7 +38,7 @@ Just an ellipse with width = height
 
 *Overrides [Ellipse](_paths_ellipse_.ellipse.md).[constructor](_paths_ellipse_.ellipse.md#constructor)*
 
-*Defined in [paths/Circle.ts:7](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Circle.ts#L7)*
+*Defined in [paths/Circle.ts:7](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Circle.ts#L7)*
 
 **Parameters:**
 
@@ -60,7 +60,7 @@ Name | Type |
 
 *Inherited from [Ellipse](_paths_ellipse_.ellipse.md).[config](_paths_ellipse_.ellipse.md#protected-config)*
 
-*Defined in [paths/Ellipse.ts:12](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Ellipse.ts#L12)*
+*Defined in [paths/Ellipse.ts:12](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Ellipse.ts#L12)*
 
 #### Type declaration:
 
@@ -82,7 +82,7 @@ Name | Type |
 
 *Inherited from [Ellipse](_paths_ellipse_.ellipse.md)*
 
-*Defined in [paths/Ellipse.ts:19](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Ellipse.ts#L19)*
+*Defined in [paths/Ellipse.ts:19](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Ellipse.ts#L19)*
 
 **Parameters:**
 

@@ -128,7 +128,12 @@ export default class SCanvas {
   ) => this.forTiling({ n: 1, margin }, callback)
 
   forTiling = (
-    config: { n: number; type?: "square" | "proportionate"; margin?: number },
+    config: {
+      n: number
+      type?: "square" | "proportionate"
+      margin?: number
+      order?: "columnFirst" | "rowFirst"
+    },
     callback: (
       point: Point2D,
       delta: Vector2D,
@@ -137,7 +142,12 @@ export default class SCanvas {
     ) => void
   ) => {
     let k = 0
-    const { n, type = "proportionate", margin = 0 } = config
+    const {
+      n,
+      type = "proportionate",
+      margin = 0,
+      order = "columnFirst",
+    } = config
     const nY = type === "square" ? Math.floor(n * (1 / this.aspectRatio)) : n
     const deltaX = (1 - margin * 2) / n
 
@@ -148,15 +158,29 @@ export default class SCanvas {
     const sX = margin
     const sY = (1 / this.aspectRatio - hY) / 2
 
-    for (let i = 0; i < n; i++) {
+    if (order === "columnFirst") {
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < nY; j++) {
+          callback(
+            [sX + i * deltaX, sY + j * deltaY],
+            [deltaX, deltaY],
+            [sX + i * deltaX + deltaX / 2, sY + j * deltaY + deltaY / 2],
+            k
+          )
+          k++
+        }
+      }
+    } else {
       for (let j = 0; j < nY; j++) {
-        callback(
-          [sX + i * deltaX, sY + j * deltaY],
-          [deltaX, deltaY],
-          [sX + i * deltaX + deltaX / 2, sY + j * deltaY + deltaY / 2],
-          k
-        )
-        k++
+        for (let i = 0; i < n; i++) {
+          callback(
+            [sX + i * deltaX, sY + j * deltaY],
+            [deltaX, deltaY],
+            [sX + i * deltaX + deltaX / 2, sY + j * deltaY + deltaY / 2],
+            k
+          )
+          k++
+        }
       }
     }
   }

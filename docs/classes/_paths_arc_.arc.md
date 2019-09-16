@@ -37,7 +37,7 @@
 
 \+ **new Arc**(`config`: object): *[Arc](_paths_arc_.arc.md)*
 
-*Defined in [paths/Arc.ts:9](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Arc.ts#L9)*
+*Defined in [paths/Arc.ts:9](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Arc.ts#L9)*
 
 **Parameters:**
 
@@ -58,7 +58,7 @@ Name | Type |
 
 • **antiClockwise**: *boolean*
 
-*Defined in [paths/Arc.ts:9](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Arc.ts#L9)*
+*Defined in [paths/Arc.ts:9](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Arc.ts#L9)*
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 • **cX**: *number*
 
-*Defined in [paths/Arc.ts:4](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Arc.ts#L4)*
+*Defined in [paths/Arc.ts:4](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Arc.ts#L4)*
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 • **cY**: *number*
 
-*Defined in [paths/Arc.ts:5](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Arc.ts#L5)*
+*Defined in [paths/Arc.ts:5](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Arc.ts#L5)*
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 • **endAngle**: *number*
 
-*Defined in [paths/Arc.ts:8](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Arc.ts#L8)*
+*Defined in [paths/Arc.ts:8](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Arc.ts#L8)*
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 • **radius**: *number*
 
-*Defined in [paths/Arc.ts:6](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Arc.ts#L6)*
+*Defined in [paths/Arc.ts:6](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Arc.ts#L6)*
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 • **startAngle**: *number*
 
-*Defined in [paths/Arc.ts:7](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Arc.ts#L7)*
+*Defined in [paths/Arc.ts:7](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Arc.ts#L7)*
 
 ## Methods
 
@@ -108,7 +108,7 @@ ___
 
 *Implementation of [Traceable](../interfaces/_paths_index_.traceable.md)*
 
-*Defined in [paths/Arc.ts:25](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Arc.ts#L25)*
+*Defined in [paths/Arc.ts:25](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Arc.ts#L25)*
 
 **Parameters:**
 
