@@ -39,7 +39,7 @@
 
 \+ **new Rect**(`config`: object): *[Rect](_paths_rect_.rect.md)*
 
-*Defined in [paths/Rect.ts:6](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Rect.ts#L6)*
+*Defined in [paths/Rect.ts:6](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Rect.ts#L6)*
 
 **Parameters:**
 
@@ -59,7 +59,7 @@ Name | Type |
 
 • **at**: *[Point2D](../modules/_types_sol_.md#point2d)*
 
-*Defined in [paths/Rect.ts:4](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Rect.ts#L4)*
+*Defined in [paths/Rect.ts:4](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Rect.ts#L4)*
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 • **h**: *number*
 
-*Defined in [paths/Rect.ts:6](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Rect.ts#L6)*
+*Defined in [paths/Rect.ts:6](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Rect.ts#L6)*
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 • **w**: *number*
 
-*Defined in [paths/Rect.ts:5](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Rect.ts#L5)*
+*Defined in [paths/Rect.ts:5](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Rect.ts#L5)*
 
 ## Accessors
 
@@ -83,7 +83,7 @@ ___
 
 • **get path**(): *[SimplePath](_paths_simplepath_.simplepath.md)*
 
-*Defined in [paths/Rect.ts:16](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Rect.ts#L16)*
+*Defined in [paths/Rect.ts:16](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Rect.ts#L16)*
 
 **Returns:** *[SimplePath](_paths_simplepath_.simplepath.md)*
 
@@ -93,7 +93,7 @@ ___
 
 ▸ **split**(`config`: object): *[Rect](_paths_rect_.rect.md)[]*
 
-*Defined in [paths/Rect.ts:25](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Rect.ts#L25)*
+*Defined in [paths/Rect.ts:25](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Rect.ts#L25)*
 
 **Parameters:**
 
@@ -114,7 +114,7 @@ ___
 
 *Implementation of [Traceable](../interfaces/_paths_index_.traceable.md)*
 
-*Defined in [paths/Rect.ts:13](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Rect.ts#L13)*
+*Defined in [paths/Rect.ts:13](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Rect.ts#L13)*
 
 **Parameters:**
 

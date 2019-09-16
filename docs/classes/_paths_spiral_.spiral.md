@@ -32,7 +32,7 @@
 
 \+ **new Spiral**(`__namedParameters`: object): *[Spiral](_paths_spiral_.spiral.md)*
 
-*Defined in [paths/Spiral.ts:6](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Spiral.ts#L6)*
+*Defined in [paths/Spiral.ts:6](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Spiral.ts#L6)*
 
 **Parameters:**
 
@@ -54,7 +54,7 @@ Name | Type | Default |
 
 • **path**: *[SimplePath](_paths_simplepath_.simplepath.md)*
 
-*Defined in [paths/Spiral.ts:6](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Spiral.ts#L6)*
+*Defined in [paths/Spiral.ts:6](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Spiral.ts#L6)*
 
 ## Methods
 
@@ -64,7 +64,7 @@ Name | Type | Default |
 
 *Implementation of [Traceable](../interfaces/_paths_index_.traceable.md)*
 
-*Defined in [paths/Spiral.ts:32](https://github.com/jamesporter/solandra/blob/02e2cc9/src/lib/paths/Spiral.ts#L32)*
+*Defined in [paths/Spiral.ts:32](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Spiral.ts#L32)*
 
 **Parameters:**
 
