@@ -9,6 +9,7 @@ Array [
   "strokeStyle = black",
   "fillStyle = gray",
   "lineCap = round",
+  "lineJoin = round",
   "save()",
   "fillStyle = hsla(100, 20%, 20%, 1)",
   "beginPath()",
