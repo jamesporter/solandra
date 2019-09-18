@@ -1,6 +1,6 @@
 import SCanvas from "../lib/sCanvas"
 import { Path, CompoundPath, Star, RegularPolygon, Circle } from "../lib/paths"
-import { v, Rect } from "../lib"
+import { v, Rect, Square } from "../lib"
 
 const compoundPath = (p: SCanvas) => {
   p.background(45, 80, 75)
@@ -149,6 +149,27 @@ const glow = (p: SCanvas) => {
   )
 }
 
+const shadowAnimation = (p: SCanvas) => {
+  p.background(10, 30, 95)
+  p.forTiling({ margin: 0.05, n: 6, type: "square" }, (_pt, [dX], at, i) => {
+    const sc = Math.cos(p.t + i)
+    p.setFillColour(198 + i, 60, 40)
+    p.shadow = {
+      size: 0.05 + 0.05 * sc,
+      dY: 0,
+      dX: 0,
+      colour: { h: 210, s: 90, l: 30, a: 0.9 },
+    }
+    p.fill(
+      new Square({
+        at,
+        s: dX * 0.5 + sc * 0.005,
+        align: "center",
+      })
+    )
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: compoundPath, name: "Compound Path" },
   { sketch: compoundPath2, name: "Compound Path 2" },
@@ -156,6 +177,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: orderedTiles, name: "Ordering of Tiles" },
   { sketch: dashes, name: "Dashes" },
   { sketch: shadows, name: "Shadows" },
+  { sketch: shadowAnimation, name: "Shadow Animation" },
   { sketch: glow, name: "Glow" },
 ]
 

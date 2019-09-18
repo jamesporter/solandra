@@ -1,12 +1,18 @@
 import { Point2D } from "../types/sol"
 import { Traceable, SimplePath } from "."
+import { v } from ".."
 export default class Rect implements Traceable {
   readonly at: Point2D
   readonly w: number
   readonly h: number
-  constructor(config: { at: Point2D; w: number; h: number }) {
-    const { at, w, h } = config
-    this.at = at
+  constructor(config: {
+    at: Point2D
+    w: number
+    h: number
+    align?: "topLeft" | "center"
+  }) {
+    const { at, w, h, align = "topLeft" } = config
+    this.at = align === "topLeft" ? at : v.subtract(at, [w / 2, h / 2])
     this.w = w
     this.h = h
   }
