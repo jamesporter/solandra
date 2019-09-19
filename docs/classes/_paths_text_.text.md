@@ -28,7 +28,7 @@
 
 \+ **new Text**(`config`: [TextConfigWithKind](../modules/_paths_text_.md#textconfigwithkind), `text`: string): *[Text](_paths_text_.text.md)*
 
-*Defined in [paths/Text.ts:50](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Text.ts#L50)*
+*Defined in [paths/Text.ts:50](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Text.ts#L50)*
 
 Text is always vertically aligned
 By default is fixed (specified vertcial font size) but can choose fitted, then will fit horizontally to size
@@ -50,7 +50,7 @@ Name | Type | Description |
 
 *Implementation of [Textable](../interfaces/_paths_index_.textable.md)*
 
-*Defined in [paths/Text.ts:58](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Text.ts#L58)*
+*Defined in [paths/Text.ts:58](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Text.ts#L58)*
 
 **Parameters:**
 

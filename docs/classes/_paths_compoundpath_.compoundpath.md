@@ -27,7 +27,7 @@
 
 *Implementation of [Traceable](../interfaces/_paths_index_.traceable.md)*
 
-*Defined in [paths/CompoundPath.ts:10](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/CompoundPath.ts#L10)*
+*Defined in [paths/CompoundPath.ts:10](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/CompoundPath.ts#L10)*
 
 **Parameters:**
 
@@ -43,7 +43,7 @@ ___
 
 ▸ **withPaths**(...`paths`: [Traceable](../interfaces/_paths_index_.traceable.md)[]): *[CompoundPath](_paths_compoundpath_.compoundpath.md)*
 
-*Defined in [paths/CompoundPath.ts:6](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/CompoundPath.ts#L6)*
+*Defined in [paths/CompoundPath.ts:6](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/CompoundPath.ts#L6)*
 
 **Parameters:**
 

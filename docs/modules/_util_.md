@@ -24,7 +24,7 @@
 
 Ƭ **ScaleConfig**: *object*
 
-*Defined in [util.ts:10](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/util.ts#L10)*
+*Defined in [util.ts:10](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/util.ts#L10)*
 
 #### Type declaration:
 
@@ -42,7 +42,7 @@
 
 ▸ **centroid**(`points`: [Point2D](_types_sol_.md#point2d)[]): *[Point2D](_types_sol_.md#point2d)*
 
-*Defined in [util.ts:49](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/util.ts#L49)*
+*Defined in [util.ts:49](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/util.ts#L49)*
 
 **Parameters:**
 
@@ -58,7 +58,7 @@ ___
 
 ▸ **clamp**(`__namedParameters`: object, `n`: number): *number*
 
-*Defined in [util.ts:3](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/util.ts#L3)*
+*Defined in [util.ts:3](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/util.ts#L3)*
 
 **Parameters:**
 
@@ -79,7 +79,7 @@ ___
 
 ▸ **isoTransform**(`height`: number): *`(Anonymous function)`*
 
-*Defined in [util.ts:41](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/util.ts#L41)*
+*Defined in [util.ts:41](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/util.ts#L41)*
 
 **Parameters:**
 
@@ -97,7 +97,7 @@ ___
 
 ▸ **scaler**(`__namedParameters`: object): *function*
 
-*Defined in [util.ts:17](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/util.ts#L17)*
+*Defined in [util.ts:17](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/util.ts#L17)*
 
 **Parameters:**
 
@@ -126,7 +126,7 @@ ___
 
 ▸ **scaler2d**(`c1`: [ScaleConfig](_util_.md#scaleconfig), `c2`: [ScaleConfig](_util_.md#scaleconfig)): *function*
 
-*Defined in [util.ts:28](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/util.ts#L28)*
+*Defined in [util.ts:28](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/util.ts#L28)*
 
 **Parameters:**
 
