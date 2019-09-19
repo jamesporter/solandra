@@ -21,7 +21,7 @@
 
 Ƭ **CurveConfig**: *object*
 
-*Defined in [paths/Path.ts:16](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Path.ts#L16)*
+*Defined in [paths/Path.ts:16](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Path.ts#L16)*
 
 #### Type declaration:
 
@@ -41,4 +41,4 @@ ___
 
 Ƭ **PathEdge**: *object | object*
 
-*Defined in [paths/Path.ts:6](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Path.ts#L6)*
+*Defined in [paths/Path.ts:6](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Path.ts#L6)*

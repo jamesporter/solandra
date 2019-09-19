@@ -22,6 +22,7 @@
 * [RoundedRect](../classes/_paths_roundedrect_.roundedrect.md)
 * [SimplePath](../classes/_paths_simplepath_.simplepath.md)
 * [Spiral](../classes/_paths_spiral_.spiral.md)
+* [Square](../classes/_paths_square_.square.md)
 * [Star](../classes/_paths_star_.star.md)
 
 ## Index
@@ -36,7 +37,7 @@
 
 ▸ **traceIn**(`ctx`: `CanvasRenderingContext2D`): *any*
 
-*Defined in [paths/index.ts:2](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/index.ts#L2)*
+*Defined in [paths/index.ts:2](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/index.ts#L2)*
 
 **Parameters:**
 

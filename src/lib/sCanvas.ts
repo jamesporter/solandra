@@ -53,8 +53,56 @@ export default class SCanvas {
     this.ctx.lineWidth = width
   }
 
-  set lineStyle({ cap = "round" }: { cap?: "round" | "butt" | "square" }) {
+  set lineStyle({
+    cap = "round",
+    join = "round",
+  }: {
+    cap?: "round" | "butt" | "square"
+    join?: "round" | "bevel" | "miter"
+  }) {
     this.ctx.lineCap = cap
+    this.ctx.lineJoin = join
+  }
+
+  /**
+   * The supplied pattern is at scale of canvas
+   */
+  set dash({
+    pattern = [0.05, 0.05],
+    offset = 0,
+  }: {
+    pattern?: number[]
+    offset?: number
+  }) {
+    this.ctx.setLineDash(pattern)
+    this.ctx.lineDashOffset = offset
+  }
+
+  clearShadow() {
+    this.ctx.shadowBlur = 0
+    this.ctx.shadowOffsetX = 0
+    this.ctx.shadowOffsetY = 0
+  }
+
+  /**
+   * Shadow scale is at size of Canvas. (This is not how HTML 5 Canvas works.)
+   */
+  set shadow({
+    size = 0.01,
+    colour = { h: 0, s: 0, l: 0, a: 0.5 },
+    dX = 0,
+    dY = 0.01,
+  }: {
+    size?: number
+    colour?: { h: number; s: number; l: number; a: number }
+    dX?: number
+    dY?: number
+  }) {
+    const { h, s, l, a } = colour
+    this.ctx.shadowBlur = size * this.originalScale
+    this.ctx.shadowColor = hsla(h, s, l, a)
+    this.ctx.shadowOffsetX = dX * this.originalScale
+    this.ctx.shadowOffsetY = dY * this.originalScale
   }
 
   background(h: number, s: number, l: number, a: number = 1) {

@@ -40,7 +40,7 @@
 
 • **get centroid**(): *[Point2D](../modules/_types_sol_.md#point2d)*
 
-*Defined in [paths/Path.ts:146](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Path.ts#L146)*
+*Defined in [paths/Path.ts:146](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Path.ts#L146)*
 
 Vertex-wise centroid
 
@@ -52,7 +52,7 @@ ___
 
 • **get reversed**(): *[Path](_paths_path_.path.md)*
 
-*Defined in [paths/Path.ts:121](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Path.ts#L121)*
+*Defined in [paths/Path.ts:121](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Path.ts#L121)*
 
 **Returns:** *[Path](_paths_path_.path.md)*
 
@@ -62,7 +62,7 @@ ___
 
 • **get segmented**(): *[Path](_paths_path_.path.md)[]*
 
-*Defined in [paths/Path.ts:153](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Path.ts#L153)*
+*Defined in [paths/Path.ts:153](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Path.ts#L153)*
 
 Split the path into triangular segments, around the centroid
 
@@ -74,7 +74,7 @@ Split the path into triangular segments, around the centroid
 
 ▸ **addCurve**(`config`: [CurveConfig](../modules/_paths_path_.md#curveconfig) & object): *[Path](_paths_path_.path.md)*
 
-*Defined in [paths/Path.ts:52](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Path.ts#L52)*
+*Defined in [paths/Path.ts:52](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Path.ts#L52)*
 
 Add a curve
 
@@ -92,7 +92,7 @@ ___
 
 ▸ **addCurveTo**(`point`: [Point2D](../modules/_types_sol_.md#point2d), `config`: [CurveConfig](../modules/_paths_path_.md#curveconfig)): *[Path](_paths_path_.path.md)*
 
-*Defined in [paths/Path.ts:65](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Path.ts#L65)*
+*Defined in [paths/Path.ts:65](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Path.ts#L65)*
 
 Adds a curve to a point
 with optional configuration
@@ -116,7 +116,7 @@ ___
 
 ▸ **addLineTo**(`point`: [Point2D](../modules/_types_sol_.md#point2d)): *[Path](_paths_path_.path.md)*
 
-*Defined in [paths/Path.ts:39](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Path.ts#L39)*
+*Defined in [paths/Path.ts:39](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Path.ts#L39)*
 
 Add a line to a point
 
@@ -134,7 +134,7 @@ ___
 
 ▸ **exploded**(`config`: object): *[Path](_paths_path_.path.md)[]*
 
-*Defined in [paths/Path.ts:172](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Path.ts#L172)*
+*Defined in [paths/Path.ts:172](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Path.ts#L172)*
 
 Split the path into triangular segments, around the centroid.
 displaced by magnitude and scaled by scale
@@ -156,7 +156,7 @@ ___
 
 ▸ **moved**(`delta`: [Vector2D](../modules/_types_sol_.md#vector2d)): *[Path](_paths_path_.path.md)*
 
-*Defined in [paths/Path.ts:108](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Path.ts#L108)*
+*Defined in [paths/Path.ts:108](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Path.ts#L108)*
 
 **Parameters:**
 
@@ -172,7 +172,7 @@ ___
 
 ▸ **rotated**(`angle`: number): *[Path](_paths_path_.path.md)*
 
-*Defined in [paths/Path.ts:224](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Path.ts#L224)*
+*Defined in [paths/Path.ts:224](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Path.ts#L224)*
 
 Rotate a path about its vertex-wise centroid
 
@@ -190,7 +190,7 @@ ___
 
 ▸ **scaled**(`scale`: number): *[Path](_paths_path_.path.md)*
 
-*Defined in [paths/Path.ts:116](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Path.ts#L116)*
+*Defined in [paths/Path.ts:116](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Path.ts#L116)*
 
 Scale a path around its (vertex-wise) centroid
 
@@ -208,7 +208,7 @@ ___
 
 ▸ **subdivide**(`config`: object): *[Path](_paths_path_.path.md)[]*
 
-*Defined in [paths/Path.ts:241](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Path.ts#L241)*
+*Defined in [paths/Path.ts:241](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Path.ts#L241)*
 
 Split a path into two, supply a curve configuration to split with a curve
 otherwise will be split with a straight line.
@@ -233,7 +233,7 @@ ___
 
 *Implementation of [Traceable](../interfaces/_paths_index_.traceable.md)*
 
-*Defined in [paths/Path.ts:279](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Path.ts#L279)*
+*Defined in [paths/Path.ts:279](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Path.ts#L279)*
 
 **Parameters:**
 
@@ -249,7 +249,7 @@ ___
 
 ▸ **transformed**(`transform`: function): *[Path](_paths_path_.path.md)*
 
-*Defined in [paths/Path.ts:194](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Path.ts#L194)*
+*Defined in [paths/Path.ts:194](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Path.ts#L194)*
 
 A new path transforming the current one in a pointwise manner
 
@@ -273,7 +273,7 @@ ___
 
 ▸ **startAt**(`point`: [Point2D](../modules/_types_sol_.md#point2d)): *[Path](_paths_path_.path.md)*
 
-*Defined in [paths/Path.ts:32](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/paths/Path.ts#L32)*
+*Defined in [paths/Path.ts:32](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/paths/Path.ts#L32)*
 
 **Parameters:**
 

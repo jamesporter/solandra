@@ -21,7 +21,7 @@
 
 Ƭ **Message**: *object*
 
-*Defined in [types/sol.ts:7](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/types/sol.ts#L7)*
+*Defined in [types/sol.ts:7](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/types/sol.ts#L7)*
 
 #### Type declaration:
 
@@ -35,7 +35,7 @@ ___
 
 Ƭ **Point2D**: *[number, number]*
 
-*Defined in [types/sol.ts:21](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/types/sol.ts#L21)*
+*Defined in [types/sol.ts:21](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/types/sol.ts#L21)*
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 Ƭ **Size**: *object*
 
-*Defined in [types/sol.ts:19](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/types/sol.ts#L19)*
+*Defined in [types/sol.ts:19](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/types/sol.ts#L19)*
 
 #### Type declaration:
 
@@ -57,7 +57,7 @@ ___
 
 Ƭ **Sketch**: *function*
 
-*Defined in [types/sol.ts:3](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/types/sol.ts#L3)*
+*Defined in [types/sol.ts:3](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/types/sol.ts#L3)*
 
 #### Type declaration:
 
@@ -75,7 +75,7 @@ ___
 
 Ƭ **StatefulSketch**: *object*
 
-*Defined in [types/sol.ts:12](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/types/sol.ts#L12)*
+*Defined in [types/sol.ts:12](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/types/sol.ts#L12)*
 
 #### Type declaration:
 
@@ -97,4 +97,4 @@ ___
 
 Ƭ **Vector2D**: *[number, number]*
 
-*Defined in [types/sol.ts:22](https://github.com/jamesporter/solandra/blob/0b8a323/src/lib/types/sol.ts#L22)*
+*Defined in [types/sol.ts:22](https://github.com/jamesporter/solandra/blob/544e3ee/src/lib/types/sol.ts#L22)*
