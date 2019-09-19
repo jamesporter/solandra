@@ -1,13 +1,21 @@
 import { Point2D } from "../types/sol"
 import { Traceable } from "./index"
+import { v } from ".."
 export default class RoundedRect implements Traceable {
   readonly at: Point2D
   readonly w: number
   readonly h: number
   readonly r: number
-  constructor(config: { at: Point2D; w: number; h: number; r: number }) {
-    const { at, w, h, r } = config
-    this.at = at
+
+  constructor(config: {
+    at: Point2D
+    w: number
+    h: number
+    r: number
+    align?: "topLeft" | "center"
+  }) {
+    const { at, w, h, r, align = "topLeft" } = config
+    this.at = align === "topLeft" ? at : v.subtract(at, [w / 2, h / 2])
     this.w = w
     this.h = h
     this.r = r

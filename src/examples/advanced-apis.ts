@@ -1,6 +1,6 @@
 import SCanvas from "../lib/sCanvas"
 import { Path, CompoundPath, Star, RegularPolygon, Circle } from "../lib/paths"
-import { v, Rect, Square } from "../lib"
+import { v, Rect, Square, RoundedRect } from "../lib"
 
 const compoundPath = (p: SCanvas) => {
   p.background(45, 80, 75)
@@ -170,6 +170,33 @@ const shadowAnimation = (p: SCanvas) => {
   })
 }
 
+const segments = (p: SCanvas) => {
+  p.background(35, 5, 20)
+  p.forTiling(
+    { n: 12, type: "square", margin: 0.05, order: "rowFirst" },
+    (_pt, [dX], at, i) => {
+      p.doProportion(0.6, () => {
+        p.setFillColour(5 + i, 90, 40)
+        p.shadow = {
+          size: 0.05,
+          dY: 0,
+          dX: 0,
+          colour: { h: 45, s: 80, l: 30, a: 0.9 },
+        }
+        p.fill(
+          new RoundedRect({
+            at,
+            align: "center",
+            w: dX / 1.3,
+            h: dX / 1.3,
+            r: dX / 8,
+          })
+        )
+      })
+    }
+  )
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: compoundPath, name: "Compound Path" },
   { sketch: compoundPath2, name: "Compound Path 2" },
@@ -179,6 +206,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: shadows, name: "Shadows" },
   { sketch: shadowAnimation, name: "Shadow Animation" },
   { sketch: glow, name: "Glow" },
+  { sketch: segments, name: "Segments" },
 ]
 
 export default sketches
