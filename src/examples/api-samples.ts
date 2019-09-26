@@ -61,7 +61,7 @@ const vertical = (p: SCanvas) => {
   )
   p.forVertical({ n: 20, margin: 0.1 }, ([x, y], [dX, dY]) => {
     const points = p.build(p.range, { from: x, to: x + dX, n: 20 }, vX => {
-      return p.perturb([vX, y + dY / 2], { magnitude: dY / 4 })
+      return p.perturb({ at: [vX, y + dY / 2], magnitude: dY / 4 })
     })
     p.lineWidth = 0.01 / p.meta.aspectRatio
     p.setStrokeColor(y * 60, 90, 40)
@@ -91,9 +91,9 @@ const flower = (p: SCanvas) => {
   const ir = p.random() * 0.025 + midX / 5
   const da = Math.PI / 10
 
-  const start = p.perturb([midX, bottom * 0.95])
+  const start = p.perturb({ at: [midX, bottom * 0.95] })
   const end: Point2D = [midX, midY]
-  const second = p.perturb(pointAlong(start, end, 0.4))
+  const second = p.perturb({ at: pointAlong(start, end, 0.4) })
 
   p.setStrokeColor(140, 50, 25)
   p.lineWidth = 0.02
@@ -196,7 +196,7 @@ const tilesOfChaiken = (p: SCanvas) => {
 const circle = (p: SCanvas) => {
   p.times(10, n => {
     p.setStrokeColor(0, 0, n + 10, (0.75 * (n + 1)) / 10)
-    const points = p.build(p.aroundCircle, { n: 20 }, pt => p.perturb(pt))
+    const points = p.build(p.aroundCircle, { n: 20 }, at => p.perturb({ at }))
     const sp = SimplePath.withPoints(points)
       .close()
       .chaiken({ n: n + 1, looped: true })
@@ -266,7 +266,7 @@ const circleText = (p: SCanvas) => {
       p.setFillColor(i * 5 + n, 75, 35, 0.2 * n)
       p.fillText(
         {
-          at: p.perturb([x, y]),
+          at: p.perturb({ at: [x, y] }),
           size: 0.05,
           align: "left",
         },
@@ -603,7 +603,7 @@ const cards = (p: SCanvas) => {
         p.times(5, () =>
           p.fill(
             new Ellipse({
-              at: p.perturb([x + dX / 2, y + dY / 2]),
+              at: p.perturb({ at: [x + dX / 2, y + dY / 2] }),
               w: dX / 2,
               h: dX / 2,
             })
@@ -721,10 +721,10 @@ const curls = (p: SCanvas) => {
   p.setFillColor(baseColor, 60, 30)
   p.setStrokeColor(baseColor - 40, 80, 35, 0.9)
   p.times(p.uniformRandomInt({ from: 20, to: 100 }), () => {
-    const c = p.randomPoint
-    let tail = p.perturb(c, { magnitude: 0.2 })
+    const c = p.randomPoint()
+    let tail = p.perturb({ at: c, magnitude: 0.2 })
     while (distance(c, tail) < 0.1) {
-      tail = p.perturb(c, { magnitude: 0.2 })
+      tail = p.perturb({ at: c, magnitude: 0.2 })
     }
     p.fill(
       new Circle({

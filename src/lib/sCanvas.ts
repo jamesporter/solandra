@@ -381,7 +381,7 @@ export default class SCanvas {
     return cases[0][1]()
   }
 
-  get randomPoint(): Point2D {
+  randomPoint(): Point2D {
     return [this.rng.next(), this.rng.next() / this.aspectRatio]
   }
 
@@ -546,8 +546,11 @@ export default class SCanvas {
    * -0.05 to 0.05, optional magnitude scales this e.g. magnitude 1 is perturbations
    * of -0.5 to 0.5)
    */
-  perturb = ([x, y]: Point2D, config: { magnitude?: number } = {}): Point2D => {
-    const { magnitude = 0.1 } = config
+  perturb = (config: { at: Point2D; magnitude?: number }): Point2D => {
+    const {
+      at: [x, y],
+      magnitude = 0.1,
+    } = config
     return [
       x + magnitude * (this.rng.next() - 0.5),
       y + magnitude * (this.rng.next() - 0.5),

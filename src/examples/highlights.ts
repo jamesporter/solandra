@@ -262,7 +262,7 @@ const hatching2 = (p: SCanvas) => {
   const { center } = p.meta
   const count = p.uniformRandomInt({ from: 5, to: 35 })
   const points = p.build(p.times, count, n => {
-    return p.perturb(center, { magnitude: 0.1 * n })
+    return p.perturb({ at: center, magnitude: 0.1 * n })
   })
   points.forEach(pt => {
     p.setStrokeColor(15 + pt[0] * 50, 90, 40, 0.9)
@@ -679,7 +679,7 @@ const minis2 = (p: SCanvas) => {
         let nPt: Point2D = [cX, cY]
         p.times(6, j => {
           p.setFillColor(i * 27 + j * 12, 90, 40, 0.3)
-          nPt = p.perturb(nPt, { magnitude: dX / 1.5 })
+          nPt = p.perturb({ at: nPt, magnitude: dX / 1.5 })
           p.fill(new Circle({ at: nPt, r: dX / 2 }))
         })
       })
@@ -689,7 +689,7 @@ const minis2 = (p: SCanvas) => {
       p.setStrokeColor(0, 0, 90)
       p.times(3, () => {
         p.draw(new Rect({ at: frame, w: dX, h: dY }))
-        frame = p.perturb(frame, { magnitude: 0.015 })
+        frame = p.perturb({ at: frame, magnitude: 0.015 })
       })
     }
   )
@@ -710,7 +710,7 @@ const contoured3 = (p: SCanvas) => {
       p.sample([50, 40, 30]),
       0.25
     )
-    let spt = p.randomPoint
+    let spt = p.randomPoint()
     let pt: Point2D = [spt[0], spt[1]]
     const points: Point2D[] = [spt]
     while (p.inDrawing(pt)) {
@@ -883,7 +883,7 @@ const bokeh = (p: SCanvas) => {
   )
   p.forTiling({ n: 20, type: "square", margin: 0.2 }, (_pt, [dX], c) => {
     const hue = p.sample([5, 25, 210])
-    const loc = p.perturb(c, { magnitude: 0.4 })
+    const loc = p.perturb({ at: c, magnitude: 0.4 })
     p.setFillGradient(
       new RadialGradient({
         start: loc,

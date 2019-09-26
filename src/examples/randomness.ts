@@ -15,7 +15,7 @@ const noiseField = (p: SCanvas) => {
 
   p.times(250, n => {
     p.setStrokeColor(195 + n / 12.5, 90, 30, 0.7)
-    let pt = p.randomPoint
+    let pt = p.randomPoint()
     const sp = SimplePath.startAt(pt)
     while (true) {
       const a = Math.PI * 2 * perlin2(pt[0] * s, pt[1] * s)
@@ -66,7 +66,7 @@ const randomness1c = (p: SCanvas) => {
     p.fill(new Circle({ at, r: w * 0.45 }))
 
     p.setFillColor(205, 70, 80)
-    p.fill(new Circle({ at: p.perturb(at, { magnitude: w / 3 }), r: w * 0.3 }))
+    p.fill(new Circle({ at: p.perturb({ at, magnitude: w / 3 }), r: w * 0.3 }))
   })
 }
 
@@ -110,7 +110,7 @@ const littleAbstracts = (p: SCanvas) => {
         p.setFillColor(200, p.sample([20, 40]), 90, 0.4)
         p.fill(
           new RegularPolygon({
-            at: p.perturb(c, { magnitude: d[0] / 1.5 }),
+            at: p.perturb({ at: c, magnitude: d[0] / 1.5 }),
             n: p.poisson(4) + 3,
             r: d[0] / 6,
           })
@@ -232,7 +232,7 @@ const minis = (p: SCanvas) => {
       let nPt: Point2D = [cX, cY]
       p.times(6, j => {
         p.setFillColor(i * 27 + j * 12, 90, 30, 0.3)
-        nPt = p.perturb(nPt, { magnitude: dX / 1.5 })
+        nPt = p.perturb({ at: nPt, magnitude: dX / 1.5 })
         p.fill(new Circle({ at: nPt, r: dX / 2 }))
       })
     })
@@ -323,7 +323,7 @@ const explosion = (p: SCanvas) => {
     p.times(5, m => {
       const sp = SimplePath.withPoints([])
       p.aroundCircle({ at: [0, 0], r: 0.1 + 0.08 * m, n: 30 }, ([x, y]) => {
-        sp.addPoint(p.perturb([x, y]))
+        sp.addPoint(p.perturb({ at: [x, y] }))
       })
       sp.close()
       p.setFillColor(210, 45, 90, 0.2)
@@ -333,10 +333,11 @@ const explosion = (p: SCanvas) => {
     p.setFillColor(45, 90, 100)
     p.times(N, n => {
       p.withRotation((2 * Math.PI * n) / N, () => {
-        const start = p.perturb([0.1 + p.random() * 0.2, 0], {
+        const start = p.perturb({
+          at: [0.1 + p.random() * 0.2, 0],
           magnitude: 0.03,
         })
-        const end = p.perturb([0.4, 0], { magnitude: 0.1 })
+        const end = p.perturb({ at: [0.4, 0], magnitude: 0.1 })
         p.fill(
           Path.startAt(start)
             .addCurveTo(end, { curveSize: 0.05 })
@@ -359,7 +360,7 @@ const contoured = (p: SCanvas) => {
       p.sample([50, 80]),
       p.sample([40, 20, 10])
     )
-    let spt = p.randomPoint
+    let spt = p.randomPoint()
     let pt: Point2D = [spt[0], spt[1]]
     let p1 = SimplePath.withPoints([spt])
     while (p.inDrawing(pt)) {
@@ -400,7 +401,7 @@ const contoured2 = (p: SCanvas) => {
       p.sample([40, 20, 10]),
       0.75
     )
-    let spt = p.randomPoint
+    let spt = p.randomPoint()
     let pt: Point2D = [spt[0], spt[1]]
     let p1 = SimplePath.withPoints([spt])
     while (p.inDrawing(pt)) {
@@ -431,7 +432,7 @@ const night = (p: SCanvas) => {
   p.background(0, 0, 5)
   p.forTiling({ n: 15, type: "square" }, (_pt, [dX], c) => {
     const hue = p.sample([45, 55, 60])
-    const loc = p.perturb(c, { magnitude: 0.4 })
+    const loc = p.perturb({ at: c, magnitude: 0.4 })
     p.setFillGradient(
       new RadialGradient({
         start: loc,
@@ -500,7 +501,8 @@ const perturbedSpiral2 = (p: SCanvas) => {
       r += 0.005 * dA
       a += dA
       path.addPoint(
-        p.perturb([r * Math.cos(a), r * Math.sin(a)], {
+        p.perturb({
+          at: [r * Math.cos(a), r * Math.sin(a)],
           magnitude: 0.0125 * (1.1 + Math.cos(p.t)),
         })
       )

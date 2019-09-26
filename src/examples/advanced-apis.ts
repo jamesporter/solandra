@@ -33,7 +33,7 @@ const compoundPath2 = (p: SCanvas) => {
             at: c,
             r: (s * dX) / 4 + dX * n * 0.05,
             n: i + 3,
-          }).path.transformed(pt => p.perturb(pt, { magnitude: 0.05 })).reversed
+          }).path.transformed(at => p.perturb({ at, magnitude: 0.05 })).reversed
         )
       )
     })
