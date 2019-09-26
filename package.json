@@ -23,9 +23,7 @@
     "react-helmet": "^5.2.1",
     "react-syntax-highlighter": "^11.0.2",
     "react-use-dimensions": "^1.2.1",
-    "tailwindcss": "^1.0.5",
-    "typedoc": "^0.15.0",
-    "typedoc-plugin-markdown": "^2.1.0"
+    "tailwindcss": "^1.0.5"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",
@@ -49,8 +47,7 @@
     "serve": "gatsby serve",
     "test": "jest",
     "build:package": "node pre-publish && yarn tsc ./src/lib/index.ts --outDir ./package --lib dom,esnext --target ES2016 --moduleResolution Node -d",
-    "build:source": "node extract-source.js",
-    "build:docs": "node pre-docs && yarn typedoc --theme markdown --out ./docs ./src/lib --readme none --excludePrivate --exclude \"**/*+.test.ts\""
+    "build:source": "node extract-source.js"
   },
   "repository": {
     "type": "git",
