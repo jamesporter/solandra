@@ -15,7 +15,7 @@ import {
 import { add, pointAlong, scale, distance } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
 import { LinearGradient, RadialGradient } from "../lib/gradient"
-import { clamp } from "../lib"
+import { clamp, Line } from "../lib"
 
 const rainbow = (p: SCanvas) => {
   p.withRandomOrder(
@@ -25,12 +25,14 @@ const rainbow = (p: SCanvas) => {
       p.doProportion(0.6, () => {
         p.setStrokeColor(i * 100, 80, 30 + j * 30, 0.9)
         p.lineWidth = 0.02 + 0.02 * (1 - i)
-        p.drawLine(
-          [i + di / 4, j + dj / 4],
-          [
-            i + (di * 3 * j * p.randomPolarity()) / 4,
-            j + (dj * 5 * (1 + p.random())) / 4,
-          ]
+        p.draw(
+          new Line(
+            [i + di / 4, j + dj / 4],
+            [
+              i + (di * 3 * j * p.randomPolarity()) / 4,
+              j + (dj * 5 * (1 + p.random())) / 4,
+            ]
+          )
         )
       })
     }
@@ -47,7 +49,7 @@ const horizontal = (p: SCanvas) => {
   )
   p.forHorizontal({ n: 20, margin: 0.1 }, ([x, y], [dX, dY]) => {
     p.setStrokeColor(x * 360, 90, 40)
-    p.drawLine([x, y], [x + dX, y + dY])
+    p.draw(new Line([x, y], [x + dX, y + dY]))
   })
 }
 
@@ -551,9 +553,9 @@ const clipping = (p: SCanvas) => {
             ([x, y], [dX, dY]) => {
               p.setStrokeColor(120 + x * 120 + p.t * 50, 90 - 20 * y, 40)
               p.proportionately([
-                [1, () => p.drawLine([x, y], [x + dX, y + dY])],
-                [2, () => p.drawLine([x + dX, y], [x, y + dY])],
-                [1, () => p.drawLine([x, y], [x, y + dY])],
+                [1, () => p.draw(new Line([x, y], [x + dX, y + dY]))],
+                [2, () => p.draw(new Line([x + dX, y], [x, y + dY]))],
+                [1, () => p.draw(new Line([x, y], [x, y + dY]))],
               ])
             }
           )

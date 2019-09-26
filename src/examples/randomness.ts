@@ -1,7 +1,13 @@
 import { Point2D } from "../lib/types/sol"
 import SCanvas from "../lib/sCanvas"
-import { Path, SimplePath } from "../lib/paths"
-import { RegularPolygon, Circle, Rect } from "../lib/paths"
+import {
+  Path,
+  SimplePath,
+  Line,
+  RegularPolygon,
+  Circle,
+  Rect,
+} from "../lib/paths"
 import { add, scale } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
 import { RadialGradient } from "../lib/gradient"
@@ -128,7 +134,7 @@ const recordCoverish3 = (p: SCanvas) => {
       const a = p.gaussian({ mean: Math.PI, sd: Math.PI / 12 })
       p.withRotation(a, () => {
         p.setStrokeColor(a * 12, 100, 70, 0.9)
-        p.drawLine([-1, 0], [1, 0])
+        p.draw(new Line([-1, 0], [1, 0]))
       })
     })
   })
@@ -477,9 +483,11 @@ const perturbedSpiral = (p: SCanvas) => {
   p.times(800, n => {
     p.setStrokeColor(p.sample([220, 190, 215]), 50, p.sample([20, 40]))
     const pA = a + p.gaussian({ sd: Math.PI })
-    p.drawLine(
-      [cX + Math.cos(pA) * r, cY + Math.sin(pA) * r],
-      [cX + Math.cos(pA) * (r + 0.1), cY + Math.sin(pA) * (r + 0.1)]
+    p.draw(
+      new Line(
+        [cX + Math.cos(pA) * r, cY + Math.sin(pA) * r],
+        [cX + Math.cos(pA) * (r + 0.1), cY + Math.sin(pA) * (r + 0.1)]
+      )
     )
     r += 0.001
     a += 0.1

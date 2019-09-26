@@ -14,14 +14,14 @@ import { add, scale } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
 import { LinearGradient, RadialGradient } from "../lib/gradient"
 import { zip2, sum, arrayOf } from "../lib/collectionOps"
-import { clamp } from "../lib"
+import { clamp, Line } from "../lib"
 
 const tiling = (p: SCanvas) => {
   p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
     p.setStrokeColor(120 + x * 120 + p.t * 50, 90 - 20 * y, 40)
     p.proportionately([
-      [1, () => p.drawLine([x, y], [x + dX, y + dY])],
-      [2, () => p.drawLine([x + dX, y], [x, y + dY])],
+      [1, () => p.draw(new Line([x, y], [x + dX, y + dY]))],
+      [2, () => p.draw(new Line([x + dX, y], [x, y + dY]))],
     ])
   })
 }
@@ -407,7 +407,7 @@ const fancyTiling = (p: SCanvas) => {
         () => (x: number, y: number, dX: number, dY: number) => {
           p.lineWidth = lw
           p.setStrokeColor(...color)
-          p.drawLine([x, y], [x + dX, y + dY])
+          p.draw(new Line([x, y], [x + dX, y + dY]))
         },
       ],
       [
@@ -415,7 +415,7 @@ const fancyTiling = (p: SCanvas) => {
         () => (x: number, y: number, dX: number, dY: number) => {
           p.lineWidth = lw
           p.setStrokeColor(...color)
-          p.drawLine([x + dX, y], [x, y + dY])
+          p.draw(new Line([x + dX, y], [x, y + dY]))
         },
       ],
       [
@@ -423,7 +423,7 @@ const fancyTiling = (p: SCanvas) => {
         () => (x: number, y: number, dX: number, dY: number) => {
           p.lineWidth = lw
           p.setStrokeColor(...color)
-          p.drawLine([x, y], [x, y + dY])
+          p.draw(new Line([x, y], [x, y + dY]))
         },
       ],
       [
@@ -431,7 +431,7 @@ const fancyTiling = (p: SCanvas) => {
         () => (x: number, y: number, dX: number, dY: number) => {
           p.lineWidth = lw
           p.setStrokeColor(...color)
-          p.drawLine([x, y], [x + dX, y])
+          p.draw(new Line([x, y], [x + dX, y]))
         },
       ],
     ])
@@ -541,7 +541,7 @@ const recordCoverish2 = (p: SCanvas) => {
     p.times(20, () => {
       p.setStrokeColor(0, 0, 100, 0.2)
       const y = p.gaussian({ mean: bottom * 0.8, sd: bottom * 0.1 })
-      p.drawLine([0, y], [right, y])
+      p.draw(new Line([0, y], [right, y]))
     })
   })
 }

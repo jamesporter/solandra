@@ -137,14 +137,6 @@ export default class SCanvas {
     this.ctx.fillStyle = gradient.gradient(this.ctx)
   }
 
-  // probably reimplement with other thing... want to minimise actual number of drawing ops
-  drawLine(from: Point2D, to: Point2D) {
-    this.ctx.beginPath()
-    this.ctx.moveTo(...from)
-    this.ctx.lineTo(...to)
-    this.ctx.stroke()
-  }
-
   draw(traceable: Traceable) {
     this.ctx.beginPath()
     traceable.traceIn(this.ctx)
