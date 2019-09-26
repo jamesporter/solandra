@@ -1,5 +1,5 @@
 import { Size, Point2D, Vector2D } from "./types/sol"
-import { hsla } from "./colours"
+import { hsla } from "./colors"
 import { Traceable, TextConfig, Text, Rect } from "./paths"
 import Prando from "prando"
 
@@ -89,16 +89,16 @@ export default class SCanvas {
    */
   set shadow({
     size = 0.01,
-    colour = { h: 0, s: 0, l: 0, a: 0.5 },
+    color = { h: 0, s: 0, l: 0, a: 0.5 },
     dX = 0,
     dY = 0.01,
   }: {
     size?: number
-    colour?: { h: number; s: number; l: number; a: number }
+    color?: { h: number; s: number; l: number; a: number }
     dX?: number
     dY?: number
   }) {
-    const { h, s, l, a } = colour
+    const { h, s, l, a } = color
     this.ctx.shadowBlur = size * this.originalScale
     this.ctx.shadowColor = hsla(h, s, l, a)
     this.ctx.shadowOffsetX = dX * this.originalScale
@@ -121,11 +121,11 @@ export default class SCanvas {
     this.popState()
   }
 
-  setStrokeColour(h: number, s: number, l: number, a: number = 1) {
+  setStrokeColor(h: number, s: number, l: number, a: number = 1) {
     this.ctx.strokeStyle = hsla(h, s, l, a)
   }
 
-  setFillColour(h: number, s: number, l: number, a: number = 1) {
+  setFillColor(h: number, s: number, l: number, a: number = 1) {
     this.ctx.fillStyle = hsla(h, s, l, a)
   }
 
@@ -425,7 +425,7 @@ export default class SCanvas {
   }
 
   /**
-   * Within a context all style/colour changes are local.
+   * Within a context all style/color changes are local.
    */
   withContext = (callback: () => void) => {
     this.pushState()

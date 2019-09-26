@@ -18,7 +18,7 @@ import { clamp } from "../lib"
 
 const tiling = (p: SCanvas) => {
   p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
-    p.setStrokeColour(120 + x * 120 + p.t * 50, 90 - 20 * y, 40)
+    p.setStrokeColor(120 + x * 120 + p.t * 50, 90 - 20 * y, 40)
     p.proportionately([
       [1, () => p.drawLine([x, y], [x + dX, y + dY])],
       [2, () => p.drawLine([x + dX, y], [x, y + dY])],
@@ -48,7 +48,7 @@ const chaiken = (p: SCanvas) => {
     sp.close()
     sp.chaiken({ n: 4, looped: true })
     p.lineWidth = 0.005
-    p.setStrokeColour(190 + n, 90, 40, 0.75)
+    p.setStrokeColor(190 + n, 90, 40, 0.75)
     p.draw(sp)
   })
 }
@@ -87,7 +87,7 @@ const mondrian = (p: SCanvas) => {
 
   rs.map(r => {
     p.doProportion(0.3, () => {
-      p.setFillColour(p.sample([10, 60, 200]), 80, 50)
+      p.setFillColor(p.sample([10, 60, 200]), 80, 50)
       p.fill(r)
     })
     p.draw(r)
@@ -99,7 +99,7 @@ const scriptLike = (p: SCanvas) => {
 
   p.range({ from: 0.1, to: bottom - 0.1, n: 5 }, m => {
     let points: Point2D[] = []
-    p.setStrokeColour(215, 40, 30 - 30 * m)
+    p.setStrokeColor(215, 40, 30 - 30 * m)
     p.range({ from: 0.1, to: 0.9, n: 60 }, n => {
       points.push([
         n + perlin2(n * 45 + m * 67, 20) / 12,
@@ -116,8 +116,8 @@ const circles2 = (p: SCanvas) => {
     p.forTiling,
     { n: 10, type: "square", margin: 0.1 },
     (pt, delta) => {
-      p.setFillColour(150 + pt[0] * 50, 80, 50, 0.9)
-      p.setStrokeColour(150, 40, 20)
+      p.setFillColor(150 + pt[0] * 50, 80, 50, 0.9)
+      p.setStrokeColor(150, 40, 20)
       p.lineWidth = 0.005
       const r = Math.sqrt(1.2 * pt[0] * pt[1]) * p.sample([0.7, 1.1, 1.3])
       const e = new Circle({
@@ -144,7 +144,7 @@ const randomness1 = (p: SCanvas) => {
         new LinearGradient({
           from: [0, 0],
           to: [0, bottom],
-          colours: [
+          colors: [
             [0, { h: 245, s: 80, l: 40 }],
             [0.45, { h: 180, s: 80, l: 40 }],
             [0.55, { h: 40, s: 80, l: 40 }],
@@ -170,7 +170,7 @@ const randomness2 = (p: SCanvas) => {
   p.forTiling({ n: 50, margin: 0.1 }, (pt, delta) => {
     const v = p.poisson(4)
     p.times(v, n => {
-      p.setFillColour(40 - n * 20, 80, 50, 1 / n)
+      p.setFillColor(40 - n * 20, 80, 50, 1 / n)
       p.fill(
         new Ellipse({
           at: add(pt, scale(delta, 0.5)),
@@ -195,7 +195,7 @@ const curves = (p: SCanvas) => {
     const points = zip2(nHPts, nVPts)
     const path = SimplePath.withPoints(points)
     path.chaiken({ n: 4 })
-    p.setStrokeColour(p.uniformRandomInt({ from: -40, to: 60 }), 90, 60, 0.95)
+    p.setStrokeColor(p.uniformRandomInt({ from: -40, to: 60 }), 90, 60, 0.95)
     p.draw(path)
   })
 }
@@ -205,7 +205,7 @@ const transforms2 = (p: SCanvas) => {
   const baseSize = (1 + Math.sin(2 * p.t)) / 2
   const { bottom: h } = p.meta
   p.forTiling({ n: 32, type: "square" }, ([x, y], [dX, dY]) => {
-    p.setFillColour(320 - x * 100 + p.t * 10, 90, 50, 0.8)
+    p.setFillColor(320 - x * 100 + p.t * 10, 90, 50, 0.8)
     p.withTranslation([x + dX / 2, y + dY / 2], () =>
       p.withRotation(x + y + p.t * 2, () =>
         p.withScale(
@@ -228,7 +228,7 @@ const time = (p: SCanvas) => {
   p.forHorizontal({ n: 20, margin: 0.1 }, ([x, y], [dX, dY]) => {
     p.times(times, n => {
       const h = dY * 0.5 * (1 + perlin2(x, 100 + n + p.t / 4))
-      p.setFillColour((n * 60) / times, 80, 60)
+      p.setFillColor((n * 60) / times, 80, 60)
       p.fill(
         new Rect({
           at: [x + (dX / times) * n, y + dY - h],
@@ -245,7 +245,7 @@ const polygons2 = (p: SCanvas) => {
   p.times(5, n => {
     const sides = 10 - n
     const r = 0.4 - n * 0.05
-    p.setFillColour(330, 70, 10 + n * 12)
+    p.setFillColor(330, 70, 10 + n * 12)
     p.fill(
       new RegularPolygon({
         at: p.meta.center,
@@ -265,7 +265,7 @@ const hatching2 = (p: SCanvas) => {
     return p.perturb(center, { magnitude: 0.1 * n })
   })
   points.forEach(pt => {
-    p.setStrokeColour(15 + pt[0] * 50, 90, 40, 0.9)
+    p.setStrokeColor(15 + pt[0] * 50, 90, 40, 0.9)
     const r = 0.1 + 0.15 * p.random()
     p.withClipping(new Circle({ at: pt, r }), () =>
       p.draw(
@@ -285,7 +285,7 @@ const moreArcs = (p: SCanvas) => {
   p.times(100, () => {
     const a = p.random() * 2 * Math.PI
     const a2 = a + p.random()
-    p.setFillColour(a * 30, 90, 30, 0.2)
+    p.setFillColor(a * 30, 90, 30, 0.2)
     p.fill(
       new HollowArc({
         at: p.meta.center,
@@ -298,13 +298,13 @@ const moreArcs = (p: SCanvas) => {
   })
 }
 
-const colourWheel = (p: SCanvas) => {
+const colorWheel = (p: SCanvas) => {
   const dA = Math.PI / 20
   const dR = 0.05
   for (let a = 0; a < Math.PI * 2; a += dA) {
     for (let r = 0.1; r < 0.4; r += dR) {
       p.doProportion(0.6, () => {
-        p.setFillColour((180 * a) / Math.PI, r * 220, 50)
+        p.setFillColor((180 * a) / Math.PI, r * 220, 50)
         p.fill(
           new HollowArc({
             at: p.meta.center,
@@ -369,7 +369,7 @@ const sunburst = (p: SCanvas) => {
 
   const prop = (1.2 + Math.cos(p.t / 2)) / 2.2
   layers.flat().forEach(({ start, end, depth }, i) => {
-    p.setFillColour(i, 90, 60)
+    p.setFillColor(i, 90, 60)
     p.fill(
       new HollowArc({
         at: p.meta.center,
@@ -391,7 +391,7 @@ const fancyTiling = (p: SCanvas) => {
     dX: number,
     dY: number
   ) => void) => {
-    const colour: [number, number, number] = [
+    const color: [number, number, number] = [
       p.uniformRandomInt({ from: baseHue, to: baseHue + 60 }),
       p.uniformRandomInt({ from: 60, to: 90 }),
       p.uniformRandomInt({ from: 30, to: 60 }),
@@ -406,7 +406,7 @@ const fancyTiling = (p: SCanvas) => {
         1,
         () => (x: number, y: number, dX: number, dY: number) => {
           p.lineWidth = lw
-          p.setStrokeColour(...colour)
+          p.setStrokeColor(...color)
           p.drawLine([x, y], [x + dX, y + dY])
         },
       ],
@@ -414,7 +414,7 @@ const fancyTiling = (p: SCanvas) => {
         1,
         () => (x: number, y: number, dX: number, dY: number) => {
           p.lineWidth = lw
-          p.setStrokeColour(...colour)
+          p.setStrokeColor(...color)
           p.drawLine([x + dX, y], [x, y + dY])
         },
       ],
@@ -422,7 +422,7 @@ const fancyTiling = (p: SCanvas) => {
         1,
         () => (x: number, y: number, dX: number, dY: number) => {
           p.lineWidth = lw
-          p.setStrokeColour(...colour)
+          p.setStrokeColor(...color)
           p.drawLine([x, y], [x, y + dY])
         },
       ],
@@ -430,7 +430,7 @@ const fancyTiling = (p: SCanvas) => {
         1,
         () => (x: number, y: number, dX: number, dY: number) => {
           p.lineWidth = lw
-          p.setStrokeColour(...colour)
+          p.setStrokeColor(...color)
           p.drawLine([x, y], [x + dX, y])
         },
       ],
@@ -459,7 +459,7 @@ const fancyTiling = (p: SCanvas) => {
 const sketchingCurves = (p: SCanvas) => {
   p.background(30, 30, 95)
   p.lineWidth = 0.005
-  p.setStrokeColour(230, 90, 25, 0.6)
+  p.setStrokeColor(230, 90, 25, 0.6)
 
   const points = p.build(
     p.forHorizontal,
@@ -491,7 +491,7 @@ const recordCoverish = (p: SCanvas) => {
     }),
     () => {
       p.forVertical({ n: 9 }, (at, [w, h], _c, i) => {
-        p.setFillColour(
+        p.setFillColor(
           baseHue + i * 10 + p.uniformRandomInt({ from: -5, to: 5 }),
           90,
           50,
@@ -503,7 +503,7 @@ const recordCoverish = (p: SCanvas) => {
   )
   p.times(20, () => {
     const x = p.random()
-    p.setFillColour(baseHue, 80, 10)
+    p.setFillColor(baseHue, 80, 10)
     p.fill(new Rect({ at: [x, 0], w: 0.01, h: p.meta.bottom }))
   })
 }
@@ -521,14 +521,14 @@ const recordCoverish2 = (p: SCanvas) => {
     new LinearGradient({
       from: [0, 0],
       to: [0, bottom],
-      colours: [[0, { h: 215, s: 80, l: 60 }], [1, { h: 215, s: 80, l: 20 }]],
+      colors: [[0, { h: 215, s: 80, l: 60 }], [1, { h: 215, s: 80, l: 20 }]],
     })
   )
   p.fill(mainRect)
 
   p.withClipping(mainRect, () => {
     p.times(40, () => {
-      p.setFillColour(p.uniformRandomInt({ from: 180, to: 225 }), 80, 40, 0.3)
+      p.setFillColor(p.uniformRandomInt({ from: 180, to: 225 }), 80, 40, 0.3)
       p.fill(
         new Rect({
           at: [0, p.gaussian({ mean: bottom * 0.6, sd: bottom * 0.15 })],
@@ -539,7 +539,7 @@ const recordCoverish2 = (p: SCanvas) => {
     })
     p.lineWidth = 0.005
     p.times(20, () => {
-      p.setStrokeColour(0, 0, 100, 0.2)
+      p.setStrokeColor(0, 0, 100, 0.2)
       const y = p.gaussian({ mean: bottom * 0.8, sd: bottom * 0.1 })
       p.drawLine([0, y], [right, y])
     })
@@ -551,7 +551,7 @@ const painting = (p: SCanvas) => {
     new LinearGradient({
       from: [0, 0],
       to: [0, p.meta.bottom],
-      colours: [[0, { h: 45, s: 30, l: 95 }], [1, { h: 55, s: 30, l: 90 }]],
+      colors: [[0, { h: 45, s: 30, l: 95 }], [1, { h: 55, s: 30, l: 90 }]],
     })
   )
   p.forVertical({ n: 100, margin: 0.15 }, ([x, y], [dX, dY]) => {
@@ -566,7 +566,7 @@ const painting = (p: SCanvas) => {
       new LinearGradient({
         from: [x + xOffset, y],
         to: [x + dX + xOffset, y + dY],
-        colours: [
+        colors: [
           [0, { h: h1, s: 60, l: 65, a: 0 }],
           [0.05, { h: h1, s: 60, l: 65, a: 0 }],
           [0.1, { h: h1, s: 60, l: 65, a: 0.9 }],
@@ -601,7 +601,7 @@ const painting2 = (p: SCanvas) => {
     new LinearGradient({
       from: [0, 0],
       to: [0, p.meta.bottom],
-      colours: [
+      colors: [
         [0, { h: bh + 15, s: 30, l: 95 }],
         [1, { h: bh + 25, s: 30, l: 90 }],
       ],
@@ -621,7 +621,7 @@ const painting2 = (p: SCanvas) => {
           new LinearGradient({
             from: [x + xOffset, y],
             to: [x + dX + xOffset, y + dY],
-            colours: [
+            colors: [
               [0, { h: h1, s: 60, l: 65, a: 0 }],
               [0.05, { h: h1, s: 60, l: 65, a: 0 }],
               [0.1, { h: h1, s: 60, l: 65, a: 0.9 }],
@@ -659,7 +659,7 @@ const doodles = (p: SCanvas) => {
   p.forTiling({ n: 7, type: "square", margin: 0.1 }, ([x, y], [dX, dY]) => {
     const center = add([x, y], scale([dX, dY], 0.5))
     let path = Path.startAt(center)
-    p.setStrokeColour(100 * x + y * 33, 60 + 45 * y, 40)
+    p.setStrokeColor(100 * x + y * 33, 60 + 45 * y, 40)
     p.lineWidth = 0.005
     p.withRandomOrder(p.aroundCircle, { at: center, r: dX / 2.8, n: 7 }, pt =>
       path.addCurveTo(pt)
@@ -678,7 +678,7 @@ const minis2 = (p: SCanvas) => {
         p.background(i * 27, 20, 10)
         let nPt: Point2D = [cX, cY]
         p.times(6, j => {
-          p.setFillColour(i * 27 + j * 12, 90, 40, 0.3)
+          p.setFillColor(i * 27 + j * 12, 90, 40, 0.3)
           nPt = p.perturb(nPt, { magnitude: dX / 1.5 })
           p.fill(new Circle({ at: nPt, r: dX / 2 }))
         })
@@ -686,7 +686,7 @@ const minis2 = (p: SCanvas) => {
 
       let frame: Point2D = [x, y]
       p.lineWidth = 0.001
-      p.setStrokeColour(0, 0, 90)
+      p.setStrokeColor(0, 0, 90)
       p.times(3, () => {
         p.draw(new Rect({ at: frame, w: dX, h: dY }))
         frame = p.perturb(frame, { magnitude: 0.015 })
@@ -704,7 +704,7 @@ const contoured3 = (p: SCanvas) => {
   p.times(20, n => {
     const sPerlin = (x, y) =>
       perlin2(p.random() + x * s + n / 50, y * s + n / 100)
-    p.setFillColour(
+    p.setFillColor(
       p.sample([220, 170]),
       p.sample([50, 80]),
       p.sample([50, 40, 30]),
@@ -751,7 +751,7 @@ const central = (p: SCanvas) => {
       end: [0, 0],
       rStart: 0,
       rEnd: 0.8,
-      colours: [
+      colors: [
         [0, { h: 0, s: 0, l: 100 }],
         [0.25, { h: 220, s: 10, l: 50 }],
         [0.35, { h: 0, s: 0, l: 100 }],
@@ -784,7 +784,7 @@ const centralCurves = (p: SCanvas) => {
       end: [0, 0],
       rStart: 0,
       rEnd: 0.8,
-      colours: [
+      colors: [
         [0, { h: 0, s: 0, l: 100 }],
         [0.25, { h: 220, s: 10, l: 50 }],
         [0.35, { h: 0, s: 0, l: 100 }],
@@ -819,7 +819,7 @@ const lineOfCurves = (p: SCanvas) => {
     const cS = p.gaussian({ mean: 0.3, sd: 0.1 })
     const pol = p.randomPolarity()
     const yBase = y + dY + 0.2
-    p.setFillColour(p.sample([45, 55, 60, 65]), 30, 85, 0.6)
+    p.setFillColor(p.sample([45, 55, 60, 65]), 30, 85, 0.6)
     p.fill(
       Path.startAt([x, yBase])
         .addCurveTo([cX + dH, y + dY - height + 0.1], {
@@ -841,7 +841,7 @@ const dividing = (p: SCanvas) => {
     r: 0.4,
   }).path.segmented.flatMap(s => s.segmented)
   ss.forEach((s, i) => {
-    p.setFillColour(i * 5, 70, 60)
+    p.setFillColor(i * 5, 70, 60)
     p.fill(s)
   })
   p.lineWidth = 0.005
@@ -856,7 +856,7 @@ const dividing2 = (p: SCanvas) => {
     .flatMap(s => s.exploded({ scale: 0.75, magnitude: 1.1 }))
     .flatMap(s => s.exploded({ scale: 0.75, magnitude: 1.3 }))
     .forEach((s, i) => {
-      p.setFillColour(i * 5, 80, 60, 0.9)
+      p.setFillColor(i * 5, 80, 60, 0.9)
       p.fill(s)
     })
 }
@@ -868,7 +868,7 @@ const dividing6 = (p: SCanvas) => {
     .exploded({ magnitude: 1.05, scale: 0.99 })
     .flatMap(s => s.exploded({ magnitude: 1.05, scale: 0.99 }))
     .forEach((s, i) => {
-      p.setFillColour(215 - i * 3, 90, 40)
+      p.setFillColor(215 - i * 3, 90, 40)
       p.fill(s.rotated(p.gaussian({ sd: Math.PI / 12 })))
     })
 }
@@ -878,7 +878,7 @@ const bokeh = (p: SCanvas) => {
     new LinearGradient({
       from: [0, 0],
       to: [0, p.meta.bottom],
-      colours: [[0, { h: 0, s: 0, l: 30 }], [1, { h: 0, s: 0, l: 0 }]],
+      colors: [[0, { h: 0, s: 0, l: 30 }], [1, { h: 0, s: 0, l: 0 }]],
     })
   )
   p.forTiling({ n: 20, type: "square", margin: 0.2 }, (_pt, [dX], c) => {
@@ -890,7 +890,7 @@ const bokeh = (p: SCanvas) => {
         end: loc,
         rStart: 0,
         rEnd: dX * 2.2,
-        colours: [
+        colors: [
           [0, { h: hue, s: 80, l: 70 }],
           [p.sample([0.1, 0.2, 0.3, 0.5]), { h: hue, s: 80, l: 70, a: 0 }],
         ],
@@ -908,12 +908,12 @@ const advancedDivisions = (p: SCanvas) => {
   })
 
   path.subdivide({ m: 0, n: 10 }).forEach((part, i) => {
-    p.setFillColour(10 + i * 40, 90, 60, p.sample([0.4, 0.5]))
+    p.setFillColor(10 + i * 40, 90, 60, p.sample([0.4, 0.5]))
     p.fill(part)
   })
 
   path.exploded().forEach((part, i) => {
-    p.setFillColour(10 + i * 2, 90, 60, p.sample([0.4, 0.5]))
+    p.setFillColor(10 + i * 2, 90, 60, p.sample([0.4, 0.5]))
     p.fill(part)
   })
 
@@ -921,7 +921,7 @@ const advancedDivisions = (p: SCanvas) => {
     .exploded()
     .flatMap(part => part.exploded())
     .forEach((part, i) => {
-      p.setFillColour(10 + (i * 2) / 3, 90, 60, p.sample([0.2, 0.3]))
+      p.setFillColor(10 + (i * 2) / 3, 90, 60, p.sample([0.2, 0.3]))
       p.fill(part)
     })
 }
@@ -941,7 +941,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: polygons2, name: "Polygons 2" },
   { sketch: hatching2, name: "Hatching Demo 2" },
   { sketch: moreArcs, name: "More Arcs" },
-  { sketch: colourWheel, name: "Colour Wheel" },
+  { sketch: colorWheel, name: "Color Wheel" },
   { sketch: sunburst, name: "Sunburst" },
   { sketch: fancyTiling, name: "Fancy Tiling" },
   { sketch: sketchingCurves, name: "Sketching Curves" },

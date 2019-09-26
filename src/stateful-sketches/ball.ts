@@ -14,7 +14,7 @@ type BallState = { position: Point2D; velocity: Vector2D; hue: number }
 const ball = (p: SCanvas, state: BallState) => {
   p.background(state.hue, 50, 90)
 
-  p.setFillColour(state.hue, 80, 40, 0.2)
+  p.setFillColor(state.hue, 80, 40, 0.2)
   p.fill(
     new RoundedRect({
       at: [
@@ -26,7 +26,7 @@ const ball = (p: SCanvas, state: BallState) => {
       r: 0.05,
     })
   )
-  p.setFillColour(state.hue, 80, 40)
+  p.setFillColor(state.hue, 80, 40)
   p.fill(new Circle({ at: state.position, r: 0.05 }))
   state.position = add(state.position, scale(state.velocity, 0.016))
 

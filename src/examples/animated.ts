@@ -22,7 +22,7 @@ const blob = (p: SCanvas) => {
   paths.forEach(pt => {
     p.withTranslation([0.5, 0.5], () => {
       p.withScale([1.2, 1.2], () => {
-        p.setFillColour(205, 75, 90)
+        p.setFillColor(205, 75, 90)
         p.fill(pt)
       })
     })
@@ -30,7 +30,7 @@ const blob = (p: SCanvas) => {
 
   paths.forEach(pt => {
     p.withTranslation([0.5, 0.5], () => {
-      p.setFillColour(205, 75, 45)
+      p.setFillColor(205, 75, 45)
       p.fill(pt)
     })
   })
@@ -39,7 +39,7 @@ const blob = (p: SCanvas) => {
 const lissajous = (p: SCanvas) => {
   p.background(140, 20, 10)
   p.lineWidth = 0.005
-  p.setStrokeColour(140, 80, 60, 0.5)
+  p.setStrokeColor(140, 80, 60, 0.5)
 
   const a = 1
   const b = 2.4
@@ -74,7 +74,7 @@ const lowResAnimation = (p: SCanvas) => {
   p.background(215, 20, 20)
   p.forTiling({ n: 35, type: "square", margin: 0.1 }, ([x, y], [w, h]) => {
     if (scaleY(y) > Math.cos(p.t * 2 + scaleX(x))) {
-      p.setFillColour(215 - y * 40, 90, 40)
+      p.setFillColor(215 - y * 40, 90, 40)
       p.fill(new Rect({ at: [x + d, y + d], w: w - 2 * d, h: h - 2 * d }))
     }
   })
@@ -100,7 +100,7 @@ const lowResAnimation2 = (p: SCanvas) => {
   p.forTiling({ n: 35, type: "square", margin: 0.1 }, ([x, y], [w, h]) => {
     const [sX, sY] = scaleXY([x, y])
     if (sY > Math.cos(p.t + sX) + 0.5 * Math.sin(p.t * 2.23 + sX)) {
-      p.setFillColour(5 + y * 40, 90, 40)
+      p.setFillColor(5 + y * 40, 90, 40)
       p.fill(new Rect({ at: [x + d, y + d], w: w - 2 * d, h: h - 2 * d }))
     }
   })
@@ -126,7 +126,7 @@ const lowResAnimation3 = (p: SCanvas) => {
     const [sX, sY] = scaleXY([x, y])
     const eqn = Math.cos(p.t / 1.2 + sX)
     const alpha = clamp({ from: 0.15, to: 1 }, 1 - Math.abs(sY - eqn))
-    p.setFillColour(p.t * 20 + 120 + y * 40, 90, 50, alpha)
+    p.setFillColor(p.t * 20 + 120 + y * 40, 90, 50, alpha)
     p.fill(new Circle({ at, r: w / 2.1 }))
   })
 }

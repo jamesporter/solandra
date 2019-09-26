@@ -1,4 +1,4 @@
-type Colour = string;
+type Color = string;
 
 /**
  * @param h hue 0 to 360
@@ -6,6 +6,6 @@ type Colour = string;
  * @param l lightness 0 to 100
  * @param a alpha 0 to 1
  */
-export function hsla(h: number, s: number, l: number, a: number = 1): Colour {
+export function hsla(h: number, s: number, l: number, a: number = 1): Color {
   return `hsla(${h}, ${s}%, ${l}%, ${a})`;
 }
