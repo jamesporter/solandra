@@ -1,6 +1,15 @@
 import SCanvas from "../lib/sCanvas"
 import { Path, CompoundPath, Star, RegularPolygon, Circle } from "../lib/paths"
-import { v, Rect, Square, RoundedRect, hexTransform, Hexagon } from "../lib"
+import {
+  v,
+  Rect,
+  Square,
+  RoundedRect,
+  hexTransform,
+  Hexagon,
+  EquilateralTriangle,
+  triTransform,
+} from "../lib"
 
 const compoundPath = (p: SCanvas) => {
   p.background(45, 80, 75)
@@ -249,6 +258,40 @@ const hexH = (p: SCanvas) => {
   })
 }
 
+const tri = (p: SCanvas) => {
+  p.background(215, 40, 30)
+  p.lineWidth = 0.005
+  p.setStrokeColor(0, 0, 90, 0.5)
+  const s = 0.14
+  const tt = triTransform({ s })
+  const area = {
+    minX: -8,
+    maxX: 8,
+    minY: -5,
+    maxY: 5,
+  } as const
+  p.withTranslation(p.meta.center, () => {
+    p.forGrid(area, gp => {
+      p.draw(
+        new EquilateralTriangle({
+          ...tt(gp),
+          s,
+        })
+      )
+    })
+
+    p.times(100, n => {
+      p.setFillColor(n / 2, 90, 60, 0.4)
+      p.fill(
+        new EquilateralTriangle({
+          ...tt(p.uniformGridPoint(area)),
+          s: s * p.gaussian({ mean: 1.5, sd: 0.4 }),
+        })
+      )
+    })
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: compoundPath, name: "Compound Path" },
   { sketch: compoundPath2, name: "Compound Path 2" },
@@ -261,6 +304,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: segments, name: "Segments" },
   { sketch: hex, name: "Hex" },
   { sketch: hexH, name: "Hex (Horizontal)" },
+  { sketch: tri, name: "Triangles" },
 ]
 
 export default sketches
