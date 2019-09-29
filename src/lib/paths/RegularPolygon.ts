@@ -60,3 +60,22 @@ export class Hexagon extends RegularPolygon {
     })
   }
 }
+
+export class EquilateralTriangle extends RegularPolygon {
+  constructor({
+    at,
+    s,
+    flipped,
+  }: {
+    at: Point2D
+    s: number
+    flipped: boolean
+  }) {
+    super({
+      at,
+      r: s / (2 * Math.sin(Math.PI / 3)),
+      n: 3,
+      a: flipped ? Math.PI : 0,
+    })
+  }
+}

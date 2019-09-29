@@ -18,7 +18,11 @@ export { default as Rect } from "./Rect"
 export { default as Square } from "./Square"
 export { default as RoundedRect } from "./RoundedRect"
 export { default as Star } from "./Star"
-export { default as RegularPolygon, Hexagon } from "./RegularPolygon"
+export {
+  default as RegularPolygon,
+  Hexagon,
+  EquilateralTriangle,
+} from "./RegularPolygon"
 export { default as Spiral } from "./Spiral"
 export { default as Line } from "./Line"
 export * from "./Text"
