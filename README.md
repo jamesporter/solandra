@@ -64,13 +64,6 @@ p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
 
 ![An example](samples/2.png)
 
-## Docs
-
-[API Documentation](docs/README.md) though to be honest you are probably better looking at the [examples here](https://solandra.netlify.com/main), each of which includes source code. If you do want to look at the docs, the main things are:
-
-- [SCanvas](docs/classes/_scanvas_.scanvas.md) the main Solandra class that does drawing and (pseudo)random number generation
-- [Paths](docs/modules/_path_.md) which includes a bunch of pre-made, ready to draw things shapes.
-
 ![An example](samples/3.png)
 
 ![An example](samples/4.png)

@@ -4,6 +4,7 @@ import { v } from ".."
 
 export default class Spiral implements Traceable {
   path: SimplePath
+
   constructor({
     at,
     a: sA = 0,

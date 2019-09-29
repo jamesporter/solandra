@@ -23,16 +23,6 @@ export default function Footer() {
           or install with{" "}
           <span className="text-gray-400 font-mono">npm i solandra</span>
         </p>
-        <p className="text-xl mb-2 mr-4 text-white text-center mb-12">
-          {" "}
-          Read the{" "}
-          <a
-            className="text-blue-400 "
-            href="https://github.com/jamesporter/solandra/tree/master/docs"
-          >
-            Docs
-          </a>
-        </p>
       </Container>
     </div>
   )

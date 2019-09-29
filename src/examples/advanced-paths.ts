@@ -12,7 +12,7 @@ const dividing3 = (p: SCanvas) => {
     .flatMap(s => s.exploded({ scale: 0.75, magnitude: 1.1 }))
     .map((s, i) => s.rotated((i * Math.PI) / 2))
     .forEach((s, i) => {
-      p.setFillColour(i * 5, 80, 60, 0.9)
+      p.setFillColor(i * 5, 80, 60, 0.9)
       p.fill(s)
     })
 }
@@ -27,14 +27,14 @@ const dividing4 = (p: SCanvas) => {
         .moved([p.gaussian({ sd: 0.06 }), p.gaussian({ sd: 0.04 })])
     )
     .forEach((s, i) => {
-      p.setFillColour(210 + (i % 40), 80, 60, 0.8)
+      p.setFillColor(210 + (i % 40), 80, 60, 0.8)
       p.fill(s)
     })
 }
 
 const dividing5 = (p: SCanvas) => {
   p.background(210, 20, 95)
-  p.setFillColour(215, 95, 20, 0.8)
+  p.setFillColor(215, 95, 20, 0.8)
   p.forMargin(0.1, (at, [w, h]) => {
     new Rect({ at, w, h })
       .split({ orientation: "horizontal", split: arrayOf(10, () => 1) })
@@ -73,7 +73,7 @@ const dividing7 = (p: SCanvas) => {
         })
       )
       .forEach((s, i) => {
-        p.setFillColour(0 + (i % 60), 90, 50)
+        p.setFillColor(0 + (i % 60), 90, 50)
         p.draw(s)
         p.fill(s)
       })
@@ -82,22 +82,22 @@ const dividing7 = (p: SCanvas) => {
 
 const dividing8 = (p: SCanvas) => {
   p.background(0, 0, 85)
-  p.setFillColour(0, 0, 20)
+  p.setFillColor(0, 0, 20)
   p.fill(new RegularPolygon({ n: 6, at: p.meta.center, r: 0.44 }))
   new RegularPolygon({ n: 6, at: p.meta.center, r: 0.4 }).path
     .subdivide({ m: 1, n: 5 })
     .forEach((s, i) => {
-      p.setFillColour(i * 20, 50, 50)
+      p.setFillColor(i * 20, 50, 50)
       p.fill(s)
     })
   new RegularPolygon({ n: 6, at: p.meta.center, r: 0.4 }).path
     .subdivide({ m: 0, n: 3 })
     .forEach((s, i) => {
-      p.setFillColour(i * 20, 50, 50, 0.5)
+      p.setFillColor(i * 20, 50, 50, 0.5)
       p.fill(s)
     })
 
-  p.setFillColour(60, 50, 20, 0.1)
+  p.setFillColor(60, 50, 20, 0.1)
   p.fill(
     new RegularPolygon({ n: 6, at: p.meta.center, r: 0.4 }).path.subdivide({
       m: 2,
@@ -108,7 +108,7 @@ const dividing8 = (p: SCanvas) => {
 
 const dividing9 = (p: SCanvas) => {
   p.background(45, 20, 85)
-  p.setFillColour(0, 0, 20)
+  p.setFillColor(0, 0, 20)
   const hue = p.sample([160, 0, 190])
 
   p.downFrom(2, n => {
@@ -116,17 +116,17 @@ const dividing9 = (p: SCanvas) => {
     new Star({ at: p.meta.center, r: s * 0.4, r2: s * 0.2, n: 12 }).path
       .subdivide({ m: 0, n: 12 })
       .forEach((s, i) => {
-        p.setFillColour(hue + i * 40, 90, 40)
+        p.setFillColor(hue + i * 40, 90, 40)
         p.fill(s)
       })
-    p.setFillColour(45, 20, 70 + 5 * n)
+    p.setFillColor(45, 20, 70 + 5 * n)
     p.fill(new Star({ at: p.meta.center, r: s * 0.3, r2: s * 0.15, n: 12 }))
   })
 }
 
 const dividing10 = (p: SCanvas) => {
   p.background(0, 0, 85)
-  p.setFillColour(0, 0, 0, 0.5)
+  p.setFillColor(0, 0, 0, 0.5)
   const points: Point2D[] = []
   new RegularPolygon({ n: 24, r: 0.4, at: p.meta.center }).path
     .exploded({ scale: 0.95, magnitude: 1 })
@@ -138,7 +138,7 @@ const dividing10 = (p: SCanvas) => {
     })
 
   p.lineWidth = 0.01
-  p.setStrokeColour(0, 0, 0, 0.2)
+  p.setStrokeColor(0, 0, 0, 0.2)
   p.draw(SimplePath.withPoints(p.shuffle(points)))
 }
 
@@ -169,7 +169,7 @@ const advancedDivisions2 = (p: SCanvas) => {
   path.addCurveTo(points[0])
 
   path.exploded().forEach(s => {
-    p.setFillColour(0, 0, 95, p.sample([0.2, 0.4]))
+    p.setFillColor(0, 0, 95, p.sample([0.2, 0.4]))
     p.fill(s)
   })
 
@@ -189,14 +189,14 @@ const advancedDivisions2 = (p: SCanvas) => {
     .flatMap(s => s.exploded())
     .filter(_ => p.random() < 0.4)
     .forEach(s => {
-      p.setFillColour(0, 0, 95, p.sample([0.1, 0.2]))
+      p.setFillColor(0, 0, 95, p.sample([0.1, 0.2]))
       p.fill(s)
     })
 }
 
 const curvify = (p: SCanvas) => {
   p.background(150, 90, 30)
-  p.setStrokeColour(0, 0, 95, 0.4)
+  p.setStrokeColor(0, 0, 95, 0.4)
   p.times(20, () => {
     p.draw(
       new RegularPolygon({ at: p.meta.center, r: 0.3, n: 11 }).path.curvify(
@@ -211,7 +211,7 @@ const curvify = (p: SCanvas) => {
 
 const curvify2 = (p: SCanvas) => {
   p.background(150, 20, 20)
-  p.setStrokeColour(0, 0, 95)
+  p.setStrokeColor(0, 0, 95)
   new RegularPolygon({ at: p.meta.center, r: 0.3, n: 12 }).path
     .exploded({ magnitude: 1.2, scale: 0.8 })
     .map((sp, i) => sp.curvify(() => ({ curveSize: -0.25 })))
@@ -221,9 +221,9 @@ const curvify2 = (p: SCanvas) => {
     r: 0.25,
     n: 12,
   }).path.curvify(i => (i % 2 === 0 ? { curveSize: -0.9 } : null))
-  p.setFillColour(0, 0, 75, 0.4)
+  p.setFillColor(0, 0, 75, 0.4)
   p.fill(middle)
-  p.setStrokeColour(0, 0, 75)
+  p.setStrokeColor(0, 0, 75)
   p.draw(middle)
 }
 
@@ -236,7 +236,7 @@ const spirals = (p: SCanvas) => {
     n: 400,
     rate: p.oscillate({ from: 0.004, to: 0.005, rate: 0.15 }),
   }).path.edges.forEach((edge, i) => {
-    p.setStrokeColour(i / 3, 70, 30)
+    p.setStrokeColor(i / 3, 70, 30)
     p.draw(edge.rotated(Math.PI / 4 + (i * Math.PI) / 2))
   })
 }
@@ -244,7 +244,7 @@ const spirals = (p: SCanvas) => {
 const spirals2 = (p: SCanvas) => {
   p.background(195, 10, 95)
   p.lineWidth = 0.0025
-  p.setStrokeColour(0, 50, 20, 0.9)
+  p.setStrokeColor(0, 50, 20, 0.9)
   new Spiral({
     at: p.meta.center,
     l: 0.04,

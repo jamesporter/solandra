@@ -24,10 +24,10 @@ const isometricExample = (p: SCanvas) => {
           ])
         )
       })
-      p.setStrokeColour(0, 0, 95)
+      p.setStrokeColor(0, 0, 95)
       p.lineWidth = 0.015
       p.draw(sp)
-      p.setStrokeColour(215 - n * 3, 90, 60)
+      p.setStrokeColor(215 - n * 3, 90, 60)
       p.lineWidth = 0.005
       p.draw(sp)
     })
@@ -49,7 +49,7 @@ const isometricExample2 = (p: SCanvas) => {
         sp.addPoint(iso([n + 1, h, m + 1]))
         sp.addPoint(iso([n, h, m + 1]))
         sp.close()
-        p.setFillColour(10 + h * 10, 100, 70)
+        p.setFillColor(10 + h * 10, 100, 70)
         p.fill(sp)
 
         sp = SimplePath.withPoints([])
@@ -58,7 +58,7 @@ const isometricExample2 = (p: SCanvas) => {
         sp.addPoint(iso([n, h - 1, m]))
         sp.addPoint(iso([n, h, m]))
         sp.close()
-        p.setFillColour(10 + h * 10, 75, 60)
+        p.setFillColor(10 + h * 10, 75, 60)
         p.fill(sp)
 
         sp = SimplePath.withPoints([])
@@ -80,7 +80,7 @@ const isometricExample3 = (p: SCanvas) => {
   const { bottom, right } = p.meta
   p.lineWidth = 0.01 * bottom
   p.background(210, 70, 30)
-  p.setStrokeColour(30, 10, 30)
+  p.setStrokeColor(30, 10, 30)
   p.withTranslation([right / 2, bottom * 0.9], () => {
     const iso = isoTransform(0.05 * bottom)
     p.downFrom(10, n => {
@@ -99,7 +99,7 @@ const isometricExample3 = (p: SCanvas) => {
         // sp.addPoint(iso([n + 1, h - 1, m + 1]))
         sp.close()
 
-        p.setFillColour(h * 10 + 10 * Math.cos(h * 3), 95, 65, 0.9)
+        p.setFillColor(h * 10 + 10 * Math.cos(h * 3), 95, 65, 0.9)
         p.fill(sp)
         p.draw(sp)
       })
@@ -111,7 +111,7 @@ const isometricExample4 = (p: SCanvas) => {
   const { bottom, right } = p.meta
   p.lineWidth = 0.005 * bottom
   p.background(340, 100, 40)
-  p.setStrokeColour(30, 5, 20)
+  p.setStrokeColor(30, 5, 20)
   p.withTranslation([right / 2, bottom * 0.9], () => {
     const iso = isoTransform(0.05 * bottom)
     p.downFrom(10, n => {
@@ -124,7 +124,7 @@ const isometricExample4 = (p: SCanvas) => {
         sp.addPoint(iso([n + 0.5, h, m + 0.5]))
         sp.close()
 
-        p.setFillColour(h * 10, 100, 75, 0.95)
+        p.setFillColor(h * 10, 100, 75, 0.95)
         p.fill(sp)
         p.draw(sp)
 
@@ -134,7 +134,7 @@ const isometricExample4 = (p: SCanvas) => {
         sp2.addPoint(iso([n + 0.5, h, m + 0.5]))
         sp2.close()
 
-        p.setFillColour(h * 10, 60, 75, 0.95)
+        p.setFillColor(h * 10, 60, 75, 0.95)
         p.fill(sp2)
         p.draw(sp2)
       })
@@ -146,7 +146,7 @@ const isometricExample5 = (p: SCanvas) => {
   const { bottom, right } = p.meta
   p.lineWidth = 0.005 * bottom
   p.background(40, 40, 90)
-  p.setStrokeColour(30, 5, 20)
+  p.setStrokeColor(30, 5, 20)
   // make origin a point centred horizontally, but near bottom
   p.withTranslation([right / 2, bottom * 0.95], () => {
     const iso = isoTransform(0.05 * bottom)
@@ -165,8 +165,8 @@ const isometricExample5 = (p: SCanvas) => {
           sp.close()
 
           p.proportionately([
-            [1, () => p.setFillColour(210, 100, 55 + 2.5 * h(n, m), 0.95)],
-            [1, () => p.setFillColour(0, 80, 50 + 2.5 * h(n, m), 0.95)],
+            [1, () => p.setFillColor(210, 100, 55 + 2.5 * h(n, m), 0.95)],
+            [1, () => p.setFillColor(0, 80, 50 + 2.5 * h(n, m), 0.95)],
           ])
 
           p.fill(sp)
@@ -181,7 +181,7 @@ const isometricExample6 = (p: SCanvas) => {
   const { bottom, right } = p.meta
   p.lineWidth = 0.005 * bottom
   p.background(0, 0, 90)
-  p.setStrokeColour(30, 5, 20)
+  p.setStrokeColor(30, 5, 20)
   // make origin a point centred horizontally, but near bottom
   p.withTranslation([right / 2, bottom * 0.95], () => {
     const iso = isoTransform(0.05 * bottom)
@@ -204,12 +204,12 @@ const isometricExample6 = (p: SCanvas) => {
               [
                 1,
                 () =>
-                  p.setFillColour(210, 100, 55 + 2.5 * h(n, m), 0.95 - k / 8),
+                  p.setFillColor(210, 100, 55 + 2.5 * h(n, m), 0.95 - k / 8),
               ],
               [
                 1,
                 () =>
-                  p.setFillColour(340, 100, 45 + 2.5 * h(n, m), 0.95 - k / 8),
+                  p.setFillColor(340, 100, 45 + 2.5 * h(n, m), 0.95 - k / 8),
               ],
             ])
 
@@ -226,14 +226,14 @@ const isometricExample7 = (p: SCanvas) => {
   const { bottom, right } = p.meta
   p.lineWidth = 0.005 * bottom
   p.background(0, 0, 90)
-  p.setStrokeColour(30, 5, 20)
+  p.setStrokeColor(30, 5, 20)
   // make origin a point centred horizontally, but near bottom
   p.withTranslation([right / 2, bottom * 0.95], () => {
     const iso = isoTransform(0.05 * bottom)
 
     p.times(7, hr => {
       const h = hr + Math.cos(p.t)
-      p.setFillColour(h * 10, 90, 50, 0.95)
+      p.setFillColor(h * 10, 90, 50, 0.95)
       const sp = SimplePath.withPoints([])
 
       p.proportionately([
@@ -308,13 +308,13 @@ const isometricExample8 = (p: SCanvas) => {
       rStart: 0,
       end: p.meta.center,
       rEnd: 0.6,
-      colours: [[0, { h: 0, s: 0, l: 90 }], [1, { h: 215, s: 80, l: 30 }]],
+      colors: [[0, { h: 0, s: 0, l: 90 }], [1, { h: 215, s: 80, l: 30 }]],
     })
   )
 
   const { bottom, right } = p.meta
   p.lineWidth = 0.005 * bottom
-  p.setStrokeColour(30, 5, 20)
+  p.setStrokeColor(30, 5, 20)
   // make origin a point centred horizontally, but near bottom
   p.withTranslation([right / 2, bottom * 0.95], () => {
     const iso = isoTransform(0.05 * bottom)
@@ -337,17 +337,17 @@ const isometricExample8 = (p: SCanvas) => {
         const x = p.uniformRandomInt({ from: 0, to: 10 })
         const z = p.uniformRandomInt({ from: 0, to: 10 })
 
-        p.setFillColour(200, 40, 50)
+        p.setFillColor(200, 40, 50)
         const sp = SimplePath.withPoints(top(x, y, z)).close()
         p.fill(sp)
         p.draw(sp)
 
-        p.setFillColour(180, 40, 50, 0.8)
+        p.setFillColor(180, 40, 50, 0.8)
         const sp2 = SimplePath.withPoints(left(x, y, z)).close()
         p.fill(sp2)
         p.draw(sp2)
 
-        p.setFillColour(350, 40, 50, 0.8)
+        p.setFillColor(350, 40, 50, 0.8)
         const sp3 = SimplePath.withPoints(left(x + 1, y + 0.5, z)).close()
         p.fill(sp3)
         p.draw(sp3)
@@ -360,7 +360,7 @@ const isometricExample9 = (p: SCanvas) => {
   p.background(215, 80, 10)
   const { bottom, right: r } = p.meta
   p.lineWidth = 0.005 * bottom
-  p.setStrokeColour(0, 0, 90)
+  p.setStrokeColor(0, 0, 90)
   p.withTranslation([r / 2, bottom * 0.5], () => {
     const iso = isoTransform(0.1 * bottom)
 
@@ -387,7 +387,7 @@ const isometricExample9 = (p: SCanvas) => {
     ]
 
     const shade = (fn, x, y, z, s, h, sat = 40, l = 50) => {
-      p.setFillColour(h, sat, l, 0.95)
+      p.setFillColor(h, sat, l, 0.95)
       const sp = SimplePath.withPoints(fn(x, y, z, s)).close()
       p.fill(sp)
       p.draw(sp)
@@ -413,7 +413,7 @@ const isometricExample10 = (p: SCanvas) => {
   p.background(175, 60, 10)
   const { bottom, right: r } = p.meta
   p.lineWidth = 0.005 * bottom
-  p.setStrokeColour(0, 0, 90)
+  p.setStrokeColor(0, 0, 90)
   const tracePoints = (points: Point2D[]) => {
     const sp = SimplePath.withPoints(points).close()
     p.draw(sp)
@@ -472,7 +472,7 @@ const lorenz = (p: SCanvas) => {
       end: center,
       rStart: 0,
       rEnd: 0.65,
-      colours: [[0, { h: 215, s: 80, l: 40 }], [1, { h: 215, s: 80, l: 10 }]],
+      colors: [[0, { h: 215, s: 80, l: 40 }], [1, { h: 215, s: 80, l: 10 }]],
     })
   )
   p.lineWidth = 0.005 * bottom
@@ -501,7 +501,7 @@ const lorenz = (p: SCanvas) => {
     }
 
     for (let j = 0; j < N / 10; j++) {
-      p.setStrokeColour(30 * Math.cos(j / 10), 100, 70)
+      p.setStrokeColor(30 * Math.cos(j / 10), 100, 70)
       p.draw(SimplePath.withPoints(points.slice(j * 10, (j + 1) * 10 + 1)))
     }
   })

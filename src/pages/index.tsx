@@ -22,7 +22,7 @@ const logo = (p: SCanvas) => {
   p.times(5, n => {
     const sides = 10 - n
     const r = d - n * 0.16 * d + (1 + Math.cos(p.t * 1.5)) / 45
-    p.setFillColour(220, 70, 10 + n * 12)
+    p.setFillColor(220, 70, 10 + n * 12)
     p.fill(
       new RegularPolygon({
         at: center,
@@ -158,11 +158,11 @@ const IndexPage = () => (
         </P>
 
         <CodeAndSketch
-          code={`p.setFillColour(220, 54, 50)
+          code={`p.setFillColor(220, 54, 50)
 p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
           sketch={p => {
             p.background(220, 26, 14)
-            p.setFillColour(220, 54, 50)
+            p.setFillColor(220, 54, 50)
             p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))
           }}
         />
@@ -181,7 +181,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
           code={`p.forTiling(
   { n: 10, type: "square", margin: 0.1 },
   (at, [w, h], c, i) => {
-    p.setFillColour(150 + i * 5, 54, 50)
+    p.setFillColor(150 + i * 5, 54, 50)
     p.fill(new Rect({ at, w, h }))
   }
 )`}
@@ -190,7 +190,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
             p.forTiling(
               { n: 10, type: "square", margin: 0.1 },
               (at, [w, h], c, i) => {
-                p.setFillColour(150 + i * 5, 54, 50)
+                p.setFillColor(150 + i * 5, 54, 50)
                 p.fill(new Rect({ at, w, h }))
               }
             )
@@ -217,13 +217,13 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
 
         <CodeAndSketch
           code={`p.forHorizontal({ n: 8, margin: 0.1 }, (at, [w, h], c, i) => {
-  p.setFillColour(150 + i * 5, 54, 50)
+  p.setFillColor(150 + i * 5, 54, 50)
   p.fill(new RegularPolygon({ at: c, r: w / 3, n: i + 3 }))
 })`}
           sketch={p => {
             p.background(220, 26, 14)
             p.forHorizontal({ n: 6, margin: 0.1 }, (at, [w, h], c, i) => {
-              p.setFillColour(150 + i * 10, 54, 50)
+              p.setFillColor(150 + i * 10, 54, 50)
               p.fill(new RegularPolygon({ at: c, r: w / 3, n: i + 3 }))
             })
           }}
@@ -244,7 +244,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
           sketch={p => {
             p.background(220, 26, 14)
             p.forHorizontal({ n: 6, margin: 0.1 }, (at, [w, h], c, i) => {
-              p.setFillColour(150 + i * 10, 54, 50)
+              p.setFillColor(150 + i * 10, 54, 50)
               p.fill(
                 new RegularPolygon({
                   at: [c[0], c[1] + Math.cos(p.t + (i * Math.PI) / 8) * 0.2],
@@ -268,7 +268,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
   p.times(5, n => {
     const sides = 10 - n
     const r = d - n * 0.16 * d + (1 + Math.cos(p.t)) / 40
-    p.setFillColour(220, 70, 10 + n * 12)
+    p.setFillColor(220, 70, 10 + n * 12)
     p.fill(
       new RegularPolygon({
         at: center,
@@ -284,17 +284,6 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
 
         <H2>Examples</H2>
 
-        <p className="pb-8">
-          Now what?{" "}
-          <Link to="/main" className="text-blue-700 underline">
-            There are loads of examples with source code to learn from
-          </Link>
-          . You can also read the{" "}
-          <A href="https://github.com/jamesporter/solandra/tree/master/docs">
-            docs
-          </A>
-          .
-        </p>
         <ExampleLinks />
       </Container>
 

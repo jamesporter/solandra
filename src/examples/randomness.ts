@@ -1,7 +1,13 @@
 import { Point2D } from "../lib/types/sol"
 import SCanvas from "../lib/sCanvas"
-import { Path, SimplePath } from "../lib/paths"
-import { RegularPolygon, Circle, Rect } from "../lib/paths"
+import {
+  Path,
+  SimplePath,
+  Line,
+  RegularPolygon,
+  Circle,
+  Rect,
+} from "../lib/paths"
 import { add, scale } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
 import { RadialGradient } from "../lib/gradient"
@@ -14,8 +20,8 @@ const noiseField = (p: SCanvas) => {
   p.lineWidth = 0.0025
 
   p.times(250, n => {
-    p.setStrokeColour(195 + n / 12.5, 90, 30, 0.7)
-    let pt = p.randomPoint
+    p.setStrokeColor(195 + n / 12.5, 90, 30, 0.7)
+    let pt = p.randomPoint()
     const sp = SimplePath.startAt(pt)
     while (true) {
       const a = Math.PI * 2 * perlin2(pt[0] * s, pt[1] * s)
@@ -33,7 +39,7 @@ const noiseField = (p: SCanvas) => {
 
 const randomness1b = (p: SCanvas) => {
   p.times(25, n => {
-    p.setFillColour(175 + n, 80, 50, 0.4)
+    p.setFillColor(175 + n, 80, 50, 0.4)
     const values = p
       .build(p.times, 50, () => p.gaussian())
       .sort((a, b) => (a > b ? -1 : 1))
@@ -62,11 +68,11 @@ const randomness1b = (p: SCanvas) => {
 const randomness1c = (p: SCanvas) => {
   p.background(205, 20, 85)
   p.forTiling({ n: 20, type: "square", margin: 0.1 }, (_pt, [w], at) => {
-    p.setFillColour(195, 70, 40)
+    p.setFillColor(195, 70, 40)
     p.fill(new Circle({ at, r: w * 0.45 }))
 
-    p.setFillColour(205, 70, 80)
-    p.fill(new Circle({ at: p.perturb(at, { magnitude: w / 3 }), r: w * 0.3 }))
+    p.setFillColor(205, 70, 80)
+    p.fill(new Circle({ at: p.perturb({ at, magnitude: w / 3 }), r: w * 0.3 }))
   })
 }
 
@@ -74,7 +80,7 @@ const rectangles = (p: SCanvas) => {
   p.lineWidth = 0.005
 
   p.forTiling({ n: 12, margin: 0.1 }, ([x, y], [dX, dY]) => {
-    p.setFillColour(214 * x, 100, 35 + 10 * y, 0.7)
+    p.setFillColor(214 * x, 100, 35 + 10 * y, 0.7)
     p.fill(
       new Rect({
         at: [x + dX / 8, y + dY / 8],
@@ -88,7 +94,7 @@ const rectangles = (p: SCanvas) => {
 const littleAbstracts = (p: SCanvas) => {
   p.background(200, 10, 20)
   p.forTiling({ n: 8, margin: 0.1, type: "square" }, (at, d, c, i) => {
-    p.setFillColour(p.uniformRandomInt({ from: 200, to: 260 }), 50, 50)
+    p.setFillColor(p.uniformRandomInt({ from: 200, to: 260 }), 50, 50)
     const rect = new Rect({
       at: add(at, scale(d, 0.1)),
       w: d[0] * 0.8,
@@ -96,7 +102,7 @@ const littleAbstracts = (p: SCanvas) => {
     })
     p.fill(rect)
     p.withClipping(rect, () => {
-      p.setFillColour(0, 0, 100, 0.2)
+      p.setFillColor(0, 0, 100, 0.2)
       const h = (p.random() * 0.5 + 0.1) * d[1] * 0.8
       p.fill(
         new Rect({
@@ -107,10 +113,10 @@ const littleAbstracts = (p: SCanvas) => {
       )
 
       p.times(3, () => {
-        p.setFillColour(200, p.sample([20, 40]), 90, 0.4)
+        p.setFillColor(200, p.sample([20, 40]), 90, 0.4)
         p.fill(
           new RegularPolygon({
-            at: p.perturb(c, { magnitude: d[0] / 1.5 }),
+            at: p.perturb({ at: c, magnitude: d[0] / 1.5 }),
             n: p.poisson(4) + 3,
             r: d[0] / 6,
           })
@@ -127,8 +133,8 @@ const recordCoverish3 = (p: SCanvas) => {
     p.times(100, () => {
       const a = p.gaussian({ mean: Math.PI, sd: Math.PI / 12 })
       p.withRotation(a, () => {
-        p.setStrokeColour(a * 12, 100, 70, 0.9)
-        p.drawLine([-1, 0], [1, 0])
+        p.setStrokeColor(a * 12, 100, 70, 0.9)
+        p.draw(new Line([-1, 0], [1, 0]))
       })
     })
   })
@@ -137,7 +143,7 @@ const recordCoverish3 = (p: SCanvas) => {
 const recordCoverish4 = (p: SCanvas) => {
   p.background(30, 10, 20)
   p.lineWidth = 0.001
-  p.setStrokeColour(0, 0, 90)
+  p.setStrokeColor(0, 0, 90)
   p.forTiling({ n: 10, type: "square", margin: 0.15 }, (at, d, c) => {
     p.draw(
       new Rect({
@@ -153,7 +159,7 @@ const recordCoverish4 = (p: SCanvas) => {
         h: d[1],
       }),
       () => {
-        p.setFillColour(30, 20, p.uniformRandomInt({ from: 60, to: 80 }))
+        p.setFillColor(30, 20, p.uniformRandomInt({ from: 60, to: 80 }))
         const a = p.gaussian({ sd: Math.PI / 8 })
         const fY = p.gaussian({ mean: 0.04, sd: 0.01 })
         p.withTranslation(add(c, [0, fY]), () => {
@@ -180,7 +186,7 @@ const stackedCurves = (p: SCanvas) => {
         sp.addPoint([x - dX / 2 - p.gaussian({ sd: 0.01 }), y + (n * dY) / 10])
       })
       sp.close()
-      p.setFillColour(120 + i * 5, 60, 50, 0.85)
+      p.setFillColor(120 + i * 5, 60, 50, 0.85)
 
       p.fill(sp.chaiken({ n: 5, looped: true }))
     }
@@ -208,8 +214,8 @@ const stackedCurves2 = (p: SCanvas) => {
     () => {
       for (let i = 0; i < N - 1; i++) {
         p.proportionately([
-          [1, () => p.setFillColour(p.sample(HUES), 95, 50)],
-          [1, () => p.setFillColour(p.sample(HUES), 40, 80)],
+          [1, () => p.setFillColor(p.sample(HUES), 95, 50)],
+          [1, () => p.setFillColor(p.sample(HUES), 40, 80)],
         ])
 
         p.fill(
@@ -231,8 +237,8 @@ const minis = (p: SCanvas) => {
       p.background(i * 27, 20, 65)
       let nPt: Point2D = [cX, cY]
       p.times(6, j => {
-        p.setFillColour(i * 27 + j * 12, 90, 30, 0.3)
-        nPt = p.perturb(nPt, { magnitude: dX / 1.5 })
+        p.setFillColor(i * 27 + j * 12, 90, 30, 0.3)
+        nPt = p.perturb({ at: nPt, magnitude: dX / 1.5 })
         p.fill(new Circle({ at: nPt, r: dX / 2 }))
       })
     })
@@ -250,18 +256,18 @@ const weave = (p: SCanvas) => {
         [
           1,
           () => {
-            p.setFillColour(0, 0, 50)
+            p.setFillColor(0, 0, 50)
             p.fill(new Rect({ at: [x, cY - s], w: dX, h: 2 * s }))
-            p.setFillColour(h2, 80, 10)
+            p.setFillColor(h2, 80, 10)
             p.fill(new Rect({ at: [cX - s, y], w: 2 * s, h: dY }))
           },
         ],
         [
           1,
           () => {
-            p.setFillColour(h2, 80, 10)
+            p.setFillColor(h2, 80, 10)
             p.fill(new Rect({ at: [cX - s, y], w: 2 * s, h: dY }))
-            p.setFillColour(0, 0, 50)
+            p.setFillColor(0, 0, 50)
             p.fill(new Rect({ at: [x, cY - s], w: dX, h: 2 * s }))
           },
         ],
@@ -282,32 +288,32 @@ const weave2 = (p: SCanvas) => {
         [
           1,
           () => {
-            p.setFillColour(h1, 60, 30)
+            p.setFillColor(h1, 60, 30)
             p.fill(new Rect({ at: [x, cY - s], w: dX, h: 2 * s }))
           },
         ],
         [
           1,
           () => {
-            p.setFillColour(h1, 60, 30)
+            p.setFillColor(h1, 60, 30)
             p.fill(new Rect({ at: [x, cY - s], w: dX, h: 2 * s }))
-            p.setFillColour(h2, 80, 50)
+            p.setFillColor(h2, 80, 50)
             p.fill(new Rect({ at: [cX - s, y], w: 2 * s, h: dY }))
           },
         ],
         [
           1,
           () => {
-            p.setFillColour(h2, 80, 50)
+            p.setFillColor(h2, 80, 50)
             p.fill(new Rect({ at: [cX - s, y], w: 2 * s, h: dY }))
-            p.setFillColour(h1, 60, 30)
+            p.setFillColor(h1, 60, 30)
             p.fill(new Rect({ at: [x, cY - s], w: dX, h: 2 * s }))
           },
         ],
         [
           1,
           () => {
-            p.setFillColour(h2, 80, 50)
+            p.setFillColor(h2, 80, 50)
             p.fill(new Rect({ at: [cX - s, y], w: 2 * s, h: dY }))
           },
         ],
@@ -323,20 +329,21 @@ const explosion = (p: SCanvas) => {
     p.times(5, m => {
       const sp = SimplePath.withPoints([])
       p.aroundCircle({ at: [0, 0], r: 0.1 + 0.08 * m, n: 30 }, ([x, y]) => {
-        sp.addPoint(p.perturb([x, y]))
+        sp.addPoint(p.perturb({ at: [x, y] }))
       })
       sp.close()
-      p.setFillColour(210, 45, 90, 0.2)
+      p.setFillColor(210, 45, 90, 0.2)
       p.fill(sp.chaiken({ n: 2, looped: true }))
     })
 
-    p.setFillColour(45, 90, 100)
+    p.setFillColor(45, 90, 100)
     p.times(N, n => {
       p.withRotation((2 * Math.PI * n) / N, () => {
-        const start = p.perturb([0.1 + p.random() * 0.2, 0], {
+        const start = p.perturb({
+          at: [0.1 + p.random() * 0.2, 0],
           magnitude: 0.03,
         })
-        const end = p.perturb([0.4, 0], { magnitude: 0.1 })
+        const end = p.perturb({ at: [0.4, 0], magnitude: 0.1 })
         p.fill(
           Path.startAt(start)
             .addCurveTo(end, { curveSize: 0.05 })
@@ -354,12 +361,12 @@ const contoured = (p: SCanvas) => {
   p.background(0, 30, 96)
   const sPerlin = (x, y) => perlin2(x * s, y * s)
   p.times(40, () => {
-    p.setStrokeColour(
+    p.setStrokeColor(
       p.sample([215, 200, 0]),
       p.sample([50, 80]),
       p.sample([40, 20, 10])
     )
-    let spt = p.randomPoint
+    let spt = p.randomPoint()
     let pt: Point2D = [spt[0], spt[1]]
     let p1 = SimplePath.withPoints([spt])
     while (p.inDrawing(pt)) {
@@ -394,13 +401,13 @@ const contoured2 = (p: SCanvas) => {
 
   p.times(30, n => {
     const sPerlin = (x, y) => perlin2(x * s + n / 50, y * s + n / 100)
-    p.setStrokeColour(
+    p.setStrokeColor(
       p.sample([150, 170, 75]),
       p.sample([50, 80]),
       p.sample([40, 20, 10]),
       0.75
     )
-    let spt = p.randomPoint
+    let spt = p.randomPoint()
     let pt: Point2D = [spt[0], spt[1]]
     let p1 = SimplePath.withPoints([spt])
     while (p.inDrawing(pt)) {
@@ -431,14 +438,14 @@ const night = (p: SCanvas) => {
   p.background(0, 0, 5)
   p.forTiling({ n: 15, type: "square" }, (_pt, [dX], c) => {
     const hue = p.sample([45, 55, 60])
-    const loc = p.perturb(c, { magnitude: 0.4 })
+    const loc = p.perturb({ at: c, magnitude: 0.4 })
     p.setFillGradient(
       new RadialGradient({
         start: loc,
         end: loc,
         rStart: 0,
         rEnd: dX,
-        colours: [
+        colors: [
           [0, { h: hue, s: 80, l: 70 }],
           [p.sample([0.1, 0.2, 0.3, 0.5]), { h: hue, s: 80, l: 90, a: 0 }],
         ],
@@ -457,9 +464,9 @@ const noiseGlow = (p: SCanvas) => {
       1.5 * perlin2(x * 6 + 0.3, y * 15 + 0.5)
     )
     const h = 120 - 120 * value
-    p.setFillColour(h, 80, 50, 0.2)
+    p.setFillColor(h, 80, 50, 0.2)
     p.fill(new Circle({ at, r: maxR * value * 1.5 }))
-    p.setFillColour(h, 90, 50)
+    p.setFillColor(h, 90, 50)
     p.fill(new Circle({ at, r: maxR * value }))
   })
 }
@@ -474,11 +481,13 @@ const perturbedSpiral = (p: SCanvas) => {
   p.background(45, 85, 97)
   p.lineWidth = 0.001
   p.times(800, n => {
-    p.setStrokeColour(p.sample([220, 190, 215]), 50, p.sample([20, 40]))
+    p.setStrokeColor(p.sample([220, 190, 215]), 50, p.sample([20, 40]))
     const pA = a + p.gaussian({ sd: Math.PI })
-    p.drawLine(
-      [cX + Math.cos(pA) * r, cY + Math.sin(pA) * r],
-      [cX + Math.cos(pA) * (r + 0.1), cY + Math.sin(pA) * (r + 0.1)]
+    p.draw(
+      new Line(
+        [cX + Math.cos(pA) * r, cY + Math.sin(pA) * r],
+        [cX + Math.cos(pA) * (r + 0.1), cY + Math.sin(pA) * (r + 0.1)]
+      )
     )
     r += 0.001
     a += 0.1
@@ -488,7 +497,7 @@ const perturbedSpiral = (p: SCanvas) => {
 const perturbedSpiral2 = (p: SCanvas) => {
   p.background(25, 40, 95)
   p.lineWidth = 0.002
-  p.setStrokeColour(205, 70, 40)
+  p.setStrokeColor(205, 70, 40)
   p.withTranslation(p.meta.center, () => {
     const path = SimplePath.withPoints([])
     let a = 0
@@ -500,7 +509,8 @@ const perturbedSpiral2 = (p: SCanvas) => {
       r += 0.005 * dA
       a += dA
       path.addPoint(
-        p.perturb([r * Math.cos(a), r * Math.sin(a)], {
+        p.perturb({
+          at: [r * Math.cos(a), r * Math.sin(a)],
           magnitude: 0.0125 * (1.1 + Math.cos(p.t)),
         })
       )
@@ -512,7 +522,7 @@ const perturbedSpiral2 = (p: SCanvas) => {
 const perturbedSpiral3 = (p: SCanvas) => {
   p.background(0, 0, 95)
   p.lineWidth = 0.002
-  p.setStrokeColour(165, 70, 30)
+  p.setStrokeColor(165, 70, 30)
 
   new Spiral({ at: p.meta.center, l: 0.05, n: 400 }).path.edges.forEach(
     edge => {
