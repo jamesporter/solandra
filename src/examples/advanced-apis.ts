@@ -250,7 +250,7 @@ const hexH = (p: SCanvas) => {
               maxY: 5,
             })
           ),
-          r,
+          r: r * 0.9,
           vertical,
         })
       )
