@@ -67,3 +67,20 @@ export const centroid = (points: Point2D[]): Point2D => {
     return [x / m, y / m]
   }
 }
+
+const hr = Math.sin(Math.PI / 3)
+const cp6 = Math.cos(Math.PI / 6)
+
+export const hexTransform = ({
+  r,
+  vertical = true,
+}: {
+  r: number
+  vertical?: boolean
+}) => ([x, y]: Point2D): Point2D => {
+  if (vertical) {
+    return [y % 2 === 0 ? 2 * r * cp6 * x : (2 * x - 1) * r * cp6, 1.5 * y * r]
+  } else {
+    return [r * 1.5 * x, x % 2 === 0 ? 2 * r * cp6 * y : (2 * y - 1) * r * cp6]
+  }
+}

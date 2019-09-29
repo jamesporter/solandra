@@ -488,6 +488,26 @@ export default class SCanvas {
   }
 
   /**
+   * A random Point2D on a grid
+   */
+  uniformGridPoint = ({
+    minX,
+    maxX,
+    minY,
+    maxY,
+  }: {
+    minX: number
+    maxX: number
+    minY: number
+    maxY: number
+  }): Point2D => {
+    return [
+      this.uniformRandomInt({ from: minX, to: maxX }),
+      this.uniformRandomInt({ from: minY, to: maxY }),
+    ]
+  }
+
+  /**
    * A coin toss with result either -1 or 1
    */
   randomPolarity = (): 1 | -1 => {

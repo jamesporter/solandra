@@ -41,3 +41,22 @@ export default class RegularPolygon implements Traceable {
     return traceSimplePath(this)
   }
 }
+
+export class Hexagon extends RegularPolygon {
+  constructor({
+    at,
+    r,
+    vertical = true,
+  }: {
+    at: Point2D
+    r: number
+    vertical?: boolean
+  }) {
+    super({
+      at,
+      r,
+      n: 6,
+      a: vertical ? 0 : Math.PI / 6,
+    })
+  }
+}
