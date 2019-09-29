@@ -8,9 +8,6 @@ export default function Header() {
       <HLink to="/main">Examples</HLink>
       <HLink to="/viewAll">Slides</HLink>
       <HLink to="/quickstart">Start</HLink>
-      <HUrl to="https://github.com/jamesporter/solandra/tree/master/docs">
-        Docs
-      </HUrl>
     </div>
   )
 }

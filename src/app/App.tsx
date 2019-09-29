@@ -1,9 +1,9 @@
-import React from "react";
-import { HashRouter as Router, Route, Link } from "react-router-dom";
-import ViewSingle from "./pages/ViewSingle";
-import { Main } from "./pages/Main";
-import { Export } from "./pages/Export";
-import ViewStateful from "./pages/ViewStateful";
+import React from "react"
+import { HashRouter as Router, Route, Link } from "react-router-dom"
+import ViewSingle from "./pages/ViewSingle"
+import { Main } from "./pages/Main"
+import { Export } from "./pages/Export"
+import ViewStateful from "./pages/ViewStateful"
 
 export default function App() {
   return (
@@ -23,7 +23,7 @@ export default function App() {
               href="https://github.com/jamesporter/play-ts"
               className="underline  ml-2 text-blue-600 hover:text-blue-800"
             >
-              Project Source and Docs
+              Project Source
             </a>
             <a
               className="underline ml-2 text-blue-600 hover:text-blue-800"
@@ -41,5 +41,5 @@ export default function App() {
         </div>
       </div>
     </Router>
-  );
+  )
 }

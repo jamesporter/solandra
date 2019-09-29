@@ -284,17 +284,6 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
 
         <H2>Examples</H2>
 
-        <p className="pb-8">
-          Now what?{" "}
-          <Link to="/main" className="text-blue-700 underline">
-            There are loads of examples with source code to learn from
-          </Link>
-          . You can also read the{" "}
-          <A href="https://github.com/jamesporter/solandra/tree/master/docs">
-            docs
-          </A>
-          .
-        </p>
         <ExampleLinks />
       </Container>
 
