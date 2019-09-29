@@ -285,6 +285,36 @@ export default class SCanvas {
     }
   }
 
+  forGrid = (
+    config: {
+      minX: number
+      maxX: number
+      minY: number
+      maxY: number
+      order?: "columnFirst" | "rowFirst"
+    },
+    callback: (point: Point2D, i: number) => void
+  ) => {
+    let k = 0
+    const { minX, maxX, minY, maxY, order = "columnFirst" } = config
+
+    if (order === "columnFirst") {
+      for (let i = minX; i <= maxX; i++) {
+        for (let j = minY; j <= maxY; j++) {
+          callback([i, j], k)
+          k++
+        }
+      }
+    } else {
+      for (let j = minY; j <= maxY; j++) {
+        for (let i = minX; i <= maxX; i++) {
+          callback([i, j], k)
+          k++
+        }
+      }
+    }
+  }
+
   /*
     Build something using other iteration utlities rather than drawing within callback
 
@@ -485,6 +515,26 @@ export default class SCanvas {
     const { to, from = 0, inclusive = true } = config
     const d = to - from + (inclusive ? 1 : 0)
     return from + Math.floor(this.random() * d)
+  }
+
+  /**
+   * A random Point2D on a grid
+   */
+  uniformGridPoint = ({
+    minX,
+    maxX,
+    minY,
+    maxY,
+  }: {
+    minX: number
+    maxX: number
+    minY: number
+    maxY: number
+  }): Point2D => {
+    return [
+      this.uniformRandomInt({ from: minX, to: maxX }),
+      this.uniformRandomInt({ from: minY, to: maxY }),
+    ]
   }
 
   /**

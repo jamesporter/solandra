@@ -1,4 +1,4 @@
-import { scaler, clamp, isoTransform } from "../util"
+import { scaler, clamp, isoTransform, triTransform } from "../util"
 
 describe("Scaler", () => {
   it("should be able to scale", () => {
@@ -31,5 +31,34 @@ describe("Isotransform", () => {
 
     expect(itf([0, 2, 0])[1]).toBeCloseTo(-6.8)
     expect(itf([0, 2, 0])[0]).toBeCloseTo(0)
+  })
+})
+
+describe("Describle Triangle Transform", () => {
+  it("Can do up cases", () => {
+    const tt = triTransform({ s: 1 })
+    const r = 1 / (2 * Math.sin(Math.PI / 3))
+    const h = 0.5 / Math.tan(Math.PI / 3)
+
+    expect(tt([0, 0]).at[0]).toBeCloseTo(0)
+    expect(tt([0, 0]).at[1]).toBeCloseTo(0)
+
+    expect(tt([2, 0]).at[0]).toBeCloseTo(1)
+    expect(tt([2, 0]).at[1]).toBeCloseTo(0)
+
+    expect(tt([4, 0]).at[0]).toBeCloseTo(2)
+    expect(tt([4, 0]).at[1]).toBeCloseTo(0)
+
+    expect(tt([1, 1]).at[0]).toBeCloseTo(0.5)
+    expect(tt([1, 1]).at[1]).toBeCloseTo(h + r)
+  })
+
+  it("Can do down cases", () => {
+    const tt = triTransform({ s: 1 })
+    const r = 1 / (2 * Math.sin(Math.PI / 3))
+    const h = 0.5 / Math.tan(Math.PI / 3)
+
+    expect(tt([1, 0]).at[0]).toBeCloseTo(0.5)
+    expect(tt([1, 0]).at[1]).toBeCloseTo(h - r)
   })
 })

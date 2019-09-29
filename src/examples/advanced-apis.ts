@@ -1,6 +1,15 @@
 import SCanvas from "../lib/sCanvas"
 import { Path, CompoundPath, Star, RegularPolygon, Circle } from "../lib/paths"
-import { v, Rect, Square, RoundedRect } from "../lib"
+import {
+  v,
+  Rect,
+  Square,
+  RoundedRect,
+  hexTransform,
+  Hexagon,
+  EquilateralTriangle,
+  triTransform,
+} from "../lib"
 
 const compoundPath = (p: SCanvas) => {
   p.background(45, 80, 75)
@@ -197,6 +206,93 @@ const segments = (p: SCanvas) => {
   )
 }
 
+const hex = (p: SCanvas) => {
+  p.background(35, 30, 10)
+  const r = 0.1
+  const vertical = true
+  const h = hexTransform({ r, vertical })
+  p.withTranslation(p.meta.center, () => {
+    p.times(50, () => {
+      p.setFillColor(p.sample([35, 40, 45]), 60, 60, 0.4)
+      p.fill(
+        new Hexagon({
+          at: h(
+            p.uniformGridPoint({
+              minX: -3,
+              maxX: 3,
+              minY: -3,
+              maxY: 3,
+            })
+          ),
+          r,
+          vertical,
+        })
+      )
+    })
+  })
+}
+
+const hexH = (p: SCanvas) => {
+  p.background(215, 40, 30)
+  const r = 0.075
+  const vertical = false
+  const h = hexTransform({ r, vertical })
+  p.withTranslation(p.meta.center, () => {
+    p.times(250, () => {
+      p.setFillColor(p.sample([135, 140, 145]), 60, 60, 0.4)
+      p.fill(
+        new Hexagon({
+          at: h(
+            p.uniformGridPoint({
+              minX: -5,
+              maxX: 5,
+              minY: -5,
+              maxY: 5,
+            })
+          ),
+          r: r * 0.9,
+          vertical,
+        })
+      )
+    })
+  })
+}
+
+const tri = (p: SCanvas) => {
+  p.background(215, 40, 30)
+  p.lineWidth = 0.005
+  p.setStrokeColor(0, 0, 90, 0.5)
+  const s = 0.14
+  const tt = triTransform({ s })
+  const area = {
+    minX: -8,
+    maxX: 8,
+    minY: -5,
+    maxY: 5,
+  } as const
+  p.withTranslation(p.meta.center, () => {
+    p.forGrid(area, gp => {
+      const ta = new EquilateralTriangle({
+        ...tt(gp),
+        s,
+      })
+      p.setFillColor(p.sample([215, 195]), 60, 60, 0.2)
+      p.fill(ta)
+      p.draw(ta)
+    })
+
+    p.times(100, n => {
+      p.setFillColor(n / 2, 90, 60, 0.45)
+      p.fill(
+        new EquilateralTriangle({
+          ...tt(p.uniformGridPoint(area)),
+          s: s * p.gaussian({ mean: 1.5, sd: 0.4 }),
+        })
+      )
+    })
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: compoundPath, name: "Compound Path" },
   { sketch: compoundPath2, name: "Compound Path 2" },
@@ -207,6 +303,9 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: shadowAnimation, name: "Shadow Animation" },
   { sketch: glow, name: "Glow" },
   { sketch: segments, name: "Segments" },
+  { sketch: hex, name: "Hex" },
+  { sketch: hexH, name: "Hex (Horizontal)" },
+  { sketch: tri, name: "Triangles" },
 ]
 
 export default sketches

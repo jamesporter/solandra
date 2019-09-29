@@ -41,3 +41,41 @@ export default class RegularPolygon implements Traceable {
     return traceSimplePath(this)
   }
 }
+
+export class Hexagon extends RegularPolygon {
+  constructor({
+    at,
+    r,
+    vertical = true,
+  }: {
+    at: Point2D
+    r: number
+    vertical?: boolean
+  }) {
+    super({
+      at,
+      r,
+      n: 6,
+      a: vertical ? 0 : Math.PI / 6,
+    })
+  }
+}
+
+export class EquilateralTriangle extends RegularPolygon {
+  constructor({
+    at,
+    s,
+    flipped,
+  }: {
+    at: Point2D
+    s: number
+    flipped: boolean
+  }) {
+    super({
+      at,
+      r: s / (2 * Math.sin(Math.PI / 3)),
+      n: 3,
+      a: flipped ? Math.PI : 0,
+    })
+  }
+}

@@ -1,4 +1,5 @@
 import { Point2D } from "./types/sol"
+import { v } from "."
 
 export const clamp = (
   { from, to }: { from: number; to: number },
@@ -65,5 +66,42 @@ export const centroid = (points: Point2D[]): Point2D => {
       y += points[i][1]
     }
     return [x / m, y / m]
+  }
+}
+
+const cp6 = Math.cos(Math.PI / 6)
+
+/**
+ * NB Assumes integer grid
+ * Supply a radius and boolean for whether it should be vertical (vertex at top) or not
+ */
+export const hexTransform = ({
+  r,
+  vertical = true,
+}: {
+  r: number
+  vertical?: boolean
+}) => ([x, y]: Point2D): Point2D => {
+  if (vertical) {
+    return [y % 2 === 0 ? 2 * r * cp6 * x : (2 * x - 1) * r * cp6, 1.5 * y * r]
+  } else {
+    return [r * 1.5 * x, x % 2 === 0 ? 2 * r * cp6 * y : (2 * y - 1) * r * cp6]
+  }
+}
+
+/**
+ * NB Assumes integer grid, returns function that will return center of triangle and whether it should be flipped
+ */
+export const triTransform = ({ s }: { s: number }) => {
+  const r = s / (2 * Math.sin(Math.PI / 3))
+  const h = (s * 0.5) / Math.tan(Math.PI / 3)
+
+  return ([x, y]: Point2D): { at: Point2D; flipped: boolean } => {
+    const isUp = (x + y) % 2 === 0
+    if (isUp) {
+      return { at: [0.5 * s * x, (h + r) * y], flipped: false }
+    } else {
+      return { at: [0.5 * s * x, (h + r) * y + h - r], flipped: true }
+    }
   }
 }

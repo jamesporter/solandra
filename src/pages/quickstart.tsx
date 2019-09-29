@@ -134,7 +134,7 @@ const QuickStart = () => (
               new LinearGradient({
                 from: [0, 0],
                 to: [0, p.meta.bottom],
-                colours: [
+                colors: [
                   [0, { h: 215, s: 30, l: 35 }],
                   [1, { h: 230, s: 30, l: 20 }],
                 ],
@@ -170,7 +170,7 @@ const QuickStart = () => (
                   new LinearGradient({
                     from: [x + xOffset, y],
                     to: [x + dX + xOffset, y + dY],
-                    colours: [
+                    colors: [
                       [0, { h: h1, s: 60, l: 65, a: 0 }],
                       [0.05, { h: h1, s: 60, l: 65, a: 0 }],
                       [0.1, { h: h1, s: 60, l: 65, a: 0.8 }],
