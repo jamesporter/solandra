@@ -272,16 +272,17 @@ const tri = (p: SCanvas) => {
   } as const
   p.withTranslation(p.meta.center, () => {
     p.forGrid(area, gp => {
-      p.draw(
-        new EquilateralTriangle({
-          ...tt(gp),
-          s,
-        })
-      )
+      const ta = new EquilateralTriangle({
+        ...tt(gp),
+        s,
+      })
+      p.setFillColor(p.sample([215, 195]), 60, 60, 0.2)
+      p.fill(ta)
+      p.draw(ta)
     })
 
     p.times(100, n => {
-      p.setFillColor(n / 2, 90, 60, 0.4)
+      p.setFillColor(n / 2, 90, 60, 0.45)
       p.fill(
         new EquilateralTriangle({
           ...tt(p.uniformGridPoint(area)),
