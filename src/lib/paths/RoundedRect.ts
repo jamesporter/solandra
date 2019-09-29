@@ -20,6 +20,7 @@ export default class RoundedRect implements Traceable {
     this.h = h
     this.r = r
   }
+
   traceIn = (ctx: CanvasRenderingContext2D) => {
     const r = Math.min(this.r, this.h / 2, this.w / 2)
     const [x1, y1] = this.at

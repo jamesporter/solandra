@@ -5,6 +5,7 @@ export default class Rect implements Traceable {
   readonly at: Point2D
   readonly w: number
   readonly h: number
+
   constructor(config: {
     at: Point2D
     w: number
@@ -16,9 +17,11 @@ export default class Rect implements Traceable {
     this.w = w
     this.h = h
   }
+
   traceIn = (ctx: CanvasRenderingContext2D) => {
     ctx.rect(this.at[0], this.at[1], this.w, this.h)
   }
+
   get path(): SimplePath {
     const [x, y] = this.at
     return SimplePath.withPoints([
@@ -28,6 +31,7 @@ export default class Rect implements Traceable {
       [x, y + this.h],
     ]).close()
   }
+
   split = (config: {
     orientation: "vertical" | "horizontal"
     split?: number | number[]
