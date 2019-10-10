@@ -15,7 +15,8 @@ import {
 import { add, pointAlong, scale, distance } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
 import { LinearGradient, RadialGradient } from "../lib/gradient"
-import { clamp, Line } from "../lib"
+import { clamp, Line, Square, v } from "../lib"
+import { simpleLinearGradient } from "../lib/colors"
 
 const rainbow = (p: SCanvas) => {
   p.withRandomOrder(
@@ -937,6 +938,36 @@ const scaled = (p: SCanvas) => {
   })
 }
 
+const colourThemes = (p: SCanvas) => {
+  p.background(0, 10, 80)
+  const g = simpleLinearGradient(
+    { h: 10, s: 90, l: 50, a: 1 },
+    { h: 50, s: 70, l: 60, a: 1 },
+    100
+  )
+  const g2 = simpleLinearGradient(
+    { h: 210, s: 90, l: 50, a: 0.6 },
+    { h: 350, s: 70, l: 60, a: 0.7 },
+    100
+  )
+  p.forTiling(
+    { n: 10, type: "square", margin: 0.1, order: "rowFirst" },
+    (_p, [dX], c, i) => {
+      p.setFillColor(g(i))
+      p.fill(new Square({ at: c, align: "center", s: dX / 3 }))
+
+      p.setFillColor(g2(i))
+      p.fill(
+        new Square({
+          at: v.add(c, [(i * dX) / 500, (-i * dX) / 500]),
+          align: "center",
+          s: dX / 3,
+        })
+      )
+    }
+  )
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: rainbow, name: "Rainbow Drips" },
   { sketch: horizontal, name: "Horizontal" },
@@ -978,6 +1009,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: arcChart, name: "Arc Chart" },
   { sketch: bars, name: "Bars" },
   { sketch: scaled, name: "Discs" },
+  { sketch: colourThemes, name: "Colour Themes" },
 ]
 
 export default sketches
