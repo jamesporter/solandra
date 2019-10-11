@@ -110,9 +110,10 @@ export default class SCanvas {
   background(h: number | ColorSpec, s?: number, l?: number, a: number = 1) {
     this.pushState()
     if (isColorSpec(h)) {
+      console.log("is c spec")
       const { h: hue, s: sat, l: lig, a: alp } = h
       this.ctx.fillStyle = hsla(hue, sat, lig, alp)
-    } else if (s && l) {
+    } else if (s !== undefined && l !== undefined) {
       this.ctx.fillStyle = hsla(h, s, l, a)
     }
     const { right, bottom } = this.meta
@@ -134,7 +135,7 @@ export default class SCanvas {
     if (isColorSpec(h)) {
       const { h: hue, s: sat, l: lig, a: alp } = h
       this.ctx.strokeStyle = hsla(hue, sat, lig, alp)
-    } else if (s && l) {
+    } else if (s !== undefined && l !== undefined) {
       this.ctx.strokeStyle = hsla(h, s, l, a)
     }
   }
@@ -145,7 +146,7 @@ export default class SCanvas {
     if (isColorSpec(h)) {
       const { h: hue, s: sat, l: lig, a: alp } = h
       this.ctx.fillStyle = hsla(hue, sat, lig, alp)
-    } else if (s && l) {
+    } else if (s !== undefined && l !== undefined) {
       this.ctx.fillStyle = hsla(h, s, l, a)
     }
   }

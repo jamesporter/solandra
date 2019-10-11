@@ -42,3 +42,99 @@ export const simpleLinearGradient = (
     a: a1 + (dA * n) / steps,
   })
 }
+
+export const hueRange = ({
+  h1,
+  h2,
+  s,
+  l,
+  a = 1,
+  steps,
+}: {
+  h1: number
+  h2: number
+  s: number
+  l: number
+  a?: number
+  steps: number
+}): ThemeColorable => {
+  const dH = h2 - h1
+  return (n: number) => ({
+    h: h1 + (dH * n) / steps,
+    s,
+    l,
+    a,
+  })
+}
+
+export const saturationRange = ({
+  h,
+  s1,
+  s2,
+  l,
+  a = 1,
+  steps,
+}: {
+  h: number
+  s1: number
+  s2: number
+  l: number
+  a?: number
+  steps: number
+}): ThemeColorable => {
+  const dS = s2 - s1
+  return (n: number) => ({
+    h,
+    s: s1 + (dS * n) / steps,
+    l,
+    a,
+  })
+}
+
+export const lightnessRange = ({
+  h,
+  s,
+  l1,
+  l2,
+  a = 1,
+  steps,
+}: {
+  h: number
+  s: number
+  l1: number
+  l2: number
+  a?: number
+  steps: number
+}): ThemeColorable => {
+  const dL = l2 - l1
+  return (n: number) => ({
+    h,
+    s,
+    l: l1 + (dL * n) / steps,
+    a,
+  })
+}
+
+export const alphaRange = ({
+  h,
+  s,
+  l,
+  a1,
+  a2,
+  steps,
+}: {
+  h: number
+  s: number
+  l: number
+  a1: number
+  a2: number
+  steps: number
+}): ThemeColorable => {
+  const dA = a2 - a1
+  return (n: number) => ({
+    h,
+    s,
+    l,
+    a: a1 + (dA * n) / steps,
+  })
+}
