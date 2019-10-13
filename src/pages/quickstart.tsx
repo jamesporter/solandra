@@ -101,6 +101,19 @@ const QuickStart = () => (
           Simple editable sketch
         </A>
       </div>
+
+      <div className="start-item-text">
+        You can get a{" "}
+        <A href="https://github.com/jamesporter/solandra/tree/master/src/docs/cheat-sheet.md">
+          markdown cheat sheet
+        </A>{" "}
+        or{" "}
+        <A href="https://github.com/jamesporter/solandra/tree/master/src/docs/cheat-sheet.pdf">
+          PDF cheat sheet (for printing)
+        </A>
+        .
+      </div>
+
       <div className="start-item-text">
         To start coding: clone{" "}
         <A href="https://github.com/jamesporter/solandra">this project</A> to
