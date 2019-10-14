@@ -996,7 +996,7 @@ const colourThemes2 = (p: SCanvas) => {
 
   const h = p.uniformRandomInt({ from: 0, to: 100 })
   p.times(N, () => {
-    const l = p.uniformRandomInt({ from: 0, to: 100 })  
+    const l = p.uniformRandomInt({ from: 0, to: 100 })
     const delta = p.gaussian({ sd: 0.1 })
     const delta2 = p.gaussian({ sd: 0.1 })
     const g2 = saturationRange({
@@ -1044,6 +1044,22 @@ const colourThemes2 = (p: SCanvas) => {
   })
 }
 
+const colourThemes3 = (p: SCanvas) => {
+  const hr = hueRange({
+    h1: 215,
+    h2: 360,
+    s: 80,
+    l: 50,
+    a: 1,
+    steps: 10,
+  })
+  p.background(25, 60, 15)
+  p.forTiling({ n: 20, type: "square", margin: 0.1 }, (pt, [dX], at) => {
+    p.setFillColor(hr(p.uniformRandomInt({ from: 0, to: 10 })))
+    p.fill(new Square({ at, align: "center", s: dX * 0.8 }))
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: rainbow, name: "Rainbow Drips" },
   { sketch: horizontal, name: "Horizontal" },
@@ -1087,6 +1103,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: scaled, name: "Discs" },
   { sketch: colourThemes, name: "Colour Themes" },
   { sketch: colourThemes2, name: "Colour Themes 2" },
+  { sketch: colourThemes3, name: "Colour Themes 3" },
 ]
 
 export default sketches
