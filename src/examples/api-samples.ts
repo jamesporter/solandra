@@ -15,7 +15,13 @@ import {
 import { add, pointAlong, scale, distance } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
 import { LinearGradient, RadialGradient } from "../lib/gradient"
-import { clamp, Line } from "../lib"
+import { clamp, Line, Square, v } from "../lib"
+import {
+  simpleLinearGradient,
+  hueRange,
+  saturationRange,
+  lightnessRange,
+} from "../lib/colors"
 
 const rainbow = (p: SCanvas) => {
   p.withRandomOrder(
@@ -937,6 +943,123 @@ const scaled = (p: SCanvas) => {
   })
 }
 
+const colourThemes = (p: SCanvas) => {
+  p.background(0, 10, 80)
+  const g = simpleLinearGradient(
+    { h: 10, s: 90, l: 50, a: 1 },
+    { h: 50, s: 70, l: 60, a: 1 },
+    100
+  )
+  const g2 = simpleLinearGradient(
+    { h: 210, s: 90, l: 50, a: 0.6 },
+    { h: 350, s: 70, l: 60, a: 0.7 },
+    100
+  )
+  p.forTiling(
+    { n: 10, type: "square", margin: 0.1, order: "rowFirst" },
+    (_p, [dX], c, i) => {
+      p.setFillColor(g(i))
+      p.fill(new Square({ at: c, align: "center", s: dX / 3 }))
+
+      p.setFillColor(g2(i))
+      p.fill(
+        new Square({
+          at: v.add(c, [(i * dX) / 500, (-i * dX) / 500]),
+          align: "center",
+          s: dX / 3,
+        })
+      )
+    }
+  )
+}
+
+const colourThemes2 = (p: SCanvas) => {
+  const N = 70
+  p.background(0, 0, 20)
+  p.times(N, () => {
+    const s = p.uniformRandomInt({ from: 0, to: 100 })
+    const delta = p.gaussian({ sd: 0.1 })
+    const delta2 = p.gaussian({ sd: 0.1 })
+
+    const g1 = hueRange({ h1: 0, h2: 360, s, l: 50, a: 0.7, steps: 12 })
+    p.forHorizontal({ n: 12 }, (pt, [dX, dY], c, i) => {
+      p.setFillColor(g1(i))
+      p.fill(
+        new Square({
+          at: v.add(c, [delta, delta2]),
+          align: "center",
+          s: dX / 3,
+        })
+      )
+    })
+  })
+
+  const h = p.uniformRandomInt({ from: 0, to: 100 })
+  p.times(N, () => {
+    const l = p.uniformRandomInt({ from: 0, to: 100 })
+    const delta = p.gaussian({ sd: 0.1 })
+    const delta2 = p.gaussian({ sd: 0.1 })
+    const g2 = saturationRange({
+      h,
+      s1: 30,
+      s2: 100,
+      l,
+      a: 0.6,
+      steps: 12,
+    })
+    p.forHorizontal({ n: 12 }, (pt, [dX, dY], c, i) => {
+      p.setFillColor(g2(i))
+      p.fill(
+        new Square({
+          at: v.subtract(c, [delta, delta2 + dY / 4]),
+          align: "center",
+          s: dX / 3,
+        })
+      )
+    })
+  })
+
+  p.times(N, () => {
+    const h = p.uniformRandomInt({ from: 0, to: 360 })
+    const delta = p.gaussian({ sd: 0.1 })
+    const delta2 = p.gaussian({ sd: 0.1 })
+    const g3 = lightnessRange({
+      h,
+      l1: 30,
+      l2: 100,
+      s: 100,
+      a: 0.7,
+      steps: 12,
+    })
+    p.forHorizontal({ n: 12 }, (pt, [dX, dY], c, i) => {
+      p.setFillColor(g3(i))
+      p.fill(
+        new Square({
+          at: v.add(c, [delta, delta2 + dY / 4]),
+          align: "center",
+          s: dX / 3,
+        })
+      )
+    })
+  })
+}
+
+const colourThemes3 = (p: SCanvas) => {
+  const hr = hueRange({
+    h1: 215,
+    h2: 360,
+    s: 80,
+    l: 50,
+    a: 1,
+    steps: 10,
+  })
+  p.background(25, 60, 15)
+  p.forTiling({ n: 20, type: "square", margin: 0.1 }, (pt, [dX], at) => {
+    p.setFillColor(hr(p.uniformRandomInt({ from: 0, to: 10 })))
+    p.fill(new Square({ at, align: "center", s: dX * 0.8 }))
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: rainbow, name: "Rainbow Drips" },
   { sketch: horizontal, name: "Horizontal" },
@@ -978,6 +1101,9 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: arcChart, name: "Arc Chart" },
   { sketch: bars, name: "Bars" },
   { sketch: scaled, name: "Discs" },
+  { sketch: colourThemes, name: "Colour Themes" },
+  { sketch: colourThemes2, name: "Colour Themes 2" },
+  { sketch: colourThemes3, name: "Colour Themes 3" },
 ]
 
 export default sketches

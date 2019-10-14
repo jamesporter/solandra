@@ -1,6 +1,6 @@
 import { Gradientable } from "./sCanvas"
 import { Point2D } from "./types/sol"
-import { hsla } from "./colors"
+import { hsla, ColorSpec } from "./colors"
 
 export class LinearGradient implements Gradientable {
   constructor(
@@ -9,12 +9,7 @@ export class LinearGradient implements Gradientable {
       to: Point2D
       colors: [
         number,
-        {
-          h: number
-          s: number
-          l: number
-          a?: number
-        }
+        ColorSpec
       ][]
     }
   ) {}
@@ -42,12 +37,7 @@ export class RadialGradient implements Gradientable {
       rEnd: number
       colors: [
         number,
-        {
-          h: number
-          s: number
-          l: number
-          a?: number
-        }
+        ColorSpec
       ][]
     }
   ) {}
