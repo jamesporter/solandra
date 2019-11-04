@@ -108,11 +108,6 @@ const QuickStart = () => (
         On 15th November 2019 I'll be talking about why I created Solandra and the ideas/principles behind it at London Createive Code.
       </div>
       
-      <div className="start-item-text">
-        On 28th October 2019, I gave a workshop/talk on Solandra which <A href="https://algorithmicartmeetup.blogspot.com/2019/10/solandra-hands-on-tutorial-emergent.html">Tariq Rashid wrote up as a introductory tutorial</A>.
-      </div>
-      
-      https://algorithmicartmeetup.blogspot.com/2019/10/solandra-hands-on-tutorial-emergent.html
       <H2>Code</H2>
       <div className="start-item-text">
         On CodeSandbox, quickly get started:{" "}
