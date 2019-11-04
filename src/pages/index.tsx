@@ -86,7 +86,7 @@ const IndexPage = () => (
         <H1>Principles</H1>
 
         <P>
-          Opionated, agile (code is easy to change) framework for algorithmic
+          Opinionated, agile (code is easy to change) framework for algorithmic
           art. See my{" "}
           <a
             href="https://www.amimetic.co.uk/art/"
@@ -124,7 +124,7 @@ const IndexPage = () => (
           </li>
           <li className="pb-1">
             Declarative when possible (especially anything configuration-y),
-            proceedural when pragmatic; make it easy to explore/change your
+            procedural when pragmatic; make it easy to explore/change your
             mind.
           </li>
         </ul>
