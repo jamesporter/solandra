@@ -19,10 +19,6 @@ export interface ThemeColorable {
   (at: number): ColorSpec
 }
 
-export function isColorSpec(arg: number | ColorSpec): arg is ColorSpec {
-  return !(typeof arg === "number")
-}
-
 export const simpleLinearGradient = (
   a: ColorSpec,
   b: ColorSpec,

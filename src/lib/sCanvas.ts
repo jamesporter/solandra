@@ -1,5 +1,5 @@
 import { Size, Point2D, Vector2D } from "./types/sol"
-import { hsla, ColorSpec, isColorSpec } from "./colors"
+import { hsla, ColorSpec } from "./colors"
 import { Traceable, TextConfig, Text, Rect } from "./paths"
 import Prando from "prando"
 
@@ -105,20 +105,16 @@ export default class SCanvas {
     this.ctx.shadowOffsetY = dY * this.originalScale
   }
 
-  background(spec: ColorSpec)
-  background(h: number, s: number, l: number, a?: number)
-  background(h: number | ColorSpec, s?: number, l?: number, a: number = 1) {
+  background(h: number, s: number, l: number, a: number = 1) {
     this.pushState()
-    if (isColorSpec(h)) {
-      console.log("is c spec")
-      const { h: hue, s: sat, l: lig, a: alp } = h
-      this.ctx.fillStyle = hsla(hue, sat, lig, alp)
-    } else if (s !== undefined && l !== undefined) {
-      this.ctx.fillStyle = hsla(h, s, l, a)
-    }
+    this.ctx.fillStyle = hsla(h, s, l, a)
     const { right, bottom } = this.meta
     this.fill(new Rect({ at: [0, 0], w: right, h: bottom }))
     this.popState()
+  }
+
+  backgroundFromSpec({ h, s, l, a }: ColorSpec) {
+    this.background(h, s, l, a)
   }
 
   backgroundGradient(gradient: Gradientable) {
@@ -129,26 +125,20 @@ export default class SCanvas {
     this.popState()
   }
 
-  setStrokeColor(spec: ColorSpec)
-  setStrokeColor(h: number, s: number, l: number, a?: number)
-  setStrokeColor(h: number | ColorSpec, s?: number, l?: number, a: number = 1) {
-    if (isColorSpec(h)) {
-      const { h: hue, s: sat, l: lig, a: alp } = h
-      this.ctx.strokeStyle = hsla(hue, sat, lig, alp)
-    } else if (s !== undefined && l !== undefined) {
-      this.ctx.strokeStyle = hsla(h, s, l, a)
-    }
+  setStrokeColor(h: number, s: number, l: number, a: number = 1) {
+    this.ctx.strokeStyle = hsla(h, s, l, a)
   }
 
-  setFillColor(spec: ColorSpec)
-  setFillColor(h: number, s: number, l: number, a?: number)
-  setFillColor(h: number | ColorSpec, s?: number, l?: number, a: number = 1) {
-    if (isColorSpec(h)) {
-      const { h: hue, s: sat, l: lig, a: alp } = h
-      this.ctx.fillStyle = hsla(hue, sat, lig, alp)
-    } else if (s !== undefined && l !== undefined) {
-      this.ctx.fillStyle = hsla(h, s, l, a)
-    }
+  setStrokeColorFromSpec({ h, s, l, a }: ColorSpec) {
+    this.setStrokeColor(h, s, l, a)
+  }
+
+  setFillColor(h: number, s: number, l: number, a: number = 1) {
+    this.ctx.fillStyle = hsla(h, s, l, a)
+  }
+
+  setFillColorFromSpec({ h, s, l, a }: ColorSpec) {
+    this.setFillColor(h, s, l, a)
   }
 
   setStrokeGradient(gradient: Gradientable) {

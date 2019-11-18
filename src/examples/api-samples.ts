@@ -956,17 +956,17 @@ const colourThemes = (p: SCanvas) => {
     100
   )
   p.forTiling(
-    { n: 10, type: "square", margin: 0.1, order: "rowFirst" },
+    { n: 10, type: "square", margin: 0.05, order: "rowFirst" },
     (_p, [dX], c, i) => {
-      p.setFillColor(g(i))
-      p.fill(new Square({ at: c, align: "center", s: dX / 3 }))
+      p.setFillColorFromSpec(g(i))
+      p.fill(new Square({ at: c, align: "center", s: dX / 2 }))
 
-      p.setFillColor(g2(i))
+      p.setFillColorFromSpec(g2(i))
       p.fill(
         new Square({
           at: v.add(c, [(i * dX) / 500, (-i * dX) / 500]),
           align: "center",
-          s: dX / 3,
+          s: dX / 2,
         })
       )
     }
@@ -983,7 +983,7 @@ const colourThemes2 = (p: SCanvas) => {
 
     const g1 = hueRange({ h1: 0, h2: 360, s, l: 50, a: 0.7, steps: 12 })
     p.forHorizontal({ n: 12 }, (pt, [dX, dY], c, i) => {
-      p.setFillColor(g1(i))
+      p.setFillColorFromSpec(g1(i))
       p.fill(
         new Square({
           at: v.add(c, [delta, delta2]),
@@ -1008,7 +1008,7 @@ const colourThemes2 = (p: SCanvas) => {
       steps: 12,
     })
     p.forHorizontal({ n: 12 }, (pt, [dX, dY], c, i) => {
-      p.setFillColor(g2(i))
+      p.setFillColorFromSpec(g2(i))
       p.fill(
         new Square({
           at: v.subtract(c, [delta, delta2 + dY / 4]),
@@ -1032,7 +1032,7 @@ const colourThemes2 = (p: SCanvas) => {
       steps: 12,
     })
     p.forHorizontal({ n: 12 }, (pt, [dX, dY], c, i) => {
-      p.setFillColor(g3(i))
+      p.setFillColorFromSpec(g3(i))
       p.fill(
         new Square({
           at: v.add(c, [delta, delta2 + dY / 4]),
@@ -1055,8 +1055,40 @@ const colourThemes3 = (p: SCanvas) => {
   })
   p.background(25, 60, 15)
   p.forTiling({ n: 20, type: "square", margin: 0.1 }, (pt, [dX], at) => {
-    p.setFillColor(hr(p.uniformRandomInt({ from: 0, to: 10 })))
+    p.setFillColorFromSpec(hr(p.uniformRandomInt({ from: 0, to: 10 })))
     p.fill(new Square({ at, align: "center", s: dX * 0.8 }))
+  })
+}
+
+const colourThemes4 = (p: SCanvas) => {
+  p.backgroundFromSpec({ h: 215, s: 50, l: 90 })
+
+  const hr = hueRange({
+    h1: 160,
+    h2: 240,
+    s: 80,
+    l: 30,
+    a: 0.8,
+    steps: 20,
+  })
+
+  const {
+    bottom: b,
+    right: r,
+    center: [cX, cY],
+  } = p.meta
+  const u: Point2D = [cX - r / 3.5, cY - b / 3.5]
+  const v: Point2D = [cX + r / 3.5, cY + b / 3.5]
+
+  p.range({ from: -10, to: 10, n: 21 }, n => {
+    p.setStrokeColorFromSpec(hr(n))
+    p.draw(
+      Path.startAt(u).addCurveTo(v, {
+        curveSize: n / 10,
+        curveAngle: p.gaussian(),
+        bulbousness: 1 + Math.cos(p.t / 2 + n),
+      })
+    )
   })
 }
 
@@ -1104,6 +1136,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: colourThemes, name: "Colour Themes" },
   { sketch: colourThemes2, name: "Colour Themes 2" },
   { sketch: colourThemes3, name: "Colour Themes 3" },
+  { sketch: colourThemes4, name: "Colour Themes 4" },
 ]
 
 export default sketches
