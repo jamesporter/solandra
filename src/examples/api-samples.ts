@@ -956,17 +956,17 @@ const colourThemes = (p: SCanvas) => {
     100
   )
   p.forTiling(
-    { n: 10, type: "square", margin: 0.1, order: "rowFirst" },
+    { n: 10, type: "square", margin: 0.05, order: "rowFirst" },
     (_p, [dX], c, i) => {
       p.setFillColorFromSpec(g(i))
-      p.fill(new Square({ at: c, align: "center", s: dX / 3 }))
+      p.fill(new Square({ at: c, align: "center", s: dX / 2 }))
 
       p.setFillColorFromSpec(g2(i))
       p.fill(
         new Square({
           at: v.add(c, [(i * dX) / 500, (-i * dX) / 500]),
           align: "center",
-          s: dX / 3,
+          s: dX / 2,
         })
       )
     }
@@ -1060,6 +1060,38 @@ const colourThemes3 = (p: SCanvas) => {
   })
 }
 
+const colourThemes4 = (p: SCanvas) => {
+  p.backgroundFromSpec({ h: 215, s: 50, l: 90 })
+
+  const hr = hueRange({
+    h1: 160,
+    h2: 240,
+    s: 80,
+    l: 30,
+    a: 0.8,
+    steps: 20,
+  })
+
+  const {
+    bottom: b,
+    right: r,
+    center: [cX, cY],
+  } = p.meta
+  const u: Point2D = [cX - r / 3.5, cY - b / 3.5]
+  const v: Point2D = [cX + r / 3.5, cY + b / 3.5]
+
+  p.range({ from: -10, to: 10, n: 21 }, n => {
+    p.setStrokeColorFromSpec(hr(n))
+    p.draw(
+      Path.startAt(u).addCurveTo(v, {
+        curveSize: n / 10,
+        curveAngle: p.gaussian(),
+        bulbousness: 1 + Math.cos(p.t / 2 + n),
+      })
+    )
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: rainbow, name: "Rainbow Drips" },
   { sketch: horizontal, name: "Horizontal" },
@@ -1104,6 +1136,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: colourThemes, name: "Colour Themes" },
   { sketch: colourThemes2, name: "Colour Themes 2" },
   { sketch: colourThemes3, name: "Colour Themes 3" },
+  { sketch: colourThemes4, name: "Colour Themes 4" },
 ]
 
 export default sketches
