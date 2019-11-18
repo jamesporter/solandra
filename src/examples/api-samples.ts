@@ -958,10 +958,10 @@ const colourThemes = (p: SCanvas) => {
   p.forTiling(
     { n: 10, type: "square", margin: 0.1, order: "rowFirst" },
     (_p, [dX], c, i) => {
-      p.setFillColor(g(i))
+      p.setFillColorFromSpec(g(i))
       p.fill(new Square({ at: c, align: "center", s: dX / 3 }))
 
-      p.setFillColor(g2(i))
+      p.setFillColorFromSpec(g2(i))
       p.fill(
         new Square({
           at: v.add(c, [(i * dX) / 500, (-i * dX) / 500]),
@@ -983,7 +983,7 @@ const colourThemes2 = (p: SCanvas) => {
 
     const g1 = hueRange({ h1: 0, h2: 360, s, l: 50, a: 0.7, steps: 12 })
     p.forHorizontal({ n: 12 }, (pt, [dX, dY], c, i) => {
-      p.setFillColor(g1(i))
+      p.setFillColorFromSpec(g1(i))
       p.fill(
         new Square({
           at: v.add(c, [delta, delta2]),
@@ -1008,7 +1008,7 @@ const colourThemes2 = (p: SCanvas) => {
       steps: 12,
     })
     p.forHorizontal({ n: 12 }, (pt, [dX, dY], c, i) => {
-      p.setFillColor(g2(i))
+      p.setFillColorFromSpec(g2(i))
       p.fill(
         new Square({
           at: v.subtract(c, [delta, delta2 + dY / 4]),
@@ -1032,7 +1032,7 @@ const colourThemes2 = (p: SCanvas) => {
       steps: 12,
     })
     p.forHorizontal({ n: 12 }, (pt, [dX, dY], c, i) => {
-      p.setFillColor(g3(i))
+      p.setFillColorFromSpec(g3(i))
       p.fill(
         new Square({
           at: v.add(c, [delta, delta2 + dY / 4]),
@@ -1055,7 +1055,7 @@ const colourThemes3 = (p: SCanvas) => {
   })
   p.background(25, 60, 15)
   p.forTiling({ n: 20, type: "square", margin: 0.1 }, (pt, [dX], at) => {
-    p.setFillColor(hr(p.uniformRandomInt({ from: 0, to: 10 })))
+    p.setFillColorFromSpec(hr(p.uniformRandomInt({ from: 0, to: 10 })))
     p.fill(new Square({ at, align: "center", s: dX * 0.8 }))
   })
 }
