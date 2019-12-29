@@ -7,10 +7,41 @@ export interface Gradientable {
   gradient(ctx: CanvasRenderingContext2D): CanvasGradient
 }
 
+/**
+ * Utility type if want to expose an API where have access to Solandra non-drawing related things
+ *
+ * (want to use in thing I'm calling sol-game-r)
+ */
+export type SCanvasNonDrawing = Pick<
+  SCanvas,
+  | "random"
+  | "randomPoint"
+  | "randomPolarity"
+  | "aspectRatio"
+  | "build"
+  | "doProportion"
+  | "downFrom"
+  | "forGrid"
+  | "gaussian"
+  | "meta"
+  | "perturb"
+  | "poisson"
+  | "proportionately"
+  | "range"
+  | "resetRandomNumberGenerator"
+  | "sample"
+  | "samples"
+  | "shuffle"
+  | "times"
+  | "uniformGridPoint"
+  | "uniformRandomInt"
+  | "withRandomOrder"
+>
+
 export default class SCanvas {
   readonly aspectRatio: number
   readonly originalScale: number
-  readonly rng: Prando
+  private rng: Prando
   readonly t: number
 
   constructor(
@@ -36,6 +67,36 @@ export default class SCanvas {
     // will probably replace with better RNG?
     this.rng.skip(100)
     this.t = time || 0
+  }
+
+  /**
+   * Allow for re-use of a single SCanvas
+   *
+   * In examples and most early use just recreated but this is somewhat wasteful
+   */
+  updateTime(time: number) {
+    // @ts-ignore (sorry but don't want other people to do this!)
+    this.t = time
+  }
+
+  /**
+   * Allow for re-use of a single SCanvas
+   *
+   * In examples and most early use just recreated but this is somewhat wasteful
+   */
+  updateSize({ width, height }: { width: number; height: number }) {
+    this.ctx.resetTransform()
+    // @ts-ignore (sorry but don't want other people to do this!)
+    this.aspectRatio = width / height
+    // i.e. size 1 = entire width
+    // @ts-ignore (sorry but don't want other people to do this!)
+    this.originalScale = width
+    // i.e. size 1/100 of width
+    this.ctx.scale(width, width)
+  }
+
+  resetRandomNumberGenerator(seed?: number | string) {
+    this.rng = new Prando(seed)
   }
 
   get meta() {
