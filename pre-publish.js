@@ -14,9 +14,7 @@ const packageTemplate = {
   version,
   main: "index.js",
   license: "MIT",
-  dependencies: {
-    prando: "^5.1.1",
-  },
+  dependencies: {},
   types: "index.d.ts",
 }
 

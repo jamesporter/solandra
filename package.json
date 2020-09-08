@@ -2,7 +2,7 @@
   "name": "solandra",
   "private": true,
   "description": "A framework for algorithmic art. TypeScript first. Make drawing concepts part of framework. Make APIs for humans.",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "author": "James Porter <james@amimetic.co.uk>",
   "dependencies": {
     "gatsby": "^2.18.12",
@@ -16,7 +16,6 @@
     "gatsby-source-filesystem": "^2.1.40",
     "gatsby-transformer-remark": "^2.6.10",
     "gatsby-transformer-sharp": "^2.3.7",
-    "prando": "^5.1.1",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",

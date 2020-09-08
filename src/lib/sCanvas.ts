@@ -1,7 +1,7 @@
 import { Size, Point2D, Vector2D } from "./types/sol"
 import { hsla, ColorSpec } from "./colors"
 import { Traceable, TextConfig, Text, Rect } from "./paths"
-import Prando from "prando"
+import { RNG } from "./rng"
 
 export interface Gradientable {
   gradient(ctx: CanvasRenderingContext2D): CanvasGradient
@@ -41,13 +41,13 @@ export type SCanvasNonDrawing = Pick<
 export default class SCanvas {
   readonly aspectRatio: number
   readonly originalScale: number
-  private rng: Prando
+  private rng: RNG
   readonly t: number
 
   constructor(
     private ctx: CanvasRenderingContext2D,
     { width, height }: Size,
-    rngSeed?: string | number,
+    rngSeed?: number,
     time?: number
   ) {
     ctx.resetTransform()
@@ -62,10 +62,7 @@ export default class SCanvas {
     ctx.fillStyle = "gray"
     this.lineStyle = { cap: "round" }
 
-    this.rng = new Prando(rngSeed)
-    // RNG is pretty poor with similar integer seeds, iterates it 100 times which seems to improve
-    // will probably replace with better RNG?
-    this.rng.skip(100)
+    this.rng = new RNG(rngSeed)
     this.t = time || 0
   }
 
@@ -95,8 +92,8 @@ export default class SCanvas {
     this.ctx.scale(width, width)
   }
 
-  resetRandomNumberGenerator(seed?: number | string) {
-    this.rng = new Prando(seed)
+  resetRandomNumberGenerator(seed?: number) {
+    this.rng = new RNG(seed)
   }
 
   get meta() {
@@ -425,7 +422,7 @@ export default class SCanvas {
   }
 
   doProportion(p: number, callback: () => void) {
-    if (this.rng.next() < p) {
+    if (this.rng.number() < p) {
       callback()
     }
   }
@@ -463,7 +460,7 @@ export default class SCanvas {
   proportionately<T>(cases: [number, () => T][]): T {
     const total = cases.map(c => c[0]).reduce((a, b) => a + b, 0)
     if (total <= 0) throw new Error("Must be positive total")
-    let r = this.rng.next() * total
+    let r = this.rng.number() * total
 
     for (let i = 0; i < cases.length; i++) {
       if (cases[i][0] > r) {
@@ -477,7 +474,7 @@ export default class SCanvas {
   }
 
   randomPoint(): Point2D {
-    return [this.rng.next(), this.rng.next() / this.aspectRatio]
+    return [this.rng.number(), this.rng.number() / this.aspectRatio]
   }
 
   range(
@@ -573,7 +570,7 @@ export default class SCanvas {
    * A uniform random number betweeon 0 and 1
    */
   random = (): number => {
-    return this.rng.next()
+    return this.rng.number()
   }
 
   /**
@@ -614,14 +611,14 @@ export default class SCanvas {
    * A coin toss with result either -1 or 1
    */
   randomPolarity = (): 1 | -1 => {
-    return this.rng.next() > 0.5 ? 1 : -1
+    return this.rng.number() > 0.5 ? 1 : -1
   }
 
   /**
    * Sample uniformly from an array
    */
   sample = <T>(from: T[]): T => {
-    return from[Math.floor(this.rng.next() * from.length)]
+    return from[Math.floor(this.rng.number() * from.length)]
   }
 
   /**
@@ -644,7 +641,7 @@ export default class SCanvas {
     let randomIndex = 0
 
     while (0 !== currentIndex) {
-      randomIndex = Math.floor(this.rng.next() * currentIndex)
+      randomIndex = Math.floor(this.rng.number() * currentIndex)
       currentIndex -= 1
 
       // And swap it with the current element.
@@ -667,8 +664,8 @@ export default class SCanvas {
       magnitude = 0.1,
     } = config
     return [
-      x + magnitude * (this.rng.next() - 0.5),
-      y + magnitude * (this.rng.next() - 0.5),
+      x + magnitude * (this.rng.number() - 0.5),
+      y + magnitude * (this.rng.number() - 0.5),
     ]
   }
 
@@ -677,8 +674,8 @@ export default class SCanvas {
    */
   gaussian = (config?: { mean?: number; sd?: number }): number => {
     const { mean = 0, sd = 1 } = config || {}
-    const a = this.rng.next()
-    const b = this.rng.next()
+    const a = this.rng.number()
+    const b = this.rng.number()
     const n = Math.sqrt(-2.0 * Math.log(a)) * Math.cos(2.0 * Math.PI * b)
     return mean + n * sd
   }
@@ -688,11 +685,11 @@ export default class SCanvas {
    */
   poisson = (lambda: number): number => {
     const limit = Math.exp(-lambda)
-    let prod = this.rng.next()
+    let prod = this.rng.number()
     let n = 0
     while (prod >= limit) {
       n++
-      prod *= this.rng.next()
+      prod *= this.rng.number()
     }
     return n
   }
