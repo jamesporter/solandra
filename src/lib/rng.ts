@@ -2,7 +2,13 @@
 // see also http://www.pcg-random.org/
 
 // multiply two 64 bit numbers (given in parts), and store the result in `out`.
-function mul64_(out, aHi, aLo, bHi, bLo) {
+function mul64_(
+  out: Int32Array,
+  aHi: number,
+  aLo: number,
+  bHi: number,
+  bLo: number
+) {
   var c1 = ((aLo >>> 16) * (bLo & 0xffff)) >>> 0
   var c0 = ((aLo & 0xffff) * (bLo >>> 16)) >>> 0
 
@@ -29,7 +35,13 @@ function mul64_(out, aHi, aLo, bHi, bLo) {
 }
 
 // add two 64 bit numbers (given in parts), and store the result in `out`.
-function add64_(out, aHi, aLo, bHi, bLo) {
+function add64_(
+  out: Int32Array,
+  aHi: number,
+  aLo: number,
+  bHi: number,
+  bLo: number
+) {
   var hi = (aHi + bHi) >>> 0
   var lo = (aLo + bLo) >>> 0
   if (lo >>> 0 < aLo >>> 0) {
@@ -57,16 +69,6 @@ export class RNG {
     incHi: number = defaultIncHi,
     incLo: number = defaultIncLo
   ) {
-    this.state = new Int32Array([0, 0, incHi >>> 0, (incLo | 1) >>> 0])
-    this.setSeed(seedHi, seedLo, incHi, incLo)
-  }
-
-  setSeed(
-    seedHi: undefined | number,
-    seedLo: undefined | number,
-    incHi: number,
-    incLo: number
-  ) {
     let hi, lo: number
 
     if (seedLo === undefined && seedHi === undefined) {
@@ -80,18 +82,10 @@ export class RNG {
       hi = seedHi
     }
 
-    if (incLo == null && incHi == null) {
-      incLo = this.state ? this.state[3] : defaultIncLo
-      incHi = this.state ? this.state[2] : defaultIncHi
-    } else if (incLo == null) {
-      incLo = incHi
-      incHi = 0
-    }
-
+    this.state = new Int32Array([0, 0, incHi >>> 0, (incLo | 1) >>> 0])
     this.next()
     add64_(this.state, this.state[0], this.state[1], hi >>> 0, lo >>> 0)
     this.next()
-    return this
   }
 
   getState(): [number, number, number, number] {
@@ -106,7 +100,7 @@ export class RNG {
   }
 
   // Generate a random 32 bit integer. This uses the PCG algorithm, described here: http://www.pcg-random.org/
-  next() {
+  next(): number {
     // save current state (what we'll use for this number)
     var oldHi = this.state[0] >>> 0
     var oldLo = this.state[1] >>> 0
@@ -135,7 +129,7 @@ export class RNG {
   }
 
   /// Get a uniformly distributed 32 bit integer between [0, max).
-  integer(max) {
+  integer(max: number): number {
     if (!max) {
       return this.next()
     }
@@ -155,7 +149,7 @@ export class RNG {
 
   /// Get a uniformly distributed IEEE-754 double between 0.0 and 1.0, with
   /// 53 bits of precision (every bit of the mantissa is randomized).
-  number() {
+  number(): number {
     var hi = (this.next() & 0x03ffffff) * 1.0
     var lo = (this.next() & 0x07ffffff) * 1.0
     return (hi * BIT_27 + lo) / BIT_53

@@ -10,7 +10,7 @@ describe("Uniform random integers", () => {
         lineWidth: 1,
       },
       { width: 1, height: 1 },
-      100
+      101
     )
 
     let total = 0

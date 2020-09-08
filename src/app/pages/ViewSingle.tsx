@@ -31,15 +31,6 @@ function ViewSingle() {
     setSeed(newSeed)
   }
 
-  console.log(source[sketches[category].fileName])
-  console.log(sketches[category].sketches[sketchNo].name)
-
-  console.log(
-    source[sketches[category].fileName][
-      sketches[category].sketches[sketchNo].name
-    ]
-  )
-
   return (
     <div className="flex flex-col w-screen h-screen">
       <Header />
