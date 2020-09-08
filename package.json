@@ -45,8 +45,10 @@
     "start": "npm run develop",
     "serve": "gatsby serve",
     "test": "jest",
-    "build:package": "node pre-publish && yarn tsc ./src/lib/index.ts --outDir ./package --lib dom,esnext --target ES2016 --skipLibCheck --moduleResolution Node -d",
-    "build:source": "node extract-source.js"
+    "build:package": "node pre-publish && yarn build:esm && yarn build:cjs",
+    "build:source": "node extract-source.js",
+    "build:esm": "yarn tsc -p tsconfig-esm.json",
+    "build:cjs": "yarn tsc -p tsconfig-cjs.json"
   },
   "repository": {
     "type": "git",

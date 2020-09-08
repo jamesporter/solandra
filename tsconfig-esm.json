@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2016",
+    "module": "esnext",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./package/esm",
+    "lib": ["DOM", "ESNext"],
+    "declaration": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node"
+  },
+  "include": ["./src/lib/index.ts"]
+}

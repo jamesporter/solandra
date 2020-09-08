@@ -69,7 +69,8 @@ export class RNG {
     incHi: number = defaultIncHi,
     incLo: number = defaultIncLo
   ) {
-    let hi, lo: number
+    let hi: number
+    let lo: number
 
     if (seedLo === undefined && seedHi === undefined) {
       lo = (Math.random() * 0xffffffff) >>> 0
@@ -79,7 +80,7 @@ export class RNG {
       hi = 0
     } else {
       lo = seedLo
-      hi = seedHi
+      hi = seedHi as number
     }
 
     this.state = new Int32Array([0, 0, incHi >>> 0, (incLo | 1) >>> 0])
