@@ -111,7 +111,7 @@ const IndexPage = () => (
           <li className="pb-1">
             Control flow at level of drawing (tiling, partitions etc).
           </li>
-          <li className="pb-1">Few dependencies/mostly from scratch.</li>
+          <li className="pb-1">Zero dependencies.</li>
           <li className="pb-1">Performance is not the goal.</li>
           <li className="pb-1">
             Common algorthmic art things (e.g. randomness) should be easy.
@@ -124,8 +124,7 @@ const IndexPage = () => (
           </li>
           <li className="pb-1">
             Declarative when possible (especially anything configuration-y),
-            procedural when pragmatic; make it easy to explore/change your
-            mind.
+            procedural when pragmatic; make it easy to explore/change your mind.
           </li>
         </ul>
         <H1>Tutorial</H1>
