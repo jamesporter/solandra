@@ -16,7 +16,7 @@ const packageTemplate = {
   module: "./esm/index.js",
   license: "MIT",
   dependencies: {},
-  types: "index.d.ts",
+  types: "./esm/index.d.ts",
 }
 
 fs.writeFileSync(
