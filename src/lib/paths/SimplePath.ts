@@ -3,9 +3,10 @@ import { Point2D, Vector2D } from "../types/sol"
 import { tripleWise, pairWise } from "../collectionOps"
 import { v } from ".."
 import { centroid } from "../util"
+
 import { CurveConfig } from "./Path"
 
-export default class SimplePath implements Traceable {
+export class SimplePath implements Traceable {
   constructor(public points: Point2D[] = []) {}
 
   static startAt(point: Point2D): SimplePath {
@@ -64,12 +65,12 @@ export default class SimplePath implements Traceable {
    * @param delta Vector to move path by
    */
   moved(delta: Vector2D): SimplePath {
-    return this.transformed(pt => v.add(pt, delta))
+    return this.transformed((pt) => v.add(pt, delta))
   }
 
   scaled(scale: number): SimplePath {
     const c = this.centroid
-    return this.transformed(p => v.add(c, v.scale(v.subtract(p, c), scale)))
+    return this.transformed((p) => v.add(c, v.scale(v.subtract(p, c), scale)))
   }
 
   /**
@@ -145,7 +146,7 @@ export default class SimplePath implements Traceable {
   rotated(angle: number): SimplePath {
     const c = this.centroid
     const [cX, cY] = c
-    return this.transformed(pt => {
+    return this.transformed((pt) => {
       const [dX, dY] = v.subtract(pt, c)
       return [
         cX + Math.cos(angle) * dX - Math.sin(angle) * dY,

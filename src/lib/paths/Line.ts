@@ -1,9 +1,9 @@
 import { Traceable } from "."
 import { Point2D, Vector2D } from "../types/sol"
 import { v } from ".."
-import SimplePath from "./SimplePath"
+import { SimplePath } from "./SimplePath"
 
-export default class Line implements Traceable {
+export class Line implements Traceable {
   constructor(private a: Point2D, private b: Point2D) {}
 
   /**

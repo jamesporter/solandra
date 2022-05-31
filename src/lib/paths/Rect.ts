@@ -1,7 +1,7 @@
 import { Point2D } from "../types/sol"
 import { Traceable, SimplePath } from "."
 import { v } from ".."
-export default class Rect implements Traceable {
+export class Rect implements Traceable {
   readonly at: Point2D
   readonly w: number
   readonly h: number
@@ -50,10 +50,10 @@ export default class Rect implements Traceable {
         ]
       } else {
         const total = split.reduce((a, b) => a + b, 0)
-        const proportions = split.map(s => s / total)
+        const proportions = split.map((s) => s / total)
         let xDxs: [number, number][] = []
         let c = 0
-        proportions.forEach(p => {
+        proportions.forEach((p) => {
           xDxs.push([c, p * this.w])
           c += p * this.w
         })
@@ -78,10 +78,10 @@ export default class Rect implements Traceable {
         ]
       } else {
         const total = split.reduce((a, b) => a + b, 0)
-        const proportions = split.map(s => s / total)
+        const proportions = split.map((s) => s / total)
         let yDys: [number, number][] = []
         let c = 0
-        proportions.forEach(p => {
+        proportions.forEach((p) => {
           yDys.push([c, p * this.h])
           c += p * this.h
         })

@@ -1,6 +1,6 @@
 import { Traceable } from "."
 
-export default class CompoundPath implements Traceable {
+export class CompoundPath implements Traceable {
   private constructor(private paths: Traceable[]) {}
 
   static withPaths(...paths: Traceable[]) {
@@ -8,6 +8,6 @@ export default class CompoundPath implements Traceable {
   }
 
   traceIn(ctx: CanvasRenderingContext2D) {
-    this.paths.forEach(p => p.traceIn(ctx))
+    this.paths.forEach((p) => p.traceIn(ctx))
   }
 }

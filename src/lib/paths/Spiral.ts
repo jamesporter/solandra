@@ -2,7 +2,7 @@ import { Traceable, SimplePath } from "."
 import { Point2D } from "../types/sol"
 import { v } from ".."
 
-export default class Spiral implements Traceable {
+export class Spiral implements Traceable {
   path: SimplePath
 
   constructor({

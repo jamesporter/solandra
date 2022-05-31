@@ -1,7 +1,7 @@
 import { Point2D } from "../types/sol"
 import { Traceable, SimplePath } from "."
 import { traceSimplePath } from "./pathUtil"
-export default class Star implements Traceable {
+export class Star implements Traceable {
   constructor(
     private config: {
       at: Point2D

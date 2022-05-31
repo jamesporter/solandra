@@ -2,7 +2,7 @@ import { Traceable, SimplePath } from "."
 import { Point2D } from "../types/sol"
 import { traceSimplePath } from "./pathUtil"
 
-export default class RegularPolygon implements Traceable {
+export class RegularPolygon implements Traceable {
   constructor(
     private config: {
       at: Point2D

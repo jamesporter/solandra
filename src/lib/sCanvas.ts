@@ -458,7 +458,7 @@ export default class SCanvas {
   }
 
   proportionately<T>(cases: [number, () => T][]): T {
-    const total = cases.map(c => c[0]).reduce((a, b) => a + b, 0)
+    const total = cases.map((c) => c[0]).reduce((a, b) => a + b, 0)
     if (total <= 0) throw new Error("Must be positive total")
     let r = this.rng.number() * total
 

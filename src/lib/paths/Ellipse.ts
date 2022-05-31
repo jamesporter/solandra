@@ -7,7 +7,7 @@ import { Traceable } from "./index"
  *
  * https://stackoverflow.com/questions/1734745/how-to-create-circle-with-bézier-curves
  */
-export default class Ellipse implements Traceable {
+export class Ellipse implements Traceable {
   constructor(
     protected config: {
       at: Point2D

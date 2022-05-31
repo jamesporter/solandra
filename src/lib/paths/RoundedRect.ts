@@ -1,7 +1,7 @@
 import { Point2D } from "../types/sol"
 import { Traceable } from "./index"
 import { v } from ".."
-export default class RoundedRect implements Traceable {
+export class RoundedRect implements Traceable {
   readonly at: Point2D
   readonly w: number
   readonly h: number
