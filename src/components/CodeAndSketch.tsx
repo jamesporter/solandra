@@ -1,6 +1,6 @@
 import React from "react"
 import { SCanvas } from "../lib"
-import Canvas from "./Canvas"
+import { Canvas } from "./Canvas"
 import Source from "./Source"
 
 export default function CodeAndSketch({

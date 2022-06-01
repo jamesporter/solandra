@@ -1,6 +1,7 @@
 import { Point2D } from "../types/sol"
-import { Traceable, SimplePath } from "."
+import { Traceable } from "."
 import { v } from ".."
+import { SimplePath } from "./SimplePath"
 export class Rect implements Traceable {
   readonly at: Point2D
   readonly w: number

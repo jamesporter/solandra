@@ -49,7 +49,7 @@ export default function Preview({
   return (
     <div className="m-4">
       <h3 className="text-md text-center font-semibold pb-4">{name}</h3>
-      <Link to={`/view?sketch=${id}&category=${category}`}>
+      <Link href={`/view?sketch=${id}&category=${category}`}>
         <canvas
           width={size}
           height={size}

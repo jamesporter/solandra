@@ -1,7 +1,8 @@
 import { Point2D } from "../lib/types/sol"
 import SCanvas from "../lib/sCanvas"
-import { Path, SimplePath } from "../lib/paths"
 import {
+  Path,
+  SimplePath,
   Hatching,
   Star,
   RegularPolygon,
@@ -9,12 +10,13 @@ import {
   Ellipse,
   Rect,
   HollowArc,
-} from "../lib/paths"
+  Line,
+} from "../lib"
 import { add, scale } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
 import { LinearGradient, RadialGradient } from "../lib/gradient"
 import { zip2, sum, arrayOf } from "../lib/collectionOps"
-import { clamp, Line } from "../lib"
+import { clamp } from "../lib"
 
 const tiling = (p: SCanvas) => {
   p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {

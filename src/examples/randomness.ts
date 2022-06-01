@@ -7,19 +7,19 @@ import {
   RegularPolygon,
   Circle,
   Rect,
-} from "../lib/paths"
+  Spiral,
+} from "../lib"
 import { add, scale } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
 import { RadialGradient } from "../lib/gradient"
 import { clamp } from "../lib"
-import Spiral from "../lib/paths/Spiral"
 
 const noiseField = (p: SCanvas) => {
   const delta = 0.01
   const s = 8
   p.lineWidth = 0.0025
 
-  p.times(250, n => {
+  p.times(250, (n) => {
     p.setStrokeColor(195 + n / 12.5, 90, 30, 0.7)
     let pt = p.randomPoint()
     const sp = SimplePath.startAt(pt)
@@ -38,7 +38,7 @@ const noiseField = (p: SCanvas) => {
 }
 
 const randomness1b = (p: SCanvas) => {
-  p.times(25, n => {
+  p.times(25, (n) => {
     p.setFillColor(175 + n, 80, 50, 0.4)
     const values = p
       .build(p.times, 50, () => p.gaussian())
@@ -179,10 +179,10 @@ const stackedCurves = (p: SCanvas) => {
     { n: 20, margin: 0.1 },
     ([x, y], [dX, dY], c, i) => {
       let sp = SimplePath.withPoints([])
-      p.times(10, n => {
+      p.times(10, (n) => {
         sp.addPoint([x + dX / 2 + p.gaussian({ sd: 0.01 }), y + (n * dY) / 10])
       })
-      p.downFrom(10, n => {
+      p.downFrom(10, (n) => {
         sp.addPoint([x - dX / 2 - p.gaussian({ sd: 0.01 }), y + (n * dY) / 10])
       })
       sp.close()
@@ -199,7 +199,7 @@ const stackedCurves2 = (p: SCanvas) => {
   const HUES = [190, 195, 200, 210, 215, 220, 170, 30, 40]
   p.background(40, 80, 95)
   let sp = SimplePath.withPoints([])
-  p.times(p.meta.bottom * 13, n => {
+  p.times(p.meta.bottom * 13, (n) => {
     sp.addPoint([-0.2 + p.gaussian({ sd: 0.01 }), n / 10])
   })
   p.draw(sp)
@@ -236,7 +236,7 @@ const minis = (p: SCanvas) => {
     p.withClipping(new Rect({ at: [x, y], w: dX, h: dY }), () => {
       p.background(i * 27, 20, 65)
       let nPt: Point2D = [cX, cY]
-      p.times(6, j => {
+      p.times(6, (j) => {
         p.setFillColor(i * 27 + j * 12, 90, 30, 0.3)
         nPt = p.perturb({ at: nPt, magnitude: dX / 1.5 })
         p.fill(new Circle({ at: nPt, r: dX / 2 }))
@@ -326,7 +326,7 @@ const explosion = (p: SCanvas) => {
   p.background(355, 70, 32)
   const N = 45
   p.withTranslation(p.meta.center, () => {
-    p.times(5, m => {
+    p.times(5, (m) => {
       const sp = SimplePath.withPoints([])
       p.aroundCircle({ at: [0, 0], r: 0.1 + 0.08 * m, n: 30 }, ([x, y]) => {
         sp.addPoint(p.perturb({ at: [x, y] }))
@@ -337,7 +337,7 @@ const explosion = (p: SCanvas) => {
     })
 
     p.setFillColor(45, 90, 100)
-    p.times(N, n => {
+    p.times(N, (n) => {
       p.withRotation((2 * Math.PI * n) / N, () => {
         const start = p.perturb({
           at: [0.1 + p.random() * 0.2, 0],
@@ -399,7 +399,7 @@ const contoured2 = (p: SCanvas) => {
   p.lineWidth = 0.005
   p.background(170, 40, 95)
 
-  p.times(30, n => {
+  p.times(30, (n) => {
     const sPerlin = (x, y) => perlin2(x * s + n / 50, y * s + n / 100)
     p.setStrokeColor(
       p.sample([150, 170, 75]),
@@ -480,7 +480,7 @@ const perturbedSpiral = (p: SCanvas) => {
 
   p.background(45, 85, 97)
   p.lineWidth = 0.001
-  p.times(800, n => {
+  p.times(800, (n) => {
     p.setStrokeColor(p.sample([220, 190, 215]), 50, p.sample([20, 40]))
     const pA = a + p.gaussian({ sd: Math.PI })
     p.draw(
@@ -525,7 +525,7 @@ const perturbedSpiral3 = (p: SCanvas) => {
   p.setStrokeColor(165, 70, 30)
 
   new Spiral({ at: p.meta.center, l: 0.05, n: 400 }).path.edges.forEach(
-    edge => {
+    (edge) => {
       p.draw(
         edge.rotated(p.gaussian({ sd: Math.PI / (10 + Math.cos(p.t * 2) * 8) }))
       )

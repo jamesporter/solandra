@@ -1,6 +1,7 @@
-import { Traceable, SimplePath } from "."
+import { Traceable } from "."
 import { Point2D } from "../types/sol"
 import { v } from ".."
+import { SimplePath } from "./SimplePath"
 
 export class Spiral implements Traceable {
   path: SimplePath

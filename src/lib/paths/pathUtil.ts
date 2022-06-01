@@ -1,4 +1,5 @@
-import { SimplePath, Traceable } from "."
+import { Traceable } from "."
+import { SimplePath } from "./SimplePath"
 
 /**
  * NB Not all canvas stuff supported, don't export this!

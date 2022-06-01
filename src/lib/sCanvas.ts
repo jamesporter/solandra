@@ -1,6 +1,7 @@
 import { Size, Point2D, Vector2D } from "./types/sol"
 import { hsla, ColorSpec } from "./colors"
-import { Traceable, TextConfig, Text, Rect } from "./paths"
+import { Traceable } from "./paths"
+import { TextConfig, Text, Rect } from "."
 import { RNG } from "./rng"
 
 export interface Gradientable {

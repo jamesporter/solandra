@@ -1,5 +1,5 @@
 import { Point2D } from "../types/sol"
-import { Ellipse } from "."
+import { Ellipse } from "./Ellipse"
 
 /**
  * Just an ellipse with width = height

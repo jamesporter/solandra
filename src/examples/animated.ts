@@ -1,12 +1,12 @@
 import SCanvas from "../lib/sCanvas"
-import { SimplePath, Rect } from "../lib/paths"
+import { SimplePath, Rect } from "../lib"
 import { add, scale } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
 import { scaler, scaler2d, Circle, clamp } from "../lib"
 
 const blob = (p: SCanvas) => {
   p.background(205, 55, 95)
-  const paths = p.build(p.times, 3, n =>
+  const paths = p.build(p.times, 3, (n) =>
     SimplePath.withPoints(
       p.build(p.aroundCircle, { n: 12, at: [0, 0] }, (pt, i) =>
         add(
@@ -19,7 +19,7 @@ const blob = (p: SCanvas) => {
       .chaiken({ n: 3, looped: true })
   )
 
-  paths.forEach(pt => {
+  paths.forEach((pt) => {
     p.withTranslation([0.5, 0.5], () => {
       p.withScale([1.2, 1.2], () => {
         p.setFillColor(205, 75, 90)
@@ -28,7 +28,7 @@ const blob = (p: SCanvas) => {
     })
   })
 
-  paths.forEach(pt => {
+  paths.forEach((pt) => {
     p.withTranslation([0.5, 0.5], () => {
       p.setFillColor(205, 75, 45)
       p.fill(pt)

@@ -47,7 +47,7 @@ export default function StatefulPreview<S>({
   return (
     <div className="m-4">
       <h3 className="text-md text-center font-semibold pb-4">{name}</h3>
-      <Link to={`/viewStateful?sketch=${id}`}>
+      <Link href={`/viewStateful?sketch=${id}`}>
         <canvas
           width={size}
           height={size}

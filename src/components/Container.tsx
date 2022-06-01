@@ -1,10 +1,10 @@
 import React from "react"
 
-export default function({
+export default function Container({
   children,
   minHeight,
 }: {
-  children
+  children: React.ReactNode
   minHeight?: string
 }) {
   return (

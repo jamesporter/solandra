@@ -1,9 +1,8 @@
 import { Point2D } from "../lib/types/sol"
 import SCanvas from "../lib/sCanvas"
-import { SimplePath } from "../lib/paths"
 import { perlin2 } from "../lib/noise"
 import { RadialGradient } from "../lib/gradient"
-import { clamp, isoTransform } from "../lib"
+import { clamp, isoTransform, SimplePath } from "../lib"
 
 const isometricExample = (p: SCanvas) => {
   const { bottom, right } = p.meta
@@ -12,9 +11,9 @@ const isometricExample = (p: SCanvas) => {
   p.withTranslation([right / 2, bottom * 0.8], () => {
     // 1/200 of width = height of 1 unit
     const iso = isoTransform(0.005)
-    p.times(10, n => {
+    p.times(10, (n) => {
       const sp = SimplePath.withPoints([])
-      p.times(100, m => {
+      p.times(100, (m) => {
         // adjust all x,y,z for vertical size: as in isometric all get scaled linearly in vertical direction
         sp.addPoint(
           iso([
@@ -40,8 +39,8 @@ const isometricExample2 = (p: SCanvas) => {
   p.background(30, 20, 85)
   p.withTranslation([right / 2, bottom * 0.9], () => {
     const iso = isoTransform(0.05 * bottom)
-    p.downFrom(10, n => {
-      p.downFrom(10, m => {
+    p.downFrom(10, (n) => {
+      p.downFrom(10, (m) => {
         let sp = SimplePath.withPoints([])
         const h = clamp({ from: -3, to: 6 }, p.poisson(4) - 3)
         sp.addPoint(iso([n, h, m]))
@@ -83,8 +82,8 @@ const isometricExample3 = (p: SCanvas) => {
   p.setStrokeColor(30, 10, 30)
   p.withTranslation([right / 2, bottom * 0.9], () => {
     const iso = isoTransform(0.05 * bottom)
-    p.downFrom(10, n => {
-      p.downFrom(10, m => {
+    p.downFrom(10, (n) => {
+      p.downFrom(10, (m) => {
         const sp = SimplePath.withPoints([])
         const h = clamp(
           { from: -2, to: 5 },
@@ -114,8 +113,8 @@ const isometricExample4 = (p: SCanvas) => {
   p.setStrokeColor(30, 5, 20)
   p.withTranslation([right / 2, bottom * 0.9], () => {
     const iso = isoTransform(0.05 * bottom)
-    p.downFrom(10, n => {
-      p.downFrom(10, m => {
+    p.downFrom(10, (n) => {
+      p.downFrom(10, (m) => {
         const h = perlin2(n / 5, m / 10) * 5 + 4
 
         const sp = SimplePath.withPoints([])
@@ -153,8 +152,8 @@ const isometricExample5 = (p: SCanvas) => {
 
     const h = (x, y) => 2 + 5 * perlin2(x / 5 + p.t, y / 10 + p.t * 0.5)
 
-    p.downFrom(11, n => {
-      p.downFrom(11, m => {
+    p.downFrom(11, (n) => {
+      p.downFrom(11, (m) => {
         p.doProportion(0.8, () => {
           const sp = SimplePath.withPoints([])
 
@@ -185,9 +184,9 @@ const isometricExample6 = (p: SCanvas) => {
   // make origin a point centred horizontally, but near bottom
   p.withTranslation([right / 2, bottom * 0.95], () => {
     const iso = isoTransform(0.05 * bottom)
-    p.downFrom(11, n => {
-      p.downFrom(11, m => {
-        p.times(3, k => {
+    p.downFrom(11, (n) => {
+      p.downFrom(11, (m) => {
+        p.times(3, (k) => {
           p.doProportion(1 - (k + 1) / 6, () => {
             const h = (x, y) =>
               k * 2 + 2 * perlin2(x / 5 + p.t, y / 10 + p.t * 0.5)
@@ -231,7 +230,7 @@ const isometricExample7 = (p: SCanvas) => {
   p.withTranslation([right / 2, bottom * 0.95], () => {
     const iso = isoTransform(0.05 * bottom)
 
-    p.times(7, hr => {
+    p.times(7, (hr) => {
       const h = hr + Math.cos(p.t)
       p.setFillColor(h * 10, 90, 50, 0.95)
       const sp = SimplePath.withPoints([])
@@ -308,7 +307,10 @@ const isometricExample8 = (p: SCanvas) => {
       rStart: 0,
       end: p.meta.center,
       rEnd: 0.6,
-      colors: [[0, { h: 0, s: 0, l: 90 }], [1, { h: 215, s: 80, l: 30 }]],
+      colors: [
+        [0, { h: 0, s: 0, l: 90 }],
+        [1, { h: 215, s: 80, l: 30 }],
+      ],
     })
   )
 
@@ -332,7 +334,7 @@ const isometricExample8 = (p: SCanvas) => {
       iso([x, y - 0.5, z + 1]),
       iso([x, y, z + 1]),
     ]
-    p.times(7, y => {
+    p.times(7, (y) => {
       p.times(7, () => {
         const x = p.uniformRandomInt({ from: 0, to: 10 })
         const z = p.uniformRandomInt({ from: 0, to: 10 })
@@ -472,7 +474,10 @@ const lorenz = (p: SCanvas) => {
       end: center,
       rStart: 0,
       rEnd: 0.65,
-      colors: [[0, { h: 215, s: 80, l: 40 }], [1, { h: 215, s: 80, l: 10 }]],
+      colors: [
+        [0, { h: 215, s: 80, l: 40 }],
+        [1, { h: 215, s: 80, l: 10 }],
+      ],
     })
   )
   p.lineWidth = 0.005 * bottom

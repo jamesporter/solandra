@@ -1,13 +1,13 @@
 import type { NextPage } from "next"
 import Head from "next/head"
 import { Canvas } from "../src/components/Canvas"
-// import CodeAndSketch from "../src/components/CodeAndSketch"
-// import ExampleLinks from "../src/components/ExampleLinks"
-// import Footer from "../src/components/Footer"
+import CodeAndSketch from "../src/components/CodeAndSketch"
+import ExampleLinks from "../src/components/ExampleLinks"
+import Footer from "../src/components/Footer"
 import HLink from "../src/components/HLink"
 import { H1, H2, P } from "../src/components/Text"
 import { ViewAll } from "../src/components/ViewAll"
-import { SCanvas } from "../src/lib"
+import { Rect, SCanvas } from "../src/lib"
 import { RegularPolygon } from "../src/lib/paths/RegularPolygon"
 
 const logo = (p: SCanvas) => {
@@ -83,7 +83,7 @@ const Home: NextPage = () => {
           <ViewAll />
         </div>
 
-        {/*<p className="py-2 pb-8 text-sm text-center">
+        <p className="py-2 pb-8 text-sm text-center">
           Use Arrow keys or click to navigate
         </p>
 
@@ -108,8 +108,8 @@ const Home: NextPage = () => {
           <li className="pb-1">Points are [number, number].</li>
           <li className="pb-1">Colours in hsl(a).</li>
           <li className="pb-1">
-            Leverage TypeScript: you shouldn't need to learn much, autocomplete
-            and type checking should have your back.
+            Leverage TypeScript: you shouldn&apos;t need to learn much,
+            autocomplete and type checking should have your back.
           </li>
           <li className="pb-1">Not for beginners.</li>
           <li className="pb-1">
@@ -118,7 +118,7 @@ const Home: NextPage = () => {
           <li className="pb-1">Zero dependencies.</li>
           <li className="pb-1">Performance is not the goal.</li>
           <li className="pb-1">
-            Common algorthmic art things (e.g. randomness) should be easy.
+            Common algorithmic art things (e.g. randomness) should be easy.
           </li>
           <li className="pb-1">Should feel fun/powerful.</li>
           <li className="pb-1">Life is too short to compile things.</li>
@@ -134,9 +134,9 @@ const Home: NextPage = () => {
         <H1>Tutorial</H1>
 
         <P>
-          Let's make the animated logo thing above to learn about how to use
-          Solandra. Let's start with the background. The only way to do colours
-          in Solandra is via HSL(A). Hue (0-360), Saturation (0-100) and
+          Let&apos;s make the animated logo thing above to learn about how to
+          use Solandra. Let&apos;s start with the background. The only way to do
+          colours in Solandra is via HSL(A). Hue (0-360), Saturation (0-100) and
           Brightness (0-100). Oh and alpha (0-1). RGB is for computers not for
           you.
         </P>
@@ -154,10 +154,10 @@ const Home: NextPage = () => {
         />
 
         <P>
-          That's a bit boring. Let's draw something. First we set a fill colour.
-          Then we use a fill call (to draw lines use draw instead). Solandra
-          comes with loads of standard built in shapes, with clear, declarative
-          APIs (you describe the shape).
+          That&apos;s a bit boring. Let&apos;s draw something. First we set a
+          fill colour. Then we use a fill call (to draw lines use draw instead).
+          Solandra comes with loads of standard built in shapes, with clear,
+          declarative APIs (you describe the shape).
         </P>
 
         <CodeAndSketch
@@ -176,8 +176,8 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
         </P>
 
         <P>
-          Let's draw many shapes. But we'll make the computer do the hard bit.
-          What if we could just ask it to tile our canvas? We can.
+          Let&apos;s draw many shapes. But we&apos;ll make the computer do the
+          hard bit. What if we could just ask it to tile our canvas? We can.
         </P>
 
         <CodeAndSketch
@@ -201,21 +201,21 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
         />
 
         <P>
-          First we configure out tiling: 10 tiles across, square shape. Let's
-          add a margin (that would be really tedious by hand).
+          First we configure out tiling: 10 tiles across, square shape.
+          Let&apos;s add a margin (that would be really tedious by hand).
         </P>
 
         <P>
-          Now let's use our tiling. That's a lot of arguments. But it doesn't
-          matter. TypeScript keeps track of them. They are the position, tile
-          size, tile centre and iteration count. We'll use the last one to pick
-          a colour.
+          Now let&apos;s use our tiling. That&apos;s a lot of arguments. But it
+          doesn&apos;t matter. TypeScript keeps track of them. They are the
+          position, tile size, tile centre and iteration count. We&apos;ll use
+          the last one to pick a colour.
         </P>
 
         <P>
-          Let's draw polygons instead. Instead of tiling, let's move across our
-          canvas. The API is basically the same. Configuration goes first (we
-          can then easily tweak it).
+          Let&apos;s draw polygons instead. Instead of tiling, let&apos;s move
+          across our canvas. The API is basically the same. Configuration goes
+          first (we can then easily tweak it).
         </P>
 
         <CodeAndSketch
@@ -260,7 +260,9 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
           playing
         />
 
-        <P>Okay so let's put everything together and draw our animated logo.</P>
+        <P>
+          Okay so let&apos;s put everything together and draw our animated logo.
+        </P>
 
         <CodeAndSketch
           code={`(p: SCanvas) => {
@@ -289,7 +291,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
 
         <ExampleLinks />
 
-        <Footer /> */}
+        <Footer />
       </main>
     </div>
   )
