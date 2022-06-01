@@ -1,34 +1,69 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Solandra
 
-## Getting Started
+## Principles
 
-First, run the development server:
+Opionated, agile (code is easy to change) framework for algorithmic art. See my [essays](https://www.amimetic.co.uk/art/) for research/plans that went into this!
 
-```bash
-npm run dev
-# or
-yarn dev
+- Sketches always have width 1, height depends on aspect ratio.
+- Angles in radians.
+- Points are [number, number].
+- Colours in hsl(a).
+- Leverage TypeScript: you shouldn't need to learn much, autocomplete and type checking should have your back.
+- Not for beginners.
+- Control flow at level of drawing (tiling, partitions etc).
+- Few dependencies/mostly from scratch.
+- Performance is not the goal.
+- Common algorthmic art things (e.g. randomness) should be easy.
+- Should feel fun/powerful.
+- Life is too short to compile things.
+- Rethink APIs e.g. standard bezier curve APIs make absolutely no sense
+- Declarative when possible (especially anything configuration-y), procedural when pragmatic; make it easy to explore/change your mind.
+
+![Examples](/samples/samples.png)
+
+## Get Started
+
+- On CodeSandbox, quickly get started: [Simple editable sketch](https://codesandbox.io/s/simple-solandra-example-2-wy7nx?fontsize=14)
+- Clone [this project](https://github.com/jamesporter/solandra) to try out as add React powered GUI around stuff but first see: [Live Demo](https://solandra.netlify.com/).
+- On [NPM](https://www.npmjs.com/package/solandra). Install with `npm i solandra` or `yarn add solandra`.
+
+Or if you want to play, install gatsby cli, clone this repo and start by
+
+```
+yarn
+gatsby develop
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:8000](http://localhost:8000) and in your editor `sketches.ts` and try things out. It does things like the below
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+![A simple example drawn with tiles](tiles.png)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+```typescript
+p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
+  p.lineStyle = { cap: "round" }
+  p.proportionately([
+    [
+      1,
+      () => {
+        p.setStrokeColour(120 + x * 120, 90 - 20 * y, 40)
+        p.drawLine([x, y], [x + dX, y + dY])
+      },
+    ],
+    [
+      2,
+      () => {
+        p.setStrokeColour(120 + x * 120, 90 - 20 * y, 40)
+        p.drawLine([x + dX, y], [x, y + dY])
+      },
+    ],
+  ])
+})
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+![An example](samples/1.png)
 
-## Learn More
+![An example](samples/2.png)
 
-To learn more about Next.js, take a look at the following resources:
+![An example](samples/3.png)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+![An example](samples/4.png)

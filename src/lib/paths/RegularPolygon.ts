@@ -1,6 +1,7 @@
-import { Traceable, SimplePath } from "."
+import { Traceable } from "."
 import { Point2D } from "../types/sol"
 import { traceSimplePath } from "./pathUtil"
+import { SimplePath } from "./SimplePath"
 
 export class RegularPolygon implements Traceable {
   constructor(
