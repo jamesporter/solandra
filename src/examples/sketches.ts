@@ -54,3 +54,7 @@ framework. Click on Source Code to see how things work.`,
 }
 
 export default sketches
+
+export const sketchKinds = Object.keys(sketches) as SketchKind[]
+
+export type SketchKind = keyof typeof sketches

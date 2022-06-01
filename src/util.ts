@@ -1,3 +1,5 @@
+import { SketchKind, sketchKinds } from "./examples/sketches"
+
 export const getNumber = (key: string): number | null => {
   const raw = global.localStorage && localStorage.getItem(key)
   if (raw) {
@@ -45,12 +47,17 @@ export const getSketchIdx = (): null | number => {
   }
 }
 
-export const getSketchCategory = (): null | number => {
+export const getSketchCategory = (): SketchKind => {
   try {
     const params = new URL(document.location).searchParams
-    return params.get("category")
+    const k = params.get("category")
+    if (sketchKinds.includes(k as any)) {
+      return k as SketchKind
+    } else {
+      return "Highlights"
+    }
   } catch (ex) {
-    return null
+    return "Highlights"
   }
 }
 
