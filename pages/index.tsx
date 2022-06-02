@@ -112,7 +112,7 @@ const Home: NextPage = () => {
             <ViewAll />
 
             <Link href="/viewAll">
-              <a className="absolute bottom-0 right-0 bg-slate-800 bg-opacity-30 rounded-tl-xl">
+              <a className="absolute bottom-0 right-0 bg-slate-800  bg-opacity-30 hover:bg-opacity-60 rounded-tl-xl">
                 <ArrowsExpandIcon className="text-white h-6 w-6 m-2" />
               </a>
             </Link>
@@ -133,15 +133,9 @@ const Home: NextPage = () => {
             >
               essays
             </a>{" "}
-            for research/plans that went into this!
+            for research/plans that went into this.
           </p>
           <ul className="list-inside list-disc">
-            <li className="pb-1">
-              Sketches always have width 1, height depends on aspect ratio.
-            </li>
-            <li className="pb-1">Angles in radians.</li>
-            <li className="pb-1">Points are [number, number].</li>
-            <li className="pb-1">Colours in hsl(a).</li>
             <li className="pb-1">
               Leverage TypeScript: you shouldn&apos;t need to learn much,
               autocomplete and type checking should have your back.
@@ -150,23 +144,36 @@ const Home: NextPage = () => {
             <li className="pb-1">
               Control flow at level of drawing (tiling, partitions etc).
             </li>
-            <li className="pb-1">Zero dependencies.</li>
             <li className="pb-1">Performance is not the goal.</li>
             <li className="pb-1">
               Common algorithmic art things (e.g. randomness) should be easy.
             </li>
             <li className="pb-1">Should feel fun/powerful.</li>
             <li className="pb-1">Life is too short to compile things.</li>
-            <li className="pb-1">
-              Rethink APIs e.g. standard bezier curve APIs make absolutely no
-              sense
-            </li>
+            <li className="pb-1">Rethink standard APIs</li>
             <li className="pb-1">
               Declarative when possible (especially anything configuration-y),
               procedural when pragmatic; make it easy to explore/change your
               mind.
             </li>
           </ul>
+
+          <h1>Practice</h1>
+          <p>Some of the practical implications:</p>
+
+          <ul className="list-inside list-disc">
+            <li className="pb-1">
+              Sketches always have width 1, height depends on aspect ratio.
+            </li>
+            <li className="pb-1">Angles in radians.</li>
+            <li className="pb-1">Points are [number, number].</li>
+            <li className="pb-1">Colours in hsl(a).</li>
+            <li className="pb-1">
+              Novel curve drawing API, as standard bezier curve APIs make
+              absolutely no sense for humans to think about.
+            </li>
+          </ul>
+
           <h1>Tutorial</h1>
 
           <p>
@@ -326,6 +333,11 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
 
           <h1>Examples</h1>
 
+          <p>
+            This website has loads of examples of using Solandra, all with
+            source code.
+          </p>
+
           <ExampleLinks />
 
           <h1>Other Platforms</h1>
@@ -334,8 +346,10 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
             You can also use a version of solandra for SVG rendering and with
             Flutter.
           </p>
+        </div>
 
-          <div className="bg-gray-800 text-white rounded-xl p-4 shadow-lg">
+        <div className="flex flex-row flex-wrap md:gap-4 justify-center">
+          <div className="bg-gray-800 text-white md:rounded-xl p-4 md:shadow-lg max-w-lg flex flex-col gap-y-4">
             <h3 className="font-bold text-4xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-rose-600 inline-block">
               Solandra Flutter
             </h3>
@@ -355,7 +369,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
               <img
                 src="/images/solandra-flutter.png"
                 alt="Example of Solandra Flutter App"
-                className="max-w-md m-auto"
+                className="m-auto"
               />
             </a>
 
@@ -382,7 +396,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
             </div>
           </div>
 
-          <div className="bg-sky-800 text-white rounded-xl p-4 shadow-lg mt-8">
+          <div className="bg-sky-800 text-white md:rounded-xl p-4 md:shadow-lg max-w-lg flex flex-col gap-y-4">
             <h3 className="font-bold text-4xl text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-sky-500 inline-block">
               Solandra SVG
             </h3>
@@ -436,6 +450,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
             </div>
           </div>
         </div>
+
         <Footer />
       </main>
     </>
