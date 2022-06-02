@@ -314,6 +314,11 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
+"@heroicons/react@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@heroicons/react/-/react-1.0.6.tgz#35dd26987228b39ef2316db3b1245c42eb19e324"
+  integrity sha512-JJCXydOFWMDpCP4q13iEplA503MQO3xLoZiKum+955ZCtHINWnx26CUxVxxFQu/uLb4LW3ge15ZpzIkXKkJ8oQ==
+
 "@humanwhocodes/config-array@^0.9.2":
   version "0.9.5"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.9.5.tgz#2cbaf9a89460da24b5ca6531b8bbfc23e1df50c7"
@@ -3537,6 +3542,11 @@ slash@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
+
+solandra-svg@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/solandra-svg/-/solandra-svg-0.3.1.tgz#4fdd76d4e27d01a0d9ab018648fdcdeab0a11ee4"
+  integrity sha512-P+2QaZHTzLR9QrzCYNpIKR4X80PlpNoUiFgynn9XFV5Nn9UwfdNZZQvnRpPELnnB0fIgxjqbLG11vfDKsc+FUQ==
 
 source-map-js@^1.0.1, source-map-js@^1.0.2:
   version "1.0.2"

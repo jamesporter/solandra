@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import type { NextPage } from "next"
 import Head from "next/head"
 import { Canvas } from "../src/components/Canvas"
@@ -8,6 +9,14 @@ import HLink from "../src/components/HLink"
 import { ViewAll } from "../src/components/ViewAll"
 import { Rect, SCanvas } from "../src/lib"
 import { RegularPolygon } from "../src/lib/paths/RegularPolygon"
+import {
+  ArrowsExpandIcon,
+  CodeIcon,
+  DownloadIcon,
+  InformationCircleIcon,
+} from "@heroicons/react/outline"
+import Link from "next/link"
+import { SVGSketch } from "../src/components/SVGSketch"
 
 const logo = (p: SCanvas) => {
   const { bottom, right, center } = p.meta
@@ -77,7 +86,7 @@ const Home: NextPage = () => {
               Solandra
             </h1>
             <h2 className="text-gray-100 text-center text-3xl">
-              A simple, modern TypeScript-first Algorithmic Art Tool
+              A modern TypeScript-first Creative Coding Framework
             </h2>
             <div className="flex flex-row justify-center pt-4">
               <HLink to="/main">Examples</HLink>
@@ -91,16 +100,23 @@ const Home: NextPage = () => {
           <h1>Slideshow</h1>
           <div
             style={{
-              width: "100%",
               maxWidth: "640px",
               height: "32rem",
               display: "flex",
               flexDirection: "column",
               alignSelf: "center",
+              margin: "auto",
+              position: "relative",
             }}
-            className="shadow-lg select-none"
+            className="shadow-lg select-none rounded-xl overflow-hidden"
           >
             <ViewAll />
+
+            <Link href="/viewAll">
+              <a className="absolute bottom-0 right-0 bg-slate-800 bg-opacity-30 rounded-tl-xl">
+                <ArrowsExpandIcon className="text-white h-6 w-6 m-2" />
+              </a>
+            </Link>
           </div>
 
           <p className="py-2 pb-8 text-sm text-center">
@@ -312,6 +328,114 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
           <h1>Examples</h1>
 
           <ExampleLinks />
+
+          <h1>Other Platforms</h1>
+
+          <p>
+            You can also use a version of solandra for SVG rendering and with
+            Flutter.
+          </p>
+
+          <div className="bg-gray-800 text-white rounded-xl p-4 shadow-lg">
+            <h3 className="font-bold text-4xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-rose-600 inline-block">
+              Solandra Flutter
+            </h3>
+            <p>
+              Flutter is a cross platform framework for creating applications.
+              You can make native iOS, Android, Mac, Windows and Linux Apps. You
+              can also deploy to the web. Unlike most native app development
+              environments it supports hot (stateful) reload; which is great for
+              working on interactive applications.
+            </p>
+
+            <a
+              href="https://solandra-flutter.netlify.app/#/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img
+                src="/images/solandra-flutter.png"
+                alt="Example of Solandra Flutter App"
+                className="max-w-md m-auto"
+              />
+            </a>
+
+            <div className="flex flex-col mt-4">
+              <a
+                href="https://github.com/jamesporter/solandra-flutter"
+                target="_blank"
+                rel="noreferrer"
+                className="flex flex-row gap-x-4 items-center p-2 hover:bg-gradient-to-r from-amber-400 to-rose-500 hover:text-sky-900 rounded-lg"
+              >
+                <CodeIcon className="h-8 w-8" />
+                Documentation and Source Code
+              </a>
+
+              <a
+                href="https://pub.dev/packages/solandra"
+                target="_blank"
+                rel="noreferrer"
+                className="flex flex-row gap-x-4 items-center p-2 hover:bg-gradient-to-r from-amber-400 to-rose-500 hover:text-sky-900 rounded-lg"
+              >
+                <DownloadIcon className="h-8 w-8" />
+                Dart Package on Pub
+              </a>
+            </div>
+          </div>
+
+          <div className="bg-sky-800 text-white rounded-xl p-4 shadow-lg mt-8">
+            <h3 className="font-bold text-4xl text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-sky-500 inline-block">
+              Solandra SVG
+            </h3>
+            <p>
+              Solandra SVG allows for the creation of vector graphics with many
+              of Solandra's APIs. I created it to make images for plotters and
+              experimented with a fluent/chained API.
+            </p>
+
+            <a
+              href="https://solandra-svg.netlify.app/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <SVGSketch
+                sketch={(s) => {
+                  s.times(40, () => {
+                    s.strokedPath((attr) =>
+                      attr.fill(s.sample([220, 210, 320, 175]), 90, 50, 0.1)
+                    )
+                      .moveTo(s.randomPoint())
+                      .arcTo(s.randomPoint())
+                  })
+                }}
+                width={100}
+                height={100}
+                className="max-w-md m-auto w-full bg-white"
+              />
+            </a>
+
+            <div className="flex flex-col mt-4">
+              <a
+                href="https://github.com/jamesporter/solandra-svg"
+                target="_blank"
+                rel="noreferrer"
+                className="flex flex-row gap-x-4 items-center p-2 hover:bg-gradient-to-r from-emerald-400 to-sky-500  rounded-lg"
+              >
+                <CodeIcon className="h-8 w-8" />
+                Source Code
+              </a>
+
+              <a
+                href="https://solandra-svg.netlify.app/"
+                target="_blank"
+                rel="noreferrer"
+                className="flex flex-row gap-x-4 items-center p-2 hover:bg-gradient-to-r from-emerald-400 to-sky-500  rounded-lg"
+              >
+                <InformationCircleIcon className="h-8 w-8" />
+                Documentation
+              </a>
+            </div>
+          </div>
         </div>
         <Footer />
       </main>

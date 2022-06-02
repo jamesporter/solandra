@@ -1,5 +1,4 @@
 import Header from "../components/Header"
-import { H1 } from "../components/Text"
 import ExampleLinks from "../components/ExampleLinks"
 import Footer from "../components/Footer"
 import sketches, { SketchKind } from "../examples/sketches"
@@ -12,8 +11,10 @@ export function Main({ category }: { category: string }) {
 
       <ExampleLinks />
 
-      <H1>{category}</H1>
-      <p className="text-center max-w-xl m-auto">
+      <h1 className="text-4xl text-sky-700 mt-16 mb-4 text-center">
+        {category}
+      </h1>
+      <p className="text-center max-w-xl m-auto mb-12">
         {sketches[category as SketchKind].description}
       </p>
 

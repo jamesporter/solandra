@@ -17,11 +17,13 @@
     "build:cjs": "yarn tsc -p tsconfig-cjs.json"
   },
   "dependencies": {
+    "@heroicons/react": "^1.0.6",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-syntax-highlighter": "^15.5.0",
-    "react-use-dimensions": "^1.2.1"
+    "react-use-dimensions": "^1.2.1",
+    "solandra-svg": "^0.3.1"
   },
   "devDependencies": {
     "@types/jest": "^28.1.0",
