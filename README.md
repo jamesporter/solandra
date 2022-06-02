@@ -2,7 +2,7 @@
 
 ## Principles
 
-Opionated, agile (code is easy to change) framework for algorithmic art. See my [essays](https://www.amimetic.co.uk/art/) for research/plans that went into this!
+Opinionated, agile (code is easy to change) framework for algorithmic art. See my [essays](https://www.amimetic.co.uk/art/) for research/plans that went into this!
 
 - Sketches always have width 1, height depends on aspect ratio.
 - Angles in radians.
@@ -13,7 +13,7 @@ Opionated, agile (code is easy to change) framework for algorithmic art. See my 
 - Control flow at level of drawing (tiling, partitions etc).
 - Few dependencies/mostly from scratch.
 - Performance is not the goal.
-- Common algorthmic art things (e.g. randomness) should be easy.
+- Common algorithmic art things (e.g. randomness) should be easy.
 - Should feel fun/powerful.
 - Life is too short to compile things.
 - Rethink APIs e.g. standard bezier curve APIs make absolutely no sense
