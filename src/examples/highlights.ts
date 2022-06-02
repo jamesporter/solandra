@@ -710,7 +710,7 @@ const contoured3 = (p: SCanvas) => {
   p.background(190, 80, 80)
 
   p.times(20, (n) => {
-    const sPerlin = (x, y) =>
+    const sPerlin = (x: number, y: number) =>
       perlin2(p.random() + x * s + n / 50, y * s + n / 100)
     p.setFillColor(
       p.sample([220, 170]),

@@ -122,10 +122,6 @@ const QuickStart = () => (
       You can get a{" "}
       <A href="https://github.com/jamesporter/solandra/tree/master/src/docs/cheat-sheet.md">
         markdown cheat sheet
-      </A>{" "}
-      or{" "}
-      <A href="https://github.com/jamesporter/solandra/tree/master/src/docs/cheat-sheet.pdf">
-        PDF cheat sheet (for printing)
       </A>
       .
     </div>
@@ -133,7 +129,7 @@ const QuickStart = () => (
     <div className="start-item-text">
       To start coding: clone{" "}
       <A href="https://github.com/jamesporter/solandra">this project</A> to try
-      out as add React/Gatsby powered GUI around stuff.
+      out as add React/NextJS powered GUI around stuff.
     </div>
     <div className="start-item-text">
       On <A href="https://www.npmjs.com/package/solandra">NPM</A>. Install with{" "}

@@ -1,3 +1,55 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.hljs-comment {
+  color: hsl(214, 32%, 60%);
+}
+
+.hljs-keyword {
+  color: #f6ad55;
+}
+
+.hljs-string {
+  color: #c6f6d5;
+}
+
+.hljs-variable {
+  color: #81e6d9;
+}
+
+.hljs-function {
+  color: #63b3ed;
+}
+
+.hljs-number {
+  color: #f687b3;
+}
+
+.hljs-built_in {
+  color: #c3dafe;
+}
+
+.main-link {
+  border-bottom: 4px solid rgb(26, 33, 45);
+}
+
+.main-link:hover {
+  border-bottom: 4px solid #90cdf4;
+}
+
+.main-link.active-link {
+  border-bottom: 4px solid #90cdf4;
+}
+
+.start-item img {
+  margin: auto;
+  display: block;
+  padding: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.start-item-text {
+  padding-bottom: 10px;
+}

@@ -359,7 +359,7 @@ const contoured = (p: SCanvas) => {
   let s = 3
   p.lineWidth = 0.005
   p.background(0, 30, 96)
-  const sPerlin = (x, y) => perlin2(x * s, y * s)
+  const sPerlin = (x: number, y: number) => perlin2(x * s, y * s)
   p.times(40, () => {
     p.setStrokeColor(
       p.sample([215, 200, 0]),
@@ -400,7 +400,8 @@ const contoured2 = (p: SCanvas) => {
   p.background(170, 40, 95)
 
   p.times(30, (n) => {
-    const sPerlin = (x, y) => perlin2(x * s + n / 50, y * s + n / 100)
+    const sPerlin = (x: number, y: number) =>
+      perlin2(x * s + n / 50, y * s + n / 100)
     p.setStrokeColor(
       p.sample([150, 170, 75]),
       p.sample([50, 80]),

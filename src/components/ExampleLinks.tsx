@@ -9,21 +9,13 @@ export default function ExampleLinks() {
       {areaName.map((areaName, i) => (
         <Link
           className="text-blue-400 text-md px-4 hover:text-blue-800 w-32 p-2 text-center"
+          // @ts-expect-error
           href={sketches[areaName].path}
-          activeClassName="text-blue-700"
           key={i}
         >
           {areaName}
         </Link>
       ))}
-      <Link
-        className="text-blue-400 text-md px-4 hover:text-blue-800 w-32 p-2 text-center"
-        href="/stateful"
-        activeClassName="text-blue-700"
-        key={-1}
-      >
-        Stateful
-      </Link>
     </div>
   )
 }

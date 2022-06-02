@@ -11,9 +11,9 @@ import {
   getSketchIdx,
   setNumber,
 } from "../src/util"
-// @ts-expect-error
 import SyntaxHighlighter from "react-syntax-highlighter"
 import { Canvas } from "../src/components/Canvas"
+import source from "../src/data/source.json"
 
 export const INDEX_KEY = "play-ts.index"
 export const SEED_KEY = "play-ts.seed"
@@ -116,6 +116,7 @@ function ViewSingle() {
             <div className="p-8 text-gray-300">
               <SyntaxHighlighter language="typescript" useInlineStyles={false}>
                 {
+                  // @ts-expect-error
                   source[sketches[category].fileName][
                     sketches[category].sketches[sketchNo].name
                   ]

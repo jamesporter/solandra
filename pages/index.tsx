@@ -38,7 +38,7 @@ const Home: NextPage = () => {
           name="description"
           content="A human friendly, agile framework for creative coding"
         />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" href="/images/icon.png" />
       </Head>
 
       <main className="">

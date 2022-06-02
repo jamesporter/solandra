@@ -20,7 +20,7 @@ for (let f of files) {
 
   const examples = {}
 
-  matches.forEach(m => {
+  matches.forEach((m) => {
     const name = m.match(/const (.*?)(?= )/)[1]
     const code = m
 
@@ -33,13 +33,13 @@ for (let f of files) {
 
   source
     .match(/{ sketch: ([^,]*), name: "([^"]*)" }/gi)
-    .map(nm => nm.match(/{ sketch: ([^,]*), name: "([^"]*)" }/i).slice(1, 3))
+    .map((nm) => nm.match(/{ sketch: ([^,]*), name: "([^"]*)" }/i).slice(1, 3))
     .forEach(([n, l]) => (names[n] = l))
 
   // console.log(names)
 
   const esForF = {}
-  Object.keys(names).forEach(name => {
+  Object.keys(names).forEach((name) => {
     esForF[names[name]] = examples[name]
   })
 
@@ -51,6 +51,6 @@ for (let f of files) {
 // console.log(exampleScripts)
 
 fs.writeFileSync(
-  path.join("src", "app", "examples.json"),
+  path.join("src", "data", "source.json"),
   JSON.stringify(exampleScripts, null, 2)
 )

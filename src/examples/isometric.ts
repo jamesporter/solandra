@@ -150,7 +150,8 @@ const isometricExample5 = (p: SCanvas) => {
   p.withTranslation([right / 2, bottom * 0.95], () => {
     const iso = isoTransform(0.05 * bottom)
 
-    const h = (x, y) => 2 + 5 * perlin2(x / 5 + p.t, y / 10 + p.t * 0.5)
+    const h = (x: number, y: number) =>
+      2 + 5 * perlin2(x / 5 + p.t, y / 10 + p.t * 0.5)
 
     p.downFrom(11, (n) => {
       p.downFrom(11, (m) => {
@@ -188,7 +189,7 @@ const isometricExample6 = (p: SCanvas) => {
       p.downFrom(11, (m) => {
         p.times(3, (k) => {
           p.doProportion(1 - (k + 1) / 6, () => {
-            const h = (x, y) =>
+            const h = (x: number, y: number) =>
               k * 2 + 2 * perlin2(x / 5 + p.t, y / 10 + p.t * 0.5)
 
             const sp = SimplePath.withPoints([])
@@ -321,14 +322,14 @@ const isometricExample8 = (p: SCanvas) => {
   p.withTranslation([right / 2, bottom * 0.95], () => {
     const iso = isoTransform(0.05 * bottom)
 
-    const top = (x, y, z) => [
+    const top = (x: number, y: number, z: number) => [
       iso([x + 0, y, z + 0]),
       iso([x + 1, y, z + 0]),
       iso([x + 1, y, z + 1]),
       iso([x + 0, y, z + 1]),
     ]
 
-    const left = (x, y, z) => [
+    const left = (x: number, y: number, z: number) => [
       iso([x, y, z + 0]),
       iso([x, y - 0.5, z + 0]),
       iso([x, y - 0.5, z + 1]),
@@ -367,35 +368,44 @@ const isometricExample9 = (p: SCanvas) => {
     const iso = isoTransform(0.1 * bottom)
 
     // Experimenting with helper functions... probably want to include in framework or as helpers somehow?
-    const top = (x, y, z, s) => [
+    const top = (x: number, y: number, z: number, s: number) => [
       iso([x, y, z]),
       iso([x + s, y, z]),
       iso([x + s, y, z + s]),
       iso([x, y, z + s]),
     ]
 
-    const left = (x, y, z, s) => [
+    const left = (x: number, y: number, z: number, s: number) => [
       iso([x, y, z]),
       iso([x, y - s, z + 0]),
       iso([x, y - s, z + s]),
       iso([x, y, z + s]),
     ]
 
-    const right = (x, y, z, s) => [
+    const right = (x: number, y: number, z: number, s: number) => [
       iso([x, y, z]),
       iso([x + s, y, z]),
       iso([x + s, y - s, z]),
       iso([x, y - s, z]),
     ]
 
-    const shade = (fn, x, y, z, s, h, sat = 40, l = 50) => {
+    const shade = (
+      fn: (a: number, b: number, c: number, d: number) => Point2D[],
+      x: number,
+      y: number,
+      z: number,
+      s: number,
+      h: number,
+      sat = 40,
+      l = 50
+    ) => {
       p.setFillColor(h, sat, l, 0.95)
       const sp = SimplePath.withPoints(fn(x, y, z, s)).close()
       p.fill(sp)
       p.draw(sp)
     }
 
-    const cube = (x, y, z, s) => {
+    const cube = (x: number, y: number, z: number, s: number) => {
       shade(top, x, y, z, s, 200)
       shade(left, x, y, z, s, 180)
       shade(right, x, y, z, s, 350)

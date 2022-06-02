@@ -27,14 +27,19 @@ Opionated, agile (code is easy to change) framework for algorithmic art. See my 
 - Clone [this project](https://github.com/jamesporter/solandra) to try out as add React powered GUI around stuff but first see: [Live Demo](https://solandra.netlify.com/).
 - On [NPM](https://www.npmjs.com/package/solandra). Install with `npm i solandra` or `yarn add solandra`.
 
-Or if you want to play, install gatsby cli, clone this repo and start by
+Or if you want to play locally clone this repo, install dependencies with `npm` or `yarn` and start by:
 
 ```
-yarn
-gatsby develop
+yarn dev
 ```
 
-Then open [http://localhost:8000](http://localhost:8000) and in your editor `sketches.ts` and try things out. It does things like the below
+or
+
+```
+npm run dev
+```
+
+Then open [http://localhost:3000](http://localhost:3000) and in your editor `sketches.ts` and try things out. It does things like the below
 
 ![A simple example drawn with tiles](tiles.png)
 
@@ -60,10 +65,10 @@ p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
 })
 ```
 
-![An example](samples/1.png)
+![An example](public/images/1.png)
 
-![An example](samples/2.png)
+![An example](public/images/2.png)
 
-![An example](samples/3.png)
+![An example](public/images/3.png)
 
-![An example](samples/4.png)
+![An example](public/images/4.png)
