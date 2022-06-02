@@ -20,7 +20,7 @@ export const rotate = ([x, y]: Point2D, a: number): Point2D => [
   x * Math.sin(a) + y * Math.cos(a),
 ]
 
-export const normalise = (p: Point2D): Point2D => {
+export const normalize = (p: Point2D): Point2D => {
   const m = magnitude(p)
   return [p[0] / m, p[1] / m]
 }
@@ -47,15 +47,17 @@ export const pointAlong = (
 export const dot = ([x1, y1]: Point2D, [x2, y2]: Point2D): number =>
   x1 * x2 + y1 * y2
 
-export default {
+const vectorOps = {
   add,
   subtract,
   magnitude,
   rotate,
-  normalise,
+  normalize,
   scale,
   polarToCartesian,
   pointAlong,
   dot,
   distance,
 }
+
+export default vectorOps

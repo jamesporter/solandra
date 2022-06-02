@@ -21,7 +21,7 @@ export type CurveConfig = {
   twist?: number
 }
 
-export default class Path implements Traceable {
+export class Path implements Traceable {
   private currentPoint: Point2D
   private edges: PathEdge[] = []
 
@@ -74,13 +74,13 @@ export default class Path implements Traceable {
     const u = v.subtract(point, this.currentPoint)
     const d = v.magnitude(u)
     const m = v.add(this.currentPoint, v.scale(u, 0.5))
-    const perp = v.normalise(v.rotate(u, -Math.PI / 2))
+    const perp = v.normalize(v.rotate(u, -Math.PI / 2))
     const rotatedPerp = v.rotate(perp, curveAngle)
     const controlMid = v.add(
       m,
       v.scale(rotatedPerp, curveSize * polarlity * d * 0.5)
     )
-    const perpOfRot = v.normalise(v.rotate(rotatedPerp, -Math.PI / 2 - twist))
+    const perpOfRot = v.normalize(v.rotate(rotatedPerp, -Math.PI / 2 - twist))
 
     const control1 = v.add(
       controlMid,
@@ -106,7 +106,7 @@ export default class Path implements Traceable {
    * @param delta Vector to move path by
    */
   moved(delta: Vector2D): Path {
-    return this.transformed(pt => v.add(pt, delta))
+    return this.transformed((pt) => v.add(pt, delta))
   }
 
   /**
@@ -115,27 +115,25 @@ export default class Path implements Traceable {
    */
   scaled(scale: number): Path {
     const c = this.centroid
-    return this.transformed(p => v.add(c, v.scale(v.subtract(p, c), scale)))
+    return this.transformed((p) => v.add(c, v.scale(v.subtract(p, c), scale)))
   }
 
   get reversed(): Path {
     const newPath = new Path(this.currentPoint)
-    const newEdges = this.edges.map(
-      (e: PathEdge): PathEdge => {
-        switch (e.kind) {
-          case "line":
-            return { kind: "line", from: e.to, to: e.from }
-          case "cubic":
-            return {
-              kind: "cubic",
-              from: e.to,
-              to: e.from,
-              control1: e.control2,
-              control2: e.control1,
-            }
-        }
+    const newEdges = this.edges.map((e: PathEdge): PathEdge => {
+      switch (e.kind) {
+        case "line":
+          return { kind: "line", from: e.to, to: e.from }
+        case "cubic":
+          return {
+            kind: "cubic",
+            from: e.to,
+            to: e.from,
+            control1: e.control2,
+            control2: e.control1,
+          }
       }
-    )
+    })
     newPath.edges = newEdges
     return newPath
   }
@@ -144,7 +142,7 @@ export default class Path implements Traceable {
    * Vertex-wise centroid
    */
   get centroid(): Point2D {
-    return centroid(this.edges.map(e => e.from))
+    return centroid(this.edges.map((e) => e.from))
   }
 
   /**
@@ -194,26 +192,24 @@ export default class Path implements Traceable {
   transformed(transform: (point: Point2D) => Point2D): Path {
     const newPath = new Path(this.currentPoint)
 
-    newPath.edges = this.edges.map(
-      (e): PathEdge => {
-        switch (e.kind) {
-          case "cubic":
-            return {
-              kind: "cubic",
-              from: transform(e.from),
-              to: transform(e.to),
-              control1: transform(e.control1),
-              control2: transform(e.control2),
-            }
-          case "line":
-            return {
-              kind: "line",
-              from: transform(e.from),
-              to: transform(e.to),
-            }
-        }
+    newPath.edges = this.edges.map((e): PathEdge => {
+      switch (e.kind) {
+        case "cubic":
+          return {
+            kind: "cubic",
+            from: transform(e.from),
+            to: transform(e.to),
+            control1: transform(e.control1),
+            control2: transform(e.control2),
+          }
+        case "line":
+          return {
+            kind: "line",
+            from: transform(e.from),
+            to: transform(e.to),
+          }
       }
-    )
+    })
     return newPath
   }
 
@@ -224,7 +220,7 @@ export default class Path implements Traceable {
   rotated(angle: number): Path {
     const c = this.centroid
     const [cX, cY] = c
-    return this.transformed(pt => {
+    return this.transformed((pt) => {
       const [dX, dY] = v.subtract(pt, c)
       return [
         cX + Math.cos(angle) * dX - Math.sin(angle) * dY,
@@ -260,7 +256,7 @@ export default class Path implements Traceable {
       path1.addCurveTo(es1[0].from, config.curve)
       path2.addCurveTo(es2[0].from, {
         ...config.curve,
-        polarlity: -polarlity as (1 | -1),
+        polarlity: -polarlity as 1 | -1,
       })
 
       return [path1, path2]

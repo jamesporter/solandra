@@ -6,7 +6,7 @@ import highlights from "./highlights"
 import isometric from "./isometric"
 import randomness from "./randomness"
 
-export default {
+const sketches = {
   Highlights: {
     sketches: highlights,
     fileName: "highlights.ts",
@@ -52,3 +52,9 @@ framework. Click on Source Code to see how things work.`,
     description: `Examples focusing on randomness or noise. Click on Source Code to see how things work.`,
   },
 }
+
+export default sketches
+
+export const sketchKinds = Object.keys(sketches) as SketchKind[]
+
+export type SketchKind = keyof typeof sketches

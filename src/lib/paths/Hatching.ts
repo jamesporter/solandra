@@ -3,7 +3,7 @@ import { Traceable } from "./index"
 /**
  * Hatching in a circle around a point, with a radius and delta between lines
  */
-export default class Hatching implements Traceable {
+export class Hatching implements Traceable {
   constructor(
     private config: {
       at: Point2D

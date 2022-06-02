@@ -1,10 +1,10 @@
 import { Point2D } from "../types/sol"
-import { Ellipse } from "."
+import { Ellipse } from "./Ellipse"
 
 /**
  * Just an ellipse with width = height
  */
-export default class Circle extends Ellipse {
+export class Circle extends Ellipse {
   constructor(config: {
     at: Point2D
     r: number

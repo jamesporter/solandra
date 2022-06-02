@@ -1,6 +1,6 @@
 import { Point2D } from "../types/sol"
 import { Traceable } from "./index"
-export default class HollowArc implements Traceable {
+export class HollowArc implements Traceable {
   readonly cX: number
   readonly cY: number
   readonly radius: number

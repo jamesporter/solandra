@@ -1,6 +1,6 @@
 import { Point2D } from "../lib/types/sol"
 import SCanvas from "../lib/sCanvas"
-import { Path, SimplePath } from "../lib/paths"
+
 import {
   Hatching,
   Star,
@@ -11,7 +11,9 @@ import {
   Rect,
   HollowArc,
   Arc,
-} from "../lib/paths"
+  Path,
+  SimplePath,
+} from "../lib"
 import { add, pointAlong, scale, distance } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
 import { LinearGradient, RadialGradient } from "../lib/gradient"
@@ -50,7 +52,10 @@ const horizontal = (p: SCanvas) => {
     new LinearGradient({
       from: [0, 0],
       to: [1, 0],
-      colors: [[0, { h: 0, s: 0, l: 95 }], [1, { h: 0, s: 0, l: 85 }]],
+      colors: [
+        [0, { h: 0, s: 0, l: 95 }],
+        [1, { h: 0, s: 0, l: 85 }],
+      ],
     })
   )
   p.forHorizontal({ n: 20, margin: 0.1 }, ([x, y], [dX, dY]) => {
@@ -64,11 +69,14 @@ const vertical = (p: SCanvas) => {
     new LinearGradient({
       from: [0, 0],
       to: [0, 1],
-      colors: [[0, { h: 50, s: 40, l: 95 }], [1, { h: 30, s: 40, l: 90 }]],
+      colors: [
+        [0, { h: 50, s: 40, l: 95 }],
+        [1, { h: 30, s: 40, l: 90 }],
+      ],
     })
   )
   p.forVertical({ n: 20, margin: 0.1 }, ([x, y], [dX, dY]) => {
-    const points = p.build(p.range, { from: x, to: x + dX, n: 20 }, vX => {
+    const points = p.build(p.range, { from: x, to: x + dX, n: 20 }, (vX) => {
       return p.perturb({ at: [vX, y + dY / 2], magnitude: dY / 4 })
     })
     p.lineWidth = 0.01 / p.meta.aspectRatio
@@ -106,10 +114,7 @@ const flower = (p: SCanvas) => {
   p.setStrokeColor(140, 50, 25)
   p.lineWidth = 0.02
   p.draw(
-    SimplePath.startAt(start)
-      .addPoint(second)
-      .addPoint(end)
-      .chaiken({ n: 3 })
+    SimplePath.startAt(start).addPoint(second).addPoint(end).chaiken({ n: 3 })
   )
 
   p.lineWidth = 0.01
@@ -158,7 +163,10 @@ const curves1 = (p: SCanvas) => {
     new LinearGradient({
       from: [0, 0],
       to: [0, 1],
-      colors: [[0, { h: 215, s: 20, l: 90 }], [1, { h: 140, s: 20, l: 90 }]],
+      colors: [
+        [0, { h: 215, s: 20, l: 90 }],
+        [1, { h: 140, s: 20, l: 90 }],
+      ],
     })
   )
   p.forTiling({ n: 12, margin: 0.1 }, ([x, y], [dX, dY]) => {
@@ -181,7 +189,7 @@ const tilesOfChaiken = (p: SCanvas) => {
     const ir = dX / 4
     const da = Math.PI / 10
 
-    p.times(3, n => {
+    p.times(3, (n) => {
       let points: Point2D[] = []
       for (let a = 0; a < Math.PI * 2; a += da) {
         const rr = 2 * p.random() + 1
@@ -191,7 +199,7 @@ const tilesOfChaiken = (p: SCanvas) => {
         ])
       }
       const sp = SimplePath.startAt(points[0])
-      points.slice(1).forEach(p => sp.addPoint(p))
+      points.slice(1).forEach((p) => sp.addPoint(p))
       sp.close()
       sp.chaiken({ n: 2 + n, looped: true })
       p.lineWidth = 0.005
@@ -202,9 +210,9 @@ const tilesOfChaiken = (p: SCanvas) => {
 }
 
 const circle = (p: SCanvas) => {
-  p.times(10, n => {
+  p.times(10, (n) => {
     p.setStrokeColor(0, 0, n + 10, (0.75 * (n + 1)) / 10)
-    const points = p.build(p.aroundCircle, { n: 20 }, at => p.perturb({ at }))
+    const points = p.build(p.aroundCircle, { n: 20 }, (at) => p.perturb({ at }))
     const sp = SimplePath.withPoints(points)
       .close()
       .chaiken({ n: n + 1, looped: true })
@@ -218,7 +226,7 @@ const arcs = (p: SCanvas) => {
   const cX = right / 2
   const cY = bottom / 2
 
-  p.times(19, n => {
+  p.times(19, (n) => {
     p.setFillColor(n * 2.5, 90, 50, 0.5)
     p.fill(
       new Arc({
@@ -270,7 +278,7 @@ const rectanglesDivided = (p: SCanvas) => {
 
 const circleText = (p: SCanvas) => {
   p.aroundCircle({ r: 0.25, n: 12 }, ([x, y], i) => {
-    p.times(5, n => {
+    p.times(5, (n) => {
       p.setFillColor(i * 5 + n, 75, 35, 0.2 * n)
       p.fillText(
         {
@@ -308,7 +316,7 @@ const helloWorld = (p: SCanvas) => {
       to: bottom - 0.1,
       n: 10,
     },
-    n => {
+    (n) => {
       p.setStrokeColor(n * aspectRatio * 50, 20, 20, 0.75)
       for (let align of ["right", "center", "left"] as const) {
         p.drawText(
@@ -434,7 +442,12 @@ const gradients3 = (p: SCanvas) => {
 
 const gradients4 = (p: SCanvas) => {
   const { right, bottom } = p.meta
-  const corners: Point2D[] = [[0, 0], [right, 0], [right, bottom], [0, bottom]]
+  const corners: Point2D[] = [
+    [0, 0],
+    [right, 0],
+    [right, bottom],
+    [0, bottom],
+  ]
   const hues = [10, 215, 50, 190]
 
   p.background(0, 0, 5)
@@ -461,7 +474,12 @@ const gradients4 = (p: SCanvas) => {
 
 const gradients5 = (p: SCanvas) => {
   const { right, bottom } = p.meta
-  const corners: Point2D[] = [[0, 0], [right, 0], [right, bottom], [0, bottom]]
+  const corners: Point2D[] = [
+    [0, 0],
+    [right, 0],
+    [right, bottom],
+    [0, bottom],
+  ]
   const hues = [10, 215, 50, 190]
 
   p.background(0, 0, 5)
@@ -534,7 +552,7 @@ const transforms3 = (p: SCanvas) => {
   const { bottom: h } = p.meta
   const a = Math.sin(p.t)
   p.forHorizontal({ n: 20, margin: 0.3 }, ([x, y], [dX, dY]) => {
-    p.range({ from: 0, to: 2 * Math.PI, n: 12 }, n =>
+    p.range({ from: 0, to: 2 * Math.PI, n: 12 }, (n) =>
       p.withTranslation([x + dX / 2, (h * n) / 6 + dY / 6], () => {
         p.withRotation(x - n + a, () => {
           p.setFillColor(360 - n * 20, 90, 30, 0.5)
@@ -550,7 +568,7 @@ const clipping = (p: SCanvas) => {
   const size = Math.min(bottom, right) * 0.8
   p.background(120 + p.t * 50, 40, 90)
   p.lineWidth = 0.005
-  p.range({ from: 1, to: 4, n: 4 }, n =>
+  p.range({ from: 1, to: 4, n: 4 }, (n) =>
     p.withTranslation([0.037 * n * n, bottom * 0.037 * n * n], () =>
       p.withScale([0.1 * n, 0.1 * n], () =>
         p.withClipping(new Ellipse({ at: center, w: size, h: size }), () =>
@@ -673,7 +691,7 @@ const stars = (p: SCanvas) => {
 
 const hatching = (p: SCanvas) => {
   p.lineWidth = 0.001
-  p.range({ from: 1, to: 0.2, n: 4, inclusive: true }, n => {
+  p.range({ from: 1, to: 0.2, n: 4, inclusive: true }, (n) => {
     p.setStrokeColor(215 - n * 75, 90, 10 + n * 30)
     const s = (1.5 + Math.cos(p.t)) / 2
     p.draw(
@@ -776,7 +794,7 @@ const colorPaletteGenerator = (p: SCanvas) => {
 
   p.forVertical({ n: 6, margin: 0.1 }, ([x, y], [dX, dY], _c, i) => {
     const c = colors[i]
-    p.range({ from: x, to: x + dX, n: 6, inclusive: false }, xV => {
+    p.range({ from: x, to: x + dX, n: 6, inclusive: false }, (xV) => {
       p.setFillColor(c, 80, 10 + xV * 70)
       p.fill(
         new Rect({
@@ -795,7 +813,7 @@ const stackPolys = (p: SCanvas) => {
   const v = p.uniformRandomInt({ from: 5, to: 8 })
   const m = p.uniformRandomInt({ from: 30, to: 80 })
 
-  p.times(m, n => {
+  p.times(m, (n) => {
     p.setStrokeColor(p.uniformRandomInt({ from: 320, to: 360 }), 80, 50)
     p.draw(
       new RegularPolygon({
@@ -870,7 +888,10 @@ const shadingArcs = (p: SCanvas) => {
       end: center,
       rStart: 0,
       rEnd: 1,
-      colors: [[0, { h: 50, s: 0, l: 40 }], [1, { h: 50, s: 0, l: 0 }]],
+      colors: [
+        [0, { h: 50, s: 0, l: 40 }],
+        [1, { h: 50, s: 0, l: 0 }],
+      ],
     })
   )
   p.lineWidth = 0.005
@@ -897,7 +918,7 @@ const shadingArcs = (p: SCanvas) => {
 const arcChart = (p: SCanvas) => {
   p.background(30, 30, 20)
   const { center: at } = p.meta
-  p.range({ from: 0, to: Math.PI * 2, inclusive: false, n: 32 }, n => {
+  p.range({ from: 0, to: Math.PI * 2, inclusive: false, n: 32 }, (n) => {
     p.setFillColor((180 * n) / Math.PI, 100, 60)
     p.fill(
       new HollowArc({
@@ -928,7 +949,7 @@ const bars = (p: SCanvas) => {
 
 const scaled = (p: SCanvas) => {
   p.withTranslation(add([0, 0.1], p.meta.center), () => {
-    p.times(16, n => {
+    p.times(16, (n) => {
       p.withRotation((Math.PI * n) / 8, () => {
         p.withScale([1, 1 - 0.05 * n], () => {
           p.withTranslation([n * 0.02, 0], () => {
@@ -1080,7 +1101,7 @@ const colourThemes4 = (p: SCanvas) => {
   const u: Point2D = [cX - r / 3.5, cY - b / 3.5]
   const v: Point2D = [cX + r / 3.5, cY + b / 3.5]
 
-  p.range({ from: -10, to: 10, n: 21 }, n => {
+  p.range({ from: -10, to: 10, n: 21 }, (n) => {
     p.setStrokeColorFromSpec(hr(n))
     p.draw(
       Path.startAt(u).addCurveTo(v, {

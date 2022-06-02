@@ -1,7 +1,8 @@
 import { Point2D } from "../lib/types/sol"
 import SCanvas from "../lib/sCanvas"
-import { Path, SimplePath } from "../lib/paths"
 import {
+  Path,
+  SimplePath,
   Hatching,
   Star,
   RegularPolygon,
@@ -9,12 +10,13 @@ import {
   Ellipse,
   Rect,
   HollowArc,
-} from "../lib/paths"
+  Line,
+} from "../lib"
 import { add, scale } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
 import { LinearGradient, RadialGradient } from "../lib/gradient"
 import { zip2, sum, arrayOf } from "../lib/collectionOps"
-import { clamp, Line } from "../lib"
+import { clamp } from "../lib"
 
 const tiling = (p: SCanvas) => {
   p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
@@ -34,7 +36,7 @@ const chaiken = (p: SCanvas) => {
   const ir = midX / 4
   const da = Math.PI / 10
 
-  p.times(30, n => {
+  p.times(30, (n) => {
     let points: Point2D[] = []
     for (let a = 0; a < Math.PI * 2; a += da) {
       const rr = 2 * p.random() + 1
@@ -44,7 +46,7 @@ const chaiken = (p: SCanvas) => {
       ])
     }
     const sp = SimplePath.startAt(points[0])
-    points.slice(1).forEach(p => sp.addPoint(p))
+    points.slice(1).forEach((p) => sp.addPoint(p))
     sp.close()
     sp.chaiken({ n: 4, looped: true })
     p.lineWidth = 0.005
@@ -58,7 +60,7 @@ const mondrian = (p: SCanvas) => {
 
   let rs = [new Rect({ at: [0.1, 0.1], w: right - 0.2, h: bottom - 0.2 })]
   p.times(4, () => {
-    rs = rs.flatMap(r => {
+    rs = rs.flatMap((r) => {
       if (r.w > 0.1 && r.h > 0.1) {
         return p.proportionately([
           [0.6, () => [r]],
@@ -85,7 +87,7 @@ const mondrian = (p: SCanvas) => {
     })
   })
 
-  rs.map(r => {
+  rs.map((r) => {
     p.doProportion(0.3, () => {
       p.setFillColor(p.sample([10, 60, 200]), 80, 50)
       p.fill(r)
@@ -97,10 +99,10 @@ const mondrian = (p: SCanvas) => {
 const scriptLike = (p: SCanvas) => {
   const { bottom, aspectRatio } = p.meta
 
-  p.range({ from: 0.1, to: bottom - 0.1, n: 5 }, m => {
+  p.range({ from: 0.1, to: bottom - 0.1, n: 5 }, (m) => {
     let points: Point2D[] = []
     p.setStrokeColor(215, 40, 30 - 30 * m)
-    p.range({ from: 0.1, to: 0.9, n: 60 }, n => {
+    p.range({ from: 0.1, to: 0.9, n: 60 }, (n) => {
       points.push([
         n + perlin2(n * 45 + m * 67, 20) / 12,
         m + perlin2(n * 100 + m * 100, 0.1) / (6 * aspectRatio),
@@ -169,7 +171,7 @@ const randomness2 = (p: SCanvas) => {
   p.background(320, 10, 90)
   p.forTiling({ n: 50, margin: 0.1 }, (pt, delta) => {
     const v = p.poisson(4)
-    p.times(v, n => {
+    p.times(v, (n) => {
       p.setFillColor(40 - n * 20, 80, 50, 1 / n)
       p.fill(
         new Ellipse({
@@ -185,13 +187,13 @@ const randomness2 = (p: SCanvas) => {
 const curves = (p: SCanvas) => {
   p.background(215, 30, 20)
   p.forHorizontal({ n: 75 }, ([x, y], [dX, dY]) => {
-    const vPts = [0, 0, 0, 0].map(_ => p.poisson(5) + 2)
+    const vPts = [0, 0, 0, 0].map((_) => p.poisson(5) + 2)
     const total = sum(vPts)
-    let nVPts = vPts.map(p => (dY * p) / total)
+    let nVPts = vPts.map((p) => (dY * p) / total)
     nVPts = [y - 0.1].concat(
-      [3, 2, 1, 0].map(i => y + 1.2 * sum(nVPts.slice(i)))
+      [3, 2, 1, 0].map((i) => y + 1.2 * sum(nVPts.slice(i)))
     )
-    const nHPts = nVPts.map(p => x + dX * 12 * perlin2(10 + p * 60, x * 20))
+    const nHPts = nVPts.map((p) => x + dX * 12 * perlin2(10 + p * 60, x * 20))
     const points = zip2(nHPts, nVPts)
     const path = SimplePath.withPoints(points)
     path.chaiken({ n: 4 })
@@ -226,7 +228,7 @@ const time = (p: SCanvas) => {
   p.background(50, 20, 90)
   const times = 4
   p.forHorizontal({ n: 20, margin: 0.1 }, ([x, y], [dX, dY]) => {
-    p.times(times, n => {
+    p.times(times, (n) => {
       const h = dY * 0.5 * (1 + perlin2(x, 100 + n + p.t / 4))
       p.setFillColor((n * 60) / times, 80, 60)
       p.fill(
@@ -242,7 +244,7 @@ const time = (p: SCanvas) => {
 
 const polygons2 = (p: SCanvas) => {
   p.background(330, 70, 10)
-  p.times(5, n => {
+  p.times(5, (n) => {
     const sides = 10 - n
     const r = 0.4 - n * 0.05
     p.setFillColor(330, 70, 10 + n * 12)
@@ -261,10 +263,10 @@ const hatching2 = (p: SCanvas) => {
   p.lineWidth = 0.005
   const { center } = p.meta
   const count = p.uniformRandomInt({ from: 5, to: 35 })
-  const points = p.build(p.times, count, n => {
+  const points = p.build(p.times, count, (n) => {
     return p.perturb({ at: center, magnitude: 0.1 * n })
   })
-  points.forEach(pt => {
+  points.forEach((pt) => {
     p.setStrokeColor(15 + pt[0] * 50, 90, 40, 0.9)
     const r = 0.1 + 0.15 * p.random()
     p.withClipping(new Circle({ at: pt, r }), () =>
@@ -350,7 +352,7 @@ const sunburst = (p: SCanvas) => {
           ],
         ])
       })
-      .filter(l => l.end - l.start > 0.01)
+      .filter((l) => l.end - l.start > 0.01)
   }
 
   const layerZero: { start: number; end: number; depth: number }[] = [
@@ -450,7 +452,7 @@ const fancyTiling = (p: SCanvas) => {
     },
     ([x, y], [dX, dY]) => {
       p.proportionately(
-        rules.map(r => [p.poisson(3) + 1, () => r(x, y, dX, dY)])
+        rules.map((r) => [p.poisson(3) + 1, () => r(x, y, dX, dY)])
       )
     }
   )
@@ -474,7 +476,7 @@ const sketchingCurves = (p: SCanvas) => {
     p.draw(curve)
     curve = curve
       .moved([0, (-i * p.meta.bottom) / 1024])
-      .transformed(pt => [
+      .transformed((pt) => [
         pt[0],
         pt[1] + 0.017 * p.meta.bottom * perlin2(pt[0] * 4, pt[1] + p.t),
       ])
@@ -521,7 +523,10 @@ const recordCoverish2 = (p: SCanvas) => {
     new LinearGradient({
       from: [0, 0],
       to: [0, bottom],
-      colors: [[0, { h: 215, s: 80, l: 60 }], [1, { h: 215, s: 80, l: 20 }]],
+      colors: [
+        [0, { h: 215, s: 80, l: 60 }],
+        [1, { h: 215, s: 80, l: 20 }],
+      ],
     })
   )
   p.fill(mainRect)
@@ -551,7 +556,10 @@ const painting = (p: SCanvas) => {
     new LinearGradient({
       from: [0, 0],
       to: [0, p.meta.bottom],
-      colors: [[0, { h: 45, s: 30, l: 95 }], [1, { h: 55, s: 30, l: 90 }]],
+      colors: [
+        [0, { h: 45, s: 30, l: 95 }],
+        [1, { h: 55, s: 30, l: 90 }],
+      ],
     })
   )
   p.forVertical({ n: 100, margin: 0.15 }, ([x, y], [dX, dY]) => {
@@ -661,7 +669,7 @@ const doodles = (p: SCanvas) => {
     let path = Path.startAt(center)
     p.setStrokeColor(100 * x + y * 33, 60 + 45 * y, 40)
     p.lineWidth = 0.005
-    p.withRandomOrder(p.aroundCircle, { at: center, r: dX / 2.8, n: 7 }, pt =>
+    p.withRandomOrder(p.aroundCircle, { at: center, r: dX / 2.8, n: 7 }, (pt) =>
       path.addCurveTo(pt)
     )
     path.addCurveTo(center)
@@ -677,7 +685,7 @@ const minis2 = (p: SCanvas) => {
       p.withClipping(new Rect({ at: [x, y], w: dX, h: dY }), () => {
         p.background(i * 27, 20, 10)
         let nPt: Point2D = [cX, cY]
-        p.times(6, j => {
+        p.times(6, (j) => {
           p.setFillColor(i * 27 + j * 12, 90, 40, 0.3)
           nPt = p.perturb({ at: nPt, magnitude: dX / 1.5 })
           p.fill(new Circle({ at: nPt, r: dX / 2 }))
@@ -701,8 +709,8 @@ const contoured3 = (p: SCanvas) => {
   p.lineWidth = 0.005
   p.background(190, 80, 80)
 
-  p.times(20, n => {
-    const sPerlin = (x, y) =>
+  p.times(20, (n) => {
+    const sPerlin = (x: number, y: number) =>
       perlin2(p.random() + x * s + n / 50, y * s + n / 100)
     p.setFillColor(
       p.sample([220, 170]),
@@ -839,13 +847,13 @@ const dividing = (p: SCanvas) => {
     at: p.meta.center,
     n: 14,
     r: 0.4,
-  }).path.segmented.flatMap(s => s.segmented)
+  }).path.segmented.flatMap((s) => s.segmented)
   ss.forEach((s, i) => {
     p.setFillColor(i * 5, 70, 60)
     p.fill(s)
   })
   p.lineWidth = 0.005
-  ss.forEach(s => {
+  ss.forEach((s) => {
     p.draw(s)
   })
 }
@@ -853,8 +861,8 @@ const dividing = (p: SCanvas) => {
 const dividing2 = (p: SCanvas) => {
   p.background(0, 0, 5)
   new RegularPolygon({ at: p.meta.center, r: 0.4, n: 20 }).path.segmented
-    .flatMap(s => s.exploded({ scale: 0.75, magnitude: 1.1 }))
-    .flatMap(s => s.exploded({ scale: 0.75, magnitude: 1.3 }))
+    .flatMap((s) => s.exploded({ scale: 0.75, magnitude: 1.1 }))
+    .flatMap((s) => s.exploded({ scale: 0.75, magnitude: 1.3 }))
     .forEach((s, i) => {
       p.setFillColor(i * 5, 80, 60, 0.9)
       p.fill(s)
@@ -866,7 +874,7 @@ const dividing6 = (p: SCanvas) => {
 
   new Star({ at: p.meta.center, n: 16, r: 0.4 }).path
     .exploded({ magnitude: 1.05, scale: 0.99 })
-    .flatMap(s => s.exploded({ magnitude: 1.05, scale: 0.99 }))
+    .flatMap((s) => s.exploded({ magnitude: 1.05, scale: 0.99 }))
     .forEach((s, i) => {
       p.setFillColor(215 - i * 3, 90, 40)
       p.fill(s.rotated(p.gaussian({ sd: Math.PI / 12 })))
@@ -878,7 +886,10 @@ const bokeh = (p: SCanvas) => {
     new LinearGradient({
       from: [0, 0],
       to: [0, p.meta.bottom],
-      colors: [[0, { h: 0, s: 0, l: 30 }], [1, { h: 0, s: 0, l: 0 }]],
+      colors: [
+        [0, { h: 0, s: 0, l: 30 }],
+        [1, { h: 0, s: 0, l: 0 }],
+      ],
     })
   )
   p.forTiling({ n: 20, type: "square", margin: 0.2 }, (_pt, [dX], c) => {
@@ -919,7 +930,7 @@ const advancedDivisions = (p: SCanvas) => {
 
   path
     .exploded()
-    .flatMap(part => part.exploded())
+    .flatMap((part) => part.exploded())
     .forEach((part, i) => {
       p.setFillColor(10 + (i * 2) / 3, 90, 60, p.sample([0.2, 0.3]))
       p.fill(part)

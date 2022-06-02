@@ -1,7 +1,7 @@
 import { Point2D } from "../types/sol"
-import { Rect } from "."
+import { Rect } from "./Rect"
 
-export default class Square extends Rect {
+export class Square extends Rect {
   constructor(config: {
     at: Point2D
     s: number

@@ -1,5 +1,5 @@
 import SCanvas from "../sCanvas"
-import { Rect } from "../paths"
+import { Rect } from "../paths/Rect"
 
 describe("Draw something with Solandra", () => {
   it("should be able to draw a rectangle", () => {
@@ -7,15 +7,15 @@ describe("Draw something with Solandra", () => {
     const pocFakeCanvas = new Proxy(
       {},
       {
-        get: function(target, property, receiver) {
+        get: function (target, property, receiver) {
           history.push(`${String(property)}`)
-          return (...args) => {
+          return (...args: any[]) => {
             history[history.length - 1] = `${String(property)}(${args.join(
               ", "
             )})`
           }
         },
-        set: function(target, property, value, receiver) {
+        set: function (target, property, value, receiver) {
           history.push(`${String(property)} = ${value}`)
           return true
         },

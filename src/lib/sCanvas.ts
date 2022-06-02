@@ -1,6 +1,7 @@
 import { Size, Point2D, Vector2D } from "./types/sol"
 import { hsla, ColorSpec } from "./colors"
-import { Traceable, TextConfig, Text, Rect } from "./paths"
+import { Traceable } from "./paths"
+import { TextConfig, Text, Rect } from "."
 import { RNG } from "./rng"
 
 export interface Gradientable {
@@ -458,7 +459,7 @@ export default class SCanvas {
   }
 
   proportionately<T>(cases: [number, () => T][]): T {
-    const total = cases.map(c => c[0]).reduce((a, b) => a + b, 0)
+    const total = cases.map((c) => c[0]).reduce((a, b) => a + b, 0)
     if (total <= 0) throw new Error("Must be positive total")
     let r = this.rng.number() * total
 

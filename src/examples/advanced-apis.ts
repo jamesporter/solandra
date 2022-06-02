@@ -1,5 +1,5 @@
 import SCanvas from "../lib/sCanvas"
-import { Path, CompoundPath, Star, RegularPolygon, Circle } from "../lib/paths"
+import { Path, CompoundPath, Star, RegularPolygon, Circle } from "../lib"
 import {
   v,
   Rect,
@@ -15,7 +15,7 @@ const compoundPath = (p: SCanvas) => {
   p.background(45, 80, 75)
   p.setFillColor(220, 9, 45, 0.4)
   // To remove a shape from another shape the path winding order must be opposite (hence the reversed)
-  p.times(4, n => {
+  p.times(4, (n) => {
     p.fill(
       CompoundPath.withPaths(
         new RegularPolygon({ at: p.meta.center, r: 0.3 + n * 0.05, n: 8 }).path,
@@ -30,7 +30,7 @@ const compoundPath2 = (p: SCanvas) => {
   p.forTiling({ n: 3, type: "square" }, (at, [dX], c, i) => {
     p.setFillColor(220 - i * 40, 30, 45, 0.4)
     const s = 1 + 0.5 * p.random()
-    p.times(4, n => {
+    p.times(4, (n) => {
       p.fill(
         CompoundPath.withPaths(
           new RegularPolygon({
@@ -42,7 +42,8 @@ const compoundPath2 = (p: SCanvas) => {
             at: c,
             r: (s * dX) / 4 + dX * n * 0.05,
             n: i + 3,
-          }).path.transformed(at => p.perturb({ at, magnitude: 0.05 })).reversed
+          }).path.transformed((at) => p.perturb({ at, magnitude: 0.05 }))
+            .reversed
         )
       )
     })
@@ -55,7 +56,7 @@ const transformingPaths = (p: SCanvas) => {
   const [cX, cY] = center
   const r = 0.3 * Math.min(bottom, right)
   const path = Path.startAt([cX + r * Math.cos(p.t), cY + r * Math.sin(p.t)])
-  p.times(33, n => {
+  p.times(33, (n) => {
     path.addCurveTo(
       [
         cX + (n % 2 === 0 ? 1 : 0.8) * r * Math.cos(p.t + (n * Math.PI) / 16),
@@ -67,7 +68,7 @@ const transformingPaths = (p: SCanvas) => {
     )
   })
 
-  p.times(4, sc => {
+  p.times(4, (sc) => {
     const scale = (sc ** 1.5 + 1) * 0.22
     p.lineWidth = (sc + 1) * 0.002
 
@@ -271,7 +272,7 @@ const tri = (p: SCanvas) => {
     maxY: 5,
   } as const
   p.withTranslation(p.meta.center, () => {
-    p.forGrid(area, gp => {
+    p.forGrid(area, (gp) => {
       const ta = new EquilateralTriangle({
         ...tt(gp),
         s,
@@ -281,7 +282,7 @@ const tri = (p: SCanvas) => {
       p.draw(ta)
     })
 
-    p.times(100, n => {
+    p.times(100, (n) => {
       p.setFillColor(n / 2, 90, 60, 0.45)
       p.fill(
         new EquilateralTriangle({
