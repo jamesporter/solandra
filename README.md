@@ -19,7 +19,7 @@ Opinionated, agile (code is easy to change) framework for algorithmic art. See m
 - Rethink APIs e.g. standard bezier curve APIs make absolutely no sense
 - Declarative when possible (especially anything configuration-y), procedural when pragmatic; make it easy to explore/change your mind.
 
-![Examples](/samples/samples.png)
+![Examples](/public/images/samples.png)
 
 ## Get Started
 
