@@ -41,7 +41,7 @@ npm run dev
 
 Then open [http://localhost:3000](http://localhost:3000) and in your editor `sketches.ts` and try things out. It does things like the below
 
-![A simple example drawn with tiles](tiles.png)
+![A simple example drawn with tiles](/public/images/tiles.png)
 
 ```typescript
 p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
