@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import type { NextPage } from "next"
 import Head from "next/head"
 import { Canvas } from "../src/components/Canvas"
@@ -389,8 +388,8 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
             </h3>
             <p>
               Solandra SVG allows for the creation of vector graphics with many
-              of Solandra's APIs. I created it to make images for plotters and
-              experimented with a fluent/chained API.
+              of Solandra&apos;s APIs. I created it to make images for plotters
+              and experimented with a fluent/chained API.
             </p>
 
             <a

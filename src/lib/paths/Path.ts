@@ -74,13 +74,13 @@ export class Path implements Traceable {
     const u = v.subtract(point, this.currentPoint)
     const d = v.magnitude(u)
     const m = v.add(this.currentPoint, v.scale(u, 0.5))
-    const perp = v.normalise(v.rotate(u, -Math.PI / 2))
+    const perp = v.normalize(v.rotate(u, -Math.PI / 2))
     const rotatedPerp = v.rotate(perp, curveAngle)
     const controlMid = v.add(
       m,
       v.scale(rotatedPerp, curveSize * polarlity * d * 0.5)
     )
-    const perpOfRot = v.normalise(v.rotate(rotatedPerp, -Math.PI / 2 - twist))
+    const perpOfRot = v.normalize(v.rotate(rotatedPerp, -Math.PI / 2 - twist))
 
     const control1 = v.add(
       controlMid,

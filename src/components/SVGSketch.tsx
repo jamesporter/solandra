@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { SolandraSvg } from "solandra-svg"
 
 export function SVGSketch({

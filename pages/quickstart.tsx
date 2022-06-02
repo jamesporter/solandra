@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import Link from "next/link"
 import { ViewAll } from "../src/components/ViewAll"
 import { LinearGradient, Path, SCanvas } from "../src/lib"
