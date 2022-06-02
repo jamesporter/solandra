@@ -4,25 +4,24 @@ type SelectFromChoiceProps<T> = {
   value: T
   choices: { label: string; value: T }[]
   onSelect: (choice: T) => void
-  tailwindContainerClasses?: string
-  tailwindItemContainerClasses?: string
 }
 
 export default function SelectFromChoice<T>({
   value,
   choices,
   onSelect,
-  tailwindContainerClasses = "",
-  tailwindItemContainerClasses = "",
 }: SelectFromChoiceProps<T>) {
   return (
-    <div className={`flex flex-row flex-wrap ${tailwindContainerClasses}`}>
+    <div className={`flex flex-row flex-wrap gap-2`}>
       {choices.map(({ label, value: v }, i) => {
-        const colour = v == value ? "teal" : "gray"
         return (
           <button
             key={i}
-            className={`bg-${colour}-500 hover:bg-${colour}-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded mx-1 ${tailwindItemContainerClasses}`}
+            className={
+              v == value
+                ? "bg-sky-200 p-2 rounded-lg "
+                : "bg-gray-200 p-2 rounded-lg hover:bg-sky-400"
+            }
             onClick={() => onSelect(v)}
           >
             {label}

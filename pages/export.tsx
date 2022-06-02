@@ -59,44 +59,47 @@ export default function Export() {
     <>
       <Header />
       <div className="p-4">
-        <SelectFromChoice
-          value={aspectRatio}
-          choices={aspectRatioChoices}
-          onSelect={setAspectRatio}
-        />
+        <div className="flex flex-col gap-y-4 max-w-xl bg-sky-700 p-4 rounded-xl mx-auto">
+          <h2 className="text-sky-200 text-4xl">Configure</h2>
 
-        <SelectFromChoice
-          value={size}
-          choices={sizeChoices}
-          onSelect={setSize}
-          tailwindContainerClasses="pt-4"
-        />
+          <SelectFromChoice
+            value={aspectRatio}
+            choices={aspectRatioChoices}
+            onSelect={setAspectRatio}
+          />
 
-        <button
-          onClick={generate}
-          className="bg-teal-500 hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-4 rounded mt-4"
-        >
-          Generate {w}x{h} (Size: {Math.floor((w * h) / 1000000)} MP)
-        </button>
+          <SelectFromChoice
+            value={size}
+            choices={sizeChoices}
+            onSelect={setSize}
+          />
 
-        {data && (
-          <>
-            <a
-              onClick={() => {
-                downloadURI(data, "sol.png")
-              }}
-              className="ml-2 bg-teal-500 hover:bg-teal-600 focus:outline-none focus:shadow-outline px-4 py-4 rounded mt-4 inline-block"
-            >
-              Save
-            </a>
-            <p>
-              Browser support for saving varies e.g. Chrome rejects large image
-              sizes (but will allow right click/save as), Safari is slower to
-              render (and fails at larger sizes) but will allow saving of larger
-              images.
-            </p>
-          </>
-        )}
+          <button
+            onClick={generate}
+            className="bg-sky-400 hover:bg-sky-600 text-white font-bold focus:outline-none focus:shadow-outline px-2 py-4 rounded "
+          >
+            Generate {w}x{h} (Size: {Math.floor((w * h) / 1000000)} MP)
+          </button>
+
+          {data && (
+            <>
+              <button
+                onClick={() => {
+                  downloadURI(data, "sol.png")
+                }}
+                className="bg-sky-400 hover:bg-sky-600 text-white font-bold focus:outline-none focus:shadow-outline px-2 py-4 rounded  text-center"
+              >
+                Save
+              </button>
+              <p className="text-white italic">
+                Browser support for saving varies e.g. Chrome rejects large
+                image sizes (but will allow right click/save as), Safari is
+                slower to render (and fails at larger sizes) but will allow
+                saving of larger images.
+              </p>
+            </>
+          )}
+        </div>
 
         <canvas
           width={size}

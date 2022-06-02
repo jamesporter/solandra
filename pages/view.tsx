@@ -39,9 +39,9 @@ function ViewSingle() {
   return (
     <div className="flex flex-col w-screen h-screen">
       <Header />
-      <div className="bg-gray-700 px-2 py-4 flex flex-row">
+      <div className="bg-sky-800 px-2 py-4 flex flex-row">
         <button
-          className={`bg-gray-500 hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2`}
+          className={`bg-gray-200 hover:bg-sky-400 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2`}
           onClick={updateSeed}
           title="Refresh"
         >
@@ -50,8 +50,8 @@ function ViewSingle() {
 
         <button
           className={`${
-            isPlaying ? "bg-teal-700" : "bg-gray-500"
-          } hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2 items-center w-20`}
+            isPlaying ? "bg-sky-200" : "bg-gray-200"
+          } hover:bg-sky-400 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2 items-center w-20`}
           onClick={() => setPlaying(!isPlaying)}
           title={isPlaying ? "Pause" : "Play"}
         >
@@ -64,26 +64,24 @@ function ViewSingle() {
           value={aspectRatio}
           choices={aspectRatioChoices}
           onSelect={setAspectRatio}
-          tailwindContainerClasses="hidden md:flex"
         />
 
         <Flex />
 
         <button
           className={`${
-            showSource ? "bg-teal-700" : "bg-gray-500"
-          } hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2 items-center`}
+            showSource ? "bg-sky-200" : "bg-gray-200"
+          } hover:bg-sky-400 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2 items-center`}
           onClick={() => setShowSource(!showSource)}
           title="Toggle Source Code"
         >
           Source Code
         </button>
 
-        <Link
-          href={`/export?sketch=${sketchNo}&category=${category}`}
-          className="bg-teal-500 hover:bg-teal-700 focus:outline-none focus:shadow-outline px-2 mr-2 py-3 rounded ml-2"
-        >
-          Export
+        <Link href={`/export?sketch=${sketchNo}&category=${category}`}>
+          <a className="bg-gray-200 hover:bg-sky-400 focus:outline-none focus:shadow-outline px-2 mr-2 py-3 rounded ml-2">
+            Export
+          </a>
         </Link>
       </div>
       <div className="flex-1 flex flex-row items-stretch">

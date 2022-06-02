@@ -5,15 +5,16 @@ import sketches from "../examples/sketches"
 export default function ExampleLinks() {
   const areaName = Object.keys(sketches)
   return (
-    <div className="flex flex-row justify-center flex-wrap my-4">
+    <div className="flex flex-row justify-center flex-wrap my-4 gap-2">
       {areaName.map((areaName, i) => (
         <Link
-          className="text-blue-400 text-md px-4 hover:text-blue-800 w-32 p-2 text-center"
           // @ts-expect-error
           href={sketches[areaName].path}
           key={i}
         >
-          {areaName}
+          <a className="bg-sky-600 text-white font-bold p-2 rounded-lg hover:bg-sky-400 w-48 text-center flex items-center justify-center">
+            {areaName}
+          </a>
         </Link>
       ))}
     </div>

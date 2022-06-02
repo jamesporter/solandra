@@ -30,18 +30,6 @@
   color: #c3dafe;
 }
 
-.main-link {
-  border-bottom: 4px solid rgb(26, 33, 45);
-}
-
-.main-link:hover {
-  border-bottom: 4px solid #90cdf4;
-}
-
-.main-link.active-link {
-  border-bottom: 4px solid #90cdf4;
-}
-
 .start-item img {
   margin: auto;
   display: block;
@@ -52,4 +40,24 @@
 
 .start-item-text {
   padding-bottom: 10px;
+}
+
+.article-page h1 {
+  @apply text-rose-700 text-4xl my-4;
+}
+
+.article-page h2 {
+  @apply text-sky-700 text-2xl mt-8 mb-4;
+}
+
+.article-page p {
+  @apply pb-4;
+}
+
+.article-page p a {
+  @apply font-bold text-rose-600 hover:text-sky-500;
+}
+
+body {
+  @apply bg-gray-100 min-h-screen;
 }
