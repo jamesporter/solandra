@@ -39,7 +39,9 @@ export const setBoolean = (key: string, b: boolean) => {
 
 export const getSketchIdx = (): null | number => {
   try {
+    // @ts-expect-error
     const params = new URL(document.location).searchParams
+    // @ts-expect-error
     const i = parseInt(params.get("sketch"), 10)
     return i
   } catch (ex) {
@@ -49,6 +51,7 @@ export const getSketchIdx = (): null | number => {
 
 export const getSketchCategory = (): SketchKind => {
   try {
+    // @ts-expect-error
     const params = new URL(document.location).searchParams
     const k = params.get("category")
     if (sketchKinds.includes(k as any)) {

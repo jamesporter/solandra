@@ -1,10 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 import { H1, H2 } from "../src/components/Text"
 import Link from "next/link"
 import { ViewAll } from "../src/components/ViewAll"
 import { LinearGradient, Path, SCanvas } from "../src/lib"
 import { Canvas } from "../src/components/Canvas"
 import A from "../src/components/A"
-import Image from "next/image"
 
 const QuickStart = () => (
   <>
@@ -35,7 +35,7 @@ const QuickStart = () => (
       </Link>
     </div>
     <div className="start-item">
-      <Image
+      <img
         src="/images/sol.png"
         height={320}
         width={320}
@@ -49,7 +49,7 @@ const QuickStart = () => (
       </A>
     </div>
     <div className="start-item">
-      <Image
+      <img
         src="/images/icons.png"
         alt="Icon design"
         className="shadow-2xl"
@@ -62,7 +62,7 @@ const QuickStart = () => (
       </A>
     </div>
     <div className="start-item">
-      <Image
+      <img
         height={320}
         width={320}
         src="/images/wallpaper.png"
@@ -77,7 +77,7 @@ const QuickStart = () => (
     </div>
 
     <div className="start-item">
-      <Image
+      <img
         height={320}
         width={320}
         src="/images/watercolour.png"
