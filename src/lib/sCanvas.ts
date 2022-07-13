@@ -550,17 +550,17 @@ export default class SCanvas {
   withTransform = (
     config: {
       hScale: number
-      hskew: number
+      hSkew: number
       vSkew: number
-      vScaling: number
+      vScale: number
       dX: number
       dY: number
     },
     callback: () => void
   ) => {
     this.pushState()
-    const { hScale, hskew, vSkew, vScaling, dX, dY } = config
-    this.ctx.transform(hScale, hskew, vSkew, vScaling, dX, dY)
+    const { hScale, hSkew, vSkew, vScale, dX, dY } = config
+    this.ctx.transform(hScale, hSkew, vSkew, vScale, dX, dY)
     callback()
     this.popState()
   }

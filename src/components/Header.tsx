@@ -31,11 +31,13 @@ export default function Header() {
 
         if (isMatch) {
           return (
-            <div className="text-amber-200 font-bold  p-4">{link.name}</div>
+            <div className="text-amber-200 font-bold  p-4" key={i}>
+              {link.name}
+            </div>
           )
         } else {
           return (
-            <Link href={link.href}>
+            <Link href={link.href} key={i}>
               <a className="text-white font-bold hover:text-rose-200 p-4">
                 {link.name}
               </a>

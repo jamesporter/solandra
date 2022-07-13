@@ -19,25 +19,12 @@ export type FontWeight =
   | "700"
   | "800"
   | "900"
-export enum Font {
-  Arial = "Arial",
-  Helvetica = "Helvetica",
-  TimesNewRoman = "Times New Roman",
-  Times = "Times",
-  CourierNew = "Courier New",
-  Courier = "Courier",
-  Palatino = "Palatino",
-  Garamond = "Garamond",
-  Bookman = "Bookman",
-  AvantGarde = "Avant Garde",
-  System = "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
-}
 
 export type TextConfigWithKind = {
   sizing?: TextSizing
   align?: TextHorizontalAlign
   size: number
-  font?: Font
+  font?: string
   at: Point2D
   kind: "fill" | "stroke"
   style?: FontStyle
@@ -46,6 +33,9 @@ export type TextConfigWithKind = {
 }
 
 export type TextConfig = Omit<TextConfigWithKind, "kind">
+
+export const systemFont =
+  "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif"
 
 export class Text implements Textable {
   /**
@@ -60,7 +50,7 @@ export class Text implements Textable {
       size,
       sizing = "fixed",
       align = "center",
-      font = Font.System,
+      font = systemFont,
       at,
       style = "normal",
       weight = "normal",
