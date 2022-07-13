@@ -1,5 +1,5 @@
 import { Point2D } from "../types/sol"
-import { Textable } from "."
+import { SCanvas } from ".."
 
 export type TextSizing = "fixed" | "fitted"
 export type TextHorizontalAlign = CanvasRenderingContext2D["textAlign"]
@@ -21,7 +21,6 @@ export type FontWeight =
   | "900"
 
 export type TextConfigWithKind = {
-  sizing?: TextSizing
   align?: TextHorizontalAlign
   size: number
   font?: string
@@ -37,43 +36,50 @@ export type TextConfig = Omit<TextConfigWithKind, "kind">
 export const systemFont =
   "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif"
 
-export class Text implements Textable {
-  /**
-   * Text is always vertically aligned
-   * By default is fixed (specified vertcial font size) but can choose fitted, then will fit horizontally to size
-   * @param config Configuration
-   */
+function configToFontSpecString({
+  style,
+  variant,
+  weight,
+  size,
+  font,
+}: TextConfigWithKind): string {
+  return `${style ?? ""} ${variant ?? ""} ${weight ?? ""} ${size}px ${
+    font ?? systemFont
+  }`
+}
+
+export class Text {
   constructor(private config: TextConfigWithKind, private text: string) {}
 
-  textIn = (ctx: CanvasRenderingContext2D) => {
-    const {
-      size,
-      sizing = "fixed",
-      align = "center",
-      font = systemFont,
-      at,
-      style = "normal",
-      weight = "normal",
-      variant = "normal",
-      kind,
-    } = this.config
+  textIn = (ctx: CanvasRenderingContext2D, s: SCanvas) => {
+    const { size, at, kind, align = "center" } = this.config
     ctx.textAlign = align
 
     let y: number
-    if (sizing === "fixed") {
-      ctx.font = `${style} ${variant} ${weight} ${size}px ${font}`
+
+    if (size < 1) {
+      s.withScale([0.01, 0.01], () => {
+        ctx.font = configToFontSpecString({
+          ...this.config,
+          size: this.config.size * 100,
+        })
+        y = at[1] * 100 + (size * 100) / 2
+
+        if (kind === "fill") {
+          ctx.fillText(this.text, at[0] * 100, y)
+        } else {
+          ctx.strokeText(this.text, at[0] * 100, y)
+        }
+      })
+    } else {
+      ctx.font = configToFontSpecString(this.config)
       y = at[1] + size / 2
-    } else {
-      ctx.font = `${style} ${variant} ${weight} 1px ${font}`
-      const { width: mW } = ctx.measureText(this.text)
-      const sizeH = size / mW
-      ctx.font = `${style} ${variant} ${weight} ${sizeH}px ${font}`
-      y = at[1] + sizeH / 2
-    }
-    if (kind === "fill") {
-      ctx.fillText(this.text, at[0], y)
-    } else {
-      ctx.strokeText(this.text, at[0], y)
+
+      if (kind === "fill") {
+        ctx.fillText(this.text, at[0], y)
+      } else {
+        ctx.strokeText(this.text, at[0], y)
+      }
     }
   }
 }

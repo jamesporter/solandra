@@ -221,11 +221,11 @@ export default class SCanvas {
   }
 
   drawText(config: TextConfig, text: string) {
-    new Text({ ...config, kind: "stroke" }, text).textIn(this.ctx)
+    new Text({ ...config, kind: "stroke" }, text).textIn(this.ctx, this)
   }
 
   fillText(config: TextConfig, text: string) {
-    new Text({ ...config, kind: "fill" }, text).textIn(this.ctx)
+    new Text({ ...config, kind: "fill" }, text).textIn(this.ctx, this)
   }
 
   forMargin = (
