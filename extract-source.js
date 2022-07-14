@@ -7,7 +7,7 @@ const files = fs.readdirSync(path.join("src", "examples"))
 // console.log(files)
 
 for (let f of files) {
-  if (f === "sketches.ts") break
+  if (f === "sketches.ts") continue
   // console.log(`Process: ${f}\n\n`)
 
   const filePath = path.join("src", "examples", f)

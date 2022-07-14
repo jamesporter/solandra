@@ -56,7 +56,7 @@ framework. Click on Source Code to see how things work.`,
     sketches: text,
     fileName: "text.ts",
     path: "/text",
-    description: `Examples of text APIs`,
+    description: `Examples of text APIs. Click on Source Code to see how things work.`,
   },
 }
 
