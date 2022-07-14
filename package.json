@@ -1,6 +1,6 @@
 {
   "name": "solandra",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "author": "James Porter <james@amimetic.co.uk>",
   "private": true,
   "description": "A framework for algorithmic art. TypeScript first. Make drawing concepts part of framework. Make APIs for humans.",

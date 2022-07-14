@@ -5,6 +5,7 @@ import samples from "./api-samples"
 import highlights from "./highlights"
 import isometric from "./isometric"
 import randomness from "./randomness"
+import text from "./text"
 
 const sketches = {
   Highlights: {
@@ -50,6 +51,12 @@ framework. Click on Source Code to see how things work.`,
     fileName: "randomness.ts",
     path: "/randomness-and-noise",
     description: `Examples focusing on randomness or noise. Click on Source Code to see how things work.`,
+  },
+  Text: {
+    sketches: text,
+    fileName: "text.ts",
+    path: "/text",
+    description: `Examples of text APIs`,
   },
 }
 

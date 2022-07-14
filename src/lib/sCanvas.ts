@@ -221,11 +221,17 @@ export default class SCanvas {
   }
 
   drawText(config: TextConfig, text: string) {
-    new Text({ ...config, kind: "stroke" }, text).textIn(this.ctx)
+    new Text({ ...config, kind: "stroke" }, text).textIn(this.ctx, this)
   }
 
   fillText(config: TextConfig, text: string) {
-    new Text({ ...config, kind: "fill" }, text).textIn(this.ctx)
+    new Text({ ...config, kind: "fill" }, text).textIn(this.ctx, this)
+  }
+
+  measureText(config: Omit<TextConfig, "at">, text: string) {
+    return new Text({ ...config, kind: "stroke", at: [0, 0] }, text).measure(
+      this.ctx
+    )
   }
 
   forMargin = (
@@ -550,17 +556,17 @@ export default class SCanvas {
   withTransform = (
     config: {
       hScale: number
-      hskew: number
+      hSkew: number
       vSkew: number
-      vScaling: number
+      vScale: number
       dX: number
       dY: number
     },
     callback: () => void
   ) => {
     this.pushState()
-    const { hScale, hskew, vSkew, vScaling, dX, dY } = config
-    this.ctx.transform(hScale, hskew, vSkew, vScaling, dX, dY)
+    const { hScale, hSkew, vSkew, vScale, dX, dY } = config
+    this.ctx.transform(hScale, hSkew, vSkew, vScale, dX, dY)
     callback()
     this.popState()
   }
