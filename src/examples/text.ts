@@ -16,14 +16,45 @@ const textSketches: { name: string; sketch: (p: SCanvas) => void }[] = [
         },
         "Hi there!"
       )
-
-      // @ts-ignore
-      // const ctx: CanvasRenderingContext2D = s.ctx
-      // // this doesn't work on safari ...
-      // ctx.font = "0.5px sans-serif"
-      // ctx.fillText("test", 0, 0.5)
     },
     name: "Basics",
+  },
+  {
+    sketch: (s) => {
+      s.background(50, 30, 90)
+
+      s.setFillColor(110, 80, 30)
+
+      s.times(11, (i) => {
+        s.times(11, (j) => {
+          s.fillText(
+            {
+              at: [i / 10, j / 10],
+              size: 0.015,
+              align: "center",
+              font: "times",
+            },
+            `${i / 10},${j / 10}`
+          )
+        })
+      })
+    },
+    name: "Position",
+  },
+  {
+    sketch: (s) => {
+      s.background(220, 30, 90)
+
+      s.setFillColor(310, 80, 30)
+
+      const m = s.measureText({ size: 0.2, font: "sans" }, "Hi there!")
+
+      s.fillText(
+        { at: s.meta.center, size: 0.1, font: "sans" },
+        `w: ${m.width.toFixed(2)} bba: ${m.fontBoundingBoxAscent}`
+      )
+    },
+    name: "Measure",
   },
 ]
 

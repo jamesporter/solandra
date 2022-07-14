@@ -323,7 +323,6 @@ const helloWorld = (p: SCanvas) => {
           {
             at: [n * aspectRatio, n],
             size: 0.2,
-            sizing: "fixed",
             align,
             weight: "600",
           },
@@ -336,7 +335,6 @@ const helloWorld = (p: SCanvas) => {
         {
           at: [n * aspectRatio, n],
           size: 0.2,
-          sizing: "fixed",
           align: "center",
           weight: "600",
         },

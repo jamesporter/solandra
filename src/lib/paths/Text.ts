@@ -82,4 +82,31 @@ export class Text {
       }
     }
   }
+
+  measure(ctx: CanvasRenderingContext2D): TextMetrics {
+    const { size, align = "center" } = this.config
+    ctx.textAlign = align
+
+    // Safari messes up for small sizes
+    if (size < 1) {
+      ctx.font = configToFontSpecString({
+        ...this.config,
+        size: this.config.size * 100,
+      })
+
+      const m = ctx.measureText(this.text)
+      return {
+        actualBoundingBoxAscent: m.actualBoundingBoxAscent / 100,
+        actualBoundingBoxDescent: m.actualBoundingBoxDescent / 100,
+        actualBoundingBoxLeft: m.actualBoundingBoxLeft / 100,
+        actualBoundingBoxRight: m.actualBoundingBoxRight / 100,
+        fontBoundingBoxAscent: m.fontBoundingBoxAscent / 100,
+        fontBoundingBoxDescent: m.fontBoundingBoxDescent / 100,
+        width: m.width / 100,
+      }
+    } else {
+      ctx.font = configToFontSpecString(this.config)
+      return ctx.measureText(this.text)
+    }
+  }
 }

@@ -228,6 +228,12 @@ export default class SCanvas {
     new Text({ ...config, kind: "fill" }, text).textIn(this.ctx, this)
   }
 
+  measureText(config: Omit<TextConfig, "at">, text: string) {
+    return new Text({ ...config, kind: "stroke", at: [0, 0] }, text).measure(
+      this.ctx
+    )
+  }
+
   forMargin = (
     margin: number,
     callback: (
