@@ -14,6 +14,7 @@ import {
 import SyntaxHighlighter from "react-syntax-highlighter"
 import { Canvas } from "../src/components/Canvas"
 import source from "../src/data/source.json"
+import Head from "next/head"
 
 export const INDEX_KEY = "play-ts.index"
 export const SEED_KEY = "play-ts.seed"

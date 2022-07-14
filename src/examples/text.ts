@@ -1,4 +1,4 @@
-import { SCanvas } from "../lib"
+import { SCanvas, v } from "../lib"
 
 const textSketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   {
@@ -55,6 +55,27 @@ const textSketches: { name: string; sketch: (p: SCanvas) => void }[] = [
       )
     },
     name: "Measure",
+  },
+  {
+    sketch: (s) => {
+      s.background(40, 40, 90)
+      s.setFillColor(340, 80, 30)
+      s.fillText(
+        { at: s.meta.center, size: 0.17, font: "Josefin Sans" },
+        `Josefin Sans`
+      )
+
+      s.setFillColor(210, 80, 30)
+      s.fillText(
+        {
+          at: v.add(s.meta.center, [0, 0.2]),
+          size: 0.1,
+          font: "Josefin Sans",
+        },
+        `A web font`
+      )
+    },
+    name: "Web Font",
   },
 ]
 
