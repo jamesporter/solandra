@@ -1111,6 +1111,10 @@ const colourThemes4 = (p: SCanvas) => {
   })
 }
 
+const colourPalettes = (p: SCanvas) => {
+  p.background(30, 20, 90)
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: rainbow, name: "Rainbow Drips" },
   { sketch: horizontal, name: "Horizontal" },
@@ -1156,6 +1160,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: colourThemes2, name: "Colour Themes 2" },
   { sketch: colourThemes3, name: "Colour Themes 3" },
   { sketch: colourThemes4, name: "Colour Themes 4" },
+  { sketch: colourPalettes, name: "Colour Palettes" },
 ]
 
 export default sketches

@@ -1,9 +1,8 @@
 import React, { useRef, useLayoutEffect, useState } from "react"
-// @ts-expect-error
-import useDimensions from "react-use-dimensions"
 import { Sketch } from "../lib/types/sol"
 import SCanvas from "../lib/sCanvas"
 import { setNumber, getNumber } from "../util"
+import { useMeasure } from "react-use"
 
 export const INDEX_KEY = "play-ts.index"
 export const SEED_KEY = "play-ts.seed"
@@ -111,7 +110,7 @@ export function Canvas({
   noShadow = false,
   onClick = () => {},
 }: CanvasProps) {
-  const [ref, { width, height }] = useDimensions()
+  const [ref, { width, height }] = useMeasure()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   // seems to be way more performant to re-use context
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
