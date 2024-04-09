@@ -13,6 +13,7 @@ import {
   Arc,
   Path,
   SimplePath,
+  palettePreset,
 } from "../lib"
 import { add, pointAlong, scale, distance } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
@@ -1113,6 +1114,50 @@ const colourThemes4 = (p: SCanvas) => {
 
 const colourPalettes = (p: SCanvas) => {
   p.background(30, 20, 90)
+
+  // Generate palettes from a preset name and number of colours:
+  const cs1 = palettePreset("rusty", 12)
+  const cs2 = palettePreset("autumnal", 12)
+  const cs3 = palettePreset("rainbow", 12)
+  const cs4 = palettePreset("warmth", 12)
+
+  p.forHorizontal({ n: 12, margin: 0.1 }, (pt, [dX, dY], c, i) => {
+    const [h, s, l] = cs1[i]
+    p.setFillColor(h, s, l, 0.9)
+    p.fill(
+      new Rect({ at: p.perturb({ at: pt, magnitude: 0.05 }), w: dX, h: dY / 4 })
+    )
+
+    const [h2, s2, l2] = cs2[i]
+    p.setFillColor(h2, s2, l2, 0.9)
+    p.fill(
+      new Rect({
+        at: p.perturb({ at: add(pt, [0, dY / 4]), magnitude: 0.05 }),
+        w: dX,
+        h: dY / 4,
+      })
+    )
+
+    const [h3, s3, l3] = cs3[i]
+    p.setFillColor(h3, s3, l3, 0.9)
+    p.fill(
+      new Rect({
+        at: p.perturb({ at: add(pt, [0, dY / 2]), magnitude: 0.05 }),
+        w: dX,
+        h: dY / 4,
+      })
+    )
+
+    const [h4, s4, l4] = cs4[i]
+    p.setFillColor(h4, s4, l4, 0.9)
+    p.fill(
+      new Rect({
+        at: p.perturb({ at: add(pt, [0, (dY * 3) / 4]), magnitude: 0.05 }),
+        w: dX,
+        h: dY / 4,
+      })
+    )
+  })
 }
 
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [

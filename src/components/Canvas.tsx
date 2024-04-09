@@ -110,7 +110,7 @@ export function Canvas({
   noShadow = false,
   onClick = () => {},
 }: CanvasProps) {
-  const [ref, { width, height }] = useMeasure()
+  const [ref, { width, height }] = useMeasure<HTMLDivElement>()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   // seems to be way more performant to re-use context
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)

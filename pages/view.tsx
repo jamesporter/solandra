@@ -78,7 +78,10 @@ function ViewSingle() {
           Source Code
         </button>
 
-        <Link href={`/export?sketch=${sketchNo}&category=${category}`}>
+        <Link
+          href={`/export?sketch=${sketchNo}&category=${category}`}
+          legacyBehavior
+        >
           <a className="bg-gray-200 hover:bg-sky-400 focus:outline-none focus:shadow-outline px-2 mr-2 py-3 rounded ml-2">
             Export
           </a>
