@@ -72,3 +72,5 @@ p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
 ![An example](public/images/3.png)
 
 ![An example](public/images/4.png)
+
+![New in 0.18: Palettes](public/images/5.png)

@@ -24,7 +24,7 @@ export default function ExampleLinks() {
           )
         } else {
           return (
-            <Link href={path} key={i}>
+            <Link href={path} key={i} legacyBehavior>
               <a className="bg-sky-600 text-white font-bold p-2 rounded-lg hover:bg-sky-400 w-48 text-center flex items-center justify-center">
                 {areaName}
               </a>

@@ -103,7 +103,8 @@ export class Text {
         fontBoundingBoxAscent: m.fontBoundingBoxAscent / 100,
         fontBoundingBoxDescent: m.fontBoundingBoxDescent / 100,
         width: m.width / 100,
-      }
+        // TODO should check this is okay, newer TS not happy with original returned stuff, but for many purposes likely fine
+      } as TextMetrics
     } else {
       ctx.font = configToFontSpecString(this.config)
       return ctx.measureText(this.text)

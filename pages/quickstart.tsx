@@ -54,17 +54,10 @@ const QuickStart = () => (
 
       <h2>Code</h2>
       <p>
-        On CodeSandbox, quickly get started:{" "}
-        <a href="https://codesandbox.io/s/simple-solandra-example-2-wy7nx?fontsize=14">
-          {" "}
-          Simple editable sketch
-        </a>
-      </p>
-
-      <p>
-        You can get a{" "}
-        <a href="https://github.com/jamesporter/solandra/tree/master/src/docs/cheat-sheet.md">
-          markdown cheat sheet
+        Solandra Codesandbox (uses React, though other frameworks would be very
+        similar):{" "}
+        <a href="https://codesandbox.io/p/sandbox/solandra-0-18-react-example-ll5gjg">
+          Solandra CodeSandbox v0.18
         </a>
         .
       </p>

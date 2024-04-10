@@ -21,7 +21,7 @@ export default function Header() {
   const router = useRouter()
   return (
     <div className="bg-rose-700 px-8 flex flex-row items-center">
-      <Link href="/">
+      <Link href="/" legacyBehavior>
         <a className="text-white font-bold hover:text-sky-100 p-4 text-xl">
           Solandra
         </a>
@@ -37,7 +37,7 @@ export default function Header() {
           )
         } else {
           return (
-            <Link href={link.href} key={i}>
+            <Link href={link.href} key={i} legacyBehavior>
               <a className="text-white font-bold hover:text-rose-200 p-4">
                 {link.name}
               </a>
