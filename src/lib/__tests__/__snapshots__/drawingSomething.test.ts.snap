@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Draw something with Solandra should be able to draw a rectangle 1`] = `
-Array [
+[
   "resetTransform()",
   "scale(100, 100)",
   "lineWidth = 0.01",
