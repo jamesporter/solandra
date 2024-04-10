@@ -1,12 +1,12 @@
 import type { NextPage } from "next"
 import Head from "next/head"
-import { Canvas } from "../src/components/Canvas"
-import CodeAndSketch from "../src/components/CodeAndSketch"
+
+// import CodeAndSketch from "../src/components/CodeAndSketch"
 import ExampleLinks from "../src/components/ExampleLinks"
 import Footer from "../src/components/Footer"
 import HLink from "../src/components/HLink"
 import { ViewAll } from "../src/components/ViewAll"
-import { Rect, SCanvas } from "../src/lib"
+import { SCanvas } from "../src/lib"
 import { RegularPolygon } from "../src/lib/paths/RegularPolygon"
 import {
   ArrowsExpandIcon,
@@ -16,44 +16,15 @@ import {
 } from "@heroicons/react/outline"
 import Link from "next/link"
 import { SVGSketch } from "../src/components/SVGSketch"
-
-const logo = (p: SCanvas) => {
-  const { bottom, right, center } = p.meta
-  const d = Math.min(bottom, right) / 2.8
-
-  p.times(5, (n) => {
-    const sides = 10 - n
-    const r = d - n * 0.16 * d + (1 + Math.cos(p.t * 1.5)) / 45
-    p.setFillColor(345, 70, 20 + n * 12)
-    p.fill(
-      new RegularPolygon({
-        at: center,
-        n: sides,
-        r,
-        a: 0.1 * Math.cos(p.t),
-      })
-    )
-  })
-}
-
-const logoForDemo = (p: SCanvas) => {
-  p.background(220, 26, 14)
-  const { bottom, right, center } = p.meta
-  const d = Math.min(bottom, right) / 2.8
-
-  p.times(5, (n) => {
-    const sides = 10 - n
-    const r = d - n * 0.16 * d + (1 + Math.cos(p.t)) / 40
-    p.setFillColor(220, 70, 10 + n * 12)
-    p.fill(
-      new RegularPolygon({
-        at: center,
-        n: sides,
-        r,
-      })
-    )
-  })
-}
+import { Logo } from "../src/components/Logo"
+import {
+  Five,
+  Four,
+  One,
+  Six,
+  Three,
+  Two,
+} from "../src/components/CodeAndSketchExamples"
 
 const Home: NextPage = () => {
   return (
@@ -69,16 +40,7 @@ const Home: NextPage = () => {
 
       <main>
         <div className="bg-gradient-to-b from-rose-500  to-sky-700 py-4 overflow-hidden">
-          <div
-            style={{
-              height: "50vh",
-              width: "100vw",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <Canvas sketch={logo} seed={1} noShadow playing />
-          </div>
+          <Logo />
 
           <div className="px-8 pt-4 flex flex-col">
             <h1 className="font-bold text-6xl mb-2 mr-4 text-white text-center">
@@ -189,12 +151,7 @@ const Home: NextPage = () => {
             called p). So we get friendly autocompletion.
           </p>
 
-          <CodeAndSketch
-            code={`p.background(220, 26, 14)`}
-            sketch={(p) => {
-              p.background(220, 26, 14)
-            }}
-          />
+          <One />
 
           <p>
             That&apos;s a bit boring. Let&apos;s draw something. First we set a
@@ -203,15 +160,7 @@ const Home: NextPage = () => {
             with clear, declarative APIs (you describe the shape).
           </p>
 
-          <CodeAndSketch
-            code={`p.setFillColor(220, 54, 50)
-p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
-            sketch={(p) => {
-              p.background(220, 26, 14)
-              p.setFillColor(220, 54, 50)
-              p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))
-            }}
-          />
+          <Two />
 
           <p>
             What did we learn? Points are always of the form: [x,y]. We use
@@ -223,25 +172,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
             hard bit. What if we could just ask it to tile our canvas? We can.
           </p>
 
-          <CodeAndSketch
-            code={`p.forTiling(
-  { n: 10, type: "square", margin: 0.1 },
-  (at, [w, h], c, i) => {
-    p.setFillColor(150 + i * 5, 54, 50)
-    p.fill(new Rect({ at, w, h }))
-  }
-)`}
-            sketch={(p) => {
-              p.background(220, 26, 14)
-              p.forTiling(
-                { n: 10, type: "square", margin: 0.1 },
-                (at, [w, h], c, i) => {
-                  p.setFillColor(150 + i * 5, 54, 50)
-                  p.fill(new Rect({ at, w, h }))
-                }
-              )
-            }}
-          />
+          <Three />
 
           <p>
             First we configure out tiling: 10 tiles across, square shape.
@@ -261,19 +192,7 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
             first (we can then easily tweak it).
           </p>
 
-          <CodeAndSketch
-            code={`p.forHorizontal({ n: 8, margin: 0.1 }, (at, [w, h], c, i) => {
-  p.setFillColor(150 + i * 5, 54, 50)
-  p.fill(new RegularPolygon({ at: c, r: w / 3, n: i + 3 }))
-})`}
-            sketch={(p) => {
-              p.background(220, 26, 14)
-              p.forHorizontal({ n: 6, margin: 0.1 }, (at, [w, h], c, i) => {
-                p.setFillColor(150 + i * 10, 54, 50)
-                p.fill(new RegularPolygon({ at: c, r: w / 3, n: i + 3 }))
-              })
-            }}
-          />
+          <Four />
 
           <p>
             We need one more thing before we can finish our drawing: time. But
@@ -281,55 +200,14 @@ p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
             throw in some trigonometric stuff to make look more organic and:
           </p>
 
-          <CodeAndSketch
-            code={`new RegularPolygon({
-  at: [c[0], c[1] + Math.cos(p.t + (i * Math.PI) / 8) * 0.2],
-  r: w / 3,
-  n: i + 3,
-})`}
-            sketch={(p) => {
-              p.background(220, 26, 14)
-              p.forHorizontal({ n: 6, margin: 0.1 }, (at, [w, h], c, i) => {
-                p.setFillColor(150 + i * 10, 54, 50)
-                p.fill(
-                  new RegularPolygon({
-                    at: [c[0], c[1] + Math.cos(p.t + (i * Math.PI) / 8) * 0.2],
-                    r: w / 3,
-                    n: i + 3,
-                  })
-                )
-              })
-            }}
-            playing
-          />
+          <Five />
 
           <p>
             Okay so let&apos;s put everything together and draw our animated
             logo.
           </p>
 
-          <CodeAndSketch
-            code={`(p: SCanvas) => {
-  p.background(220, 26, 14)
-  const { bottom, right, center } = p.meta
-  const d = Math.min(bottom, right) / 2.8
-
-  p.times(5, n => {
-    const sides = 10 - n
-    const r = d - n * 0.16 * d + (1 + Math.cos(p.t)) / 40
-    p.setFillColor(220, 70, 10 + n * 12)
-    p.fill(
-      new RegularPolygon({
-        at: center,
-        n: sides,
-        r,
-      })
-    )
-  })
-}`}
-            sketch={logoForDemo}
-            playing
-          />
+          <Six />
 
           <h1>Examples</h1>
 
