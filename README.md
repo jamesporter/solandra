@@ -4,10 +4,6 @@
 
 Opinionated, agile (code is easy to change) framework for algorithmic art. See my [essays](https://www.amimetic.co.uk/art/) for research/plans that went into this!
 
-- Sketches always have width 1, height depends on aspect ratio.
-- Angles in radians.
-- Points are [number, number].
-- Colours in hsl(a).
 - Leverage TypeScript: you shouldn't need to learn much, autocomplete and type checking should have your back.
 - Not for beginners.
 - Control flow at level of drawing (tiling, partitions etc).
@@ -45,24 +41,24 @@ Then open [http://localhost:3000](http://localhost:3000) and in your editor `ske
 
 ```typescript
 p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
-  p.lineStyle = { cap: "round" }
+  p.lineStyle = { cap: "round" };
   p.proportionately([
     [
       1,
       () => {
-        p.setStrokeColour(120 + x * 120, 90 - 20 * y, 40)
-        p.drawLine([x, y], [x + dX, y + dY])
+        p.setStrokeColour(120 + x * 120, 90 - 20 * y, 40);
+        p.drawLine([x, y], [x + dX, y + dY]);
       },
     ],
     [
       2,
       () => {
-        p.setStrokeColour(120 + x * 120, 90 - 20 * y, 40)
-        p.drawLine([x + dX, y], [x, y + dY])
+        p.setStrokeColour(120 + x * 120, 90 - 20 * y, 40);
+        p.drawLine([x + dX, y], [x, y + dY]);
       },
     ],
-  ])
-})
+  ]);
+});
 ```
 
 ![An example](public/images/1.png)
@@ -74,3 +70,24 @@ p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
 ![An example](public/images/4.png)
 
 ![New in 0.18: Palettes](public/images/5.png)
+
+## The Website
+
+This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+
+### Installation/Run
+
+```
+$ yarn
+$ yarn start
+```
+
+This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+
+### Build
+
+```
+$ yarn build
+```
+
+This command generates static content into the `build` directory and can be served using any static contents hosting service.

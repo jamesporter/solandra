@@ -1,0 +1,109 @@
+import { Canvas } from "../../../src/components/Canvas"
+import { EndOfTutorial } from "../../../src/components/Examples/EndOfTutorial"
+import { RegularPolygon, Rect } from "../../../src/lib"
+
+# Getting Started
+
+Let&apos;s make the animated logo thing above to learn about how to use
+Solandra. Let&apos;s start with the background. The only way to do colours in
+Solandra is via HSL(A). Hue (0-360), Saturation (0-100) and Brightness
+(0-100). Oh and alpha (0-1). RGB is for computers not for you.
+
+Every sketch is just a function on the main Solandra object (here called p).
+So we get friendly autocompletion.
+
+<Canvas
+	playing
+	width={320}
+	height={320}
+	sketch={(p) => {
+		p.background(220, 26, 14)
+	}}
+/>
+
+That&apos;s a bit boring. Let&apos;s draw something. First we set a fill
+colour. Then we use a fill call (to draw lines use draw instead). Solandra
+comes with loads of standard built in shapes, with clear, declarative APIs
+(you describe the shape).
+
+<Canvas
+	playing
+	width={320}
+	height={320}
+	sketch={(p) => {
+		p.background(220, 26, 14)
+		p.setFillColor(220, 54, 50)
+		p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))
+	}}
+/>
+
+What did we learn? Points are always of the form: [x,y]. We use short names
+for common things (like width, w).
+
+Let&apos;s draw many shapes. But we&apos;ll make the computer do the hard bit.
+What if we could just ask it to tile our canvas? We can.
+
+<Canvas
+	playing
+	width={320}
+	height={320}
+	sketch={(p) => {
+		p.background(220, 26, 14)
+		p.forTiling({ n: 10, type: "square", margin: 0.1 }, (at, [w, h], c, i) => {
+			p.setFillColor(150 + i * 5, 54, 50)
+			p.fill(new Rect({ at, w, h }))
+		})
+	}}
+/>
+
+First we configure out tiling: 10 tiles across, square shape. Let&apos;s add a
+margin (that would be really tedious by hand).
+
+Now let&apos;s use our tiling. That&apos;s a lot of arguments. But it
+doesn't matter. TypeScript keeps track of them. They are the position,
+tile size, tile centre and iteration count. We&apos;ll use the last one to
+pick a colour.
+
+Let&apos;s draw polygons instead. Instead of tiling, let&apos;s move across
+our canvas. The API is basically the same. Configuration goes first (we can
+then easily tweak it).
+
+<Canvas
+	playing
+	width={320}
+	height={320}
+	sketch={(p) => {
+		p.background(220, 26, 14)
+		p.forHorizontal({ n: 6, margin: 0.1 }, (at, [w, h], c, i) => {
+			p.setFillColor(150 + i * 10, 54, 50)
+			p.fill(new RegularPolygon({ at: c, r: w / 3, n: i + 3 }))
+		})
+	}}
+/>
+
+We need one more thing before we can finish our drawing: time. But it is
+really easy, usually just p.t gives the time in seconds. We throw in some
+trigonometric stuff to make look more organic and:
+
+<Canvas
+	playing
+	width={320}
+	height={320}
+	sketch={(p) => {
+		p.background(220, 26, 14)
+		p.forHorizontal({ n: 6, margin: 0.1 }, (at, [w, h], c, i) => {
+			p.setFillColor(150 + i * 10, 54, 50)
+			p.fill(
+				new RegularPolygon({
+					at: [c[0], c[1] + Math.cos(p.t + (i * Math.PI) / 8) * 0.2],
+					r: w / 3,
+					n: i + 3,
+				})
+			)
+		})
+	}}
+/>
+
+Okay so let&apos;s put everything together and draw our animated logo.
+
+<EndOfTutorial />

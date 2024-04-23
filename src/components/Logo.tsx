@@ -22,15 +22,6 @@ const logo = (p: SCanvas) => {
 
 export function Logo() {
   return (
-    <div
-      style={{
-        height: "50vh",
-        width: "100vw",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <Canvas sketch={logo} seed={1} noShadow playing />
-    </div>
+    <Canvas sketch={logo} seed={1} noShadow playing width={320} height={320} />
   )
 }
