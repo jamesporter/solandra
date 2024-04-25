@@ -14,10 +14,12 @@
     "build:package": "node pre-publish && yarn build:esm && yarn build:cjs",
     "build:source": "node extract-source.js",
     "build:esm": "yarn tsc -p tsconfig-esm.json",
-    "build:cjs": "yarn tsc -p tsconfig-cjs.json"
+    "build:cjs": "yarn tsc -p tsconfig-cjs.json",
+    "build:samples": "tsx ./create-images.ts"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.6",
+    "canvas": "^2.11.2",
     "next": "13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -37,6 +39,7 @@
     "rimraf": "^3.0.2",
     "tailwindcss": "^3.0.24",
     "ts-jest": "^29.1.2",
+    "tsx": "^4.7.3",
     "typescript": "5.4.4"
   },
   "license": "MIT",
