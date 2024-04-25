@@ -9,6 +9,9 @@ const height = 600
 
 Object.entries(sketches).forEach(([category, { sketches }]) => {
   sketches.forEach(({ sketch, name }) => {
+    // skip lch stuff as node canvas doesn't support
+    if (name.match(/.*lch.*/i)) return
+
     const canvas = createCanvas(width, height)
     const ctx = canvas.getContext("2d")
 
@@ -40,6 +43,8 @@ Object.entries(sketches).forEach(([category, { sketches }]) => {
   md += `## ${category}\n\n`
 
   sketches.forEach(({ name }) => {
+    if (name.match(/.*lch.*/i)) return
+
     md += `### ${name}\n\n`
     md += `![${name}](./${name.replaceAll(/[^A-z0-9]/g, "-")}.png)\n\n`
   })

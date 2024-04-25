@@ -937,6 +937,15 @@ const advancedDivisions = (p: SCanvas) => {
     })
 }
 
+const lchIntro = (p: SCanvas) => {
+  p.backgroundLCH(62, 13, 210)
+
+  p.range({ from: 0, to: Math.PI * 2, n: 11 }, (a) => {
+    p.setFillColorLCH(62 - a * 5, 28, 280 - a * 11, 0.8)
+    p.fill(new Star({ at: p.meta.center, n: 7, r: 0.4, a }))
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: tiling, name: "Tiling" },
   { sketch: chaiken, name: "Chaiken" },
@@ -970,6 +979,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: dividing6, name: "Dividing 6" },
   { sketch: bokeh, name: "Bokeh" },
   { sketch: advancedDivisions, name: "Advanced Divisions" },
+  { sketch: lchIntro, name: "OKLCH Intro" },
 ]
 
 export default sketches

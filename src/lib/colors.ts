@@ -10,7 +10,12 @@ export function hsla(h: number, s: number, l: number, a: number = 1): Color {
   return `hsla(${h}, ${s}%, ${l}%, ${a})`
 }
 
+export function oklcha(l: number, c: number, h: number, a: number = 1): Color {
+  return `oklch(${l}% ${c / 100} ${h}${a < 1 ? `/ ${a * 100}%` : ""})`
+}
+
 export type ColorSpec = { h: number; s: number; l: number; a?: number }
+export type OKLCHColorSpec = { l: number; c: number; h: number; a?: number }
 
 /*
   Color themes should be able to give a color at a integer stop

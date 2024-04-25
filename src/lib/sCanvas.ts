@@ -1,5 +1,5 @@
 import { Size, Point2D, Vector2D } from "./types/sol"
-import { hsla, ColorSpec } from "./colors"
+import { hsla, ColorSpec, oklcha, OKLCHColorSpec } from "./colors"
 import { Traceable } from "./paths"
 import { TextConfig, Text, Rect } from "."
 import { RNG } from "./rng"
@@ -176,6 +176,18 @@ export default class SCanvas {
     this.background(h, s, l, a)
   }
 
+  backgroundLCH(l: number, c: number, h: number, a: number = 1) {
+    this.pushState()
+    this.ctx.fillStyle = oklcha(l, c, h, a)
+    const { right, bottom } = this.meta
+    this.fill(new Rect({ at: [0, 0], w: right, h: bottom }))
+    this.popState()
+  }
+
+  backgroundFromSpecLCH({ l, c, h, a }: OKLCHColorSpec) {
+    this.backgroundLCH(l, c, h, a)
+  }
+
   backgroundGradient(gradient: Gradientable) {
     this.pushState()
     this.ctx.fillStyle = gradient.gradient(this.ctx)
@@ -188,12 +200,20 @@ export default class SCanvas {
     this.ctx.strokeStyle = hsla(h, s, l, a)
   }
 
+  setStrokeColorLCH(l: number, c: number, h: number, a: number = 1) {
+    this.ctx.strokeStyle = oklcha(l, c, h, a)
+  }
+
   setStrokeColorFromSpec({ h, s, l, a }: ColorSpec) {
     this.setStrokeColor(h, s, l, a)
   }
 
   setFillColor(h: number, s: number, l: number, a: number = 1) {
     this.ctx.fillStyle = hsla(h, s, l, a)
+  }
+
+  setFillColorLCH(l: number, c: number, h: number, a: number = 1) {
+    this.ctx.fillStyle = oklcha(l, c, h, a)
   }
 
   setFillColorFromSpec({ h, s, l, a }: ColorSpec) {
