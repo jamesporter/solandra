@@ -43,7 +43,7 @@
 }
 
 .article-page h1 {
-  @apply text-rose-700 text-4xl my-4;
+  @apply text-emerald-700 text-4xl my-4;
 }
 
 .article-page h2 {
@@ -55,7 +55,7 @@
 }
 
 .article-page p a {
-  @apply font-bold text-rose-600 hover:text-sky-500;
+  @apply font-bold text-emerald-600 hover:text-sky-500;
 }
 
 body {
