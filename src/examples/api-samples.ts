@@ -49,6 +49,7 @@ const rainbow = (p: SCanvas) => {
 }
 
 const horizontal = (p: SCanvas) => {
+  p.lineWidth = p.width / 100
   p.backgroundGradient(
     new LinearGradient({
       from: [0, 0],
@@ -59,8 +60,8 @@ const horizontal = (p: SCanvas) => {
       ],
     })
   )
-  p.forHorizontal({ n: 20, margin: 0.1 }, ([x, y], [dX, dY]) => {
-    p.setStrokeColor(x * 360, 90, 40)
+  p.forHorizontal({ n: 20, margin: 0.1 }, ([x, y], [dX, dY], _, i) => {
+    p.setStrokeColor((i / 20) * 360, 90, 40)
     p.draw(new Line([x, y], [x + dX, y + dY]))
   })
 }

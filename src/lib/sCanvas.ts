@@ -40,10 +40,12 @@ export type SCanvasNonDrawing = Pick<
 >
 
 export default class SCanvas {
-  readonly aspectRatio: number
-  readonly originalScale: number
   private rng: RNG
   readonly t: number
+
+  aspectRatio: number
+  width: number
+  height: number
 
   constructor(
     private ctx: CanvasRenderingContext2D,
@@ -53,11 +55,9 @@ export default class SCanvas {
   ) {
     ctx.resetTransform()
     this.aspectRatio = width / height
-    // i.e. size 1 = entire width
-    this.originalScale = width
-    // i.e. size 1/100 of width
-    ctx.scale(width, width)
-    ctx.lineWidth = 0.01
+    this.width = width
+    this.height = height
+
     ctx.lineJoin = "round"
     ctx.strokeStyle = "black"
     ctx.fillStyle = "gray"
@@ -84,13 +84,10 @@ export default class SCanvas {
    */
   updateSize({ width, height }: { width: number; height: number }) {
     this.ctx.resetTransform()
-    // @ts-ignore (sorry but don't want other people to do this!)
     this.aspectRatio = width / height
     // i.e. size 1 = entire width
-    // @ts-ignore (sorry but don't want other people to do this!)
-    this.originalScale = width
-    // i.e. size 1/100 of width
-    this.ctx.scale(width, width)
+    this.width = width
+    this.height = height
   }
 
   resetRandomNumberGenerator(seed?: number) {
@@ -100,11 +97,11 @@ export default class SCanvas {
   get meta() {
     return {
       top: 0,
-      bottom: 1 / this.aspectRatio,
-      right: 1,
+      bottom: this.height,
+      right: this.width,
       left: 0,
       aspectRatio: this.aspectRatio,
-      center: [0.5, 0.5 / this.aspectRatio] as [number, number],
+      center: [0.5 * this.width, 0.5 * this.height] as [number, number],
     }
   }
 
@@ -158,10 +155,10 @@ export default class SCanvas {
     dY?: number
   }) {
     const { h, s, l, a } = color
-    this.ctx.shadowBlur = size * this.originalScale
+    this.ctx.shadowBlur = size * this.width
     this.ctx.shadowColor = hsla(h, s, l, a)
-    this.ctx.shadowOffsetX = dX * this.originalScale
-    this.ctx.shadowOffsetY = dY * this.originalScale
+    this.ctx.shadowOffsetX = dX * this.width
+    this.ctx.shadowOffsetY = dY * this.width
   }
 
   background(h: number, s: number, l: number, a: number = 1) {
@@ -266,14 +263,13 @@ export default class SCanvas {
       order = "columnFirst",
     } = config
     const nY = type === "square" ? Math.floor(n * (1 / this.aspectRatio)) : n
-    const deltaX = (1 - margin * 2) / n
+    const deltaX = (this.width - margin * 2 * this.width) / n
 
-    const hY =
-      type === "square" ? deltaX * nY : 1 / this.aspectRatio - 2 * margin
+    const hY = type === "square" ? deltaX * nY : this.height * (1 - 2 * margin)
     const deltaY = hY / nY
 
-    const sX = margin
-    const sY = (1 / this.aspectRatio - hY) / 2
+    const sX = margin * this.width
+    const sY = (this.height - hY) / 2
 
     if (order === "columnFirst") {
       for (let i = 0; i < n; i++) {
@@ -316,10 +312,10 @@ export default class SCanvas {
   ) => {
     const { n, margin = 0 } = config
 
-    const sX = margin
-    const eX = 1 - margin
-    const sY = margin
-    const dY = 1 / this.aspectRatio - 2 * margin
+    const sX = margin * this.width
+    const eX = (1 - margin) * this.width
+    const sY = margin * this.height
+    const dY = this.height * (1 - 2 * margin)
     const dX = (eX - sX) / n
 
     for (let i = 0; i < n; i++) {
