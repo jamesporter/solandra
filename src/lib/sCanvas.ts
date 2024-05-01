@@ -45,6 +45,15 @@ export default class SCanvas {
   private rng: RNG
   readonly t: number
 
+  meta: {
+    top: number
+    bottom: number
+    right: number
+    left: number
+    aspectRatio: number
+    center: [number, number]
+  }
+
   constructor(
     private ctx: CanvasRenderingContext2D,
     { width, height }: Size,
@@ -62,6 +71,15 @@ export default class SCanvas {
     ctx.strokeStyle = "black"
     ctx.fillStyle = "gray"
     this.lineStyle = { cap: "round" }
+
+    this.meta = {
+      top: 0,
+      bottom: 1 / this.aspectRatio,
+      right: 1,
+      left: 0,
+      aspectRatio: this.aspectRatio,
+      center: [0.5, 0.5 / this.aspectRatio],
+    }
 
     this.rng = new RNG(rngSeed)
     this.t = time || 0
@@ -91,21 +109,19 @@ export default class SCanvas {
     this.originalScale = width
     // i.e. size 1/100 of width
     this.ctx.scale(width, width)
-  }
 
-  resetRandomNumberGenerator(seed?: number) {
-    this.rng = new RNG(seed)
-  }
-
-  get meta() {
-    return {
+    this.meta = {
       top: 0,
       bottom: 1 / this.aspectRatio,
       right: 1,
       left: 0,
       aspectRatio: this.aspectRatio,
-      center: [0.5, 0.5 / this.aspectRatio] as [number, number],
+      center: [0.5, 0.5 / this.aspectRatio],
     }
+  }
+
+  resetRandomNumberGenerator(seed?: number) {
+    this.rng = new RNG(seed)
   }
 
   set lineWidth(width: number) {
