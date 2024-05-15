@@ -78,12 +78,7 @@ const QuickStart = () => (
         <a href="https://www.npmjs.com/package/solandra-react">NPM</a> with{" "}
         <span className="text-gray-500 font-mono">
           npm i solandra-react solandra react react-dom
-        </span>{" "}
-        or{" "}
-        <span className="text-gray-500 font-mono">
-          yarn add solandra-react solandra react react-dom
         </span>
-        .
       </div>
 
       <div className="flex flex-col" style={{ height: 640 }}>
