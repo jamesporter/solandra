@@ -15,7 +15,8 @@
     "build:source": "node extract-source.js",
     "build:esm": "npx tsc -p tsconfig-esm.json",
     "build:cjs": "npx tsc -p tsconfig-cjs.json",
-    "build:samples": "tsx ./create-images.ts"
+    "build:samples": "tsx ./create-images.ts",
+    "check:samples": "tsx ./check-images.ts"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.6",
