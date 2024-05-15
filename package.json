@@ -11,10 +11,10 @@
     "lint": "next lint",
     "lint:fix": "eslint --fix --ext .ts,.tsx .",
     "test": "jest",
-    "build:package": "node pre-publish && yarn build:esm && yarn build:cjs",
+    "build:package": "node pre-publish && npm run build:esm && npm run build:cjs",
     "build:source": "node extract-source.js",
-    "build:esm": "yarn tsc -p tsconfig-esm.json",
-    "build:cjs": "yarn tsc -p tsconfig-cjs.json",
+    "build:esm": "npx tsc -p tsconfig-esm.json",
+    "build:cjs": "npx tsc -p tsconfig-cjs.json",
     "build:samples": "tsx ./create-images.ts"
   },
   "dependencies": {
