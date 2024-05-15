@@ -39,15 +39,15 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <div className="bg-gradient-to-b from-emerald-500  to-sky-700 py-4 overflow-hidden">
+        <div className="bg-gradient-to-b from-emerald-400  to-sky-900 py-4 overflow-hidden">
           <Logo />
 
           <div className="px-8 pt-4 flex flex-col">
-            <h1 className="font-bold text-6xl mb-2 mr-4 text-white text-center">
+            <h1 className="font-bold text-6xl mb-2 mr-4  text-center text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-emerald-400 inline-block drop-shadow-md">
               Solandra
             </h1>
-            <h2 className="text-gray-100 text-center text-3xl">
-              A modern TypeScript-first Creative Coding Framework
+            <h2 className="text-sky-100 text-center text-[calc(max(4vh,16px))] drop-shadow-md">
+              Modern TypeScript-first Creative Coding
             </h2>
             <div className="flex flex-row justify-center pt-4">
               <HLink to="/main">Examples</HLink>

@@ -31,7 +31,7 @@ export default function Header() {
 
         if (isMatch) {
           return (
-            <div className="text-amber-200 font-bold  p-4" key={i}>
+            <div className="text-emerald-300 font-bold  p-4" key={i}>
               {link.name}
             </div>
           )
