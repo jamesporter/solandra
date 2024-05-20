@@ -8,37 +8,6 @@ export interface Gradientable {
   gradient(ctx: CanvasRenderingContext2D): CanvasGradient
 }
 
-/**
- * Utility type if want to expose an API where have access to Solandra non-drawing related things
- *
- * (want to use in thing I'm calling sol-game-r)
- */
-export type SCanvasNonDrawing = Pick<
-  SCanvas,
-  | "random"
-  | "randomPoint"
-  | "randomPolarity"
-  | "aspectRatio"
-  | "build"
-  | "doProportion"
-  | "downFrom"
-  | "forGrid"
-  | "gaussian"
-  | "meta"
-  | "perturb"
-  | "poisson"
-  | "proportionately"
-  | "range"
-  | "resetRandomNumberGenerator"
-  | "sample"
-  | "samples"
-  | "shuffle"
-  | "times"
-  | "uniformGridPoint"
-  | "uniformRandomInt"
-  | "withRandomOrder"
->
-
 export default class SCanvas {
   readonly aspectRatio: number
   readonly originalScale: number
@@ -248,6 +217,20 @@ export default class SCanvas {
     return new Text({ ...config, kind: "stroke", at: [0, 0] }, text).measure(
       this.ctx
     )
+  }
+
+  drawImage({
+    image,
+    at = [0, 0],
+    w,
+    h,
+  }: {
+    image: CanvasImageSource
+    at?: Point2D
+    w?: number
+    h?: number
+  }) {
+    this.ctx.drawImage(image, at[0], at[1], w ?? 1, h ?? this.meta.bottom)
   }
 
   forMargin = (
@@ -500,6 +483,10 @@ export default class SCanvas {
     return [this.rng.number(), this.rng.number() / this.aspectRatio]
   }
 
+  randomAngle(): number {
+    return this.rng.number() * Math.PI * 2
+  }
+
   range(
     config: { from: number; to: number; n: number; inclusive?: boolean },
     callback: (n: number) => void
@@ -583,6 +570,13 @@ export default class SCanvas {
     this.pushState()
     const { hScale, hSkew, vSkew, vScale, dX, dY } = config
     this.ctx.transform(hScale, hSkew, vSkew, vScale, dX, dY)
+    callback()
+    this.popState()
+  }
+
+  withBlendMode = (mode: GlobalCompositeOperation, callback: () => void) => {
+    this.pushState()
+    this.ctx.globalCompositeOperation = mode
     callback()
     this.popState()
   }
