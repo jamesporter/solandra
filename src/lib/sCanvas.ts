@@ -3,6 +3,7 @@ import { hsla, ColorSpec } from "./colors"
 import { Traceable } from "./paths"
 import { TextConfig, Text, Rect } from "."
 import { RNG } from "./rng"
+import { poissonDiskPoints } from "./poissonDisk"
 
 export interface Gradientable {
   gradient(ctx: CanvasRenderingContext2D): CanvasGradient
@@ -485,6 +486,26 @@ export default class SCanvas {
 
   randomAngle(): number {
     return this.rng.number() * Math.PI * 2
+  }
+
+  forPoissonDiskPoints = (
+    config: {
+      minDist: number
+      attempts?: number
+    },
+    callback: (at: Point2D, i: number) => void
+  ) => {
+    const { minDist, attempts = 30 } = config
+
+    const points = poissonDiskPoints({
+      width: 1,
+      height: this.meta.bottom,
+      minDist,
+      rng: () => this.random(),
+      k: attempts,
+    })
+
+    points.forEach(callback)
   }
 
   range(

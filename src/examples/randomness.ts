@@ -9,7 +9,7 @@ import {
   Rect,
   Spiral,
 } from "../lib"
-import { add, scale } from "../lib/vectors"
+import { add, distance, rotateAround, scale } from "../lib/vectors"
 import { perlin2 } from "../lib/noise"
 import { RadialGradient } from "../lib/gradient"
 import { clamp } from "../lib"
@@ -534,6 +534,51 @@ const perturbedSpiral3 = (p: SCanvas) => {
   )
 }
 
+const poissonPoints = (p: SCanvas) => {
+  p.background(0, 0, 95)
+
+  p.forPoissonDiskPoints({ minDist: 0.05 }, (pt, i) => {
+    p.setFillColor(165 + (i % 50), 70, 30)
+    p.fill(new Circle({ at: pt, r: 0.01 * (1 + p.random()) }))
+  })
+}
+
+const poissonPoints2 = (p: SCanvas) => {
+  p.background(0, 0, 95)
+
+  const points = p.build(p.forPoissonDiskPoints, { minDist: 0.1 }, (pt, i) => {
+    return pt
+  })
+
+  p.setFillColor(165, 70, 30, 0.2)
+  p.setStrokeColor(0, 0, 0, 0.7)
+  p.lineWidth = 0.0075
+  const path = SimplePath.withPoints(points).chaiken({ n: 4 })
+
+  p.fill(path)
+  p.draw(path)
+}
+
+const poissonPoints3 = (p: SCanvas) => {
+  p.background(0, 0, 5)
+
+  const dC = (pt: Point2D) => distance(pt, p.meta.center)
+
+  p.forPoissonDiskPoints({ minDist: 0.025 }, (pt, i) => {
+    const d = dC(pt)
+    if (d < 0.6 * p.random()) {
+      const newPt = rotateAround(p.meta.center, pt, p.t * d)
+
+      p.setFillColor(165 + (i % 50), 70, 30, 0.6)
+      p.setStrokeColor(210, 10, 50, 0.2)
+      p.lineWidth = 0.002
+
+      p.draw(new Line(p.meta.center, newPt))
+      p.fill(new RegularPolygon({ at: newPt, n: 6, r: 0.015 }))
+    }
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: noiseField, name: "Noise Field" },
   { sketch: rectangles, name: "Rectangles" },
@@ -555,6 +600,9 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: perturbedSpiral, name: "Perturbed Spiral" },
   { sketch: perturbedSpiral2, name: "Perturbed Spiral 2" },
   { sketch: perturbedSpiral3, name: "Perturbed Spiral 3" },
+  { sketch: poissonPoints, name: "Poisson Points" },
+  { sketch: poissonPoints2, name: "Poisson Points 2" },
+  { sketch: poissonPoints3, name: "Poisson Points 3" },
 ]
 
 export default sketches

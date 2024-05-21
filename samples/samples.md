@@ -562,6 +562,18 @@
 
 ![Perturbed Spiral 3](./Perturbed-Spiral-3.png)
 
+### Poisson Points
+
+![Poisson Points](./Poisson-Points.png)
+
+### Poisson Points 2
+
+![Poisson Points 2](./Poisson-Points-2.png)
+
+### Poisson Points 3
+
+![Poisson Points 3](./Poisson-Points-3.png)
+
 ## Text
 
 ### Basics

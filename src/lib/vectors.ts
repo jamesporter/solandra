@@ -20,6 +20,19 @@ export const rotate = ([x, y]: Point2D, a: number): Point2D => [
   x * Math.sin(a) + y * Math.cos(a),
 ]
 
+export const rotateAround = (
+  origin: Point2D,
+  [x, y]: Point2D,
+  a: number
+): Point2D => {
+  const [oX, oY] = origin
+
+  return [
+    origin[0] + (x - origin[0]) * Math.cos(a) - (y - origin[1]) * Math.sin(a),
+    origin[1] + (x - origin[0]) * Math.sin(a) + (y - origin[1]) * Math.cos(a),
+  ]
+}
+
 export const normalize = (p: Point2D): Point2D => {
   const m = magnitude(p)
   return [p[0] / m, p[1] / m]
