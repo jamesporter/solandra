@@ -1,3 +1,5 @@
+import { ShaderInclude, shaderLib } from "./shaderLib"
+
 const vertexShaderCode = /* glsl */ `
 attribute vec2 a_position;
 
@@ -6,10 +8,12 @@ void main() {
 }
 `
 
-function fragmentShaderCode(shader: string) {
+function fragmentShaderCode(shader: string, includes?: ShaderInclude[]) {
   return /* glsl */ `precision highp float;
   
   uniform vec2 u_resolution;
+
+  ${includes?.map((i) => shaderLib[i]).join("\n\n") ?? ""}
   
   ${shader}      
   `
@@ -36,10 +40,12 @@ export function renderShader({
   w = 2048,
   h = 2048,
   shader,
+  includes,
 }: {
   w?: number
   h?: number
   shader: string
+  includes?: ShaderInclude[]
 }) {
   const offscreen = new OffscreenCanvas(w, h)
 
@@ -67,7 +73,7 @@ export function renderShader({
   gl.compileShader(vertexShader)
 
   const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER)!
-  gl.shaderSource(fragmentShader, fragmentShaderCode(shader))
+  gl.shaderSource(fragmentShader, fragmentShaderCode(shader, includes))
   gl.compileShader(fragmentShader)
 
   const program = gl.createProgram()!

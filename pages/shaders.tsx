@@ -6,7 +6,7 @@ import { RegularPolygon, Star, renderShader } from "../src/lib"
 const shaderOne = /* glsl */ `
 void main() {
   vec2 r_pos = gl_FragCoord.xy / u_resolution;
-  gl_FragColor = vec4(r_pos.x, r_pos.y, 0.4, 1.0);
+  gl_FragColor = vec4(r_pos.x, r_pos.y, rand(r_pos), 1.0);
 }
 `
 
@@ -91,7 +91,10 @@ export default function Shaders() {
           <Canvas
             aspectRatio={1}
             sketch={(s) => {
-              const gradient = renderShader({ shader: shaderOne })
+              const gradient = renderShader({
+                shader: shaderOne,
+                includes: ["rand"],
+              })
               s.drawImage({ image: gradient })
             }}
             seed={0}
@@ -103,7 +106,10 @@ export default function Shaders() {
           <Canvas
             aspectRatio={1}
             sketch={(s) => {
-              const gradient = renderShader({ shader: shaderOne })
+              const gradient = renderShader({
+                shader: shaderOne,
+                includes: ["rand"],
+              })
 
               s.withClipping(
                 new RegularPolygon({ n: 8, r: 0.45, at: s.meta.center }),
