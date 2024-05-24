@@ -1,4 +1,26 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Draw something with Solandra > should be able to draw a rectangle 1`] = `
+[
+  "resetTransform()",
+  "scale(100, 100)",
+  "lineWidth = 0.01",
+  "lineJoin = round",
+  "strokeStyle = black",
+  "fillStyle = gray",
+  "lineCap = round",
+  "lineJoin = round",
+  "save()",
+  "fillStyle = hsla(100, 20%, 20%, 1)",
+  "beginPath()",
+  "rect(0, 0, 1, 1)",
+  "fill()",
+  "restore()",
+  "beginPath()",
+  "rect(0.2, 0.2, 0.4, 0.2)",
+  "stroke()",
+]
+`;
 
 exports[`Draw something with Solandra should be able to draw a rectangle 1`] = `
 [

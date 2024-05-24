@@ -32,6 +32,11 @@ export default function ExampleLinks() {
           )
         }
       })}
+      <Link href="/shaders" legacyBehavior>
+        <a className="bg-sky-600 text-white font-bold p-2 rounded-lg hover:bg-sky-400 w-48 text-center flex items-center justify-center">
+          Shaders
+        </a>
+      </Link>
     </div>
   )
 }

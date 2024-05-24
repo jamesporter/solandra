@@ -57,29 +57,13 @@ export class Text {
 
     let y: number
 
-    if (size < 1) {
-      s.withScale([0.01, 0.01], () => {
-        ctx.font = configToFontSpecString({
-          ...this.config,
-          size: this.config.size * 100,
-        })
-        y = at[1] * 100 + (size * 100) / 2
+    ctx.font = configToFontSpecString(this.config)
+    y = at[1] + size / 2
 
-        if (kind === "fill") {
-          ctx.fillText(this.text, at[0] * 100, y)
-        } else {
-          ctx.strokeText(this.text, at[0] * 100, y)
-        }
-      })
+    if (kind === "fill") {
+      ctx.fillText(this.text, at[0], y)
     } else {
-      ctx.font = configToFontSpecString(this.config)
-      y = at[1] + size / 2
-
-      if (kind === "fill") {
-        ctx.fillText(this.text, at[0], y)
-      } else {
-        ctx.strokeText(this.text, at[0], y)
-      }
+      ctx.strokeText(this.text, at[0], y)
     }
   }
 

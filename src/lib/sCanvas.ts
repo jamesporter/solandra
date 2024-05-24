@@ -3,47 +3,26 @@ import { hsla, ColorSpec } from "./colors"
 import { Traceable } from "./paths"
 import { TextConfig, Text, Rect } from "."
 import { RNG } from "./rng"
+import { poissonDiskPoints } from "./poissonDisk"
 
 export interface Gradientable {
   gradient(ctx: CanvasRenderingContext2D): CanvasGradient
 }
-
-/**
- * Utility type if want to expose an API where have access to Solandra non-drawing related things
- *
- * (want to use in thing I'm calling sol-game-r)
- */
-export type SCanvasNonDrawing = Pick<
-  SCanvas,
-  | "random"
-  | "randomPoint"
-  | "randomPolarity"
-  | "aspectRatio"
-  | "build"
-  | "doProportion"
-  | "downFrom"
-  | "forGrid"
-  | "gaussian"
-  | "meta"
-  | "perturb"
-  | "poisson"
-  | "proportionately"
-  | "range"
-  | "resetRandomNumberGenerator"
-  | "sample"
-  | "samples"
-  | "shuffle"
-  | "times"
-  | "uniformGridPoint"
-  | "uniformRandomInt"
-  | "withRandomOrder"
->
 
 export default class SCanvas {
   readonly aspectRatio: number
   readonly originalScale: number
   private rng: RNG
   readonly t: number
+
+  meta: {
+    top: number
+    bottom: number
+    right: number
+    left: number
+    aspectRatio: number
+    center: [number, number]
+  }
 
   constructor(
     private ctx: CanvasRenderingContext2D,
@@ -62,6 +41,15 @@ export default class SCanvas {
     ctx.strokeStyle = "black"
     ctx.fillStyle = "gray"
     this.lineStyle = { cap: "round" }
+
+    this.meta = {
+      top: 0,
+      bottom: 1 / this.aspectRatio,
+      right: 1,
+      left: 0,
+      aspectRatio: this.aspectRatio,
+      center: [0.5, 0.5 / this.aspectRatio],
+    }
 
     this.rng = new RNG(rngSeed)
     this.t = time || 0
@@ -91,21 +79,19 @@ export default class SCanvas {
     this.originalScale = width
     // i.e. size 1/100 of width
     this.ctx.scale(width, width)
-  }
 
-  resetRandomNumberGenerator(seed?: number) {
-    this.rng = new RNG(seed)
-  }
-
-  get meta() {
-    return {
+    this.meta = {
       top: 0,
       bottom: 1 / this.aspectRatio,
       right: 1,
       left: 0,
       aspectRatio: this.aspectRatio,
-      center: [0.5, 0.5 / this.aspectRatio] as [number, number],
+      center: [0.5, 0.5 / this.aspectRatio],
     }
+  }
+
+  resetRandomNumberGenerator(seed?: number) {
+    this.rng = new RNG(seed)
   }
 
   set lineWidth(width: number) {
@@ -232,6 +218,20 @@ export default class SCanvas {
     return new Text({ ...config, kind: "stroke", at: [0, 0] }, text).measure(
       this.ctx
     )
+  }
+
+  drawImage({
+    image,
+    at = [0, 0],
+    w,
+    h,
+  }: {
+    image: CanvasImageSource
+    at?: Point2D
+    w?: number
+    h?: number
+  }) {
+    this.ctx.drawImage(image, at[0], at[1], w ?? 1, h ?? this.meta.bottom)
   }
 
   forMargin = (
@@ -484,6 +484,30 @@ export default class SCanvas {
     return [this.rng.number(), this.rng.number() / this.aspectRatio]
   }
 
+  randomAngle(): number {
+    return this.rng.number() * Math.PI * 2
+  }
+
+  forPoissonDiskPoints = (
+    config: {
+      minDist: number
+      attempts?: number
+    },
+    callback: (at: Point2D, i: number) => void
+  ) => {
+    const { minDist, attempts = 30 } = config
+
+    const points = poissonDiskPoints({
+      width: 1,
+      height: this.meta.bottom,
+      minDist,
+      rng: () => this.random(),
+      k: attempts,
+    })
+
+    points.forEach(callback)
+  }
+
   range(
     config: { from: number; to: number; n: number; inclusive?: boolean },
     callback: (n: number) => void
@@ -567,6 +591,13 @@ export default class SCanvas {
     this.pushState()
     const { hScale, hSkew, vSkew, vScale, dX, dY } = config
     this.ctx.transform(hScale, hSkew, vSkew, vScale, dX, dY)
+    callback()
+    this.popState()
+  }
+
+  withBlendMode = (mode: GlobalCompositeOperation, callback: () => void) => {
+    this.pushState()
+    this.ctx.globalCompositeOperation = mode
     callback()
     this.popState()
   }

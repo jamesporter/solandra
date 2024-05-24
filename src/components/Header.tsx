@@ -20,7 +20,7 @@ const links = [
 export default function Header() {
   const router = useRouter()
   return (
-    <div className="bg-rose-700 px-8 flex flex-row items-center">
+    <div className="bg-emerald-700 px-8 flex flex-row items-center">
       <Link href="/" legacyBehavior>
         <a className="text-white font-bold hover:text-sky-100 p-4 text-xl">
           Solandra
@@ -31,14 +31,14 @@ export default function Header() {
 
         if (isMatch) {
           return (
-            <div className="text-amber-200 font-bold  p-4" key={i}>
+            <div className="text-emerald-300 font-bold  p-4" key={i}>
               {link.name}
             </div>
           )
         } else {
           return (
             <Link href={link.href} key={i} legacyBehavior>
-              <a className="text-white font-bold hover:text-rose-200 p-4">
+              <a className="text-white font-bold hover:text-emerald-200 p-4">
                 {link.name}
               </a>
             </Link>

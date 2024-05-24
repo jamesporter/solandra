@@ -8,7 +8,7 @@ const logo = (p: SCanvas) => {
   p.times(5, (n) => {
     const sides = 10 - n
     const r = d - n * 0.16 * d + (1 + Math.cos(p.t * 1.5)) / 45
-    p.setFillColor(345, 70, 20 + n * 12)
+    p.setFillColor(200, 70, 20 + n * 12)
     p.fill(
       new RegularPolygon({
         at: center,

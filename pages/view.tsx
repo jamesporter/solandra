@@ -102,10 +102,26 @@ function ViewSingle() {
               maxWidth: "95vw",
             }}
           >
-            <div className="text-gray-100 px-8 pt-8 flex flex-row justify-between items-center">
+            <div className="text-gray-100 px-8 pt-8 flex flex-row gap-2 items-center">
               <h2 className="text-gray-100 font-bold text-xl">
                 {sketches[category].sketches[sketchNo].name}
               </h2>
+              <div className="flex-1" />
+              <button
+                className={`bg-gray-500 hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded`}
+                onClick={() => {
+                  const src =
+                    // @ts-expect-error
+                    source[sketches[category].fileName][
+                      sketches[category].sketches[sketchNo].name
+                    ]
+
+                  navigator.clipboard.writeText(src)
+                }}
+                title="Toggle Source Code"
+              >
+                Copy
+              </button>
               <button
                 className={`bg-gray-500 hover:bg-teal-600 focus:outline-none focus:shadow-outline px-2 py-1 rounded`}
                 onClick={() => setShowSource(!showSource)}

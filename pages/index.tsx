@@ -39,15 +39,15 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <div className="bg-gradient-to-b from-rose-500  to-sky-700 py-4 overflow-hidden">
+        <div className="bg-gradient-to-b from-emerald-400  to-sky-900 py-4 overflow-hidden">
           <Logo />
 
           <div className="px-8 pt-4 flex flex-col">
-            <h1 className="font-bold text-6xl mb-2 mr-4 text-white text-center">
+            <h1 className="font-bold text-6xl mb-2 mr-4  text-center text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-emerald-400 inline-block drop-shadow-md">
               Solandra
             </h1>
-            <h2 className="text-gray-100 text-center text-3xl">
-              A modern TypeScript-first Creative Coding Framework
+            <h2 className="text-sky-100 text-center text-[calc(max(4vh,16px))] drop-shadow-md">
+              Modern TypeScript-first Creative Coding
             </h2>
             <div className="flex flex-row justify-center pt-4">
               <HLink to="/main">Examples</HLink>
@@ -228,7 +228,7 @@ const Home: NextPage = () => {
 
         <div className="flex flex-row flex-wrap md:gap-4 justify-center">
           <div className="bg-gray-800 text-white md:rounded-xl p-4 md:shadow-lg max-w-lg flex flex-col gap-y-4">
-            <h3 className="font-bold text-4xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-rose-600 inline-block">
+            <h3 className="font-bold text-4xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-emerald-600 inline-block">
               Solandra Flutter
             </h3>
             <p>
@@ -256,7 +256,7 @@ const Home: NextPage = () => {
                 href="https://github.com/jamesporter/solandra-flutter"
                 target="_blank"
                 rel="noreferrer"
-                className="flex flex-row gap-x-4 items-center p-2 hover:bg-gradient-to-r from-amber-400 to-rose-500 hover:text-sky-900 rounded-lg"
+                className="flex flex-row gap-x-4 items-center p-2 hover:bg-gradient-to-r from-amber-400 to-emerald-500 hover:text-sky-900 rounded-lg"
               >
                 <CodeIcon className="h-8 w-8" />
                 Documentation and Source Code
@@ -266,7 +266,7 @@ const Home: NextPage = () => {
                 href="https://pub.dev/packages/solandra"
                 target="_blank"
                 rel="noreferrer"
-                className="flex flex-row gap-x-4 items-center p-2 hover:bg-gradient-to-r from-amber-400 to-rose-500 hover:text-sky-900 rounded-lg"
+                className="flex flex-row gap-x-4 items-center p-2 hover:bg-gradient-to-r from-amber-400 to-emerald-500 hover:text-sky-900 rounded-lg"
               >
                 <DownloadIcon className="h-8 w-8" />
                 Dart Package on Pub

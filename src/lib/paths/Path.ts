@@ -213,6 +213,18 @@ export class Path implements Traceable {
     return newPath
   }
 
+  transformedLooped(transform: (point: Point2D) => Point2D): Path {
+    const newPath = this.transformed(transform)
+
+    const lastEdge = newPath.edges[newPath.edges.length - 1]
+    const firstEdge = newPath.edges[0]
+
+    // ensure loops even if transform were non deterministic
+    lastEdge.to = [...firstEdge.from]
+
+    return newPath
+  }
+
   /**
    * Rotate a path about its vertex-wise centroid
    * @param angle radians as alway

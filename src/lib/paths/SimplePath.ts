@@ -73,12 +73,19 @@ export class SimplePath implements Traceable {
     return this.transformed((p) => v.add(c, v.scale(v.subtract(p, c), scale)))
   }
 
-  /**
-   * Warning mutates
-   * @param delta Vector to move path by
-   */
   transformPoints(transform: (point: Point2D) => Point2D): SimplePath {
     this.points = this.points.map(transform)
+    return this
+  }
+
+  /**
+   * If points are closed loop (repeat first and last) and transform is non deterministic use this to set the last point to the (transformed) first point
+   * @param transform
+   * @returns
+   */
+  transformLoopedPoints(transform: (point: Point2D) => Point2D): SimplePath {
+    this.points = this.points.map(transform)
+    this.points[this.points.length - 1] = [this.points[0][0], this.points[0][1]]
     return this
   }
 
@@ -137,6 +144,12 @@ export class SimplePath implements Traceable {
 
   transformed(transform: (point: Point2D) => Point2D): SimplePath {
     return new SimplePath(this.points.map(transform))
+  }
+
+  transformLooped(transform: (point: Point2D) => Point2D): SimplePath {
+    const points = this.points.map(transform)
+    points[points.length - 1] = [points[0][0], points[0][1]]
+    return new SimplePath(points)
   }
 
   withAppended(other: SimplePath): SimplePath {
