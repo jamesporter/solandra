@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest';
+
 import SCanvas from "../sCanvas"
 import { Rect } from "../paths/Rect"
 

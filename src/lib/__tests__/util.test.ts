@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { scaler, clamp, isoTransform, triTransform } from "../util"
 
 describe("Scaler", () => {
