@@ -50,6 +50,7 @@ const Home: NextPage = () => {
               Modern TypeScript-first Creative Coding
             </h2>
             <div className="flex flex-row justify-center pt-4">
+              <HLink to="/docs/introduction">Docs</HLink>
               <HLink to="/main">Examples</HLink>
               <HLink to="/viewAll">Slides</HLink>
               <HLink to="/quickstart">Start</HLink>

@@ -28,6 +28,7 @@ export function Logo() {
         width: "100vw",
         display: "flex",
         flexDirection: "column",
+        pointerEvents: "none",
       }}
     >
       <Canvas sketch={logo} seed={1} noShadow playing />

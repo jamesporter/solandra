@@ -4,6 +4,11 @@ import React from "react"
 
 const links = [
   {
+    href: "/docs/introduction",
+    name: "Docs",
+    basePath: "/docs",
+  },
+  {
     href: "/main",
     name: "Examples",
   },
@@ -27,11 +32,11 @@ export default function Header() {
         </a>
       </Link>
       {links.map((link, i) => {
-        const isMatch = router.asPath.includes(link.href)
+        const isMatch = router.asPath.includes(link.basePath ?? link.href)
 
         if (isMatch) {
           return (
-            <div className="text-emerald-300 font-bold  p-4" key={i}>
+            <div className="text-emerald-300 font-bold p-4" key={i}>
               {link.name}
             </div>
           )
