@@ -11,6 +11,10 @@ const links = [
     name: "Introduction",
   },
   {
+    href: "/docs/quickstart",
+    name: "Get Started",
+  },
+  {
     href: "/docs/shaders",
     name: "Shaders",
   },
@@ -28,7 +32,7 @@ export function DocLinks() {
             key={href}
             href={href}
             className={cx(
-              "p-4 font-semibold text-emerald-800 hover:text-emerald-700",
+              "p-4 font-semibold text-emerald-800 hover:text-emerald-700 mr-2",
               {
                 "bg-emerald-100 border-l-8 border-l-emerald-500": active,
                 "border-l-8 border-l-transparent": !active,
@@ -51,7 +55,7 @@ export function DocPageLayout({ children }: { children: ReactNode }) {
       <div className="flex flex-col lg:flex-row lg:my-8">
         <DocLinks />
         <div className="flex-[9]">
-          <div className="mx-auto p-4 lg:px-12 max-w-6xl article-page bg-gray-50 min-h-[80vh]">
+          <div className="mx-auto p-4 lg:px-12 max-w-6xl article-page bg-gray-50">
             {children}
           </div>
         </div>

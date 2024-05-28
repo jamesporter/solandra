@@ -16,10 +16,6 @@ const links = [
     href: "/viewAll",
     name: "Slides",
   },
-  {
-    href: "/quickstart",
-    name: "Start",
-  },
 ]
 
 export default function Header() {

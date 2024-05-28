@@ -53,7 +53,6 @@ const Home: NextPage = () => {
               <HLink to="/docs/introduction">Docs</HLink>
               <HLink to="/main">Examples</HLink>
               <HLink to="/viewAll">Slides</HLink>
-              <HLink to="/quickstart">Start</HLink>
             </div>
           </div>
         </div>
