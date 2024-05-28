@@ -24,7 +24,7 @@ export function DocLinks() {
   const pathname = usePathname()
 
   return (
-    <div className="flex flex-col lg:flex-[3]">
+    <div className="flex flex-col lg:flex-[3] lg:rounded-lg lg:overflow-hidden lg:mx-4">
       {links.map(({ href, name }, i) => {
         const active = pathname.includes(href)
         return (
@@ -32,10 +32,11 @@ export function DocLinks() {
             key={href}
             href={href}
             className={cx(
-              "p-4 font-semibold text-emerald-800 hover:text-emerald-700 mr-2",
+              "font-semibold text-emerald-800 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 p-4",
               {
-                "bg-emerald-100 border-l-8 border-l-emerald-500": active,
-                "border-l-8 border-l-transparent": !active,
+                "bg-emerald-200 border-l-8 border-l-emerald-500": active,
+                "border-l-8 border-l-transparent hover:border-l-emerald-200":
+                  !active,
               }
             )}
           >

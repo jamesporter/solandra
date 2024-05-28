@@ -33,6 +33,8 @@ export function Main({ category }: { category: string }) {
         })}
       </div>
 
+      <div className="h-4" />
+
       <Footer />
     </>
   )

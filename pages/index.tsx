@@ -226,7 +226,7 @@ const Home: NextPage = () => {
           </p>
         </div>
 
-        <div className="flex flex-row flex-wrap md:gap-4 justify-center">
+        <div className="flex flex-row flex-wrap md:gap-4 justify-center mb-8">
           <div className="bg-gray-800 text-white md:rounded-xl p-4 md:shadow-lg max-w-lg flex flex-col gap-y-4">
             <h3 className="font-bold text-4xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-emerald-600 inline-block">
               Solandra Flutter
