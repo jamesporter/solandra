@@ -15,7 +15,7 @@ export function One() {
 export function Two() {
   return (
     <CodeAndSketch
-      code={`p.setFillColor(220, 54, 50)
+      code={`p.setFillColor(220, 54, 50) 
 p.fill(new Rect({ at: [0.2, 0.2], w: 0.6, h: 0.4 }))`}
       sketch={(p) => {
         p.background(220, 26, 14)

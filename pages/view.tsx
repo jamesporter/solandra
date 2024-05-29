@@ -130,7 +130,7 @@ function ViewSingle() {
                 Close
               </button>
             </div>
-            <div className="p-8 text-gray-300">
+            <div className=" text-gray-300">
               <SyntaxHighlighter language="typescript" useInlineStyles={false}>
                 {
                   // @ts-expect-error

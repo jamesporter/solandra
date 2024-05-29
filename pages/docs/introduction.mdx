@@ -1,6 +1,65 @@
 import { DocPageLayout } from "../../src/components/DocPageLayout"
+import { ExampleCanvas } from "../../src/components/ExampleCanvas"
+import { Star } from "../../src/lib"
 
 # Introduction to Solandra
+
+Solandra is a library for creating generative art in JavaScript that tries to think a bit differently. It favours the concise and easy to change over the simple and verbose. It embraces TypeScript. And offers novel APIs around curves and iteration that are both powerful and much easier than creating yourself.
+
+A simple example. Let's use the popular Poisson disk sampling approach to create a natural looking pattern of stars. Solandra offers the ability to iterate over those points as well as many other canvas-related schemes.
+
+We set a background colour, a fill colour and then iterate over the points drawing a star at each. In just a few lines of code we have created.
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(210, 70, 10)
+    s.setFillColor(30, 60, 70)
+    s.forPoissonDiskPoints({ minDist: 0.1 }, (at) => {
+      s.fill(new Star({ at, r: 0.025, n: 5, a: s.randomAngle() }))
+    })
+  }}
+/>
+
+```ts
+s.background(210, 70, 10)
+s.setFillColor(30, 60, 70)
+s.forPoissonDiskPoints({ minDist: 0.1 }, (at) => {
+  s.fill(new Star({ at, r: 0.025, n: 5, a: s.randomAngle() }))
+})
+```
+
+Solandra is concise. Like many graphics framework there is some state for things like fill colour. We can also easily get random angles or control parameters. TypeScript guides you. The conciseness and powerful helpers make it easy to change things. Let's vary the colour more and the size of the stars. This is just a few changes.
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(210, 70, 10)
+    s.forPoissonDiskPoints({ minDist: 0.1 }, (at) => {
+      s.setFillColor(s.uniformRandomInt({ from: 10, to: 50 }), 60, 60)
+      s.fill(
+        new Star({
+          at,
+          r: 0.025 + 0.025 * s.random(),
+          n: 5,
+          a: s.randomAngle(),
+        })
+      )
+    })
+  }}
+/>
+
+```ts
+s.background(210, 70, 10)
+    s.forPoissonDiskPoints({ minDist: 0.1 }, (at) => {
+      s.setFillColor(s.uniformRandomInt({ from: 10, to: 50 }), 60, 60)
+      s.fill(
+        new Star({
+          at,
+          r: 0.025 + 0.025 * s.random(),
+          n: 5,
+          a: s.randomAngle(),
+        })
+      )
+```
 
 export default function Page({ children }) {
   return <DocPageLayout>{children}</DocPageLayout>

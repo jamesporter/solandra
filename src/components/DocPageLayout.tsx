@@ -24,7 +24,7 @@ export function DocLinks() {
   const pathname = usePathname()
 
   return (
-    <div className="flex flex-col lg:flex-[3] lg:rounded-lg lg:overflow-hidden lg:mx-4">
+    <div className="flex flex-col lg:flex-[3] lg:rounded-lg lg:overflow-hidden lg:mx-4 docsPage">
       {links.map(({ href, name }, i) => {
         const active = pathname.includes(href)
         return (
@@ -56,7 +56,7 @@ export function DocPageLayout({ children }: { children: ReactNode }) {
       <div className="flex flex-col lg:flex-row lg:my-8">
         <DocLinks />
         <div className="flex-[9]">
-          <div className="mx-auto p-4 lg:px-12 max-w-6xl article-page bg-gray-50">
+          <div className="mx-auto p-4 lg:px-12 max-w-6xl article-page bg-gray-50 @container lg:mr-4">
             {children}
           </div>
         </div>
