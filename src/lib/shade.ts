@@ -8,14 +8,21 @@ void main() {
 }
 `
 
-function fragmentShaderCode(shader: string, includes?: ShaderInclude[]) {
+function fragmentShaderCode(
+  shader: string,
+  imageNames: string[],
+  includes?: ShaderInclude[]
+) {
   return /* glsl */ `precision highp float;
-  
-  uniform vec2 u_resolution;
+precision highp sampler2D;
 
-  ${includes?.map((i) => shaderLib[i]).join("\n\n") ?? ""}
+uniform vec2 u_resolution;
+
+${imageNames.map((n) => `uniform sampler2D ${n};`).join("\n") ?? ""}
+
+${includes?.map((i) => shaderLib[i]).join("\n\n") ?? ""}
   
-  ${shader}      
+${shader}      
   `
 }
 
@@ -40,11 +47,13 @@ export function renderShader({
   w = 2048,
   h = 2048,
   shader,
+  images = {},
   includes,
 }: {
   w?: number
   h?: number
   shader: string
+  images?: Record<string, ImageBitmap>
   includes?: ShaderInclude[]
 }) {
   const offscreen = new OffscreenCanvas(w, h)
@@ -73,7 +82,8 @@ export function renderShader({
   gl.compileShader(vertexShader)
 
   const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER)!
-  gl.shaderSource(fragmentShader, fragmentShaderCode(shader, includes))
+  const code = fragmentShaderCode(shader, Object.keys(images), includes)
+  gl.shaderSource(fragmentShader, code)
   gl.compileShader(fragmentShader)
 
   const program = gl.createProgram()!
@@ -93,6 +103,23 @@ export function renderShader({
 
   const locationURes = gl.getUniformLocation(program, "u_resolution")
   gl.uniform2f(locationURes, gl.drawingBufferWidth, gl.drawingBufferHeight)
+
+  Object.entries(images).map(([name, image], i) => {
+    const texture = gl.createTexture()
+
+    gl.activeTexture(gl.TEXTURE0 + i)
+    gl.bindTexture(gl.TEXTURE_2D, texture)
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
+
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+
+    const locationUResImg = gl.getUniformLocation(program, name)
+    // this is so confusing(!); this is indexed from 0, but for active texture stuff to the weird offset
+    gl.uniform1i(locationUResImg, i)
+  })
 
   gl.drawArrays(gl.TRIANGLES, 0, 6)
 

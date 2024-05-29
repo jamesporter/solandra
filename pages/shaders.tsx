@@ -1,7 +1,14 @@
 import { Canvas } from "../src/components/Canvas"
 import Footer from "../src/components/Footer"
 import Header from "../src/components/Header"
-import { RegularPolygon, Star, renderShader } from "../src/lib"
+import {
+  Circle,
+  Rect,
+  RegularPolygon,
+  Star,
+  render,
+  renderShader,
+} from "../src/lib"
 
 const shaderOne = /* glsl */ `
 void main() {
@@ -75,9 +82,14 @@ export default function Shaders() {
 
       <h1 className="text-4xl text-sky-700 mt-16 mb-4 text-center">Shaders</h1>
       <p className="text-center max-w-xl m-auto mb-12">
-        Solandra can leverage GLSL shaders, though this is not intended to be
-        for realtime rendering (for that you should think about more efficient
-        approaches).
+        Solandra can leverage GLSL fragment shaders, though this is not intended
+        to be for realtime rendering (for that you should think about more
+        efficient approaches). This offers an efficient per-pixel way of
+        drawing, in contrast to the standard vector and curve based approach of
+        most of Solandra. This can be combined interesting ways by drawing
+        rendered shader layers onto canvases. You can use blend modes for
+        control. We can also use rendered Solandra canvas or shader layers
+        within shaders themselves.
       </p>
 
       <p className="text-center max-w-xl m-auto mb-12">
@@ -143,7 +155,138 @@ export default function Shaders() {
           />
         </div>
       </div>
+      <h2 className="text-2xl text-sky-700 mt-16 mb-4 text-center">
+        Stacking and Combining
+      </h2>
 
+      <div className="w-[320px] h-[320px] flex flex-col">
+        <Canvas
+          aspectRatio={1}
+          sketch={(s) => {
+            const overlay = render({
+              sketch: (s) => {
+                s.background(210, 70, 10)
+                s.setFillColor(30, 60, 70)
+                s.forPoissonDiskPoints({ minDist: 0.1 }, (at) => {
+                  s.fill(new Star({ at, r: 0.025, n: 5, a: s.randomAngle() }))
+                })
+              },
+            })
+
+            s.background(50, 30, 80)
+
+            s.withClipping(
+              new Star({ at: s.meta.center, r: 0.7, n: 5, a: Math.PI / 12 }),
+              () => {
+                s.withBlendMode("soft-light", () => {
+                  s.drawImage({ image: overlay })
+                })
+              }
+            )
+
+            s.setFillColor(210, 60, 40, 0.8)
+            s.fill(new Star({ at: s.meta.center, r: 0.4, n: 5 }))
+          }}
+          seed={0}
+          playing={false}
+        />
+      </div>
+
+      <div className="w-[320px] h-[320px] flex flex-col">
+        <Canvas
+          aspectRatio={1}
+          sketch={(s) => {
+            const overlay = render({
+              sketch: (s) => {
+                s.background(210, 70, 10)
+                s.setFillColor(30, 60, 70)
+                s.forPoissonDiskPoints({ minDist: 0.1 }, (at) => {
+                  s.fill(new Star({ at, r: 0.025, n: 5, a: s.randomAngle() }))
+                })
+              },
+            })
+
+            s.background(50, 30, 80)
+
+            s.withClipping(new Circle({ at: s.meta.center, r: 0.3 }), () => {
+              s.drawImage({ image: overlay })
+            })
+
+            const shaderImage = renderShader({
+              shader: /* glsl */ `void main() {
+                vec2 r_pos = gl_FragCoord.xy / u_resolution;
+                gl_FragColor = vec4(
+                  texture2D(overlay, r_pos).x, 
+                  texture2D(overlay, r_pos / 2.0).y, 
+                  texture2D(overlay, r_pos / 1.2).z, 1.0);
+              }`,
+              images: { overlay },
+            })
+
+            s.withBlendMode("hard-light", () => {
+              s.withClipping(
+                new Rect({ at: [0, 0], w: 1, h: (s.meta.bottom * 2) / 3 }),
+                () => {
+                  s.drawImage({ image: shaderImage })
+                }
+              )
+            })
+          }}
+          seed={0}
+          playing={false}
+        />
+      </div>
+
+      <div className="w-[320px] h-[320px] flex flex-col">
+        <Canvas
+          aspectRatio={1}
+          sketch={(s) => {
+            const overlay = render({
+              sketch: (s) => {
+                s.background(210, 70, 10)
+                s.setFillColor(30, 60, 70)
+                s.forPoissonDiskPoints({ minDist: 0.1 }, (at) => {
+                  s.fill(new Star({ at, r: 0.025, n: 5, a: s.randomAngle() }))
+                })
+              },
+            })
+
+            const overlay2 = render({
+              sketch: (s) => {
+                s.background(10, 70, 40)
+                // s.forPoissonDiskPoints({ minDist: 0.01 }, (at, i) => {
+                //   s.setFillColor(i, 60, 70)
+                //   s.fill(new Star({ at, r: 0.025, n: 5, a: s.randomAngle() }))
+                // })
+              },
+            })
+
+            s.background(50, 20, 5)
+
+            s.withClipping(new Circle({ at: s.meta.center, r: 0.3 }), () => {
+              s.drawImage({ image: overlay })
+            })
+
+            const shaderImage = renderShader({
+              shader: /* glsl */ `void main() {
+                vec2 r_pos = gl_FragCoord.xy / u_resolution;
+                gl_FragColor = vec4(
+                  texture2D(overlay2, r_pos + rand(r_pos) * 0.2).x, 
+                  texture2D(overlay, r_pos).y, 
+                  texture2D(overlay, r_pos + rand(r_pos) * 0.1).x * 2.0, 1.0);
+              }`,
+              images: { overlay2, overlay },
+              includes: ["rand"],
+            })
+
+            s.withClipping(new Circle({ at: s.meta.center, r: 0.45 }), () => {
+              s.drawImage({ image: shaderImage })
+            })
+          }}
+          seed={0}
+          playing={false}
+        />
+      </div>
       <Footer />
     </>
   )

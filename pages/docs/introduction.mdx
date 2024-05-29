@@ -49,16 +49,16 @@ Solandra is concise. Like many graphics framework there is some state for things
 
 ```ts
 s.background(210, 70, 10)
-    s.forPoissonDiskPoints({ minDist: 0.1 }, (at) => {
-      s.setFillColor(s.uniformRandomInt({ from: 10, to: 50 }), 60, 60)
-      s.fill(
-        new Star({
-          at,
-          r: 0.025 + 0.025 * s.random(),
-          n: 5,
-          a: s.randomAngle(),
-        })
-      )
+s.forPoissonDiskPoints({ minDist: 0.1 }, (at) => {
+  s.setFillColor(s.uniformRandomInt({ from: 10, to: 50 }), 60, 60)
+  s.fill(
+    new Star({
+      at,
+      r: 0.025 + 0.025 * s.random(),
+      n: 5,
+      a: s.randomAngle(),
+    })
+  )
 ```
 
 export default function Page({ children }) {
