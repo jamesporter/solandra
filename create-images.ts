@@ -13,6 +13,7 @@ Object.entries(sketches).forEach(([category, { sketches }]) => {
     const ctx = canvas.getContext("2d")
 
     const sC = new SCanvas(
+      // supports all the basics but not fully as per modern HTML canvas
       ctx as unknown as CanvasRenderingContext2D,
       {
         width,

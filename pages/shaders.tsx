@@ -1,7 +1,17 @@
+import { useEffect, useRef } from "react"
 import { Canvas } from "../src/components/Canvas"
 import Footer from "../src/components/Footer"
 import Header from "../src/components/Header"
-import { RegularPolygon, Star, renderShader } from "../src/lib"
+import {
+  Circle,
+  Rect,
+  RegularPolygon,
+  SCanvas,
+  Sketch,
+  Star,
+  render,
+  renderShader,
+} from "../src/lib"
 
 const shaderOne = /* glsl */ `
 void main() {
@@ -68,82 +78,137 @@ void main() {
 }
 `
 
+// Just setting up something simpler for here... want to move this stuff into main mdx docs when stable
+function ShaderExampleCanvas({ sketch }: { sketch: Sketch }) {
+  const ref = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    const ctx = ref.current?.getContext("2d")
+    if (ctx) {
+      const s = new SCanvas(ctx, { width: 320, height: 320 })
+      sketch(s)
+    }
+  }, [])
+
+  return (
+    <canvas
+      className="w-[320px] h-[320px] mx-auto my-4"
+      ref={ref}
+      width={320}
+      height={320}
+    />
+  )
+}
+
 export default function Shaders() {
   return (
     <>
       <Header />
 
-      <h1 className="text-4xl text-sky-700 mt-16 mb-4 text-center">Shaders</h1>
-      <p className="text-center max-w-xl m-auto mb-12">
-        Solandra can leverage GLSL shaders, though this is not intended to be
-        for realtime rendering (for that you should think about more efficient
-        approaches).
-      </p>
+      <div className="container mx-auto flex flex-col gap-4">
+        <h1 className="text-4xl text-sky-700 mt-16 mb-4 text-center">
+          Shaders (Preview)
+        </h1>
+        <p>
+          Solandra can leverage GLSL fragment shaders, though this is not
+          intended to be for realtime rendering (for that you should think about
+          more efficient approaches). This offers an efficient per-pixel way of
+          drawing, in contrast to the standard vector and curve based approach
+          of most of Solandra. This can be combined interesting ways by drawing
+          rendered shader layers onto canvases. You can use blend modes for
+          control. We can also use rendered Solandra canvas or shader layers
+          within shaders themselves.
+        </p>
 
-      <p className="text-center max-w-xl m-auto mb-12">
-        Here are a few simple examples. We create a couple of images and render
-        to canvas. In the third example we use a custom compositing (blend)
-        mode.
-      </p>
+        <p>
+          This is a preview feature, but if you have a look a{" "}
+          <a href="https://github.com/jamesporter/solandra/blob/main/pages/shaders.tsx">
+            the source code for this page
+          </a>{" "}
+          it will show the fundamentals.
+        </p>
 
-      <div className="flex flex-row flex-wrap gap-8 justify-center">
-        <div className="w-[320px] h-[320px] flex flex-col">
-          <Canvas
-            aspectRatio={1}
-            sketch={(s) => {
-              const gradient = renderShader({
-                shader: shaderOne,
-                includes: ["rand"],
-              })
+        <p>
+          Here are a few simple examples. We create a couple of images and
+          render to canvas. In the third example we use a custom compositing
+          (blend) mode.
+        </p>
+
+        <ShaderExampleCanvas
+          sketch={(s) => {
+            const gradient = renderShader({
+              shader: shaderOne,
+              includes: ["rand"],
+            })
+            s.drawImage({ image: gradient })
+          }}
+        />
+
+        <ShaderExampleCanvas
+          sketch={(s) => {
+            const gradient = renderShader({
+              shader: shaderOne,
+              includes: ["rand"],
+            })
+
+            s.withClipping(
+              new RegularPolygon({ n: 8, r: 0.45, at: s.meta.center }),
+              () => {
+                s.drawImage({ image: gradient })
+              }
+            )
+          }}
+        />
+
+        <ShaderExampleCanvas
+          sketch={(s) => {
+            const noise = renderShader({ shader: noiseShader })
+
+            s.background(50, 30, 80)
+
+            s.withBlendMode("soft-light", () => {
+              s.drawImage({ image: noise })
+            })
+
+            s.setFillColor(210, 60, 40, 0.8)
+            s.fill(new Star({ at: s.meta.center, r: 0.4, n: 5 }))
+          }}
+        />
+
+        <h2 className="text-2xl text-sky-700 mt-16 mb-4 text-center">
+          Stacking and Combining
+        </h2>
+
+        <ShaderExampleCanvas
+          sketch={(s) => {
+            const staticBg = renderShader({
+              shader: /* glsl */ `void main() {
+                vec2 r_pos = gl_FragCoord.xy / u_resolution;
+                gl_FragColor = vec4(vec3(rand(r_pos) * vec3(1.0, 0.3, 0.2)), 1.0);
+            }`,
+              includes: ["rand"],
+            })
+
+            const gradient = renderShader({
+              shader: /* glsl */ `void main() {
+                vec2 r_pos = gl_FragCoord.xy / u_resolution;
+                float c = 1.0 - distance(r_pos, vec2(0.5));
+                gl_FragColor = vec4(vec3(c), 1.0);
+              }`,
+            })
+
+            s.withClipping(
+              new Star({ at: s.meta.center, r: 0.2, r2: 0.4, n: 12 }),
+              () => {
+                s.drawImage({ image: staticBg })
+              }
+            )
+
+            s.withBlendMode("soft-light", () => {
               s.drawImage({ image: gradient })
-            }}
-            seed={0}
-            playing={false}
-          />
-        </div>
-
-        <div className="w-[320px] h-[320px] flex flex-col">
-          <Canvas
-            aspectRatio={1}
-            sketch={(s) => {
-              const gradient = renderShader({
-                shader: shaderOne,
-                includes: ["rand"],
-              })
-
-              s.withClipping(
-                new RegularPolygon({ n: 8, r: 0.45, at: s.meta.center }),
-                () => {
-                  s.drawImage({ image: gradient })
-                }
-              )
-            }}
-            seed={0}
-            playing={false}
-          />
-        </div>
-
-        <div className="w-[320px] h-[320px] flex flex-col">
-          <Canvas
-            aspectRatio={1}
-            sketch={(s) => {
-              const noise = renderShader({ shader: noiseShader })
-
-              s.background(50, 30, 80)
-
-              s.withBlendMode("soft-light", () => {
-                s.drawImage({ image: noise })
-              })
-
-              s.setFillColor(210, 60, 40, 0.8)
-              s.fill(new Star({ at: s.meta.center, r: 0.4, n: 5 }))
-            }}
-            seed={0}
-            playing={false}
-          />
-        </div>
+            })
+          }}
+        />
       </div>
-
       <Footer />
     </>
   )

@@ -61,3 +61,15 @@
 body {
   @apply bg-gray-100 min-h-screen;
 }
+
+code {
+  @apply p-2;
+}
+
+p code {
+  @apply p-0;
+}
+
+figure code {
+  @apply p-8 overflow-x-auto;
+}

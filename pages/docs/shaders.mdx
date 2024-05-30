@@ -1,0 +1,31 @@
+import { DocPageLayout } from "../../src/components/DocPageLayout"
+import { Canvas } from "../../src/components/Canvas"
+import { ExampleCanvas } from "../../src/components/ExampleCanvas"
+import { Star } from "../../src/lib"
+
+# Shaders
+
+<div className="w-[320px] h-[320px] flex flex-col">
+  <Canvas
+    aspectRatio={1}
+    sketch={(s) => {
+      s.setFillColor(210, 60, 40, 0.8)
+      s.fill(new Star({ at: s.meta.center, r: 0.4, n: 5 }))
+    }}
+    seed={0}
+    playing={false}
+
+/>
+
+</div>
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.setFillColor(210, 60, 40, 0.8)
+    s.fill(new Star({ at: s.meta.center, r: 0.4, n: 5 }))
+  }}
+/>
+
+export default function Page({ children }) {
+  return <DocPageLayout>{children}</DocPageLayout>
+}

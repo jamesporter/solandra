@@ -1,7 +1,7 @@
 export function TutorialCards() {
   return (
     <div className="flex flex-row flex-wrap gap-8 ">
-      <div className="flex-1 min-w-[320px] bg-gray-100 rounded-xl flex flex-col items-center h-[480px] overflow-hidden shadow-md">
+      <div className="flex-1 min-w-[320px] bg-gray-100 flex flex-col items-center h-[480px] overflow-hidden">
         <img
           src="/images/sol.png"
           className="w-full aspect-square"
@@ -17,7 +17,7 @@ export function TutorialCards() {
         </p>
       </div>
 
-      <div className="flex-1 min-w-[320px] bg-gray-100 rounded-xl flex flex-col items-center h-[480px] overflow-hidden shadow-md">
+      <div className="flex-1 min-w-[320px] bg-gray-100 flex flex-col items-center h-[480px] overflow-hidden">
         <img
           src="/images/icons.png"
           alt="Icon design"
@@ -31,7 +31,7 @@ export function TutorialCards() {
         </p>
       </div>
 
-      <div className="flex-1 min-w-[320px] bg-gray-100 rounded-xl flex flex-col items-center h-[480px] overflow-hidden shadow-md">
+      <div className="flex-1 min-w-[320px] bg-gray-100 flex flex-col items-center h-[480px] overflow-hidden">
         <img
           className="w-full aspect-square"
           src="/images/wallpaper.png"
@@ -45,7 +45,8 @@ export function TutorialCards() {
           .
         </p>
       </div>
-      <div className="flex-1 min-w-[320px] bg-gray-100 rounded-xl flex flex-col items-center h-[480px] overflow-hidden shadow-md">
+
+      <div className="flex-1 min-w-[320px] bg-gray-100 flex flex-col items-center h-[480px] overflow-hidden">
         <img
           className="w-full aspect-square"
           src="/images/watercolour.png"

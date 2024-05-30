@@ -1,0 +1,71 @@
+import { ViewAll } from "../../src/components/ViewAll"
+import { TutorialCards } from "../../src/components/TutorialCards"
+import { Canvas } from "../../src/components/Canvas"
+import { QuickStartExample } from "../../src/components/QuickStartExample"
+import { DocPageLayout } from "../../src/components/DocPageLayout"
+
+# Getting Started
+
+## Jump into code
+
+Solandra Codesandbox (uses React, though other frameworks would be very similar): [Solandra CodeSandbox v0.18](https://codesandbox.io/p/sandbox/solandra-0-18-react-example-ll5gjg).
+
+To start coding: clone [this project](https://github.com/jamesporter/solandra) to
+try out as add React/NextJS powered GUI around stuff.
+
+On [NPM](https://www.npmjs.com/package/solandra). Install with `npm i solandra` or `yarn add solandra`.
+
+There is a React wrapper for those using the most popular front end framework, install from [NPM](https://www.npmjs.com/package/solandra-react) with `npm i solandra-react solandra react react-dom`.
+
+## Examples
+
+Recommended [over 100 examples with source code to learn from](/main) (click on the Source Code button).
+
+<QuickStartExample />
+
+## Other Tutorials
+
+<img
+  src="/images/sol.png"
+  className="h-[256px] w-[256px] aspect-square mt-8 mb-2 shadow-sm "
+  alt="Sol LeWitt Solandra Tutorial"
+/>
+
+Or an [unconventional tutorial introduction based on instructions from Sol LeWitt](https://www.amimetic.co.uk/art/solving-sol-with-solandra).
+
+<img
+  src="/images/icons.png"
+  alt="Icon design"
+  className="h-[256px] w-[256px] aspect-square mt-8 mb-2 shadow-sm "
+/>
+
+This tutorial shows how you might use Solandra as a way to do [Generative design for App Icons](https://www.amimetic.co.uk/art/generative-icon-design-a-solandra-tutorial/)
+
+<img
+  className="h-[256px] w-[256px] aspect-square mt-8 mb-2 shadow-sm "
+  src="/images/wallpaper.png"
+  alt="Wallpaper Solandra Tutorial"
+/>
+Alternatively, why not [create iOS 13+ style wallpapers with Solandra](https://www.amimetic.co.uk/art/apple-style-wallpaper/)
+
+<img
+  className="h-[256px] w-[256px] aspect-square mt-8 mb-2 shadow-sm "
+  src="/images/watercolour.png"
+  alt="Watercolours with Solandra"
+/>
+Create [watercolour style](https://www.amimetic.co.uk/art/watercolour) graphics with
+Solandra.
+
+## Talks
+
+On 28th October 2019, I gave a workshop/talk on Solandra which [Tariq Rashid wrote up as a introductory tutorial](https://algorithmicartmeetup.blogspot.com/2019/10/solandra-hands-on-tutorial-emergent.html)
+
+On 6th November 2019 I gave a talk about TypeScript and Solandra (at the London TypeScript Meetup).
+
+On 15th November 2019 I covered why I created Solandra and the ideas/principles behind it at London Creative Code.
+
+<br />
+
+export default function Page({ children }) {
+  return <DocPageLayout>{children}</DocPageLayout>
+}
