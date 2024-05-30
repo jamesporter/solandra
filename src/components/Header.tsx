@@ -1,11 +1,14 @@
 import Link from "next/link"
 import React from "react"
 
-const links = [
+export const headerLinks = [
+  {
+    href: "/docs/quickstart",
+    name: "Start",
+  },
   {
     href: "/docs/introduction",
-    name: "Docs",
-    basePath: "/docs",
+    name: "Docs (Preview)",
   },
   {
     href: "/main",
@@ -19,16 +22,16 @@ const links = [
 
 export default function Header() {
   return (
-    <div className="bg-emerald-700 px-8 flex flex-row items-center">
+    <div className="bg-gradient-to-b from-emerald-500  to-emerald-600 px-8 flex flex-row items-center">
       <Link href="/" legacyBehavior>
-        <a className="text-white font-bold hover:text-sky-100 p-4 text-xl">
+        <a className="text-white font-bold hover:text-sky-100 p-4 text-xl drop-shadow-sm">
           Solandra
         </a>
       </Link>
-      {links.map((link, i) => {
+      {headerLinks.map((link, i) => {
         return (
           <Link href={link.href} key={i} legacyBehavior>
-            <a className="text-white font-bold hover:text-emerald-200 p-4">
+            <a className="text-white font-bold hover:text-emerald-200 p-4 drop-shadow-sm">
               {link.name}
             </a>
           </Link>

@@ -1,0 +1,26 @@
+import { DocPageLayout } from "../../src/components/DocPageLayout"
+
+# Release Notes
+
+## 0.19.0
+
+- Support for using fragment shaders (see [some early docs](/shaders)).
+  - Render a fragment shader to a texture (image) via `renderShader`
+  - Render a Solandra sketch to a texture (image) via `render`
+  - Pass images into shaders
+  - Render these images in sketches (so can combine in both directions) via `drawImage`
+  - Uses OffscreenCanvas (which is quite widely supported but not in Safari 16.x)
+- Poisson disc sampling iteration
+- Pseudorandom angle generation
+- `transformLoopedPoints` for non-determininistic transformations of looped points (basically make first and last point the same)
+- `rotateAround` helper
+- remove hack in place to work around Safari bugs with rendering text at 'small' (point) sizes
+- cache `meta`
+
+## 0.18.0
+
+- Following [https://iquilezles.org/articles/palettes/](https://iquilezles.org/articles/palettes/) adds support for generative palettes. Use `palettePreset` for convenient 'nice' palettes and `palette` for fuller control. See [an example](/view?sketch=44&category=API%20Samples).
+
+export default function Page({ children }) {
+  return <DocPageLayout>{children}</DocPageLayout>
+}

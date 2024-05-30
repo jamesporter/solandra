@@ -14,9 +14,13 @@ const links = [
     href: "/docs/quickstart",
     name: "Get Started",
   },
+  // {
+  //   href: "/docs/shaders",
+  //   name: "Shaders",
+  // },
   {
-    href: "/docs/shaders",
-    name: "Shaders",
+    href: "/docs/release-notes",
+    name: "Release Notes",
   },
 ]
 
@@ -25,6 +29,10 @@ export function DocLinks() {
 
   return (
     <div className="flex flex-col lg:flex-[3] lg:rounded-lg lg:overflow-hidden lg:mx-4 docsPage">
+      <h3 className="font-semibold text-emerald-50  bg-emerald-500 p-4 px-6">
+        Preview Docs
+      </h3>
+
       {links.map(({ href, name }, i) => {
         const active = pathname.includes(href)
         return (
