@@ -70,6 +70,10 @@ p code {
   @apply p-0;
 }
 
+li code {
+  @apply p-0;
+}
+
 figure code {
   @apply p-8 overflow-x-auto;
 }

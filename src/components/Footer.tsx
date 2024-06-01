@@ -3,7 +3,7 @@ import Container from "./Container"
 
 export default function Footer() {
   return (
-    <div className="bg-sky-700 p-4 md:p-16 flex flex-col">
+    <div className="bg-gradient-to-b from-emerald-400  to-sky-900 p-4 md:p-16 flex flex-col">
       <Container>
         <p className="text-xl mb-2 mr-4 text-white text-center">
           Solandra was made by{" "}
