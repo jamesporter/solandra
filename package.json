@@ -29,7 +29,7 @@
     "classnames": "^2.5.1",
     "eslint-config-next": "^14.2.3",
     "gray-matter": "^4.0.3",
-    "next": "^14.2.3",
+    "next": "^14.2.10",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-syntax-highlighter": "^15.5.0",
