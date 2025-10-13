@@ -45,13 +45,55 @@ const Home: NextPage = () => {
             </h2>
             <div className="flex flex-row justify-center pt-4">
               {headerLinks.map(({ href, name }, i) => (
-                <HLink to={href}>{name}</HLink>
+                <HLink to={href} key={href}>
+                  {name}
+                </HLink>
               ))}
             </div>
           </div>
         </div>
 
         <div className="mx-auto p-4 max-w-3xl article-page">
+          <h2>tl;dr</h2>
+
+          <ol className="list-decimal list-inside">
+            <li>
+              <Link
+                href="/main"
+                className="font-bold text-emerald-600 hover:text-sky-500"
+              >
+                Look at some examples
+              </Link>
+              . They all have source code. Might this concise, expressive way of
+              creative coding be for you?
+            </li>
+            <li>
+              Have a look at these{" "}
+              <Link
+                href="/docs/quickstart"
+                className="font-bold text-emerald-600 hover:text-sky-500"
+              >
+                getting started tutorials and examples
+              </Link>
+            </li>
+            <li>
+              Use with AI/LLMs by dropping{" "}
+              <a
+                href="https://github.com/jamesporter/solandra/blob/main/llm.md"
+                className="font-bold text-emerald-600 hover:text-sky-500"
+                target="_blank"
+                rel="noreferrer"
+              >
+                this context
+              </a>{" "}
+              into your project.
+            </li>
+            <li>
+              Or keep reading here for a mini introduction after the slideshow
+              and principles ...
+            </li>
+          </ol>
+
           <h2>Slideshow</h2>
           <div
             style={{

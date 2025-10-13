@@ -3,16 +3,12 @@ import React from "react"
 
 export const headerLinks = [
   {
-    href: "/docs/quickstart",
-    name: "Start",
+    href: "/main",
+    name: "Examples",
   },
   {
     href: "/docs/introduction",
     name: "Docs",
-  },
-  {
-    href: "/main",
-    name: "Examples",
   },
   {
     href: "/viewAll",
