@@ -25,12 +25,12 @@ Opinionated, agile (code is easy to change) framework for algorithmic art. See m
 
 - On CodeSandbox, quickly get started: [Simple editable sketch](https://codesandbox.io/s/simple-solandra-example-2-wy7nx?fontsize=14)
 - Clone [this project](https://github.com/jamesporter/solandra) to try out as add React powered GUI around stuff but first see it [live](https://solandra.amimetic.co.uk/).
-- On [NPM](https://www.npmjs.com/package/solandra). Install with `npm i solandra` or `yarn add solandra`.
+- On [NPM](https://www.npmjs.com/package/solandra). Install with `pnpm add solandra`, `npm i solandra` or `yarn add solandra`.
 
-Or if you want to play locally clone this repo, install dependencies with `npm` and start by:
+Or if you want to play locally clone this repo, install dependencies with `pnpm i` and start by:
 
 ```
-npm run dev
+pnpm dev
 ```
 
 Then open [http://localhost:3000](http://localhost:3000) and in your editor `sketches.ts` and try things out. It does things like the below
