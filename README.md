@@ -70,3 +70,44 @@ p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
 [Over 140 Examples](./samples/samples.md)
 
 ![New in 0.18: Palettes](public/images/5.png)
+
+## Use with AI
+
+There is a lot more graphics code out there which uses verbose, tedious APIs. To leverage LLMs with Solandra you will want to tell them about how Solandra works. You can copy and paste [llm.md](./llm.md) into your projects and markdown slash/custom command files. For example with e.g. Claude Code the following approach should work well for a 'daily sketches' project, providing a new slash command `new-sketch`.
+
+Create a new file like `.claude/commands/new-sketch.md`
+
+````md
+---
+description: Create a new sketch
+---
+
+- Identify the largest numbered sketch like src/sketches/sketch-N.tsx
+- Create a new file src/sketches/sketch-N+1.tsx by incrementing N (but do pad with up to 2 zeros)
+
+Should look like this initially, but replace the {NUMBER_PADDED} and {DO_SKETCH_HERE} parts:
+
+```tsx
+import { Circle, type SCanvas } from "solandra"
+import { Canvas } from "../components/Canvas"
+
+const sketch = (s: SCanvas) => {
+  s.background(20, 20, 30)
+
+  {DO_SKETCH_HERE}
+}
+
+const Sketch{NUMBER_PADDED} = () => <Canvas sketch={sketch} />
+
+export default Sketch{NUMBER_PADDED}
+```
+
+- do some kind of generative art sketch in the sketch function using the Solandra library
+- Add to src/App.tsx
+- Add to src/Directory.tsx
+- Do not run any checks or formatting, do not run the server; just generated and update files
+
+# Guide on how to use Solandra
+````
+
+then add the full contents of [llm.md](./llm.md) to the end.
