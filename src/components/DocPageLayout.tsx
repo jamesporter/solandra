@@ -32,7 +32,6 @@ export function DocLinks() {
       <h3 className="font-semibold text-emerald-50  bg-emerald-500 p-4 px-6">
         Preview Docs
       </h3>
-
       {links.map(({ href, name }, i) => {
         const active = pathname.includes(href)
         return (
@@ -47,13 +46,13 @@ export function DocLinks() {
                   !active,
               }
             )}
-          >
+            legacyBehavior>
             {name}
           </Link>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
 
 export function DocPageLayout({ children }: { children: ReactNode }) {

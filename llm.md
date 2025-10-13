@@ -1,0 +1,759 @@
+# Solandra
+
+Solandra is a TypeScript library for creating generative art. It provides a simple and expressive API for drawing shapes, paths, and patterns, and for working with color, randomness, and transformations. It is designed to be used in a browser environment, typically with a canvas element.
+
+A Solandra sketch is a function that takes an `SCanvas` instance as an argument. The `SCanvas` object is the main interface to the drawing API.
+
+```ts
+import SCanvas from "./lib/sCanvas"
+
+const mySketch = (s: SCanvas) => {
+  // Your drawing code here
+}
+```
+
+## Basic Shapes
+
+Solandra provides a set of basic shapes that can be easily created and drawn.
+
+### Rect
+
+A rectangle.
+
+```ts
+const rectanglesDivided = (s: SCanvas) => {
+  s.lineWidth = 0.005
+  const { right, bottom } = s.meta
+
+  new Rect({ at: [0.1, 0.1], w: right - 0.2, h: bottom - 0.2 })
+    .split({ orientation: "vertical", split: [1, 1.5, 2, 2.5] })
+    .forEach((r, i) => {
+      s.setFillGradient(
+        new LinearGradient({
+          from: r.at,
+          to: [r.at[0], r.at[1] + r.h],
+          colors: [
+            [0, { h: i * 10, s: 90, l: 60 }],
+            [1, { h: i * 10, s: 60, l: 40 }],
+          ],
+        })
+      )
+      s.fill(r)
+      s.draw(r)
+    })
+}
+```
+
+### Circle
+
+A circle.
+
+```ts
+const curls = (s: SCanvas) => {
+  const baseColor = s.uniformRandomInt({ from: 150, to: 250 })
+  s.background(baseColor, 20, 90)
+  s.lineStyle = {
+    cap: "round",
+  }
+  s.setFillColor(baseColor, 60, 30)
+  s.setStrokeColor(baseColor - 40, 80, 35, 0.9)
+  s.times(s.uniformRandomInt({ from: 20, to: 100 }), () => {
+    const c = s.randomPoint()
+    let tail = s.perturb({ at: c, magnitude: 0.2 })
+    while (distance(c, tail) < 0.1) {
+      tail = s.perturb({ at: c, magnitude: 0.2 })
+    }
+    s.fill(
+      new Circle({
+        at: c,
+        r: 0.015,
+      })
+    )
+    s.fill(
+      new Circle({
+        at: tail,
+        r: 0.015,
+      })
+    )
+    s.draw(
+      Path.startAt(c).addCurveTo(tail, {
+        curveSize: s.gaussian({
+          mean: 2,
+          sd: 1,
+        }),
+      })
+    )
+  })
+}
+```
+
+### Ellipse
+
+An ellipse.
+
+```ts
+const ellipses = (s: SCanvas) => {
+  s.background(0, 0, 100)
+  s.withRandomOrder(
+    s.forTiling,
+    { n: 15, type: "square", margin: 0.1 },
+    (pt, delta) => {
+      const [x, y] = pt
+      s.setFillColor(150 + perlin2(x * 10, 1) * 50, 80, 50, 0.9)
+      s.setStrokeColor(150, 40, 100)
+      s.lineWidth = 0.005
+      const r = Math.sqrt(
+        1.8 * (0.1 + Math.abs(x - 0.5)) * (0.1 + Math.abs(y - 0.5))
+      )
+      const e = new Ellipse({
+        at: add(pt, scale(delta, 0.5)),
+        align: "center",
+        w: delta[1] * r * 3,
+        h: delta[1] * 1.2,
+      })
+      s.fill(e)
+      s.draw(e)
+    }
+  )
+}
+```
+
+### RegularPolygon
+
+A regular polygon with `n` sides.
+
+```ts
+const polygons = (s: SCanvas) => {
+  s.background(330, 70, 30)
+  let n = 3
+  s.forTiling({ n: 4, type: "square", margin: 0.1 }, ([x, y], [dX, dY]) => {
+    s.setFillColor(180 + 40 * x, 50 + 50 * y, 60)
+    s.fill(
+      new RegularPolygon({
+        at: [x + dX / 2, y + dY / 2],
+        n,
+        r: dX / 2.1,
+        a: s.t,
+      })
+    )
+    n++
+  })
+}
+```
+
+### Star
+
+A star shape.
+
+```ts
+const stars = (s: SCanvas) => {
+  let n = 3
+  s.background(30, 20, 80)
+  s.forTiling({ n: 4, type: "square", margin: 0.1 }, ([x, y], [dX, dY]) => {
+    s.setFillColor(20 + 30 * x, 25 + 75 * y, 45 + 5 * (1 + Math.sin(s.t + x)))
+    s.fill(
+      new Star({
+        at: [x + dX / 2, y + dY / 2],
+        n,
+        r: (dX * (2.2 + Math.cos(x + y + s.t))) / 6.1,
+        a: s.t,
+      })
+    )
+    n++
+  })
+}
+```
+
+### RoundedRect
+
+A rectangle with rounded corners.
+
+```ts
+const roundedRects = (s: SCanvas) => {
+  s.forTiling(
+    { n: 5, type: "proportionate", margin: 0.1 },
+    ([x, y], [dX, dY]) => {
+      s.setFillColor(s.t * 50 + 150 + x * 100, y * 40 + 60, 40)
+      s.fill(
+        new RoundedRect({
+          at: [x + dX / 6, y + dY / 6],
+          w: (dX * 2) / 3,
+          h: (dY * 2) / 3,
+          r: dX / 8,
+        })
+      )
+    }
+  )
+}
+```
+
+## Paths
+
+Solandra provides powerful tools for working with paths, which are sequences of connected points. There are two main types of paths: `SimplePath` for straight line segments and `Path` for curved segments.
+
+### SimplePath
+
+A `SimplePath` is a sequence of points connected by straight lines.
+
+```ts
+const tilesOfChaiken = (s: SCanvas) => {
+  s.forTiling({ n: 6, type: "square", margin: 0.1 }, ([x, y], [dX, dY]) => {
+    const midX = x + dX / 2
+    const midY = y + dY / 2
+    const ir = dX / 4
+    const da = Math.PI / 10
+
+    s.times(3, (n) => {
+      let points: Point2D[] = []
+      for (let a = 0; a < Math.PI * 2; a += da) {
+        const rr = 2 * s.random() + 1
+        points.push([
+          midX + ir * rr * Math.cos(a + da),
+          midY + ir * rr * Math.sin(a + da),
+        ])
+      }
+      const sp = SimplePath.startAt(points[0])
+      points.slice(1).forEach((p) => sp.addPoint(p))
+      sp.close()
+      sp.chaiken({ n: 2 + n, looped: true }) // Smooth the path
+      s.lineWidth = 0.005
+      s.setStrokeColor(190 + x * 100, 90, 40 + y * 10, 0.75 * ((n + 3) / 5))
+      s.draw(sp)
+    })
+  })
+}
+```
+
+### Path (with curves)
+
+A `Path` can contain both straight and curved segments. The `addCurveTo` method allows for creating complex, organic shapes.
+
+```ts
+const curves1 = (s: SCanvas) => {
+  s.backgroundGradient(
+    new LinearGradient({
+      from: [0, 0],
+      to: [0, 1],
+      colors: [
+        [0, { h: 215, s: 20, l: 90 }],
+        [1, { h: 140, s: 20, l: 90 }],
+      ],
+    })
+  )
+  s.forTiling({ n: 12, margin: 0.1 }, ([x, y], [dX, dY]) => {
+    s.setStrokeColor(20 + x * 40, 90 - 20 * y, 50)
+    s.draw(
+      Path.startAt([x, y + dY]).addCurveTo([x + dX, y + dY], {
+        polarlity: s.randomPolarity(),
+        curveSize: x * 2,
+        curveAngle: x,
+        bulbousness: y,
+      })
+    )
+  })
+}
+```
+
+### Path Manipulations
+
+Paths can be manipulated in various ways to create interesting effects.
+
+#### `exploded`
+
+The `exploded` method breaks a path into its individual segments, which can then be manipulated independently.
+
+```ts
+const dividing4 = (s: SCanvas) => {
+  s.background(45, 20, 95)
+  new RegularPolygon({ at: s.meta.center, r: 0.4, n: 24 }).path.segmented
+    .flatMap((s) => s.exploded({ scale: 0.8, magnitude: 1.1 }))
+    .map((s, i) =>
+      s
+        .rotated((i * Math.PI) / 4)
+        .moved([s.gaussian({ sd: 0.06 }), s.gaussian({ sd: 0.04 })])
+    )
+    .forEach((s, i) => {
+      s.setFillColor(210 + (i % 40), 80, 60, 0.8)
+      s.fill(s)
+    })
+}
+```
+
+#### `subdivide`
+
+The `subdivide` method can be used to create interesting geometric patterns within a path.
+
+```ts
+const dividing8 = (s: SCanvas) => {
+  s.background(0, 0, 85)
+  s.setFillColor(0, 0, 20)
+  s.fill(new RegularPolygon({ n: 6, at: s.meta.center, r: 0.44 }))
+  new RegularPolygon({ n: 6, at: s.meta.center, r: 0.4 }).path
+    .subdivide({ m: 1, n: 5 })
+    .forEach((s, i) => {
+      s.setFillColor(i * 20, 50, 50)
+      s.fill(s)
+    })
+}
+```
+
+#### `curvify`
+
+The `curvify` method converts the straight line segments of a path into curves.
+
+```ts
+const curvify = (s: SCanvas) => {
+  s.background(150, 90, 30)
+  s.setStrokeColor(0, 0, 95, 0.4)
+  s.times(20, () => {
+    s.draw(
+      new RegularPolygon({ at: s.meta.center, r: 0.3, n: 11 }).path.curvify(
+        () => ({
+          curveSize: s.gaussian({ mean: 2, sd: 0.5 }),
+          polarlity: s.randomPolarity(),
+        })
+      )
+    )
+  })
+}
+```
+
+## Tiling and Iteration
+
+Solandra provides several methods for creating repeating patterns and iterating over areas of the canvas.
+
+### `forTiling`
+
+The `forTiling` method is used to create a grid of tiles. You can specify the number of tiles, the type of grid (e.g., "square"), and the margin between tiles.
+
+```ts
+const rainbow = (s: SCanvas) => {
+  s.withRandomOrder(
+    s.forTiling,
+    { n: 20, type: "square", margin: 0.1 },
+    ([i, j], [di, dj]) => {
+      s.doProportion(0.6, () => {
+        s.setStrokeColor(i * 100, 80, 30 + j * 30, 0.9)
+        s.lineWidth = 0.02 + 0.02 * (1 - i)
+        s.draw(
+          new Line(
+            [i + di / 4, j + dj / 4],
+            [
+              i + (di * 3 * j * s.randomPolarity()) / 4,
+              j + (dj * 5 * (1 + s.random())) / 4,
+            ]
+          )
+        )
+      })
+    }
+  )
+}
+```
+
+### `forHorizontal` and `forVertical`
+
+These methods iterate over horizontal or vertical bands of the canvas.
+
+```ts
+const horizontal = (s: SCanvas) => {
+  s.backgroundGradient(
+    new LinearGradient({
+      from: [0, 0],
+      to: [1, 0],
+      colors: [
+        [0, { h: 0, s: 0, l: 95 }],
+        [1, { h: 0, s: 0, l: 85 }],
+      ],
+    })
+  )
+  s.forHorizontal({ n: 20, margin: 0.1 }, ([x, y], [dX, dY]) => {
+    s.setStrokeColor(x * 360, 90, 40)
+    s.draw(new Line([x, y], [x + dX, y + dY]))
+  })
+}
+
+const vertical = (s: SCanvas) => {
+  s.backgroundGradient(
+    new LinearGradient({
+      from: [0, 0],
+      to: [0, 1],
+      colors: [
+        [0, { h: 50, s: 40, l: 95 }],
+        [1, { h: 30, s: 40, l: 90 }],
+      ],
+    })
+  )
+  s.forVertical({ n: 20, margin: 0.1 }, ([x, y], [dX, dY]) => {
+    const points = s.build(s.range, { from: x, to: x + dX, n: 20 }, (vX) => {
+      return s.perturb({ at: [vX, y + dY / 2], magnitude: dY / 4 })
+    })
+    s.lineWidth = 0.01 / s.meta.aspectRatio
+    s.setStrokeColor(y * 60, 90, 40)
+    s.draw(SimplePath.withPoints(points))
+  })
+}
+```
+
+### `aroundCircle`
+
+The `aroundCircle` method iterates over points on the circumference of a circle.
+
+```ts
+const circleText = (s: SCanvas) => {
+  s.aroundCircle({ r: 0.25, n: 12 }, ([x, y], i) => {
+    s.times(5, (n) => {
+      s.setFillColor(i * 5 + n, 75, 35, 0.2 * n)
+      s.fillText(
+        {
+          at: s.perturb({ at: [x, y] }),
+          size: 0.05,
+          align: "left",
+        },
+        (i + 1).toString()
+      )
+    })
+  })
+}
+```
+
+## Colors and Gradients
+
+Solandra uses the HSL (Hue, Saturation, Lightness) color model, which is often more intuitive for generative art than RGB.
+
+### Setting Colors
+
+You can set the fill and stroke colors using `setFillColor` and `setStrokeColor`.
+
+```ts
+s.setFillColor(hue, saturation, lightness, alpha)
+s.setStrokeColor(hue, saturation, lightness, alpha)
+```
+
+### Linear Gradients
+
+A linear gradient transitions colors along a straight line.
+
+```ts
+const gradients1 = (s: SCanvas) => {
+  const { right, bottom } = s.meta
+  s.setFillGradient(
+    new LinearGradient({
+      from: [0, 0],
+      to: [right, bottom],
+      colors: [
+        [0, { h: 210 + s.t * 100, s: 80, l: 60 }],
+        [0.5, { h: 250 + s.t * 100, s: 80, l: 60 }],
+        [1.0, { h: 280 + s.t * 100, s: 80, l: 60 }],
+      ],
+    })
+  )
+  s.fill(new Rect({ at: [0, 0], w: right, h: bottom }))
+}
+```
+
+### Radial Gradients
+
+A radial gradient transitions colors outwards from a central point.
+
+```ts
+const gradients2 = (s: SCanvas) => {
+  const { right, bottom, center } = s.meta
+
+  s.setFillGradient(
+    new RadialGradient({
+      start: center,
+      end: [right, bottom],
+      rStart: 0.0,
+      rEnd: 2 * Math.max(bottom, right),
+      colors: [
+        [0, { h: 0 + s.t * 40, s: 80, l: 60 }],
+        [0.7, { h: 50 + s.t * 20, s: 90, l: 60 }],
+        [1.0, { h: 1000 + s.t * 20, s: 80, l: 60 }],
+      ],
+    })
+  )
+  s.fill(new Rect({ at: [0, 0], w: right, h: bottom }))
+}
+```
+
+### Color Helpers
+
+Solandra includes helper functions to generate color palettes and ranges.
+
+- `hueRange`: Creates a range of colors by interpolating hue.
+- `saturationRange`: Creates a range of colors by interpolating saturation.
+- `lightnessRange`: Creates a range of colors by interpolating lightness.
+- `palettePreset`: Provides access to a set of predefined color palettes.
+
+```ts
+const colourPalettes = (s: SCanvas) => {
+  s.background(30, 20, 90)
+
+  // Generate palettes from a preset name and number of colours:
+  const cs1 = palettePreset("rusty", 12)
+  const cs2 = palettePreset("autumnal", 12)
+
+  s.forHorizontal({ n: 12, margin: 0.1 }, (pt, [dX, dY], c, i) => {
+    const [h, s, l] = cs1[i]
+    s.setFillColor(h, s, l, 0.9)
+    s.fill(
+      new Rect({ at: s.perturb({ at: pt, magnitude: 0.05 }), w: dX, h: dY / 4 })
+    )
+
+    const [h2, s2, l2] = cs2[i]
+    s.setFillColor(h2, s2, l2, 0.9)
+    s.fill(
+      new Rect({
+        at: s.perturb({ at: add(pt, [0, dY / 4]), magnitude: 0.05 }),
+        w: dX,
+        h: dY / 4,
+      })
+    )
+  })
+}
+```
+
+## Randomness and Noise
+
+Solandra provides a rich set of tools for incorporating randomness and noise into your creations, which is fundamental to generative art.
+
+### Basic Randomness
+
+You can generate random numbers using methods like `s.random()` (a float between 0 and 1), `s.randomPolarity()` (either 1 or -1), and `s.uniformRandomInt({ from, to })`.
+
+### Distributions
+
+Solandra supports various random number distributions, allowing for more controlled randomness.
+
+- `s.gaussian({ mean, sd })`: Samples from a normal (Gaussian) distribution.
+- `s.poisson(lambda)`: Samples from a Poisson distribution.
+
+### Perturbation and Sampling
+
+- `s.perturb({ at, magnitude })`: Randomly displaces a point.
+- `s.sample(array)`: Selects a random element from an array.
+- `s.shuffle(array)`: Randomizes the order of elements in an array.
+- `s.withRandomOrder(...)`: Executes a tiling function in a random order.
+
+```ts
+const curls = (s: SCanvas) => {
+  const baseColor = s.uniformRandomInt({ from: 150, to: 250 })
+  s.background(baseColor, 20, 90)
+  // ...
+  s.times(s.uniformRandomInt({ from: 20, to: 100 }), () => {
+    const c = s.randomPoint()
+    let tail = s.perturb({ at: c, magnitude: 0.2 })
+    // ...
+    s.draw(
+      Path.startAt(c).addCurveTo(tail, {
+        curveSize: s.gaussian({
+          mean: 2,
+          sd: 1,
+        }),
+      })
+    )
+  })
+}
+```
+
+### Perlin Noise
+
+Perlin noise provides a way to generate natural-looking, organic randomness. Solandra provides `perlin2` for 2D noise.
+
+```ts
+const noise = (s: SCanvas) => {
+  s.forTiling({ n: 12, margin: 0.1 }, ([x, y], [dX, dY]) => {
+    const v = perlin2(x, y) * Math.PI * 2
+    s.setFillColor(s.t * 10 + 120 + v * 20, 80, 40)
+    s.fill(
+      new Arc({
+        at: [x + dX / 2, y + dY / 2],
+        r: dX / 2,
+        a: s.t + v,
+        a2: s.t + v + Math.PI / 2,
+      })
+    )
+  })
+}
+```
+
+## Transforms
+
+Solandra allows you to apply transformations like translation, rotation, and scaling to your drawing operations. These are scoped operations, meaning they only affect the code within the supplied function.
+
+### `withTranslation`
+
+Moves the origin (0, 0) of the canvas.
+
+### `withRotation`
+
+Rotates the canvas around the origin. The angle is specified in radians.
+
+### `withScale`
+
+Scales the canvas.
+
+```ts
+const transforms = (s: SCanvas) => {
+  s.forTiling({ n: 8, type: "square", margin: 0.1 }, ([x, y], [dX, dY]) => {
+    s.setFillColor(120 + x * 100, 90, 50)
+    s.withTranslation([x + dX / 2, y + dY / 2], () =>
+      s.withRotation(x + y + s.t, () => {
+        s.fill(new Rect({ at: [-dX / 4, -dY / 4], w: dX / 2, h: dY / 2 }))
+      })
+    )
+  })
+}
+```
+
+## Advanced Features
+
+Solandra also provides a range of advanced features for creating more complex and interesting effects.
+
+### `withClipping`
+
+The `withClipping` method allows you to use a shape as a mask, so that subsequent drawing operations are only visible within the bounds of that shape.
+
+```ts
+const clipping = (s: SCanvas) => {
+  const { center, bottom, right } = s.meta
+  const size = Math.min(bottom, right) * 0.8
+  s.background(120 + s.t * 50, 40, 90)
+  s.lineWidth = 0.005
+  s.range({ from: 1, to: 4, n: 4 }, (n) =>
+    s.withTranslation([0.037 * n * n, bottom * 0.037 * n * n], () =>
+      s.withScale([0.1 * n, 0.1 * n], () =>
+        s.withClipping(new Ellipse({ at: center, w: size, h: size }), () =>
+          s.forTiling(
+            { n: 60 / (8 - n), type: "square" },
+            ([x, y], [dX, dY]) => {
+              s.setStrokeColor(120 + x * 120 + s.t * 50, 90 - 20 * y, 40)
+              s.proportionately([
+                [1, () => s.draw(new Line([x, y], [x + dX, y + dY]))],
+                [2, () => s.draw(new Line([x + dX, y], [x, y + dY]))],
+                [1, () => s.draw(new Line([x, y], [x, y + dY]))],
+              ])
+            }
+          )
+        )
+      )
+    )
+  )
+}
+```
+
+### Shadows
+
+You can add shadows to your shapes by setting the `s.shadow` property.
+
+```ts
+const shadows = (s: SCanvas) => {
+  s.background(10, 30, 95)
+  s.forTiling(
+    { n: 6, type: "square", order: "rowFirst", margin: 0.05 },
+    (pt, [dX], _c, t) => {
+      const i = t % 6
+      const j = Math.floor(t / 6)
+
+      s.setFillColor(t, 90, 40, 0.75)
+      s.shadow = { size: t * 0.001, dX: (i - 2.5) * 0.01, dY: j * 0.01 }
+      s.fill(
+        new Rect({
+          at: add([dX / 6, dX / 6], pt),
+          w: (dX * 2) / 3,
+          h: (dX * 2) / 3,
+        })
+      )
+    }
+  )
+}
+```
+
+### Dashes
+
+You can draw dashed lines by setting the `s.dash` property.
+
+```ts
+const dashes = (s: SCanvas) => {
+  s.background(0, 0, 5)
+  s.forTiling({ n: 5, margin: 0.1, type: "square" }, (_pt, [dX], at, i) => {
+    s.lineWidth = 0.005
+    s.dash = { offset: s.t / 20, pattern: [0.001 * (5 + i), 0.002 * (5 + i)] }
+    s.setStrokeColor(45 + i * 10, 100, 70, 0.9)
+    s.draw(new RegularPolygon({ at, n: 6, r: dX / 3 }))
+  })
+}
+```
+
+### Hatching
+
+The `Hatching` shape creates a pattern of parallel lines, which can be used for shading.
+
+```ts
+const hatching = (s: SCanvas) => {
+  s.lineWidth = 0.001
+  s.range({ from: 1, to: 0.2, n: 4, inclusive: true }, (n) => {
+    s.setStrokeColor(215 - n * 75, 90, 10 + n * 30)
+    const s = (1.5 + Math.cos(s.t)) / 2
+    s.draw(
+      new Hatching({
+        at: s.meta.center,
+        r: n * s,
+        delta: 0.01,
+        a: (n * 16) / Math.PI,
+      })
+    )
+  })
+}
+```
+
+### Spiral
+
+The `Spiral` shape generates a spiral path.
+
+```ts
+const spirals = (s: SCanvas) => {
+  s.background(195, 30, 95)
+  s.lineWidth = 0.0025
+  new Spiral({
+    at: s.meta.center,
+    l: 0.05,
+    n: 400,
+    rate: s.oscillate({ from: 0.004, to: 0.005, rate: 0.15 }),
+  }).path.edges.forEach((edge, i) => {
+    s.setStrokeColor(i / 3, 70, 30)
+    s.draw(edge.rotated(Math.PI / 4 + (i * Math.PI) / 2))
+  })
+}
+```
+
+## Animation
+
+Solandra supports animation through the `s.t` variable, which represents the current time in seconds. By incorporating `s.t` into your drawing logic, you can create dynamic and evolving artworks.
+
+```ts
+const lowResAnimation3 = (s: SCanvas) => {
+  const scaleXY = scaler2d(
+    {
+      minDomain: 0.1,
+      maxDomain: 0.9,
+      minRange: -2 * Math.PI,
+      maxRange: Math.PI,
+    },
+    {
+      minDomain: 0.1,
+      maxDomain: s.meta.bottom - 0.1,
+      minRange: -1.5,
+      maxRange: 1.5,
+    }
+  )
+  s.background(s.t * 20 + 95, 15, 10)
+  s.forTiling({ n: 35, type: "square", margin: 0.05 }, ([x, y], [w], at) => {
+    const [sX, sY] = scaleXY([x, y])
+    const eqn = Math.cos(s.t / 1.2 + sX)
+    const alpha = clamp({ from: 0.15, to: 1 }, 1 - Math.abs(sY - eqn))
+    s.setFillColor(s.t * 20 + 120 + y * 40, 90, 50, alpha)
+    s.fill(new Circle({ at, r: w / 2.1 }))
+  })
+}
+```

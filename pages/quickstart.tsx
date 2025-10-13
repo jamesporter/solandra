@@ -69,7 +69,8 @@ const QuickStart = () => (
       </p>
       <p>
         On <a href="https://www.npmjs.com/package/solandra">NPM</a>. Install
-        with <span className="text-gray-500 font-mono">npm i solandra</span> or{" "}
+        with <span className="text-gray-500 font-mono">pnpm add solandra</span>,{" "}
+        <span className="text-gray-500 font-mono">npm i solandra</span> or{" "}
         <span className="text-gray-500 font-mono">yarn add solandra</span>.
       </p>
       <div className="start-item-text">
