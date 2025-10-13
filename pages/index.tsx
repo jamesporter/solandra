@@ -109,10 +109,11 @@ const Home: NextPage = () => {
           >
             <ViewAll />
 
-            <Link href="/viewAll" legacyBehavior>
-              <a className="absolute bottom-0 right-0 bg-slate-800  bg-opacity-30 hover:bg-opacity-60 rounded-tl-xl">
-                <ArrowsExpandIcon className="text-white h-6 w-6 m-2" />
-              </a>
+            <Link
+              href="/viewAll"
+              className="absolute bottom-0 right-0 bg-slate-800  bg-opacity-30 hover:bg-opacity-60 rounded-tl-xl"
+            >
+              <ArrowsExpandIcon className="text-white h-6 w-6 m-2" />
             </Link>
           </div>
 

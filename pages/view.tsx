@@ -80,11 +80,9 @@ function ViewSingle() {
 
         <Link
           href={`/export?sketch=${sketchNo}&category=${category}`}
-          legacyBehavior
+          className="bg-gray-200 hover:bg-sky-400 focus:outline-none focus:shadow-outline px-2 mr-2 py-3 rounded ml-2"
         >
-          <a className="bg-gray-200 hover:bg-sky-400 focus:outline-none focus:shadow-outline px-2 mr-2 py-3 rounded ml-2">
-            Export
-          </a>
+          Export
         </Link>
       </div>
       <div className="flex-1 flex flex-row items-stretch">
