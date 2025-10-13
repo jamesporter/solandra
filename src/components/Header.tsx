@@ -8,7 +8,7 @@ export const headerLinks = [
   },
   {
     href: "/docs/introduction",
-    name: "Docs (Preview)",
+    name: "Docs",
   },
   {
     href: "/main",
