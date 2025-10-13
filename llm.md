@@ -425,8 +425,8 @@ Solandra uses the HSL (Hue, Saturation, Lightness) color model, which is often m
 You can set the fill and stroke colors using `setFillColor` and `setStrokeColor`.
 
 ```ts
-s.setFillColor(hue, saturation, lightness, alpha);
-s.setStrokeColor(hue, saturation, lightness, alpha);
+s.setFillColor(hue, saturation, lightness, alpha)
+s.setStrokeColor(hue, saturation, lightness, alpha)
 ```
 
 ### Linear Gradients
@@ -524,6 +524,7 @@ You can generate random numbers using methods like `s.random()` (a float between
 ### Distributions
 
 Solandra supports various random number distributions, allowing for more controlled randomness.
+
 - `s.gaussian({ mean, sd })`: Samples from a normal (Gaussian) distribution.
 - `s.poisson(lambda)`: Samples from a Poisson distribution.
 
@@ -689,7 +690,7 @@ const dashes = (s: SCanvas) => {
 The `Hatching` shape creates a pattern of parallel lines, which can be used for shading.
 
 ```ts
-const hatching = (s: SCanvas) => {.
+const hatching = (s: SCanvas) => {
   s.lineWidth = 0.001
   s.range({ from: 1, to: 0.2, n: 4, inclusive: true }, (n) => {
     s.setStrokeColor(215 - n * 75, 90, 10 + n * 30)
