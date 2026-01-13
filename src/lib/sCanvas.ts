@@ -5,10 +5,36 @@ import { TextConfig, Text, Rect } from "."
 import { RNG } from "./rng"
 import { poissonDiskPoints } from "./poissonDisk"
 
+/**
+ * Interface for objects that can generate canvas gradients.
+ */
 export interface Gradientable {
   gradient(ctx: CanvasRenderingContext2D): CanvasGradient
 }
 
+/**
+ * SCanvas (Solandra Canvas) - The main API for creating generative art.
+ *
+ * A normalized canvas where the width is always 1, with height determined by aspect ratio.
+ * Provides human-friendly APIs for drawing, iteration, randomness, and transformations.
+ *
+ * Key Features:
+ * - Normalized coordinate system (width = 1)
+ * - Seeded randomness for reproducibility
+ * - Iteration utilities (tiling, grids, circles)
+ * - Transform helpers (rotation, scale, translation)
+ * - Color management with HSLA
+ * - Time-based animations
+ *
+ * @example
+ * ```ts
+ * const s = new SCanvas(ctx, { width: 1000, height: 1000 }, 42)
+ * s.background(0, 0, 100) // White background
+ * s.forTiling({ n: 10 }, ([x, y], [w, h]) => {
+ *   s.fill(new Circle({ at: [x + w/2, y + h/2], r: w/3 }))
+ * })
+ * ```
+ */
 export default class SCanvas {
   readonly aspectRatio: number
   readonly originalScale: number
@@ -234,6 +260,18 @@ export default class SCanvas {
     this.ctx.drawImage(image, at[0], at[1], w ?? 1, h ?? this.meta.bottom)
   }
 
+  /**
+   * Iterates over a single cell with margins, useful for content that needs padding from edges.
+   *
+   * @param margin - The margin size (0 to 0.5, where 0.5 would leave no space)
+   * @param callback - Called with position, size, center, and index (always 0)
+   * @example
+   * ```ts
+   * s.forMargin(0.05, ([x, y], [w, h]) => {
+   *   // Draw content with 5% margin on all sides
+   * })
+   * ```
+   */
   forMargin = (
     margin: number,
     callback: (
@@ -244,6 +282,29 @@ export default class SCanvas {
     ) => void
   ) => this.forTiling({ n: 1, margin }, callback)
 
+  /**
+   * Iterates over a regular grid/tiling of the canvas.
+   * The fundamental building block for many generative art patterns.
+   *
+   * @param config - Configuration for the tiling
+   * @param config.n - Number of columns
+   * @param config.type - "proportionate" (default) maintains aspect ratio, "square" forces square tiles
+   * @param config.margin - Margin around the edges (default: 0)
+   * @param config.order - "columnFirst" (default) or "rowFirst" iteration order
+   * @param callback - Called for each tile with position, size, center, and sequential index
+   * @example
+   * ```ts
+   * // 10x10 grid of circles
+   * s.forTiling({ n: 10, margin: 0.05 }, ([x, y], [w, h], [cx, cy]) => {
+   *   s.fill(new Circle({ at: [cx, cy], r: w * 0.4 }))
+   * })
+   *
+   * // Square tiles
+   * s.forTiling({ n: 10, type: "square" }, ([x, y], [w, h]) => {
+   *   s.fill(new Rect({ at: [x, y], w, h }))
+   * })
+   * ```
+   */
   forTiling = (
     config: {
       n: number
@@ -302,6 +363,22 @@ export default class SCanvas {
     }
   }
 
+  /**
+   * Iterates over horizontal divisions of the canvas.
+   * Each cell spans the full height (minus margins).
+   *
+   * @param config - Configuration
+   * @param config.n - Number of horizontal divisions
+   * @param config.margin - Margin around edges (default: 0)
+   * @param callback - Called for each division with position, size, center, and index
+   * @example
+   * ```ts
+   * s.forHorizontal({ n: 5, margin: 0.05 }, ([x, y], [w, h], [cx, cy], i) => {
+   *   s.setFillColor(i * 60, 50, 50)
+   *   s.fill(new Rect({ at: [x, y], w, h }))
+   * })
+   * ```
+   */
   forHorizontal = (
     config: {
       n: number
@@ -332,6 +409,21 @@ export default class SCanvas {
     }
   }
 
+  /**
+   * Iterates over vertical divisions of the canvas.
+   * Each cell spans the full width (minus margins).
+   *
+   * @param config - Configuration
+   * @param config.n - Number of vertical divisions
+   * @param config.margin - Margin around edges (default: 0)
+   * @param callback - Called for each division with position, size, center, and index
+   * @example
+   * ```ts
+   * s.forVertical({ n: 3 }, ([x, y], [w, h]) => {
+   *   s.draw(new Rect({ at: [x, y], w, h }))
+   * })
+   * ```
+   */
   forVertical = (
     config: {
       n: number
@@ -362,6 +454,25 @@ export default class SCanvas {
     }
   }
 
+  /**
+   * Iterates over integer grid coordinates within specified bounds.
+   * Useful for algorithmic patterns on discrete grids.
+   *
+   * @param config - Grid bounds and order
+   * @param config.minX - Minimum x coordinate (inclusive)
+   * @param config.maxX - Maximum x coordinate (inclusive)
+   * @param config.minY - Minimum y coordinate (inclusive)
+   * @param config.maxY - Maximum y coordinate (inclusive)
+   * @param config.order - "columnFirst" (default) or "rowFirst" iteration order
+   * @param callback - Called for each grid point with coordinates and sequential index
+   * @example
+   * ```ts
+   * s.forGrid({ minX: 0, maxX: 9, minY: 0, maxY: 9 }, ([x, y]) => {
+   *   const size = 0.08
+   *   s.fill(new Circle({ at: [x * 0.1, y * 0.1], r: size }))
+   * })
+   * ```
+   */
   forGrid = (
     config: {
       minX: number
@@ -392,11 +503,27 @@ export default class SCanvas {
     }
   }
 
-  /*
-    Build something using other iteration utlities rather than drawing within callback
-
-    I tried a  curried version with first argument so could compose with random order etc, but TypeScript wasn't figuring out types properly at use site. Would probably require explicit annotation so don't want that.
-  */
+  /**
+   * Builds an array of values using iteration utilities instead of drawing directly.
+   * Useful for collecting data from iteration patterns for further processing.
+   *
+   * @template C - Configuration type for the iteration function
+   * @template T - Tuple type of callback parameters
+   * @template U - Return type of the callback
+   * @param iterFn - An iteration function (like forTiling, forGrid, etc.)
+   * @param config - Configuration for the iteration function
+   * @param cb - Callback that returns a value for each iteration
+   * @returns An array of values returned by the callback
+   * @example
+   * ```ts
+   * // Build array of circle positions
+   * const circles = s.build(s.forTiling, { n: 5 }, ([x, y], [w, h]) => {
+   *   return { x: x + w/2, y: y + h/2, r: w * 0.4 }
+   * })
+   * // Later draw them in custom order
+   * circles.forEach(c => s.fill(new Circle({ at: [c.x, c.y], r: c.r })))
+   * ```
+   */
   build = <C, T extends any[], U>(
     iterFn: (config: C, callback: (...args: T) => void) => void,
     config: C,
@@ -409,9 +536,23 @@ export default class SCanvas {
     return res
   }
 
-  /*
-    Take existing iteration function and apply in random order
-  */
+  /**
+   * Wraps an iteration function to execute callbacks in random order.
+   * Collects all iteration arguments, shuffles them, then executes the callback.
+   *
+   * @template C - Configuration type for the iteration function
+   * @template T - Tuple type of callback parameters
+   * @param iterFn - An iteration function (like forTiling, forGrid, etc.)
+   * @param config - Configuration for the iteration function
+   * @param cb - Callback to execute for each iteration (in random order)
+   * @example
+   * ```ts
+   * // Draw tiles in random order (useful for layering effects)
+   * s.withRandomOrder(s.forTiling, { n: 10 }, ([x, y], [w, h]) => {
+   *   s.fill(new Circle({ at: [x + w/2, y + h/2], r: w * 0.5 }))
+   * })
+   * ```
+   */
   withRandomOrder<C, T extends any[]>(
     iterFn: (config: C, callback: (...args: T) => void) => void,
     config: C,
@@ -464,6 +605,24 @@ export default class SCanvas {
     }
   }
 
+  /**
+   * Randomly selects and executes one case from weighted options.
+   * Each case has a weight (proportion) and a function to execute if selected.
+   *
+   * @template T - Return type of the case functions
+   * @param cases - Array of [weight, function] tuples
+   * @returns The result of the selected function
+   * @example
+   * ```ts
+   * // 50% circles, 30% squares, 20% triangles
+   * const shape = s.proportionately([
+   *   [5, () => new Circle({ at: [0.5, 0.5], r: 0.2 })],
+   *   [3, () => new Rect({ at: [0.4, 0.4], w: 0.2, h: 0.2 })],
+   *   [2, () => new RegularPolygon({ at: [0.5, 0.5], n: 3, r: 0.2 })]
+   * ])
+   * s.fill(shape)
+   * ```
+   */
   proportionately<T>(cases: [number, () => T][]): T {
     const total = cases.map((c) => c[0]).reduce((a, b) => a + b, 0)
     if (total <= 0) throw new Error("Must be positive total")
@@ -732,6 +891,26 @@ export default class SCanvas {
     return n
   }
 
+  /**
+   * Creates smooth oscillating values over time using cosine.
+   * Useful for animations that loop seamlessly.
+   *
+   * @param config - Oscillation parameters
+   * @param config.from - Minimum value (default: 0)
+   * @param config.to - Maximum value (default: 1)
+   * @param config.rate - Oscillation speed multiplier (default: 1)
+   * @returns A value oscillating between from and to based on this.t
+   * @example
+   * ```ts
+   * // Oscillate circle radius over time
+   * const r = s.oscillate({ from: 0.1, to: 0.3, rate: 2 })
+   * s.fill(new Circle({ at: [0.5, 0.5], r }))
+   *
+   * // Oscillate hue for color animations
+   * const hue = s.oscillate({ from: 0, to: 360, rate: 0.5 })
+   * s.setFillColor(hue, 70, 50)
+   * ```
+   */
   oscillate = (config?: {
     from?: number
     to?: number

@@ -1,6 +1,26 @@
+/**
+ * Utility functions for coordinate transformations, scaling, and geometric operations.
+ * @module util
+ */
+
 import { Point2D } from "./types/sol"
 import { v } from "."
 
+/**
+ * Clamps a number to be within a specified range.
+ *
+ * @param range - The range bounds
+ * @param range.from - Minimum value
+ * @param range.to - Maximum value
+ * @param n - The number to clamp
+ * @returns The clamped value between from and to
+ * @example
+ * ```ts
+ * clamp({ from: 0, to: 1 }, 1.5) // Returns 1
+ * clamp({ from: 0, to: 1 }, -0.5) // Returns 0
+ * clamp({ from: 0, to: 1 }, 0.5) // Returns 0.5
+ * ```
+ */
 export const clamp = (
   { from, to }: { from: number; to: number },
   n: number
@@ -8,13 +28,42 @@ export const clamp = (
   return Math.min(to, Math.max(from, n))
 }
 
+/**
+ * Configuration for scaling functions that map from one numeric range to another.
+ */
 type ScaleConfig = {
+  /** Minimum value of the input domain */
   minDomain: number
+  /** Maximum value of the input domain */
   maxDomain: number
+  /** Minimum value of the output range */
   minRange: number
+  /** Maximum value of the output range */
   maxRange: number
 }
 
+/**
+ * Creates a scaling function that maps values from one range to another.
+ * Useful for converting between different coordinate systems or value ranges.
+ *
+ * @param config - Scaling configuration
+ * @param config.minDomain - Minimum input value
+ * @param config.maxDomain - Maximum input value
+ * @param config.minRange - Minimum output value
+ * @param config.maxRange - Maximum output value
+ * @returns A function that maps input values to the output range
+ * @example
+ * ```ts
+ * // Map 0-100 to 0-1
+ * const scale = scaler({ minDomain: 0, maxDomain: 100, minRange: 0, maxRange: 1 })
+ * scale(50) // Returns 0.5
+ * scale(100) // Returns 1
+ *
+ * // Map temperature from Celsius to normalized range
+ * const tempScale = scaler({ minDomain: -20, maxDomain: 40, minRange: 0, maxRange: 1 })
+ * tempScale(10) // Returns 0.5
+ * ```
+ */
 export const scaler = ({
   minDomain,
   maxDomain,
@@ -26,6 +75,23 @@ export const scaler = ({
   return n => minRange + (rangeS * (n - minDomain)) / domainS
 }
 
+/**
+ * Creates a 2D scaling function that independently maps x and y coordinates.
+ * Combines two 1D scalers for transforming 2D points.
+ *
+ * @param c1 - Scaling configuration for x-coordinate
+ * @param c2 - Scaling configuration for y-coordinate
+ * @returns A function that maps 2D points from input domain to output range
+ * @example
+ * ```ts
+ * // Map grid coordinates (0-10, 0-10) to canvas space (0-1, 0-1)
+ * const scale = scaler2d(
+ *   { minDomain: 0, maxDomain: 10, minRange: 0, maxRange: 1 },
+ *   { minDomain: 0, maxDomain: 10, minRange: 0, maxRange: 1 }
+ * )
+ * scale([5, 5]) // Returns [0.5, 0.5]
+ * ```
+ */
 export const scaler2d = (
   c1: ScaleConfig,
   c2: ScaleConfig
@@ -36,8 +102,22 @@ export const scaler2d = (
 }
 
 /**
- * @param height The height of the (vertical parts of) isometric grid cells
- * @returns A function mapping from [x,y,z] to [x,y].
+ * Creates an isometric projection transformation function.
+ * Converts 3D coordinates [x, y, z] to 2D isometric projection coordinates.
+ *
+ * @param height - The height of the vertical parts of isometric grid cells
+ * @returns A function that maps 3D points [x, y, z] to 2D isometric coordinates [x, y]
+ * @example
+ * ```ts
+ * const iso = isoTransform(0.1)
+ * const [x2d, y2d] = iso([1, 0, 0]) // Convert 3D cube coordinate to 2D
+ *
+ * // Draw isometric grid
+ * s.forGrid({ minX: 0, maxX: 5, minY: 0, maxY: 5 }, ([x, y]) => {
+ *   const [px, py] = iso([x, 0, y])
+ *   s.fill(new Circle({ at: [px + 0.5, py + 0.5], r: 0.02 }))
+ * })
+ * ```
  */
 export const isoTransform = (height: number) => {
   const w = (height * Math.sqrt(3)) / 2
@@ -47,6 +127,23 @@ export const isoTransform = (height: number) => {
   ]
 }
 
+/**
+ * Calculates the centroid (geometric center) of a set of points.
+ * If the first and last points are the same (closed path), ignores the duplicate.
+ *
+ * @param points - Array of 2D points
+ * @returns The centroid point (average of all x and y coordinates)
+ * @throws Error if the points array is empty
+ * @example
+ * ```ts
+ * const center = centroid([[0, 0], [1, 0], [1, 1], [0, 1]]) // Returns [0.5, 0.5]
+ *
+ * // Find center of a polygon and draw from there
+ * const poly = new RegularPolygon({ at: [0.5, 0.5], n: 6, r: 0.2 })
+ * const center = centroid(poly.points())
+ * s.fill(new Circle({ at: center, r: 0.05 }))
+ * ```
+ */
 export const centroid = (points: Point2D[]): Point2D => {
   const n = points.length
   if (n === 0) {
@@ -72,8 +169,25 @@ export const centroid = (points: Point2D[]): Point2D => {
 const cp6 = Math.cos(Math.PI / 6)
 
 /**
- * NB Assumes integer grid
- * Supply a radius and boolean for whether it should be vertical (vertex at top) or not
+ * Creates a hexagonal grid transformation function.
+ * Converts integer grid coordinates to positions in a hexagonal tiling pattern.
+ *
+ * @param config - Hexagonal grid configuration
+ * @param config.r - Radius of each hexagon
+ * @param config.vertical - If true (default), hexagons have a vertex at top; if false, flat edge at top
+ * @returns A function that maps integer grid coordinates to hexagonal grid positions
+ * @example
+ * ```ts
+ * // Vertical hexagons (pointy top)
+ * const hexV = hexTransform({ r: 0.05, vertical: true })
+ * s.forGrid({ minX: 0, maxX: 10, minY: 0, maxY: 10 }, ([x, y]) => {
+ *   const [hx, hy] = hexV([x, y])
+ *   s.fill(new Hexagon({ at: [hx, hy], r: 0.05 }))
+ * })
+ *
+ * // Horizontal hexagons (flat top)
+ * const hexH = hexTransform({ r: 0.05, vertical: false })
+ * ```
  */
 export const hexTransform = ({
   r,
@@ -90,7 +204,26 @@ export const hexTransform = ({
 }
 
 /**
- * NB Assumes integer grid, returns function that will return center of triangle and whether it should be flipped
+ * Creates a triangular grid transformation function.
+ * Converts integer grid coordinates to positions in a triangular tiling pattern.
+ * Triangles alternate between pointing up and down to create a tessellation.
+ *
+ * @param config - Triangle grid configuration
+ * @param config.s - Side length of each equilateral triangle
+ * @returns A function that maps integer grid coordinates to triangle centers and orientation
+ * @example
+ * ```ts
+ * const tri = triTransform({ s: 0.1 })
+ * s.forGrid({ minX: 0, maxX: 10, minY: 0, maxY: 10 }, ([x, y]) => {
+ *   const { at, flipped } = tri([x, y])
+ *   const triangle = new EquilateralTriangle({
+ *     at,
+ *     r: 0.05,
+ *     a: flipped ? Math.PI : 0
+ *   })
+ *   s.fill(triangle)
+ * })
+ * ```
  */
 export const triTransform = ({ s }: { s: number }) => {
   const r = s / (2 * Math.sin(Math.PI / 3))
