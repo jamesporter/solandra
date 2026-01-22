@@ -30,6 +30,7 @@
     "eslint-config-next": "^15.5.5",
     "gray-matter": "^4.0.3",
     "next": "^15.5.5",
+    "polygon-clipping": "^0.15.7",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-syntax-highlighter": "^15.6.6",

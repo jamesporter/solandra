@@ -2,6 +2,7 @@ import advancedApis from "./advanced-apis"
 import advancedPaths from "./advanced-paths"
 import animated from "./animated"
 import samples from "./api-samples"
+import booleanOps from "./boolean-ops"
 import highlights from "./highlights"
 import isometric from "./isometric"
 import randomness from "./randomness"
@@ -39,6 +40,12 @@ framework. Click on Source Code to see how things work.`,
     fileName: "advanced-paths.ts",
     path: "/advanced-paths",
     description: `Examples of more complex path (shape) APIs. Click on Source Code to see how things work.`,
+  },
+  "Boolean Operations": {
+    sketches: booleanOps,
+    fileName: "boolean-ops.ts",
+    path: "/boolean-ops",
+    description: `High-quality boolean operations for paths - union, intersection, difference, and XOR. Combine, subtract, and intersect shapes to create complex geometric compositions. Click on Source Code to see how things work.`,
   },
   Isometric: {
     sketches: isometric,
