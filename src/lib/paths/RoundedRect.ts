@@ -1,6 +1,8 @@
 import { Point2D } from "../types/sol"
 import { Traceable } from "./index"
 import { v } from ".."
+import { SimplePath } from "./SimplePath"
+import { sampleQuadraticBezier } from "./pathUtil"
 export class RoundedRect implements Traceable {
   readonly at: Point2D
   readonly w: number
@@ -35,5 +37,82 @@ export class RoundedRect implements Traceable {
     ctx.quadraticCurveTo(x1, y2, x1, y2 - r)
     ctx.lineTo(x1, y1 + r)
     ctx.quadraticCurveTo(x1, y1, x1 + r, y1)
+  }
+
+  toPath(detail: number): SimplePath {
+    const d = Math.max(0, Math.floor(detail))
+    const r = Math.min(this.r, this.h / 2, this.w / 2)
+    const [x1, y1] = this.at
+    const x2 = x1 + this.w
+    const y2 = y1 + this.h
+
+    if (d === 0 || r === 0) {
+      // Return simple rectangle
+      return SimplePath.withPoints([
+        [x1, y1],
+        [x2, y1],
+        [x2, y2],
+        [x1, y2],
+      ]).close()
+    }
+
+    const points: Point2D[] = []
+
+    // Start at top-left corner end
+    points.push([x1 + r, y1])
+
+    // Top edge
+    points.push([x2 - r, y1])
+
+    // Top-right corner
+    points.push(
+      ...sampleQuadraticBezier({
+        start: [x2 - r, y1],
+        control: [x2, y1],
+        end: [x2, y1 + r],
+        detail: d,
+      })
+    )
+
+    // Right edge
+    points.push([x2, y2 - r])
+
+    // Bottom-right corner
+    points.push(
+      ...sampleQuadraticBezier({
+        start: [x2, y2 - r],
+        control: [x2, y2],
+        end: [x2 - r, y2],
+        detail: d,
+      })
+    )
+
+    // Bottom edge
+    points.push([x1 + r, y2])
+
+    // Bottom-left corner
+    points.push(
+      ...sampleQuadraticBezier({
+        start: [x1 + r, y2],
+        control: [x1, y2],
+        end: [x1, y2 - r],
+        detail: d,
+      })
+    )
+
+    // Left edge
+    points.push([x1, y1 + r])
+
+    // Top-left corner
+    points.push(
+      ...sampleQuadraticBezier({
+        start: [x1, y1 + r],
+        control: [x1, y1],
+        end: [x1 + r, y1],
+        detail: d,
+      })
+    )
+
+    return SimplePath.withPoints(points).close()
   }
 }

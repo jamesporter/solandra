@@ -1,6 +1,6 @@
 {
   "name": "solandra",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "author": "James Porter <james@amimetic.co.uk>",
   "private": true,
   "description": "A framework for algorithmic art. TypeScript first. Make drawing concepts part of framework. Make APIs for humans.",
@@ -25,7 +25,7 @@
     "@mdx-js/react": "^3.0.1",
     "@next/mdx": "^15.5.5",
     "@types/mdx": "^2.0.13",
-    "canvas": "^3.2.0",
+    "canvas": "^3.2.1",
     "classnames": "^2.5.1",
     "eslint-config-next": "^15.5.5",
     "gray-matter": "^4.0.3",
@@ -72,5 +72,6 @@
       "esbuild",
       "unrs-resolver"
     ]
-  }
+  },
+  "packageManager": "pnpm@10.6.2+sha512.47870716bea1572b53df34ad8647b42962bc790ce2bf4562ba0f643237d7302a3d6a8ecef9e4bdfc01d23af1969aa90485d4cebb0b9638fa5ef1daef656f6c1b"
 }
