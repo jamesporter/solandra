@@ -267,15 +267,19 @@ const spirals2 = (p: SCanvas) => {
 }
 
 const pathConversions = (p: SCanvas) => {
+  const h = p.meta.bottom
+
   p.background(30, 20, 95)
 
   p.setFillColor(200, 70, 50)
-  p.fill(new Arc({ at: [0.25, 0.25], r: 0.1, a: 0, a2: Math.PI / 2 }).toPath(4))
+  p.fill(
+    new Arc({ at: [0.25, 0.25 * h], r: 0.1, a: 0, a2: Math.PI / 2 }).toPath(4)
+  )
 
   p.setFillColor(340, 70, 50)
   p.fill(
     new HollowArc({
-      at: [0.75, 0.25],
+      at: [0.75, 0.25 * h],
       r: 0.1,
       r2: 0.05,
       a: 0,
@@ -286,7 +290,7 @@ const pathConversions = (p: SCanvas) => {
   p.setFillColor(120, 70, 50)
   p.fill(
     new RoundedRect({
-      at: [0.25, 0.75],
+      at: [0.25, 0.75 * h],
       w: 0.2,
       h: 0.1,
       r: 0.03,
@@ -295,7 +299,7 @@ const pathConversions = (p: SCanvas) => {
   )
 
   p.setFillColor(60, 70, 50)
-  p.fill(new Ellipse({ at: [0.75, 0.75], w: 0.2, h: 0.15 }).toPath(6))
+  p.fill(new Ellipse({ at: [0.75, 0.75 * h], w: 0.2, h: 0.15 }).toPath(6))
 }
 
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
