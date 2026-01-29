@@ -1,5 +1,7 @@
 import { Point2D } from "../types/sol"
 import { Traceable } from "./index"
+import { sampleArc } from "./pathUtil"
+import { SimplePath } from "./SimplePath"
 export class Arc implements Traceable {
   readonly cX: number
   readonly cY: number
@@ -34,5 +36,19 @@ export class Arc implements Traceable {
       this.antiClockwise
     )
     if (this.startAngle - this.endAngle > 0.0001) ctx.lineTo(this.cX, this.cX)
+  }
+
+  toPath(detail: number): SimplePath {
+    const d = Math.max(0, Math.floor(detail))
+    const center: Point2D = [this.cX, this.cY]
+    const points = sampleArc({
+      center,
+      radius: this.radius,
+      startAngle: this.startAngle,
+      endAngle: this.endAngle,
+      detail: d,
+      antiClockwise: this.antiClockwise,
+    })
+    return SimplePath.withPoints([center, ...points]).close()
   }
 }

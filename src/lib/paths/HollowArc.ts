@@ -1,5 +1,7 @@
 import { Point2D } from "../types/sol"
 import { Traceable } from "./index"
+import { SimplePath } from "./SimplePath"
+import { sampleArc } from "./pathUtil"
 export class HollowArc implements Traceable {
   readonly cX: number
   readonly cY: number
@@ -60,5 +62,39 @@ export class HollowArc implements Traceable {
       this.startAngle,
       !this.antiClockwise
     )
+  }
+
+  toPath(detail: number): SimplePath {
+    const d = Math.max(0, Math.floor(detail))
+    const center: Point2D = [this.cX, this.cY]
+
+    // Start point on inner arc
+    const startInner: Point2D = [
+      this.cX + this.innerRadius * Math.cos(this.startAngle),
+      this.cY + this.innerRadius * Math.sin(this.startAngle),
+    ]
+
+    // Sample outer arc
+    const outerPoints = sampleArc({
+      center,
+      radius: this.radius,
+      startAngle: this.startAngle,
+      endAngle: this.endAngle,
+      detail: d,
+      antiClockwise: this.antiClockwise,
+    })
+
+    // Sample inner arc (reversed)
+    const innerPoints = sampleArc({
+      center,
+      radius: this.innerRadius,
+      startAngle: this.endAngle,
+      endAngle: this.startAngle,
+      detail: d,
+      antiClockwise: !this.antiClockwise,
+    })
+
+    // Combine into ring path
+    return SimplePath.withPoints([startInner, ...outerPoints, ...innerPoints]).close()
   }
 }

@@ -1,4 +1,5 @@
 import { Traceable } from "."
+import { Point2D } from "../types/sol"
 import { SimplePath } from "./SimplePath"
 
 /**
@@ -18,4 +19,84 @@ export function traceSimplePath(traceable: Traceable): SimplePath {
     },
   } as CanvasRenderingContext2D)
   return sp
+}
+
+/**
+ * Sample points along a circular arc
+ * @param config Configuration object with center, radius, angles, and detail level
+ * @returns Array of points along the arc (detail + 2 points including start and end)
+ */
+export function sampleArc(config: {
+  center: Point2D
+  radius: number
+  startAngle: number
+  endAngle: number
+  detail: number
+  antiClockwise?: boolean
+}): Point2D[] {
+  const {
+    center: [cX, cY],
+    radius,
+    startAngle,
+    endAngle,
+    detail,
+    antiClockwise = false,
+  } = config
+
+  // Handle the angle difference based on direction
+  let angleDiff = endAngle - startAngle
+  if (antiClockwise) {
+    // For antiClockwise, we want a negative angle difference
+    if (angleDiff > 0) {
+      angleDiff = angleDiff - 2 * Math.PI
+    }
+  } else {
+    // For clockwise, we want a positive angle difference
+    if (angleDiff < 0) {
+      angleDiff = angleDiff + 2 * Math.PI
+    }
+  }
+
+  const numPoints = detail + 2
+  const points: Point2D[] = []
+
+  for (let i = 0; i < numPoints; i++) {
+    const t = i / (numPoints - 1)
+    const angle = startAngle + t * angleDiff
+    points.push([cX + radius * Math.cos(angle), cY + radius * Math.sin(angle)])
+  }
+
+  return points
+}
+
+/**
+ * Sample points along a quadratic Bezier curve
+ * @param config Configuration with start, control, end points and detail level
+ * @returns Array of intermediate points (excludes start, includes end)
+ */
+export function sampleQuadraticBezier(config: {
+  start: Point2D
+  control: Point2D
+  end: Point2D
+  detail: number
+}): Point2D[] {
+  const { start, control, end, detail } = config
+
+  if (detail === 0) {
+    return [end]
+  }
+
+  const points: Point2D[] = []
+  const numPoints = detail + 1
+
+  for (let i = 1; i <= numPoints; i++) {
+    const t = i / numPoints
+    const t1 = 1 - t
+    // Quadratic Bezier formula: B(t) = (1-t)² * P0 + 2(1-t)t * P1 + t² * P2
+    const x = t1 * t1 * start[0] + 2 * t1 * t * control[0] + t * t * end[0]
+    const y = t1 * t1 * start[1] + 2 * t1 * t * control[1] + t * t * end[1]
+    points.push([x, y])
+  }
+
+  return points
 }

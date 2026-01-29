@@ -1,6 +1,17 @@
 import { Point2D } from "../lib/types/sol"
 import SCanvas from "../lib/sCanvas"
-import { Path, SimplePath, Star, RegularPolygon, Rect, Spiral } from "../lib"
+import {
+  Path,
+  SimplePath,
+  Star,
+  RegularPolygon,
+  Rect,
+  Spiral,
+  Arc,
+  HollowArc,
+  RoundedRect,
+  Ellipse,
+} from "../lib"
 import { arrayOf } from "../lib/collectionOps"
 import { perlin2, v } from "../lib"
 
@@ -255,6 +266,38 @@ const spirals2 = (p: SCanvas) => {
   })
 }
 
+const pathConversions = (p: SCanvas) => {
+  p.background(30, 20, 95)
+
+  p.setFillColor(200, 70, 50)
+  p.fill(new Arc({ at: [0.25, 0.25], r: 0.1, a: 0, a2: Math.PI / 2 }).toPath(4))
+
+  p.setFillColor(340, 70, 50)
+  p.fill(
+    new HollowArc({
+      at: [0.75, 0.25],
+      r: 0.1,
+      r2: 0.05,
+      a: 0,
+      a2: (3 * Math.PI) / 2,
+    }).toPath(6)
+  )
+
+  p.setFillColor(120, 70, 50)
+  p.fill(
+    new RoundedRect({
+      at: [0.25, 0.75],
+      w: 0.2,
+      h: 0.1,
+      r: 0.03,
+      align: "center",
+    }).toPath(4)
+  )
+
+  p.setFillColor(60, 70, 50)
+  p.fill(new Ellipse({ at: [0.75, 0.75], w: 0.2, h: 0.15 }).toPath(6))
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: dividing3, name: "Dividing 3" },
   { sketch: dividing4, name: "Dividing 4" },
@@ -268,6 +311,7 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: curvify2, name: "Paths to Curves 2" },
   { sketch: spirals, name: "Spirals" },
   { sketch: spirals2, name: "Spirals 2" },
+  { sketch: pathConversions, name: "Path Conversions" },
 ]
 
 export default sketches
