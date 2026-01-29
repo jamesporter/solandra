@@ -1,15 +1,31 @@
+/**
+ * 2D Perlin noise implementation for organic, natural-looking randomness.
+ * Adapted from public domain code: https://github.com/josephg/noisejs/blob/master/perlin.js
+ * @module noise
+ */
+
 import { dot } from "./vectors";
 
-// Adapted from public domain code: https://github.com/josephg/noisejs/blob/master/perlin.js ... possibly come back to/or find more comprehensive library
-
+/**
+ * Smoothstep interpolation function for Perlin noise.
+ * @internal
+ */
 function fade(t: number) {
   return t * t * t * (t * (t * 6 - 15) + 10);
 }
 
+/**
+ * Linear interpolation between two values.
+ * @internal
+ */
 function lerp(a: number, b: number, t: number) {
   return (1 - t) * a + t * b;
 }
 
+/**
+ * Gradient vectors for Perlin noise.
+ * @internal
+ */
 const grad3 = [
   [1, 1, 0],
   [-1, 1, 0],
@@ -284,9 +300,22 @@ var p = [
   180
 ];
 
+/**
+ * Permutation table for noise generation.
+ * @internal
+ */
 const perm = new Array(512);
+
+/**
+ * Gradient permutation table.
+ * @internal
+ */
 const gradP = new Array(512);
 
+/**
+ * Seeds the noise function for reproducible results.
+ * @internal
+ */
 function seedNoise(seed: number) {
   if (seed > 0 && seed < 1) {
     seed *= 65536;
@@ -312,6 +341,32 @@ function seedNoise(seed: number) {
 
 seedNoise(0);
 
+/**
+ * Generates 2D Perlin noise at the given coordinates.
+ * Returns smooth, continuous noise values useful for organic patterns and textures.
+ * The output range is approximately -1 to 1, though values at the extremes are rare.
+ *
+ * @param ax - X coordinate (can be any real number)
+ * @param ay - Y coordinate (can be any real number)
+ * @returns A noise value approximately in the range [-1, 1]
+ * @example
+ * ```ts
+ * // Create organic terrain heights
+ * s.forTiling({ n: 20 }, ([x, y], [w, h], [cx, cy]) => {
+ *   const noiseVal = perlin2(cx * 10, cy * 10) // Scale coordinates for detail
+ *   const height = (noiseVal + 1) * 0.5 // Normalize to 0-1
+ *   s.setFillColor(120, 50, height * 50 + 25) // Green gradient
+ *   s.fill(new Rect({ at: [x, y], w, h }))
+ * })
+ *
+ * // Organic displacement of points
+ * s.forGrid({ minX: 0, maxX: 10, minY: 0, maxY: 10 }, ([x, y]) => {
+ *   const dx = perlin2(x * 0.5, y * 0.5) * 0.05
+ *   const dy = perlin2(x * 0.5 + 100, y * 0.5 + 100) * 0.05
+ *   s.fill(new Circle({ at: [x * 0.1 + dx, y * 0.1 + dy], r: 0.01 }))
+ * })
+ * ```
+ */
 export function perlin2(ax: number, ay: number) {
   let X = Math.floor(ax);
   let Y = Math.floor(ay);

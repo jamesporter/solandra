@@ -1,7 +1,41 @@
+/**
+ * Poisson disk sampling for generating evenly-distributed random points.
+ * Creates points that maintain a minimum distance from each other, resulting in
+ * a more uniform and visually pleasing distribution than pure random placement.
+ * @module poissonDisk
+ */
+
 import { v } from "."
 import { Point2D } from "./types/sol"
 import { distance } from "./vectors"
 
+/**
+ * Generates Poisson disk sampled points within a rectangular region.
+ * Points are randomly distributed but maintain a minimum distance from each other.
+ *
+ * @param config - Configuration for point generation
+ * @param config.width - Width of the sampling region
+ * @param config.height - Height of the sampling region
+ * @param config.minDist - Minimum distance between any two points
+ * @param config.rng - Random number generator function (returns 0-1)
+ * @param config.k - Number of attempts to place each point (higher = denser, default: 30)
+ * @returns Array of generated points
+ * @example
+ * ```ts
+ * // Generate evenly-spaced points across the canvas
+ * const points = poissonDiskPoints({
+ *   width: 1,
+ *   height: 1,
+ *   minDist: 0.05,
+ *   rng: () => Math.random(),
+ *   k: 30
+ * })
+ *
+ * points.forEach(([x, y]) => {
+ *   s.fill(new Circle({ at: [x, y], r: 0.01 }))
+ * })
+ * ```
+ */
 export function poissonDiskPoints({
   width,
   height,
@@ -20,12 +54,31 @@ export function poissonDiskPoints({
   return pds.points
 }
 
+/**
+ * Implements the Poisson disk sampling algorithm.
+ * Uses Bridson's algorithm with a spatial grid for efficient neighbor checking.
+ *
+ * @example
+ * ```ts
+ * const sampler = new PoissonDiskSampling(1, 1, 0.05, 30)
+ * const points = sampler.generatePoints(() => Math.random())
+ * ```
+ */
 export class PoissonDiskSampling {
   private grid: (Point2D | null)[][]
+  /** Generated points */
   points: Point2D[]
   private spawnPoints: Point2D[]
   private cellSize: number
 
+  /**
+   * Creates a new Poisson disk sampler.
+   *
+   * @param width - Width of the sampling region
+   * @param height - Height of the sampling region
+   * @param minDist - Minimum distance between points
+   * @param k - Number of attempts to place each point
+   */
   constructor(
     private width: number,
     private height: number,
@@ -45,6 +98,12 @@ export class PoissonDiskSampling {
     this.spawnPoints = []
   }
 
+  /**
+   * Generates the Poisson disk sampled points.
+   *
+   * @param rng - Random number generator function that returns values between 0 and 1
+   * @returns Array of generated points
+   */
   generatePoints(rng: () => number) {
     let initialPoint: Point2D = [rng() * this.width, rng() * this.height]
     this.points.push(initialPoint)
@@ -86,6 +145,10 @@ export class PoissonDiskSampling {
     return this.points
   }
 
+  /**
+   * Checks if a candidate point is valid (within bounds and far enough from other points).
+   * @internal
+   */
   private isValid(point: Point2D): boolean {
     if (
       point[0] < 0 ||
