@@ -36,3 +36,4 @@ yarn-error.log*
 
 # npm package
 package
+.claude/settings.local.json
