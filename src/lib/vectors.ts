@@ -100,8 +100,8 @@ export const rotateAround = (
   const [oX, oY] = origin
 
   return [
-    origin[0] + (x - origin[0]) * Math.cos(a) - (y - origin[1]) * Math.sin(a),
-    origin[1] + (x - origin[0]) * Math.sin(a) + (y - origin[1]) * Math.cos(a),
+    oX + (x - oX) * Math.cos(a) - (y - oY) * Math.sin(a),
+    oY + (x - oX) * Math.sin(a) + (y - oY) * Math.cos(a),
   ]
 }
 
@@ -195,6 +195,7 @@ const vectorOps = {
   subtract,
   magnitude,
   rotate,
+  rotateAround,
   normalize,
   scale,
   polarToCartesian,

@@ -172,7 +172,7 @@ export class SimplePath implements Traceable {
     const l = this.points.length
     const { n, m } = config
     if (m > n || n >= l || m >= l || n < 0 || m < 0)
-      new Error(
+      throw new Error(
         "Requires two indices, ordered, each less than the total points in this path"
       )
     const p1 = [...this.points.slice(m, n + 1), this.points[m]]

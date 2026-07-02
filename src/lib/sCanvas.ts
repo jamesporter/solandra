@@ -871,9 +871,10 @@ export default class SCanvas {
    */
   gaussian = (config?: { mean?: number; sd?: number }): number => {
     const { mean = 0, sd = 1 } = config || {}
+    // rng.number() is in [0, 1) so use 1 - a to keep the log argument in (0, 1]
     const a = this.rng.number()
     const b = this.rng.number()
-    const n = Math.sqrt(-2.0 * Math.log(a)) * Math.cos(2.0 * Math.PI * b)
+    const n = Math.sqrt(-2.0 * Math.log(1 - a)) * Math.cos(2.0 * Math.PI * b)
     return mean + n * sd
   }
 

@@ -211,7 +211,7 @@ const curvify = (p: SCanvas) => {
       new RegularPolygon({ at: p.meta.center, r: 0.3, n: 11 }).path.curvify(
         () => ({
           curveSize: p.gaussian({ mean: 2, sd: 0.5 }),
-          polarlity: p.randomPolarity(),
+          polarity: p.randomPolarity(),
         })
       )
     )

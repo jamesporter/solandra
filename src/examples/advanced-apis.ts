@@ -63,7 +63,7 @@ const transformingPaths = (p: SCanvas) => {
         cY + (n % 2 === 0 ? 1 : 0.8) * r * Math.sin(p.t + (n * Math.PI) / 16),
       ],
       {
-        polarlity: n % 2 === 0 ? 1 : -1,
+        polarity: n % 2 === 0 ? 1 : -1,
       }
     )
   })
