@@ -27,7 +27,7 @@ export class Star implements Traceable {
     } = this.config
     // Start from top... feels more natural?
     startAngle -= Math.PI / 2
-    r2 || (r2 = r / 2)
+    r2 ||= r / 2
     const dA = (Math.PI * 2) / n
     ctx.moveTo(x + r * Math.cos(startAngle), y + r * Math.sin(startAngle))
     for (let i = 1; i < n; i++) {

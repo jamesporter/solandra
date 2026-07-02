@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from "vitest"
 import SCanvas from "../sCanvas"
 import { Rect } from "../paths/Rect"
 import { Circle } from "../paths/Circle"
@@ -8,28 +8,29 @@ const createMockCtx = () => {
   const history: string[] = []
   const ctx = new Proxy(
     {
-      fillStyle: '',
-      strokeStyle: '',
+      fillStyle: "",
+      strokeStyle: "",
       lineWidth: 0,
-      lineCap: 'butt',
-      lineJoin: 'miter',
+      lineCap: "butt",
+      lineJoin: "miter",
       shadowBlur: 0,
-      shadowColor: '',
+      shadowColor: "",
       shadowOffsetX: 0,
       shadowOffsetY: 0,
-      globalCompositeOperation: 'source-over',
+      globalCompositeOperation: "source-over",
     } as any,
     {
-      get: function(target, property) {
+      get: function (target, property) {
         if (property in target) {
           return target[property]
         }
         history.push(`${String(property)}`)
         return (...args: any[]) => {
-          history[history.length - 1] = `${String(property)}(${args.join(', ')})`
+          history[history.length - 1] =
+            `${String(property)}(${args.join(", ")})`
         }
       },
-      set: function(target, property, value) {
+      set: function (target, property, value) {
         history.push(`${String(property)} = ${value}`)
         target[property] = value
         return true
@@ -190,10 +191,10 @@ describe("SCanvas", () => {
     it("returns n samples from the array", () => {
       const { ctx } = createMockCtx()
       const s = new SCanvas(ctx, { width: 100, height: 100 }, 42)
-      const arr = ['a', 'b', 'c']
+      const arr = ["a", "b", "c"]
       const result = s.samples(5, arr)
       expect(result).toHaveLength(5)
-      result.forEach(item => expect(arr).toContain(item))
+      result.forEach((item) => expect(arr).toContain(item))
     })
   })
 
@@ -205,9 +206,11 @@ describe("SCanvas", () => {
       const original = [...arr]
       s.shuffle(arr)
       // Should have same elements
-      expect([...arr].sort()).toEqual([...original].sort())
+      expect([...arr].sort((a, b) => a - b)).toEqual(
+        [...original].sort((a, b) => a - b)
+      )
       // Unlikely to be in same order (technically possible but extremely rare)
-      expect(arr.join('')).not.toBe(original.join(''))
+      expect(arr.join("")).not.toBe(original.join(""))
     })
   })
 
@@ -404,7 +407,9 @@ describe("SCanvas", () => {
       const { ctx } = createMockCtx()
       const s = new SCanvas(ctx, { width: 100, height: 100 }, 42)
       const values: number[] = []
-      s.range({ from: 0, to: 1, n: 4, inclusive: false }, (val) => values.push(val))
+      s.range({ from: 0, to: 1, n: 4, inclusive: false }, (val) =>
+        values.push(val)
+      )
       expect(values).toHaveLength(4)
     })
   })
@@ -427,10 +432,10 @@ describe("SCanvas", () => {
       for (let i = 0; i < 1000; i++) {
         s.resetRandomNumberGenerator(i)
         const result = s.proportionately([
-          [7, () => 'a'],
-          [3, () => 'b'],
+          [7, () => "a"],
+          [3, () => "b"],
         ])
-        counts[result as 'a' | 'b']++
+        counts[result as "a" | "b"]++
       }
 
       // 'a' should be selected about 70% of the time
@@ -441,7 +446,9 @@ describe("SCanvas", () => {
     it("throws with zero total", () => {
       const { ctx } = createMockCtx()
       const s = new SCanvas(ctx, { width: 100, height: 100 }, 42)
-      expect(() => s.proportionately([[0, () => 'a']])).toThrow("Must be positive total")
+      expect(() => s.proportionately([[0, () => "a"]])).toThrow(
+        "Must be positive total"
+      )
     })
   })
 

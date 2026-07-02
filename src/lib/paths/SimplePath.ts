@@ -35,7 +35,7 @@ export class SimplePath implements Traceable {
     n = 1,
     looped = false,
   }: {
-    n: number
+    n?: number
     looped?: boolean
   }): SimplePath {
     for (let i = 0; i < n; i++) {
@@ -204,6 +204,6 @@ export class SimplePath implements Traceable {
   }
 
   get edges(): SimplePath[] {
-    return pairWise(this.points).map(SimplePath.withPoints)
+    return pairWise(this.points).map((points) => SimplePath.withPoints(points))
   }
 }

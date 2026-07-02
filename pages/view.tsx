@@ -114,7 +114,7 @@ function ViewSingle() {
                       sketches[category].sketches[sketchNo].name
                     ]
 
-                  navigator.clipboard.writeText(src)
+                  void navigator.clipboard.writeText(src)
                 }}
                 title="Toggle Source Code"
               >

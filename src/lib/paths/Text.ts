@@ -49,7 +49,10 @@ function configToFontSpecString({
 }
 
 export class Text {
-  constructor(private config: TextConfigWithKind, private text: string) {}
+  constructor(
+    private config: TextConfigWithKind,
+    private text: string
+  ) {}
 
   textIn = (ctx: CanvasRenderingContext2D, s: SCanvas) => {
     const { size, at, kind, align = "center" } = this.config

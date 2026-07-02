@@ -575,7 +575,7 @@ export default class SCanvas {
     }
   }
 
-  times(n: number, callback: (n: number) => void) {
+  times = (n: number, callback: (n: number) => void) => {
     for (let i = 0; i < n; i++) {
       callback(i)
     }
@@ -667,10 +667,10 @@ export default class SCanvas {
     points.forEach(callback)
   }
 
-  range(
-    config: { from: number; to: number; n: number; inclusive?: boolean },
+  range = (
+    config: { from?: number; to?: number; n: number; inclusive?: boolean },
     callback: (n: number) => void
-  ) {
+  ) => {
     const { from = 0, to = 1, n, inclusive = true } = config
 
     const di = (to - from) / n

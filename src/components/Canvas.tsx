@@ -73,7 +73,7 @@ class CanvasPainterService {
 
     this.canvas!.height = this.height
     this.canvas!.width = this.width
-    this.af && cancelAnimationFrame(this.af)
+    if (this.af) cancelAnimationFrame(this.af)
     this.updateTime()
   }
 
@@ -97,7 +97,7 @@ class CanvasPainterService {
         this.seed,
         this.time
       )
-      this.sketch && this.sketch(pts)
+      if (this.sketch) this.sketch(pts)
     }
   }
 }

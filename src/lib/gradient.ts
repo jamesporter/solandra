@@ -40,10 +40,7 @@ export class LinearGradient implements Gradientable {
     private config: {
       from: Point2D
       to: Point2D
-      colors: [
-        number,
-        ColorSpec
-      ][]
+      colors: [number, ColorSpec][]
     }
   ) {}
 
@@ -104,10 +101,7 @@ export class RadialGradient implements Gradientable {
       end: Point2D
       rStart: number
       rEnd: number
-      colors: [
-        number,
-        ColorSpec
-      ][]
+      colors: [number, ColorSpec][]
     }
   ) {}
 

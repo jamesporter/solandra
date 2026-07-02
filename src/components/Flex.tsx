@@ -1,5 +1,5 @@
-import React from "react";
+import React from "react"
 
 export default function Flex() {
-  return <div className="flex-1" />;
+  return <div className="flex-1" />
 }
