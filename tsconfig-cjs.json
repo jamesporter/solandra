@@ -6,10 +6,12 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./package/cjs",
+    "rootDir": "./src/lib",
     "lib": ["DOM", "ESNext"],
     "declaration": true,
     "skipLibCheck": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "ignoreDeprecations": "6.0"
   },
   "include": ["./src/lib/index.ts"]
 }
