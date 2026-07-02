@@ -1,7 +1,22 @@
 import { SketchKind, sketchKinds } from "./examples/sketches"
 
+// Safely resolve localStorage. It is only available in the browser, and
+// access can throw (e.g. disabled cookies). During SSR some environments also
+// expose a partial `global.localStorage` stub without the expected methods, so
+// guard on `window` rather than trusting a bare/global reference.
+const safeLocalStorage = (): Storage | null => {
+  try {
+    if (typeof window !== "undefined" && window.localStorage) {
+      return window.localStorage
+    }
+  } catch {
+    // ignore – localStorage is not accessible
+  }
+  return null
+}
+
 export const getNumber = (key: string): number | null => {
-  const raw = global.localStorage && localStorage.getItem(key)
+  const raw = safeLocalStorage()?.getItem(key)
   if (raw) {
     try {
       const n = JSON.parse(raw)
@@ -14,14 +29,14 @@ export const getNumber = (key: string): number | null => {
 }
 
 export const setNumber = (key: string, n: number) => {
-  if (global.localStorage) localStorage.setItem(key, JSON.stringify(n))
+  safeLocalStorage()?.setItem(key, JSON.stringify(n))
 }
 
 export const getBoolean = (
   key: string,
   defaultValue: boolean = false
 ): boolean => {
-  const raw = global.localStorage && localStorage.getItem(key)
+  const raw = safeLocalStorage()?.getItem(key)
   if (raw) {
     try {
       const b = JSON.parse(raw)
@@ -34,7 +49,7 @@ export const getBoolean = (
 }
 
 export const setBoolean = (key: string, b: boolean) => {
-  if (global.localStorage) localStorage.setItem(key, JSON.stringify(b))
+  safeLocalStorage()?.setItem(key, JSON.stringify(b))
 }
 
 export const getSketchIdx = (): null | number => {
@@ -43,7 +58,7 @@ export const getSketchIdx = (): null | number => {
     const params = new URL(document.location).searchParams
     // @ts-expect-error
     const i = parseInt(params.get("sketch"), 10)
-    return i
+    return Number.isNaN(i) ? null : i
   } catch (ex) {
     return null
   }
