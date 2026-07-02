@@ -11,6 +11,8 @@ import {
   polarToCartesian,
   pointAlong,
   dot,
+  cross,
+  heading,
 } from "../vectors"
 
 describe("vectors", () => {
@@ -167,6 +169,10 @@ describe("vectors", () => {
       expect(result[1]).toBeCloseTo(-0.8)
       expect(magnitude(result)).toBeCloseTo(1)
     })
+
+    it("returns [0, 0] for the zero vector rather than NaN", () => {
+      expect(normalize([0, 0])).toEqual([0, 0])
+    })
   })
 
   describe("scale", () => {
@@ -272,6 +278,37 @@ describe("vectors", () => {
 
     it("handles negative values", () => {
       expect(dot([1, -2], [-3, 4])).toBe(-11) // 1*(-3) + (-2)*4 = -11
+    })
+  })
+
+  describe("cross", () => {
+    it("calculates the 2D cross product", () => {
+      expect(cross([1, 0], [0, 1])).toBe(1)
+      expect(cross([0, 1], [1, 0])).toBe(-1)
+    })
+
+    it("returns 0 for parallel vectors", () => {
+      expect(cross([1, 2], [2, 4])).toBe(0)
+      expect(cross([1, 0], [2, 0])).toBe(0)
+    })
+
+    it("is anti-symmetric", () => {
+      expect(cross([2, 3], [5, 7])).toBe(-cross([5, 7], [2, 3]))
+    })
+  })
+
+  describe("heading", () => {
+    it("returns the angle of a vector", () => {
+      expect(heading([1, 0])).toBeCloseTo(0)
+      expect(heading([0, 1])).toBeCloseTo(Math.PI / 2)
+      expect(heading([-1, 0])).toBeCloseTo(Math.PI)
+      expect(heading([0, -1])).toBeCloseTo(-Math.PI / 2)
+    })
+
+    it("is the inverse of polarToCartesian direction", () => {
+      const angle = 0.7
+      const p = polarToCartesian([0, 0], 2, angle)
+      expect(heading(p)).toBeCloseTo(angle)
     })
   })
 })

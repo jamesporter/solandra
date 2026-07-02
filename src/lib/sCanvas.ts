@@ -764,7 +764,7 @@ export default class SCanvas {
   // Randomness
 
   /**
-   * A uniform random number betweeon 0 and 1
+   * A uniform random number between 0 and 1
    */
   random = (): number => {
     return this.rng.number()
@@ -813,8 +813,11 @@ export default class SCanvas {
 
   /**
    * Sample uniformly from an array
+   *
+   * @throws Error if the array is empty
    */
   sample = <T>(from: T[]): T => {
+    if (from.length === 0) throw new Error("Cannot sample from an empty array")
     return from[Math.floor(this.rng.number() * from.length)]
   }
 

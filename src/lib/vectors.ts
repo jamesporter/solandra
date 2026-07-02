@@ -107,16 +107,20 @@ export const rotateAround = (
 
 /**
  * Normalizes a vector to have a magnitude of 1 (unit vector).
+ * The zero vector has no direction, so it is returned unchanged
+ * (rather than producing `[NaN, NaN]`, which would silently break drawing).
  *
  * @param p - The vector to normalize
- * @returns A new unit vector in the same direction
+ * @returns A new unit vector in the same direction, or [0, 0] for the zero vector
  * @example
  * ```ts
  * normalize([3, 4]) // Returns [0.6, 0.8]
+ * normalize([0, 0]) // Returns [0, 0]
  * ```
  */
 export const normalize = (p: Point2D): Point2D => {
   const m = magnitude(p)
+  if (m === 0) return [0, 0]
   return [p[0] / m, p[1] / m]
 }
 
@@ -190,6 +194,38 @@ export const pointAlong = (
 export const dot = ([x1, y1]: Point2D, [x2, y2]: Point2D): number =>
   x1 * x2 + y1 * y2
 
+/**
+ * Calculates the 2D cross product of two vectors (the z-component of the
+ * equivalent 3D cross product).
+ * Useful for orientation tests: the sign indicates which side of the first
+ * vector the second lies on, and it is zero when the vectors are parallel.
+ *
+ * @param p1 - First vector
+ * @param p2 - Second vector
+ * @returns The scalar cross product
+ * @example
+ * ```ts
+ * cross([1, 0], [0, 1]) // Returns 1
+ * cross([1, 0], [2, 0]) // Returns 0 (parallel)
+ * ```
+ */
+export const cross = ([x1, y1]: Point2D, [x2, y2]: Point2D): number =>
+  x1 * y2 - y1 * x2
+
+/**
+ * Calculates the angle (in radians) of a vector; the directional inverse of
+ * polarToCartesian.
+ *
+ * @param p - The vector
+ * @returns The angle in radians, in the range (-π, π]
+ * @example
+ * ```ts
+ * heading([1, 0]) // Returns 0
+ * heading([0, 1]) // Returns π/2
+ * ```
+ */
+export const heading = ([x, y]: Point2D): number => Math.atan2(y, x)
+
 const vectorOps = {
   add,
   subtract,
@@ -201,6 +237,8 @@ const vectorOps = {
   polarToCartesian,
   pointAlong,
   dot,
+  cross,
+  heading,
   distance,
 }
 

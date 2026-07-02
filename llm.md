@@ -727,6 +727,32 @@ const spirals = (s: SCanvas) => {
 }
 ```
 
+## Vectors and Utilities
+
+Points are plain `[number, number]` tuples. Solandra ships with pure vector functions, available on the `v` namespace object, that return new values without mutating inputs:
+
+- `v.add(a, b)`, `v.subtract(a, b)`, `v.scale(p, factor)`: Basic arithmetic.
+- `v.magnitude(p)`, `v.distance(a, b)`: Lengths.
+- `v.normalize(p)`: Unit vector (returns `[0, 0]` for the zero vector).
+- `v.dot(a, b)`, `v.cross(a, b)`: Dot product and 2D scalar cross product (sign tells you orientation).
+- `v.heading(p)`: Angle of a vector in radians; `v.polarToCartesian(center, radius, angle)` goes the other way.
+- `v.rotate(p, angle)`, `v.rotateAround(origin, p, angle)`: Rotation.
+- `v.pointAlong(a, b, proportion)`: Interpolate between two points.
+
+There are also numeric helpers:
+
+- `clamp({ from, to }, n)`: Constrain a number to a range.
+- `lerp({ from, to }, proportion)`: Linear interpolation between two numbers.
+- `scaler(config)` and `scaler2d(c1, c2)`: Map values between ranges.
+
+```ts
+import { v, clamp, lerp } from "solandra"
+
+const mid = v.pointAlong([0.1, 0.1], [0.9, 0.5], 0.5)
+const direction = v.heading(v.subtract([0.9, 0.5], [0.1, 0.1]))
+const eased = lerp({ from: 0.2, to: 0.8 }, 0.25)
+```
+
 ## Animation
 
 Solandra supports animation through the `s.t` variable, which represents the current time in seconds. By incorporating `s.t` into your drawing logic, you can create dynamic and evolving artworks.

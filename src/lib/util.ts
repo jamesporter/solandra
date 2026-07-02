@@ -29,6 +29,29 @@ export const clamp = (
 }
 
 /**
+ * Linearly interpolates between two numbers.
+ * The numeric counterpart of `v.pointAlong` for points.
+ *
+ * @param range - The range bounds
+ * @param range.from - Value at proportion 0
+ * @param range.to - Value at proportion 1
+ * @param proportion - The interpolation proportion (not clamped, so values
+ * outside [0, 1] extrapolate)
+ * @returns The interpolated value
+ * @example
+ * ```ts
+ * lerp({ from: 0, to: 10 }, 0.5) // Returns 5
+ * lerp({ from: 10, to: 20 }, 0.25) // Returns 12.5
+ * ```
+ */
+export const lerp = (
+  { from, to }: { from: number; to: number },
+  proportion: number
+): number => {
+  return from + (to - from) * proportion
+}
+
+/**
  * Configuration for scaling functions that map from one numeric range to another.
  */
 type ScaleConfig = {

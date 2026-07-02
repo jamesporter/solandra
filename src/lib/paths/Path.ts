@@ -230,7 +230,7 @@ export class Path implements Traceable {
 
   /**
    * Rotate a path about its vertex-wise centroid
-   * @param angle radians as alway
+   * @param angle radians as always
    */
   rotated(angle: number): Path {
     const c = this.centroid
