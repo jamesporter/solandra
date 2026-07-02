@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { scaler, clamp, isoTransform, triTransform } from "../util"
+import { scaler, clamp, lerp, isoTransform, triTransform } from "../util"
 
 describe("Scaler", () => {
   it("should be able to scale", () => {
@@ -22,6 +22,20 @@ describe("Clamp", () => {
   it("should be able to clamp", () => {
     expect(clamp({ from: 0, to: 10 }, -10)).toBeCloseTo(0)
     expect(clamp({ from: 0, to: 10 }, 20)).toBeCloseTo(10)
+  })
+})
+
+describe("Lerp", () => {
+  it("should interpolate between two values", () => {
+    expect(lerp({ from: 0, to: 10 }, 0.5)).toBeCloseTo(5)
+    expect(lerp({ from: 10, to: 20 }, 0.25)).toBeCloseTo(12.5)
+    expect(lerp({ from: 0, to: 10 }, 0)).toBeCloseTo(0)
+    expect(lerp({ from: 0, to: 10 }, 1)).toBeCloseTo(10)
+  })
+
+  it("should extrapolate outside [0, 1]", () => {
+    expect(lerp({ from: 0, to: 10 }, 1.5)).toBeCloseTo(15)
+    expect(lerp({ from: 0, to: 10 }, -0.5)).toBeCloseTo(-5)
   })
 })
 

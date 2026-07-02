@@ -40,21 +40,10 @@ Then open [http://localhost:3000](http://localhost:3000) and in your editor `ske
 ```typescript
 p.forTiling({ n: 20, margin: 0.1, type: "square" }, ([x, y], [dX, dY]) => {
   p.lineStyle = { cap: "round" }
+  p.setStrokeColor(120 + x * 120, 90 - 20 * y, 40)
   p.proportionately([
-    [
-      1,
-      () => {
-        p.setStrokeColour(120 + x * 120, 90 - 20 * y, 40)
-        p.drawLine([x, y], [x + dX, y + dY])
-      },
-    ],
-    [
-      2,
-      () => {
-        p.setStrokeColour(120 + x * 120, 90 - 20 * y, 40)
-        p.drawLine([x + dX, y], [x, y + dY])
-      },
-    ],
+    [1, () => p.draw(new Line([x, y], [x + dX, y + dY]))],
+    [2, () => p.draw(new Line([x + dX, y], [x, y + dY]))],
   ])
 })
 ```

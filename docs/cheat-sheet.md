@@ -1,6 +1,6 @@
 # Solandra Cheat Sheet
 
-For over 100 examples with source code, many tutorials and no-install starter projects see [https://solandra.netlify.com](https://solandra.netlify.com).
+For over 100 examples with source code, many tutorials and no-install starter projects see [https://solandra.amimetic.co.uk](https://solandra.amimetic.co.uk).
 
 ## Install
 
@@ -37,7 +37,7 @@ There are some advanced things you can set like `lineWidth`, shadows and `lineSt
 Will use your current colour state as set above.
 
 - Draw (outline) a path with `s.draw`
-- Fill a path with `s.draw`
+- Fill a path with `s.fill`
 
 ## Paths
 
@@ -56,17 +56,17 @@ Solandra uses concise configuration property names where they seem obvious (e.g.
 - `HollowArc`
 - `Line`
 - `Rect`
-- `Regular Polygon`
+- `RegularPolygon`
 - `RoundedRect`
 - `Square`
 - `Star`
 
 For custom paths there is:
 
-- `Path` for simple straight lines between points
-- `SimplePath` allows for curves between points
+- `SimplePath` for simple straight lines between points (with `chaiken` smoothing available)
+- `Path` allows for curves between points
 
-Many standard shapes can be converted to a primitive `Path` via `.path`. There are then operations which you can perform such as `chaiken` which smooths a path. See the examples.
+Many standard shapes can be converted to a primitive `SimplePath` via `.path`. There are then operations which you can perform such as `chaiken` which smooths a path. See the examples.
 
 ## Control Flow
 
@@ -95,7 +95,7 @@ s.forTiling({ n: 10 }, ([x, y], [dX, dY], [cX, cY], i) => {})
 - `forVertical`
 - `aroundCircle`
 
-You can get fancier these, which takes one of the above as an argument
+You can get fancier with these, which take one of the above as an argument
 
 - `build` which returns the result of the callbacks in an array
 - `withRandomOrder` does things in a random order

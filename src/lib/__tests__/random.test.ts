@@ -27,6 +27,22 @@ describe("Uniform random integers", () => {
     expect(total / 100).toBeLessThan(55)
   })
 
+  it("sample should throw a clear error on an empty array", () => {
+    const p = new SCanvas(
+      // @ts-ignore
+      {
+        resetTransform: () => {},
+        scale: () => {},
+        lineWidth: 1,
+      },
+      { width: 1, height: 1 },
+      101
+    )
+
+    expect(() => p.sample([])).toThrow("Cannot sample from an empty array")
+    expect(p.sample([42])).toBe(42)
+  })
+
   it("seeding should work", () => {
     let total = 0
     for (let i = 0; i < 100; i++) {
