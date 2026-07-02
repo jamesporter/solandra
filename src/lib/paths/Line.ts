@@ -4,7 +4,10 @@ import { v } from ".."
 import { SimplePath } from "./SimplePath"
 
 export class Line implements Traceable {
-  constructor(private a: Point2D, private b: Point2D) {}
+  constructor(
+    private a: Point2D,
+    private b: Point2D
+  ) {}
 
   /**
    * @param delta Vector to move path by

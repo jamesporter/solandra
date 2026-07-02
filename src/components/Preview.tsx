@@ -58,5 +58,5 @@ export default function Preview({
         />
       </Link>
     </div>
-  );
+  )
 }

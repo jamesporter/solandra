@@ -66,12 +66,7 @@ export class Path implements Traceable {
    * and more consistent.
    */
   addCurveTo = (point: Point2D, config: CurveConfig = {}): Path => {
-    const {
-      curveSize = 1,
-      bulbousness = 1,
-      curveAngle = 0,
-      twist = 0,
-    } = config
+    const { curveSize = 1, bulbousness = 1, curveAngle = 0, twist = 0 } = config
     const polarity = config.polarity ?? config.polarlity ?? 1
 
     const u = v.subtract(point, this.currentPoint)

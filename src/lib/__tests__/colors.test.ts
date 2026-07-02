@@ -27,7 +27,9 @@ describe("colors", () => {
     })
 
     it("handles decimal values", () => {
-      expect(hsla(180.5, 75.5, 25.5, 0.75)).toBe("hsla(180.5, 75.5%, 25.5%, 0.75)")
+      expect(hsla(180.5, 75.5, 25.5, 0.75)).toBe(
+        "hsla(180.5, 75.5%, 25.5%, 0.75)"
+      )
     })
   })
 
@@ -129,7 +131,14 @@ describe("colors", () => {
     })
 
     it("handles custom alpha", () => {
-      const hueGradient = hueRange({ h1: 0, h2: 360, s: 70, l: 50, a: 0.5, steps: 10 })
+      const hueGradient = hueRange({
+        h1: 0,
+        h2: 360,
+        s: 70,
+        l: 50,
+        a: 0.5,
+        steps: 10,
+      })
       expect(hueGradient(0).a).toBe(0.5)
       expect(hueGradient(5).a).toBe(0.5)
     })
@@ -137,7 +146,13 @@ describe("colors", () => {
 
   describe("saturationRange", () => {
     it("creates a saturation gradient with constant hue and lightness", () => {
-      const satGradient = saturationRange({ h: 0, s1: 20, s2: 100, l: 50, steps: 10 })
+      const satGradient = saturationRange({
+        h: 0,
+        s1: 20,
+        s2: 100,
+        l: 50,
+        steps: 10,
+      })
 
       // Start
       const start = satGradient(0)
@@ -159,14 +174,27 @@ describe("colors", () => {
     })
 
     it("handles custom alpha", () => {
-      const satGradient = saturationRange({ h: 0, s1: 0, s2: 100, l: 50, a: 0.8, steps: 10 })
+      const satGradient = saturationRange({
+        h: 0,
+        s1: 0,
+        s2: 100,
+        l: 50,
+        a: 0.8,
+        steps: 10,
+      })
       expect(satGradient(5).a).toBe(0.8)
     })
   })
 
   describe("lightnessRange", () => {
     it("creates a lightness gradient with constant hue and saturation", () => {
-      const lightGradient = lightnessRange({ h: 240, s: 70, l1: 20, l2: 80, steps: 10 })
+      const lightGradient = lightnessRange({
+        h: 240,
+        s: 70,
+        l1: 20,
+        l2: 80,
+        steps: 10,
+      })
 
       // Start
       const start = lightGradient(0)
@@ -188,14 +216,28 @@ describe("colors", () => {
     })
 
     it("handles custom alpha", () => {
-      const lightGradient = lightnessRange({ h: 0, s: 50, l1: 0, l2: 100, a: 0.3, steps: 10 })
+      const lightGradient = lightnessRange({
+        h: 0,
+        s: 50,
+        l1: 0,
+        l2: 100,
+        a: 0.3,
+        steps: 10,
+      })
       expect(lightGradient(5).a).toBe(0.3)
     })
   })
 
   describe("alphaRange", () => {
     it("creates an alpha gradient with constant color", () => {
-      const alphaGradient = alphaRange({ h: 0, s: 100, l: 50, a1: 0, a2: 1, steps: 10 })
+      const alphaGradient = alphaRange({
+        h: 0,
+        s: 100,
+        l: 50,
+        a1: 0,
+        a2: 1,
+        steps: 10,
+      })
 
       // Start
       const start = alphaGradient(0)
@@ -214,7 +256,14 @@ describe("colors", () => {
     })
 
     it("handles reverse alpha gradient", () => {
-      const alphaGradient = alphaRange({ h: 0, s: 100, l: 50, a1: 1, a2: 0, steps: 10 })
+      const alphaGradient = alphaRange({
+        h: 0,
+        s: 100,
+        l: 50,
+        a1: 1,
+        a2: 0,
+        steps: 10,
+      })
       expect(alphaGradient(0).a).toBe(1)
       expect(alphaGradient(5).a).toBe(0.5)
       expect(alphaGradient(10).a).toBe(0)

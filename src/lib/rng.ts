@@ -228,7 +228,7 @@ export class RNG {
     }
 
     var num = 0
-    var skew = (-max >>> 0) % max >>> 0
+    var skew = ((-max >>> 0) % max) >>> 0
     for (num = this.next(); num < skew; num = this.next()) {
       // this loop will rarely execute more than twice,
       // and is intentionally empty

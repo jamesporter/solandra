@@ -95,6 +95,10 @@ export class HollowArc implements Traceable {
     })
 
     // Combine into ring path
-    return SimplePath.withPoints([startInner, ...outerPoints, ...innerPoints]).close()
+    return SimplePath.withPoints([
+      startInner,
+      ...outerPoints,
+      ...innerPoints,
+    ]).close()
   }
 }

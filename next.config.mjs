@@ -1,10 +1,10 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { fileURLToPath } from "url"
+import { dirname } from "path"
 import createMDX from "@next/mdx"
 import rehypePrettyCode from "rehype-pretty-code"
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 const moonlightTheme = {
   name: "moonlight-ii",

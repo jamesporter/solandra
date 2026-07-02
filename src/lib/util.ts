@@ -95,7 +95,7 @@ export const scaler = ({
 }: ScaleConfig): ((n: number) => number) => {
   const rangeS = maxRange - minRange
   const domainS = maxDomain - minDomain
-  return n => minRange + (rangeS * (n - minDomain)) / domainS
+  return (n) => minRange + (rangeS * (n - minDomain)) / domainS
 }
 
 /**
@@ -212,19 +212,21 @@ const cp6 = Math.cos(Math.PI / 6)
  * const hexH = hexTransform({ r: 0.05, vertical: false })
  * ```
  */
-export const hexTransform = ({
-  r,
-  vertical = true,
-}: {
-  r: number
-  vertical?: boolean
-}) => ([x, y]: Point2D): Point2D => {
-  if (vertical) {
-    return [y % 2 === 0 ? 2 * r * cp6 * x : (2 * x - 1) * r * cp6, 1.5 * y * r]
-  } else {
-    return [r * 1.5 * x, x % 2 === 0 ? 2 * r * cp6 * y : (2 * y - 1) * r * cp6]
+export const hexTransform =
+  ({ r, vertical = true }: { r: number; vertical?: boolean }) =>
+  ([x, y]: Point2D): Point2D => {
+    if (vertical) {
+      return [
+        y % 2 === 0 ? 2 * r * cp6 * x : (2 * x - 1) * r * cp6,
+        1.5 * y * r,
+      ]
+    } else {
+      return [
+        r * 1.5 * x,
+        x % 2 === 0 ? 2 * r * cp6 * y : (2 * y - 1) * r * cp6,
+      ]
+    }
   }
-}
 
 /**
  * Creates a triangular grid transformation function.

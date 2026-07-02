@@ -14,7 +14,7 @@ export const getNumber = (key: string): number | null => {
 }
 
 export const setNumber = (key: string, n: number) => {
-  global.localStorage && localStorage.setItem(key, JSON.stringify(n))
+  if (global.localStorage) localStorage.setItem(key, JSON.stringify(n))
 }
 
 export const getBoolean = (
@@ -34,7 +34,7 @@ export const getBoolean = (
 }
 
 export const setBoolean = (key: string, b: boolean) => {
-  global.localStorage && localStorage.setItem(key, JSON.stringify(b))
+  if (global.localStorage) localStorage.setItem(key, JSON.stringify(b))
 }
 
 export const getSketchIdx = (): null | number => {

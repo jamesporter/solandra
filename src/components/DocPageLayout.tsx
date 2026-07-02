@@ -46,13 +46,14 @@ export function DocLinks() {
                   !active,
               }
             )}
-            legacyBehavior>
+            legacyBehavior
+          >
             {name}
           </Link>
-        );
+        )
       })}
     </div>
-  );
+  )
 }
 
 export function DocPageLayout({ children }: { children: ReactNode }) {

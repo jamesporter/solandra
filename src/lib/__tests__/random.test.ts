@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from "vitest"
 import { SCanvas } from ".."
 
 describe("Uniform random integers", () => {
