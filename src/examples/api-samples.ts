@@ -174,7 +174,7 @@ const curves1 = (p: SCanvas) => {
     p.setStrokeColor(20 + x * 40, 90 - 20 * y, 50)
     p.draw(
       Path.startAt([x, y + dY]).addCurveTo([x + dX, y + dY], {
-        polarlity: p.randomPolarity(),
+        polarity: p.randomPolarity(),
         curveSize: x * 2,
         curveAngle: x,
         bulbousness: y,

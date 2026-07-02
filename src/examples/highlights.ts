@@ -597,7 +597,7 @@ const painting = (p: SCanvas) => {
       Path.startAt([x, y])
         .addCurveTo([x + dX, y], { curveSize })
         .addLineTo([x + dX, y + h])
-        .addCurveTo([x, y + h], { curveSize, polarlity: -1 })
+        .addCurveTo([x, y + h], { curveSize, polarity: -1 })
         .addLineTo([x, y])
     )
   })
@@ -654,7 +654,7 @@ const painting2 = (p: SCanvas) => {
             .addLineTo([dX, h])
             .addCurveTo([0, h], {
               curveSize: curveSize + p.gaussian({ sd: 0.1 }),
-              polarlity: -1,
+              polarity: -1,
             })
             .addLineTo([0, 0])
         )

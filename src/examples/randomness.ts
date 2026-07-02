@@ -347,7 +347,7 @@ const explosion = (p: SCanvas) => {
         p.fill(
           Path.startAt(start)
             .addCurveTo(end, { curveSize: 0.05 })
-            .addCurveTo(start, { curveSize: 0.05, polarlity: 1 })
+            .addCurveTo(start, { curveSize: 0.05, polarity: 1 })
         )
       })
     })

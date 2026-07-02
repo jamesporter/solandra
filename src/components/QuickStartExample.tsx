@@ -69,7 +69,7 @@ export function QuickStartExample() {
               Path.startAt([x, y])
                 .addCurveTo([x + dX, y], { curveSize })
                 .addLineTo([x + dX, y + h])
-                .addCurveTo([x, y + h], { curveSize, polarlity: -1 })
+                .addCurveTo([x, y + h], { curveSize, polarity: -1 })
                 .addLineTo([x, y])
             )
           })

@@ -14,6 +14,9 @@ type PathEdge =
     }
 
 export type CurveConfig = {
+  /** Which side of the line the curve bulges towards */
+  polarity?: 1 | -1
+  /** @deprecated misspelling kept for backwards compatibility, use `polarity` */
   polarlity?: 1 | -1
   curveSize?: number
   curveAngle?: number
@@ -65,11 +68,11 @@ export class Path implements Traceable {
   addCurveTo = (point: Point2D, config: CurveConfig = {}): Path => {
     const {
       curveSize = 1,
-      polarlity = 1,
       bulbousness = 1,
       curveAngle = 0,
       twist = 0,
     } = config
+    const polarity = config.polarity ?? config.polarlity ?? 1
 
     const u = v.subtract(point, this.currentPoint)
     const d = v.magnitude(u)
@@ -78,7 +81,7 @@ export class Path implements Traceable {
     const rotatedPerp = v.rotate(perp, curveAngle)
     const controlMid = v.add(
       m,
-      v.scale(rotatedPerp, curveSize * polarlity * d * 0.5)
+      v.scale(rotatedPerp, curveSize * polarity * d * 0.5)
     )
     const perpOfRot = v.normalize(v.rotate(rotatedPerp, -Math.PI / 2 - twist))
 
@@ -250,7 +253,7 @@ export class Path implements Traceable {
     const l = this.edges.length
     const { n, m } = config
     if (m > n || n >= l || m >= l || n < 0 || m < 0)
-      new Error(
+      throw new Error(
         "Requires two indices, ordered, each less than the total edges in this path"
       )
     const es1 = this.edges.slice(m, n)
@@ -263,18 +266,19 @@ export class Path implements Traceable {
       path1.edges = es1
       path2.edges = es2
 
-      const polarlity: 1 | -1 = (config.curve && config.curve.polarlity) || 1
+      const polarity: 1 | -1 =
+        config.curve.polarity ?? config.curve.polarlity ?? 1
 
       path1.addCurveTo(es1[0].from, config.curve)
       path2.addCurveTo(es2[0].from, {
         ...config.curve,
-        polarlity: -polarlity as 1 | -1,
+        polarity: -polarity as 1 | -1,
       })
 
       return [path1, path2]
     } else {
       es1.push({ to: es1[0].from, from: es1[es1.length - 1].to, kind: "line" })
-      es2.push({ from: es1[0].from, to: es1[es1.length - 1].to, kind: "line" })
+      es2.push({ to: es2[0].from, from: es2[es2.length - 1].to, kind: "line" })
       const path1 = new Path(es1[es1.length - 1].to)
       path1.edges = es1
       const path2 = new Path(es2[es2.length - 1].to)

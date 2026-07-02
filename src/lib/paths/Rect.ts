@@ -41,11 +41,12 @@ export class Rect implements Traceable {
     split = split || 0.5
     if (orientation === "horizontal") {
       if (typeof split === "number") {
+        const w1 = this.w * split
         return [
-          new Rect({ at: this.at, w: this.w / 2, h: this.h }),
+          new Rect({ at: this.at, w: w1, h: this.h }),
           new Rect({
-            at: [this.at[0] + this.w / 2, this.at[1]],
-            w: this.w / 2,
+            at: [this.at[0] + w1, this.at[1]],
+            w: this.w - w1,
             h: this.h,
           }),
         ]
@@ -69,12 +70,13 @@ export class Rect implements Traceable {
       }
     } else {
       if (typeof split === "number") {
+        const h1 = this.h * split
         return [
-          new Rect({ at: this.at, w: this.w, h: this.h / 2 }),
+          new Rect({ at: this.at, w: this.w, h: h1 }),
           new Rect({
-            at: [this.at[0], this.at[1] + this.h / 2],
+            at: [this.at[0], this.at[1] + h1],
             w: this.w,
-            h: this.h / 2,
+            h: this.h - h1,
           }),
         ]
       } else {
