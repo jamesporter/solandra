@@ -36,6 +36,13 @@ export default function Header() {
           </Link>
         )
       })}
+      <a
+        href="/solandra-book.epub"
+        download
+        className="text-white font-semibold hover:text-emerald-200 p-2 md:p-4 drop-shadow-sm text-sm md:text-base"
+      >
+        Download Book
+      </a>
     </div>
   )
 }

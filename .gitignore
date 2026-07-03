@@ -37,3 +37,6 @@ yarn-error.log*
 # npm package
 package
 .claude/settings.local.json
+
+# generated book output (built by `pnpm build:book`)
+/bookOutput
