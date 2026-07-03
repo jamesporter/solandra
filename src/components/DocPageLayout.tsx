@@ -68,7 +68,7 @@ export function DocLinks() {
   const pathname = usePathname()
 
   return (
-    <div className="flex flex-col lg:flex-[3] lg:rounded-lg lg:overflow-hidden lg:mx-4 docsPage">
+    <div className="flex flex-col lg:flex-[3] lg:rounded-lg lg:overflow-hidden lg:mx-4 docsPage print:hidden">
       <h3 className="font-semibold text-emerald-50  bg-emerald-500 p-4 px-6">
         Contents
       </h3>

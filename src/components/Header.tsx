@@ -18,7 +18,7 @@ export const headerLinks = [
 
 export default function Header() {
   return (
-    <div className="bg-gradient-to-b from-emerald-500  to-emerald-600 px-8 flex flex-col md:flex-row items-center max-sm:py-2">
+    <div className="bg-gradient-to-b from-emerald-500  to-emerald-600 px-8 flex flex-col md:flex-row items-center max-sm:py-2 print:hidden">
       <Link
         href="/"
         className="text-white font-bold hover:text-sky-100 p-2 md:p-4 text-xl drop-shadow-sm"
