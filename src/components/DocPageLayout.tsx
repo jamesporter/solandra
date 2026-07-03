@@ -70,7 +70,7 @@ export function DocLinks() {
   return (
     <div className="flex flex-col lg:flex-[3] lg:rounded-lg lg:overflow-hidden lg:mx-4 docsPage">
       <h3 className="font-semibold text-emerald-50  bg-emerald-500 p-4 px-6">
-        Preview Docs
+        Contents
       </h3>
       {links.map(({ href, name }, i) => {
         const active = pathname.includes(href)
@@ -86,7 +86,6 @@ export function DocLinks() {
                   !active,
               }
             )}
-            legacyBehavior
           >
             {name}
           </Link>
