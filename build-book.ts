@@ -1,4 +1,4 @@
-// build-book.mjs
+// build-book.ts
 //
 // Builds "The Solandra Book":
 //   1. Boots the Next.js site, visits every /docs/* page with a headless
@@ -7,17 +7,20 @@
 //      to PNG images.
 //   2. Writes a single, self-contained HTML file plus its images into
 //      ./bookOutput (git ignored).
-//   3. Packages that content into an EPUB at ./solandra-book.epub.
+//   3. Packages that content into an EPUB at ./public/solandra-book.epub, so it
+//      is served from the site root at /solandra-book.epub.
 //
 // The captured pages are "clean": no site header, sidebar contents or footer,
 // just the article body and the rendered sketches.
+//
+// Run with: pnpm build:book  (tsx ./build-book.ts)
 
-import { spawn } from "node:child_process"
+import { spawn, type ChildProcess } from "node:child_process"
 import { once } from "node:events"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
-import { chromium } from "playwright"
+import { chromium, type LaunchOptions, type Page } from "playwright"
 import JSZip from "jszip"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -30,15 +33,42 @@ const BASE = `http://localhost:${PORT}`
 const OUT_DIR = path.join(__dirname, "bookOutput")
 const IMG_DIR = path.join(OUT_DIR, "images")
 const HTML_OUT = path.join(OUT_DIR, "solandra-book.html")
-const EPUB_OUT = path.join(__dirname, "solandra-book.epub")
+const PUBLIC_DIR = path.join(__dirname, "public")
+const EPUB_OUT = path.join(PUBLIC_DIR, "solandra-book.epub")
 
 const BOOK_TITLE = "The Solandra Book"
 const BOOK_AUTHOR = "James Porter"
 const BOOK_ID = "urn:uuid:5b6f2c1a-1d3e-4a7b-9c2d-solandrabook01"
 
+interface SketchImage {
+  name: string
+  dataUrl: string
+}
+
+interface StaticImageRef {
+  publicPath: string
+  name: string
+}
+
+interface PageCapture {
+  xhtml: string
+  images: SketchImage[]
+  staticImages: StaticImageRef[]
+}
+
+interface Chapter {
+  slug: string
+  title: string
+}
+
+interface CapturedChapter extends Chapter {
+  xhtml: string
+  images: SketchImage[]
+}
+
 // Chapters, in reading order. Mirrors the docs navigation in
 // src/components/DocPageLayout.tsx.
-const chapters = [
+const chapters: Chapter[] = [
   { slug: "introduction", title: "Introduction" },
   { slug: "quickstart", title: "Get Started" },
   { slug: "canvas-basics", title: "Canvas Basics" },
@@ -55,11 +85,11 @@ const chapters = [
   { slug: "release-notes", title: "Release Notes" },
 ]
 
-function log(...args) {
+function log(...args: unknown[]) {
   console.log("[build:book]", ...args)
 }
 
-async function existsBinary(p) {
+async function existsBinary(p: string): Promise<boolean> {
   try {
     await fs.access(p)
     return true
@@ -68,7 +98,7 @@ async function existsBinary(p) {
   }
 }
 
-async function waitForServer(url, timeoutMs = 90_000) {
+async function waitForServer(url: string, timeoutMs = 90_000): Promise<void> {
   const start = Date.now()
   while (Date.now() - start < timeoutMs) {
     try {
@@ -77,12 +107,12 @@ async function waitForServer(url, timeoutMs = 90_000) {
     } catch {
       // not up yet
     }
-    await new Promise((r) => setTimeout(r, 500))
+    await new Promise<void>((r) => setTimeout(r, 500))
   }
   throw new Error(`Server did not become ready at ${url}`)
 }
 
-function startServer() {
+function startServer(): ChildProcess {
   log(`starting next dev on :${PORT} ...`)
   const child = spawn(
     "pnpm",
@@ -93,14 +123,14 @@ function startServer() {
       env: process.env,
     }
   )
-  child.stdout.on("data", () => {})
-  child.stderr.on("data", () => {})
+  child.stdout?.on("data", () => {})
+  child.stderr?.on("data", () => {})
   return child
 }
 
 // Runs in the browser: replace each <canvas> with an <img> pointing at a saved
 // PNG, then return the article as clean XHTML plus the captured PNG data URLs.
-async function capturePage(page, slug) {
+async function capturePage(page: Page, slug: string): Promise<PageCapture> {
   await page.goto(`${BASE}/docs/${slug}`, {
     waitUntil: "networkidle",
     timeout: 60_000,
@@ -119,11 +149,11 @@ async function capturePage(page, slug) {
   // Give sketches (incl. one animation frame) time to paint.
   await page.waitForTimeout(1000)
 
-  return await page.evaluate((slug) => {
+  return await page.evaluate<PageCapture, string>((slug) => {
     const article = document.querySelector(".article-page")
-    if (!article) return { xhtml: "", images: [] }
+    if (!article) return { xhtml: "", images: [], staticImages: [] }
 
-    const images = []
+    const images: SketchImage[] = []
     const canvases = [...article.querySelectorAll("canvas")]
     canvases.forEach((canvas, i) => {
       const name = `${slug}-${i}.png`
@@ -145,11 +175,11 @@ async function capturePage(page, slug) {
     // Static images (e.g. <img src="/images/sol.png"> served from /public).
     // Rewrite their root-absolute src to a relative path and record which
     // files need to be copied into the book.
-    const staticImages = []
+    const staticImages: StaticImageRef[] = []
     ;[...article.querySelectorAll("img")].forEach((img) => {
       const src = img.getAttribute("src") || ""
       if (!src.startsWith("/")) return // canvas snapshots are already relative
-      const name = src.split("/").pop().split(/[?#]/)[0]
+      const name = (src.split("/").pop() || "").split(/[?#]/)[0]
       staticImages.push({ publicPath: src, name })
       img.setAttribute("src", `images/${name}`)
     })
@@ -161,7 +191,7 @@ async function capturePage(page, slug) {
   }, slug)
 }
 
-function pageXhtml(title, bodyXhtml) {
+function pageXhtml(title: string, bodyXhtml: string): string {
   return `<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -177,7 +207,7 @@ ${bodyXhtml}
 `
 }
 
-function escapeXml(s) {
+function escapeXml(s: string): string {
   return s
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -185,18 +215,17 @@ function escapeXml(s) {
     .replace(/"/g, "&quot;")
 }
 
-function mimeFor(name) {
-  const ext = name.split(".").pop().toLowerCase()
-  return (
-    {
-      png: "image/png",
-      jpg: "image/jpeg",
-      jpeg: "image/jpeg",
-      gif: "image/gif",
-      svg: "image/svg+xml",
-      webp: "image/webp",
-    }[ext] || "image/png"
-  )
+function mimeFor(name: string): string {
+  const ext = (name.split(".").pop() || "").toLowerCase()
+  const map: Record<string, string> = {
+    png: "image/png",
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    gif: "image/gif",
+    svg: "image/svg+xml",
+    webp: "image/webp",
+  }
+  return map[ext] || "image/png"
 }
 
 const BOOK_CSS = `
@@ -241,15 +270,16 @@ code { font-family: "SF Mono", Menlo, Consolas, monospace; }
 `
 
 async function main() {
-  const chromiumOpts = { args: ["--no-sandbox"] }
+  const chromiumOpts: LaunchOptions = { args: ["--no-sandbox"] }
   if (await existsBinary(CHROME)) chromiumOpts.executablePath = CHROME
 
   // Fresh output directory.
   await fs.rm(OUT_DIR, { recursive: true, force: true })
   await fs.mkdir(IMG_DIR, { recursive: true })
+  await fs.mkdir(PUBLIC_DIR, { recursive: true })
 
   const server = startServer()
-  let browser
+  let browser: Awaited<ReturnType<typeof chromium.launch>> | null = null
 
   try {
     await waitForServer(`${BASE}/docs/introduction`)
@@ -260,7 +290,7 @@ async function main() {
       viewport: { width: 1400, height: 1000 },
     })
 
-    const captured = []
+    const captured: CapturedChapter[] = []
     for (const ch of chapters) {
       log(`capturing /docs/${ch.slug}`)
       const { xhtml, images, staticImages } = await capturePage(page, ch.slug)
@@ -274,9 +304,9 @@ async function main() {
 
       // Static images referenced from /public (e.g. /images/sol.png). Copy the
       // file and load it as a data URL so it flows through the same pipeline.
-      const staticLoaded = []
-      for (const s of staticImages || []) {
-        const from = path.join(__dirname, "public", s.publicPath)
+      const staticLoaded: SketchImage[] = []
+      for (const s of staticImages) {
+        const from = path.join(PUBLIC_DIR, s.publicPath)
         try {
           const buf = await fs.readFile(from)
           await fs.writeFile(path.join(IMG_DIR, s.name), buf)
@@ -332,12 +362,15 @@ ${combinedBody}
     if (browser) await browser.close().catch(() => {})
     server.kill("SIGTERM")
     // give it a moment, then force
-    await Promise.race([once(server, "exit"), new Promise((r) => setTimeout(r, 3000))])
+    await Promise.race([
+      once(server, "exit"),
+      new Promise<void>((r) => setTimeout(r, 3000)),
+    ])
     if (!server.killed) server.kill("SIGKILL")
   }
 }
 
-async function buildEpub(captured) {
+async function buildEpub(captured: CapturedChapter[]): Promise<void> {
   const zip = new JSZip()
 
   // mimetype MUST be first and stored (uncompressed).
@@ -355,13 +388,14 @@ async function buildEpub(captured) {
   )
 
   const oebps = zip.folder("OEBPS")
+  if (!oebps) throw new Error("failed to create OEBPS folder")
   oebps.file("style.css", BOOK_CSS)
 
   // Chapter XHTML files + images.
-  const manifestItems = []
-  const spineItems = []
-  const navItems = []
-  const seenImages = new Set() // an image may be referenced by several chapters
+  const manifestItems: string[] = []
+  const spineItems: string[] = []
+  const navItems: string[] = []
+  const seenImages = new Set<string>() // an image may be referenced by several chapters
 
   captured.forEach((c, idx) => {
     const file = `chapter-${String(idx + 1).padStart(2, "0")}.xhtml`

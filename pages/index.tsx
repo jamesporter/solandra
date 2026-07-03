@@ -49,6 +49,13 @@ const Home: NextPage = () => {
                   {name}
                 </HLink>
               ))}
+              <a
+                href="/solandra-book.epub"
+                download
+                className="text-white font-bold text-md px-4 hover:text-sky-200 p-2 text-center"
+              >
+                Download Book
+              </a>
             </div>
           </div>
         </div>

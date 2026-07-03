@@ -20,7 +20,7 @@
     "build:cjs": "npx tsc -p tsconfig-cjs.json",
     "build:samples": "tsx ./create-images.ts",
     "check:samples": "tsx ./check-images.ts",
-    "build:book": "node ./build-book.mjs"
+    "build:book": "tsx ./build-book.ts"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.6",
