@@ -142,10 +142,22 @@ async function capturePage(page, slug) {
       canvas.replaceWith(img)
     })
 
+    // Static images (e.g. <img src="/images/sol.png"> served from /public).
+    // Rewrite their root-absolute src to a relative path and record which
+    // files need to be copied into the book.
+    const staticImages = []
+    ;[...article.querySelectorAll("img")].forEach((img) => {
+      const src = img.getAttribute("src") || ""
+      if (!src.startsWith("/")) return // canvas snapshots are already relative
+      const name = src.split("/").pop().split(/[?#]/)[0]
+      staticImages.push({ publicPath: src, name })
+      img.setAttribute("src", `images/${name}`)
+    })
+
     // XMLSerializer emits well-formed XHTML (self-closed void elements, quoted
     // attributes) which is what an EPUB requires.
     const xhtml = new XMLSerializer().serializeToString(article)
-    return { xhtml, images }
+    return { xhtml, images, staticImages }
   }, slug)
 }
 
@@ -171,6 +183,20 @@ function escapeXml(s) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
+}
+
+function mimeFor(name) {
+  const ext = name.split(".").pop().toLowerCase()
+  return (
+    {
+      png: "image/png",
+      jpg: "image/jpeg",
+      jpeg: "image/jpeg",
+      gif: "image/gif",
+      svg: "image/svg+xml",
+      webp: "image/webp",
+    }[ext] || "image/png"
+  )
 }
 
 const BOOK_CSS = `
@@ -237,14 +263,38 @@ async function main() {
     const captured = []
     for (const ch of chapters) {
       log(`capturing /docs/${ch.slug}`)
-      const { xhtml, images } = await capturePage(page, ch.slug)
+      const { xhtml, images, staticImages } = await capturePage(page, ch.slug)
+
+      // Sketch snapshots captured from <canvas>.
       for (const img of images) {
         if (!img.dataUrl) continue
         const b64 = img.dataUrl.split(",")[1]
         await fs.writeFile(path.join(IMG_DIR, img.name), Buffer.from(b64, "base64"))
       }
-      captured.push({ ...ch, xhtml, images: images.filter((i) => i.dataUrl) })
-      log(`  -> ${images.length} sketch image(s)`)
+
+      // Static images referenced from /public (e.g. /images/sol.png). Copy the
+      // file and load it as a data URL so it flows through the same pipeline.
+      const staticLoaded = []
+      for (const s of staticImages || []) {
+        const from = path.join(__dirname, "public", s.publicPath)
+        try {
+          const buf = await fs.readFile(from)
+          await fs.writeFile(path.join(IMG_DIR, s.name), buf)
+          staticLoaded.push({
+            name: s.name,
+            dataUrl: `data:${mimeFor(s.name)};base64,${buf.toString("base64")}`,
+          })
+        } catch {
+          log(`  ! missing static image ${s.publicPath} (skipped)`)
+        }
+      }
+
+      const chapterImages = [...images.filter((i) => i.dataUrl), ...staticLoaded]
+      captured.push({ ...ch, xhtml, images: chapterImages })
+      log(
+        `  -> ${images.length} sketch image(s)` +
+          (staticLoaded.length ? `, ${staticLoaded.length} static image(s)` : "")
+      )
     }
 
     await browser.close()
@@ -311,6 +361,7 @@ async function buildEpub(captured) {
   const manifestItems = []
   const spineItems = []
   const navItems = []
+  const seenImages = new Set() // an image may be referenced by several chapters
 
   captured.forEach((c, idx) => {
     const file = `chapter-${String(idx + 1).padStart(2, "0")}.xhtml`
@@ -323,10 +374,12 @@ async function buildEpub(captured) {
     navItems.push(`<li><a href="${file}">${escapeXml(c.title)}</a></li>`)
 
     c.images.forEach((img) => {
+      if (seenImages.has(img.name)) return
+      seenImages.add(img.name)
       const b64 = img.dataUrl.split(",")[1]
       oebps.file(`images/${img.name}`, b64, { base64: true })
       manifestItems.push(
-        `<item id="img-${img.name.replace(/[^a-z0-9]/gi, "-")}" href="images/${img.name}" media-type="image/png"/>`
+        `<item id="img-${img.name.replace(/[^a-z0-9]/gi, "-")}" href="images/${img.name}" media-type="${mimeFor(img.name)}"/>`
       )
     })
   })
