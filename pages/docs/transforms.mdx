@@ -1,0 +1,253 @@
+import { DocPageLayout } from "../../src/components/DocPageLayout"
+import { ExampleCanvas } from "../../src/components/ExampleCanvas"
+import { Circle, Rect, Line, RegularPolygon, SimplePath } from "../../src/lib"
+
+# Transforms, Clipping and State
+
+Canvas state (colours, line width, transforms, clipping, blend modes) is global and mutable, which is a classic source of bugs. Solandra's answer is a family of `with...` methods: each takes a callback, and **every change you make inside is automatically undone afterwards**. No manual save/restore, no leaking state.
+
+## withContext
+
+The plainest one: `withContext` just scopes state changes:
+
+```ts
+s.background(0, 0, 95)
+s.setFillColor(215, 70, 45)
+s.withContext(() => {
+  s.setFillColor(340, 80, 55) // only applies inside
+  s.fill(new Circle({ at: [0.3, 0.5], r: 0.15 }))
+})
+s.fill(new Circle({ at: [0.7, 0.5], r: 0.15 })) // back to blue
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(0, 0, 95)
+    s.setFillColor(215, 70, 45)
+    s.withContext(() => {
+      s.setFillColor(340, 80, 55)
+      s.fill(new Circle({ at: [0.3, 0.5], r: 0.15 }))
+    })
+    s.fill(new Circle({ at: [0.7, 0.5], r: 0.15 }))
+  }}
+/>
+
+## Translation, rotation and scale
+
+`withTranslation(vector, cb)`, `withRotation(angle, cb)` and `withScale([sX, sY], cb)` transform the coordinate system inside their callback. Rotation and scaling happen around the _origin_, so the standard recipe for "rotate this thing in place" is: translate to where you want it, then rotate, then draw at `[0, 0]`:
+
+```ts
+s.background(40, 30, 95)
+s.forTiling(
+  { n: 7, type: "square", margin: 0.05 },
+  (_pt, [dX], [cX, cY], i) => {
+    s.setFillColor(200 + i * 2, 60, 50)
+    s.withTranslation([cX, cY], () => {
+      s.withRotation(i * 0.15, () => {
+        s.fill(
+          new Rect({ at: [0, 0], w: dX * 0.7, h: dX * 0.7, align: "center" })
+        )
+      })
+    })
+  }
+)
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(40, 30, 95)
+    s.forTiling(
+      { n: 7, type: "square", margin: 0.05 },
+      (_pt, [dX], [cX, cY], i) => {
+        s.setFillColor(200 + i * 2, 60, 50)
+        s.withTranslation([cX, cY], () => {
+          s.withRotation(i * 0.15, () => {
+            s.fill(
+              new Rect({
+                at: [0, 0],
+                w: dX * 0.7,
+                h: dX * 0.7,
+                align: "center",
+              })
+            )
+          })
+        })
+      }
+    )
+  }}
+/>
+
+Nesting transforms composes them, which makes recursive figures natural:
+
+```ts
+s.background(230, 40, 12)
+s.setStrokeColor(180, 70, 60)
+s.lineWidth = 0.006
+const branch = (depth) => {
+  if (depth === 0) return
+  s.draw(new Line([0, 0], [0, -0.22]))
+  s.withTranslation([0, -0.22], () => {
+    s.withScale([0.72, 0.72], () => {
+      s.withRotation(0.5, () => branch(depth - 1))
+      s.withRotation(-0.4, () => branch(depth - 1))
+    })
+  })
+}
+s.withTranslation([0.5, 0.95], () => branch(8))
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(230, 40, 12)
+    s.setStrokeColor(180, 70, 60)
+    s.lineWidth = 0.006
+    const branch = (depth) => {
+      if (depth === 0) return
+      s.draw(new Line([0, 0], [0, -0.22]))
+      s.withTranslation([0, -0.22], () => {
+        s.withScale([0.72, 0.72], () => {
+          s.withRotation(0.5, () => branch(depth - 1))
+          s.withRotation(-0.4, () => branch(depth - 1))
+        })
+      })
+    }
+    s.withTranslation([0.5, 0.95], () => branch(8))
+  }}
+/>
+
+For an arbitrary affine transform there is `withTransform({ hScale, hSkew, vSkew, vScale, dX, dY }, cb)`, mirroring the raw canvas `transform` matrix.
+
+## Clipping
+
+`withClipping(shape, cb)` restricts all drawing inside the callback to the area of any `Traceable`. Great for keeping wild textures inside tidy frames:
+
+```ts
+s.background(45, 30, 94)
+s.withClipping(new Circle({ at: [0.5, 0.5], r: 0.4 }), () => {
+  s.background(215, 70, 25)
+  s.lineWidth = 0.012
+  s.times(40, (n) => {
+    s.setStrokeColor(180 + n * 3, 70, 60)
+    const y = 0.05 + n * 0.025
+    s.draw(
+      SimplePath.withPoints(
+        s.build(s.range, { from: -0.1, to: 1.1, n: 20 }, (x) => [
+          x,
+          y + 0.02 * Math.sin(x * 12 + n),
+        ])
+      ).chaiken({ n: 2 })
+    )
+  })
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(45, 30, 94)
+    s.withClipping(new Circle({ at: [0.5, 0.5], r: 0.4 }), () => {
+      s.background(215, 70, 25)
+      s.lineWidth = 0.012
+      s.times(40, (n) => {
+        s.setStrokeColor(180 + n * 3, 70, 60)
+        const y = 0.05 + n * 0.025
+        s.draw(
+          SimplePath.withPoints(
+            s.build(s.range, { from: -0.1, to: 1.1, n: 20 }, (x) => [
+              x,
+              y + 0.02 * Math.sin(x * 12 + n),
+            ])
+          ).chaiken({ n: 2 })
+        )
+      })
+    })
+  }}
+/>
+
+## Blend modes
+
+`withBlendMode(mode, cb)` scopes a [globalCompositeOperation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation): `"multiply"`, `"screen"`, `"overlay"`, `"lighten"`, `"difference"` and friends.
+
+```ts
+s.background(0, 0, 98)
+s.withBlendMode("multiply", () => {
+  const hues = [215, 340, 45]
+  s.times(3, (n) => {
+    s.setFillColor(hues[n], 80, 60)
+    s.fill(
+      new Circle({
+        at: [
+          0.5 + 0.12 * Math.cos((n * Math.PI * 2) / 3 - Math.PI / 2),
+          0.52 + 0.12 * Math.sin((n * Math.PI * 2) / 3 - Math.PI / 2),
+        ],
+        r: 0.22,
+      })
+    )
+  })
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(0, 0, 98)
+    s.withBlendMode("multiply", () => {
+      const hues = [215, 340, 45]
+      s.times(3, (n) => {
+        s.setFillColor(hues[n], 80, 60)
+        s.fill(
+          new Circle({
+            at: [
+              0.5 + 0.12 * Math.cos((n * Math.PI * 2) / 3 - Math.PI / 2),
+              0.52 + 0.12 * Math.sin((n * Math.PI * 2) / 3 - Math.PI / 2),
+            ],
+            r: 0.22,
+          })
+        )
+      })
+    })
+  }}
+/>
+
+## Everything composes
+
+The scoped helpers nest freely; clip, then rotate, then blend, and it all unwinds correctly:
+
+```ts
+s.background(220, 40, 10)
+s.withClipping(new RegularPolygon({ at: [0.5, 0.5], n: 6, r: 0.42 }), () => {
+  s.withBlendMode("screen", () => {
+    s.times(30, (n) => {
+      s.withTranslation([0.5, 0.5], () => {
+        s.withRotation(n * 0.4, () => {
+          s.setFillColor(180 + n * 6, 80, 50, 0.5)
+          s.fill(new Rect({ at: [0.05, -0.02], w: 0.4, h: 0.04 }))
+        })
+      })
+    })
+  })
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(220, 40, 10)
+    s.withClipping(
+      new RegularPolygon({ at: [0.5, 0.5], n: 6, r: 0.42 }),
+      () => {
+        s.withBlendMode("screen", () => {
+          s.times(30, (n) => {
+            s.withTranslation([0.5, 0.5], () => {
+              s.withRotation(n * 0.4, () => {
+                s.setFillColor(180 + n * 6, 80, 50, 0.5)
+                s.fill(new Rect({ at: [0.05, -0.02], w: 0.4, h: 0.04 }))
+              })
+            })
+          })
+        })
+      }
+    )
+  }}
+/>
+
+export default function Page({ children }) {
+  return <DocPageLayout>{children}</DocPageLayout>
+}

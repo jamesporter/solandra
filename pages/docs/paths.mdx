@@ -1,0 +1,292 @@
+import { DocPageLayout } from "../../src/components/DocPageLayout"
+import { ExampleCanvas } from "../../src/components/ExampleCanvas"
+import { SimplePath, Path, RegularPolygon, Circle, v } from "../../src/lib"
+
+# Paths and Curves
+
+Beyond the built-in [shapes](/docs/shapes), Solandra has two classes for building your own: `SimplePath` (straight lines between points) and `Path` (lines and curves). Both offer a fluent, chainable API and a rich set of transformations.
+
+## SimplePath
+
+A `SimplePath` is just an ordered list of points:
+
+```ts
+import { SimplePath } from "solandra"
+
+// build up point by point
+const path = SimplePath.startAt([0.1, 0.9])
+  .addPoint([0.3, 0.4])
+  .addPoint([0.7, 0.6])
+  .addPoint([0.9, 0.1])
+
+// or all at once
+const zigzag = SimplePath.withPoints([
+  [0.1, 0.5],
+  [0.3, 0.3],
+  [0.5, 0.7],
+  [0.9, 0.4],
+])
+
+// close() joins the last point back to the first
+const triangle = SimplePath.withPoints([
+  [0.2, 0.8],
+  [0.5, 0.2],
+  [0.8, 0.8],
+]).close()
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(210, 25, 95)
+    s.lineWidth = 0.01
+    s.setStrokeColor(215, 70, 40)
+    s.draw(
+      SimplePath.startAt([0.1, 0.9])
+        .addPoint([0.3, 0.4])
+        .addPoint([0.7, 0.6])
+        .addPoint([0.9, 0.1])
+    )
+    s.setFillColor(340, 70, 55, 0.7)
+    s.fill(
+      SimplePath.withPoints([
+        [0.2, 0.8],
+        [0.5, 0.2],
+        [0.8, 0.8],
+      ]).close()
+    )
+  }}
+/>
+
+## Smoothing with chaiken
+
+The `chaiken` method smooths a path by repeatedly cutting corners (Chaikin's algorithm). It's the easiest way to turn a jagged random walk into something organic. Pass `n` for the number of smoothing iterations, and `looped: true` for closed paths.
+
+```ts
+s.background(40, 40, 96)
+s.lineWidth = 0.005
+s.times(5, (n) => {
+  const points = s.build(s.range, { from: 0.1, to: 0.9, n: 12 }, (x) => [
+    x,
+    0.15 + n * 0.18 + s.random() * 0.1 - 0.05,
+  ])
+  s.setStrokeColor(20 + n * 40, 70, 50)
+  s.draw(SimplePath.withPoints(points).chaiken({ n: 1 + n }))
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(40, 40, 96)
+    s.lineWidth = 0.005
+    s.times(5, (n) => {
+      const points = s.build(s.range, { from: 0.1, to: 0.9, n: 12 }, (x) => [
+        x,
+        0.15 + n * 0.18 + s.random() * 0.1 - 0.05,
+      ])
+      s.setStrokeColor(20 + n * 40, 70, 50)
+      s.draw(SimplePath.withPoints(points).chaiken({ n: 1 + n }))
+    })
+  }}
+/>
+
+## Path: curves made easy
+
+`Path` supports cubic Bézier curves, but you never have to place control points by hand. Instead `addCurveTo` takes a target point and a _descriptive_ configuration:
+
+- `curveSize` &mdash; how far the curve bulges (relative to the line length)
+- `polarity` &mdash; which side it bulges towards (`1` or `-1`)
+- `bulbousness` &mdash; how rounded the curve is
+- `curveAngle` &mdash; skews the peak of the curve
+- `twist` &mdash; rotates the control points for S-like curves
+
+```ts
+import { Path } from "solandra"
+
+const curve = Path.startAt([0.1, 0.5]).addCurveTo([0.9, 0.5], {
+  curveSize: 0.5,
+  bulbousness: 1.5,
+})
+```
+
+Here is a grid exploring `curveSize` (left to right) against `bulbousness` (top to bottom):
+
+```ts
+s.background(0, 0, 15)
+s.lineWidth = 0.004
+s.forTiling({ n: 5, type: "square", margin: 0.05 }, ([x, y], [dX, dY]) => {
+  const i = Math.round(x * 10)
+  s.setStrokeColor(150 + i * 20, 60, 65)
+  s.draw(
+    Path.startAt([x + dX * 0.15, y + dY / 2]).addCurveTo(
+      [x + dX * 0.85, y + dY / 2],
+      {
+        curveSize: 0.2 + x,
+        bulbousness: 0.2 + y * 2,
+      }
+    )
+  )
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(0, 0, 15)
+    s.lineWidth = 0.004
+    s.forTiling({ n: 5, type: "square", margin: 0.05 }, ([x, y], [dX, dY]) => {
+      const i = Math.round(x * 10)
+      s.setStrokeColor(150 + i * 20, 60, 65)
+      s.draw(
+        Path.startAt([x + dX * 0.15, y + dY / 2]).addCurveTo(
+          [x + dX * 0.85, y + dY / 2],
+          {
+            curveSize: 0.2 + x,
+            bulbousness: 0.2 + y * 2,
+          }
+        )
+      )
+    })
+  }}
+/>
+
+Mixing lines and curves, and closing back with a curve, makes leaf- and petal-like forms trivial:
+
+```ts
+s.background(120, 25, 94)
+const { center } = s.meta
+s.times(14, (n) => {
+  const a = (n * Math.PI * 2) / 14
+  const tip = v.polarToCartesian(center, 0.42, a)
+  s.setFillColor(90 + n * 6, 55, 45, 0.8)
+  s.fill(
+    Path.startAt(center)
+      .addCurveTo(tip, { curveSize: 0.25, polarity: 1 })
+      .addCurveTo(center, { curveSize: 0.25, polarity: 1 })
+  )
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(120, 25, 94)
+    const { center } = s.meta
+    s.times(14, (n) => {
+      const a = (n * Math.PI * 2) / 14
+      const tip = v.polarToCartesian(center, 0.42, a)
+      s.setFillColor(90 + n * 6, 55, 45, 0.8)
+      s.fill(
+        Path.startAt(center)
+          .addCurveTo(tip, { curveSize: 0.25, polarity: 1 })
+          .addCurveTo(center, { curveSize: 0.25, polarity: 1 })
+      )
+    })
+  }}
+/>
+
+There is also `addCurve({ to, ...config })` if you prefer a single configuration object, and `curvify` on `SimplePath` to convert an existing polyline into a curved `Path`:
+
+```ts
+const curvy = SimplePath.withPoints(points).curvify((i) => ({
+  polarity: i % 2 === 0 ? 1 : -1,
+  curveSize: 0.5,
+}))
+```
+
+## Transforming paths
+
+Both `Path` and `SimplePath` support a family of (mostly immutable) transformations:
+
+- `moved(delta)` &mdash; translate by a vector
+- `scaled(factor)` &mdash; scale around the centroid
+- `rotated(angle)` &mdash; rotate around the centroid
+- `transformed(fn)` &mdash; apply any point-wise function (`transformLooped` keeps closed paths closed with non-deterministic transforms)
+- `reversed` &mdash; reverse direction (useful for cutting holes with `CompoundPath`)
+- `centroid` &mdash; the vertex-wise center
+
+```ts
+s.background(230, 30, 12)
+const square = new RegularPolygon({ at: [0.5, 0.5], n: 4, r: 0.35 }).path
+s.times(20, (n) => {
+  s.setStrokeColor(180 + n * 6, 70, 60, 0.9)
+  s.lineWidth = 0.002 + n * 0.0002
+  s.draw(square.scaled(1 - n * 0.045).rotated(n * 0.12))
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(230, 30, 12)
+    const square = new RegularPolygon({ at: [0.5, 0.5], n: 4, r: 0.35 }).path
+    s.times(20, (n) => {
+      s.setStrokeColor(180 + n * 6, 70, 60, 0.9)
+      s.lineWidth = 0.002 + n * 0.0002
+      s.draw(square.scaled(1 - n * 0.045).rotated(n * 0.12))
+    })
+  }}
+/>
+
+## Cutting things up
+
+Paths can be decomposed:
+
+- `segmented` splits a closed path into triangles around its centroid
+- `exploded({ magnitude, scale })` does the same but displaces (`magnitude`) and shrinks (`scale`) each piece
+- `subdivide({ m, n })` splits a path into two along the given vertex/edge indices
+- `edges` (on `SimplePath`) gives each segment as its own path
+
+```ts
+s.background(0, 0, 96)
+const poly = new RegularPolygon({ at: [0.5, 0.5], n: 8, r: 0.35 }).path
+poly.exploded({ magnitude: 1.4, scale: 0.85 }).forEach((piece, i) => {
+  s.setFillColor(330 - i * 12, 70, 55)
+  s.fill(piece)
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(0, 0, 96)
+    const poly = new RegularPolygon({ at: [0.5, 0.5], n: 8, r: 0.35 }).path
+    poly.exploded({ magnitude: 1.4, scale: 0.85 }).forEach((piece, i) => {
+      s.setFillColor(330 - i * 12, 70, 55)
+      s.fill(piece)
+    })
+  }}
+/>
+
+Recursive subdivision is a classic generative technique; `segmented` makes it a one-liner per level:
+
+```ts
+s.background(210, 40, 15)
+let pieces = [new RegularPolygon({ at: [0.5, 0.5], n: 6, r: 0.4 }).path]
+s.times(4, () => {
+  pieces = pieces.flatMap((p) =>
+    s.random() > 0.4 ? p.segmented.map((q) => q.scaled(0.92)) : [p]
+  )
+})
+pieces.forEach((p) => {
+  s.setFillColor(s.sample([190, 210, 230, 40]), 70, 60, 0.85)
+  s.fill(p)
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(210, 40, 15)
+    let pieces = [new RegularPolygon({ at: [0.5, 0.5], n: 6, r: 0.4 }).path]
+    s.times(4, () => {
+      pieces = pieces.flatMap((p) =>
+        s.random() > 0.4 ? p.segmented.map((q) => q.scaled(0.92)) : [p]
+      )
+    })
+    pieces.forEach((p) => {
+      s.setFillColor(s.sample([190, 210, 230, 40]), 70, 60, 0.85)
+      s.fill(p)
+    })
+  }}
+/>
+
+Next: drive your paths with [Iteration](/docs/iteration) or displace them with [Randomness and Noise](/docs/randomness).
+
+export default function Page({ children }) {
+  return <DocPageLayout>{children}</DocPageLayout>
+}

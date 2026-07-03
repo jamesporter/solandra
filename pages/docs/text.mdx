@@ -1,0 +1,168 @@
+import { DocPageLayout } from "../../src/components/DocPageLayout"
+import { ExampleCanvas } from "../../src/components/ExampleCanvas"
+import { Circle, Rect } from "../../src/lib"
+
+# Text
+
+Text on canvas is usually painful; Solandra wraps it in the same small, declarative style as everything else. There are three methods:
+
+- `s.fillText(config, text)` &mdash; solid text in the current fill colour
+- `s.drawText(config, text)` &mdash; outlined text in the current stroke colour
+- `s.measureText(config, text)` &mdash; returns `TextMetrics` so you can lay text out precisely
+
+The configuration is shared:
+
+```ts
+type TextConfig = {
+  at: Point2D // position
+  size: number // in canvas units, like everything else
+  align?: "center" | "left" | "right" | "start" | "end" // default "center"
+  font?: string // font family, defaults to the system font stack
+  style?: "normal" | "italic" | "oblique"
+  weight?: "normal" | "bold" | "100" | ... | "900"
+  variant?: "normal" | "small-caps"
+}
+```
+
+Crucially `size` is in the same normalized units as coordinates: `0.1` means a tenth of the canvas width, at any resolution.
+
+## Filled and stroked text
+
+```ts
+s.background(45, 30, 95)
+s.setFillColor(215, 70, 30)
+s.fillText({ at: [0.5, 0.25], size: 0.15, weight: "bold" }, "Solandra")
+s.setStrokeColor(340, 80, 50)
+s.lineWidth = 0.002
+s.drawText({ at: [0.5, 0.5], size: 0.15, weight: "bold" }, "Solandra")
+s.setFillColor(160, 70, 35)
+s.fillText({ at: [0.5, 0.72], size: 0.08, style: "italic" }, "generative art")
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(45, 30, 95)
+    s.setFillColor(215, 70, 30)
+    s.fillText({ at: [0.5, 0.25], size: 0.15, weight: "bold" }, "Solandra")
+    s.setStrokeColor(340, 80, 50)
+    s.lineWidth = 0.002
+    s.drawText({ at: [0.5, 0.5], size: 0.15, weight: "bold" }, "Solandra")
+    s.setFillColor(160, 70, 35)
+    s.fillText(
+      { at: [0.5, 0.72], size: 0.08, style: "italic" },
+      "generative art"
+    )
+  }}
+/>
+
+## Text as texture
+
+Since text is just another drawing operation, it participates in iteration, randomness and transforms like anything else:
+
+```ts
+s.background(230, 40, 12)
+const glyphs = ["0", "1"]
+s.forTiling({ n: 14, type: "square" }, (_pt, [dX], [cX, cY], i) => {
+  s.setFillColor(120, 80, 30 + s.random() * 45)
+  s.fillText({ at: [cX, cY], size: dX * 0.8 }, s.sample(glyphs))
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(230, 40, 12)
+    const glyphs = ["0", "1"]
+    s.forTiling({ n: 14, type: "square" }, (_pt, [dX], [cX, cY], i) => {
+      s.setFillColor(120, 80, 30 + s.random() * 45)
+      s.fillText({ at: [cX, cY], size: dX * 0.8 }, s.sample(glyphs))
+    })
+  }}
+/>
+
+Combined with transforms:
+
+```ts
+s.background(0, 0, 96)
+const word = "spiral"
+s.withTranslation([0.5, 0.5], () => {
+  s.times(40, (n) => {
+    s.withRotation(n * 0.35, () => {
+      s.setFillColor(200 + n * 4, 70, 45, 0.9)
+      s.fillText(
+        { at: [0.1 + n * 0.009, 0], size: 0.02 + n * 0.002, align: "left" },
+        word
+      )
+    })
+  })
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(0, 0, 96)
+    const word = "spiral"
+    s.withTranslation([0.5, 0.5], () => {
+      s.times(40, (n) => {
+        s.withRotation(n * 0.35, () => {
+          s.setFillColor(200 + n * 4, 70, 45, 0.9)
+          s.fillText(
+            { at: [0.1 + n * 0.009, 0], size: 0.02 + n * 0.002, align: "left" },
+            word
+          )
+        })
+      })
+    })
+  }}
+/>
+
+## Measuring text
+
+`measureText` takes the same configuration (minus `at`) and returns standard [TextMetrics](https://developer.mozilla.org/en-US/docs/Web/API/TextMetrics), in canvas units. Use it to size backgrounds, underline, or fit text into a box:
+
+```ts
+s.background(210, 30, 15)
+const label = "measured"
+const size = 0.12
+const m = s.measureText({ size, weight: "bold" }, label)
+s.setFillColor(45, 90, 60)
+s.fill(
+  new Rect({
+    at: [0.5 - m.width / 2 - 0.03, 0.5 - size / 2 - 0.03],
+    w: m.width + 0.06,
+    h: size + 0.06,
+  })
+)
+s.setFillColor(210, 60, 15)
+s.fillText({ at: [0.5, 0.5], size, weight: "bold" }, label)
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(210, 30, 15)
+    const label = "measured"
+    const size = 0.12
+    const m = s.measureText({ size, weight: "bold" }, label)
+    s.setFillColor(45, 90, 60)
+    s.fill(
+      new Rect({
+        at: [0.5 - m.width / 2 - 0.03, 0.5 - size / 2 - 0.03],
+        w: m.width + 0.06,
+        h: size + 0.06,
+      })
+    )
+    s.setFillColor(210, 60, 15)
+    s.fillText({ at: [0.5, 0.5], size, weight: "bold" }, label)
+  }}
+/>
+
+## Fonts
+
+By default Solandra uses a native system font stack (`systemFont` is exported if you want to extend it). You can use any font available on the page via the `font` option; just make sure webfonts are loaded before you render.
+
+```ts
+s.fillText({ at: [0.5, 0.5], size: 0.1, font: "Georgia, serif" }, "Serif!")
+```
+
+export default function Page({ children }) {
+  return <DocPageLayout>{children}</DocPageLayout>
+}

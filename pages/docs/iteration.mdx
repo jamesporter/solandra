@@ -1,0 +1,309 @@
+import { DocPageLayout } from "../../src/components/DocPageLayout"
+import { ExampleCanvas } from "../../src/components/ExampleCanvas"
+import { Circle, Rect, Square, RegularPolygon, Star } from "../../src/lib"
+
+# Iteration
+
+Generative art is mostly loops. Solandra makes the common looping patterns first-class: instead of fiddling with indices and offsets you get positions, sizes and centers handed to you, already in canvas coordinates.
+
+## forTiling
+
+The workhorse. Divides the canvas into an `n`-column grid and calls you for each tile with `(point, delta, center, index)`:
+
+- `point` &mdash; the top-left corner of the tile
+- `delta` &mdash; the `[width, height]` of the tile
+- `center` &mdash; the center of the tile
+- `index` &mdash; a sequential counter
+
+Options: `margin` (space around the edges), `type: "square"` (force square tiles; the default `"proportionate"` follows the canvas aspect ratio), and `order` (`"columnFirst"` or `"rowFirst"`).
+
+```ts
+s.background(210, 25, 95)
+s.forTiling(
+  { n: 8, type: "square", margin: 0.05 },
+  ([x, y], [dX], [cX, cY], i) => {
+    s.setFillColor(120 + i * 2, 60, 50)
+    s.fill(
+      new RegularPolygon({
+        at: [cX, cY],
+        n: 3 + (i % 5),
+        r: dX * 0.4,
+        a: i * 0.05,
+      })
+    )
+  }
+)
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(210, 25, 95)
+    s.forTiling(
+      { n: 8, type: "square", margin: 0.05 },
+      ([x, y], [dX], [cX, cY], i) => {
+        s.setFillColor(120 + i * 2, 60, 50)
+        s.fill(
+          new RegularPolygon({
+            at: [cX, cY],
+            n: 3 + (i % 5),
+            r: dX * 0.4,
+            a: i * 0.05,
+          })
+        )
+      }
+    )
+  }}
+/>
+
+## forHorizontal and forVertical
+
+Divide the canvas into full-height columns or full-width rows. Same callback signature as `forTiling`.
+
+```ts
+s.background(0, 0, 15)
+s.forHorizontal({ n: 12, margin: 0.1 }, ([x, y], [dX, dY], _c, i) => {
+  const h = 0.3 + 0.6 * Math.abs(Math.sin(i * 0.8))
+  s.setFillColor(20 + i * 10, 80, 60)
+  s.fill(
+    new Rect({ at: [x + dX * 0.15, y + dY * (1 - h)], w: dX * 0.7, h: dY * h })
+  )
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(0, 0, 15)
+    s.forHorizontal({ n: 12, margin: 0.1 }, ([x, y], [dX, dY], _c, i) => {
+      const h = 0.3 + 0.6 * Math.abs(Math.sin(i * 0.8))
+      s.setFillColor(20 + i * 10, 80, 60)
+      s.fill(
+        new Rect({
+          at: [x + dX * 0.15, y + dY * (1 - h)],
+          w: dX * 0.7,
+          h: dY * h,
+        })
+      )
+    })
+  }}
+/>
+
+`forMargin(margin, callback)` is the degenerate but useful case: a single cell inset from the edges.
+
+## forGrid
+
+Iterates over _integer_ coordinates, for algorithmic patterns on discrete grids (pair it with the [hex, triangle and isometric transforms](/docs/vectors-and-utilities)):
+
+```ts
+s.background(45, 40, 96)
+s.forGrid({ minX: 1, maxX: 9, minY: 1, maxY: 9 }, ([x, y], i) => {
+  const on = (x * y) % 3 === 0
+  s.setFillColor(on ? 340 : 215, 70, 55)
+  s.fill(
+    new Circle({
+      at: [x * 0.1, y * 0.1],
+      r: on ? 0.04 : 0.015,
+    })
+  )
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(45, 40, 96)
+    s.forGrid({ minX: 1, maxX: 9, minY: 1, maxY: 9 }, ([x, y], i) => {
+      const on = (x * y) % 3 === 0
+      s.setFillColor(on ? 340 : 215, 70, 55)
+      s.fill(
+        new Circle({
+          at: [x * 0.1, y * 0.1],
+          r: on ? 0.04 : 0.015,
+        })
+      )
+    })
+  }}
+/>
+
+## times, downFrom and range
+
+Simple counting loops: `times(n, cb)` counts up from 0, `downFrom(n, cb)` counts down from n (great for painter's-algorithm layering), and `range({ from, to, n }, cb)` walks n (by default inclusive) steps across a numeric interval:
+
+```ts
+s.background(230, 40, 12)
+s.downFrom(9, (n) => {
+  s.setFillColor(260 - n * 15, 70, 25 + n * 6)
+  s.fill(new Circle({ at: [0.5, 0.5], r: 0.05 * n }))
+})
+s.setStrokeColor(0, 0, 100, 0.6)
+s.lineWidth = 0.002
+s.range({ from: 0, to: Math.PI / 3, n: 12, inclusive: false }, (a) => {
+  s.draw(new RegularPolygon({ at: [0.5, 0.5], n: 3, r: 0.47, a }))
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(230, 40, 12)
+    s.downFrom(9, (n) => {
+      s.setFillColor(260 - n * 15, 70, 25 + n * 6)
+      s.fill(new Circle({ at: [0.5, 0.5], r: 0.05 * n }))
+    })
+    s.setStrokeColor(0, 0, 100, 0.6)
+    s.lineWidth = 0.002
+    s.range({ from: 0, to: Math.PI / 3, n: 12, inclusive: false }, (a) => {
+      s.draw(new RegularPolygon({ at: [0.5, 0.5], n: 3, r: 0.47, a }))
+    })
+  }}
+/>
+
+## aroundCircle
+
+Places `n` points evenly around a circle (`at` defaults to the canvas center, `r` to 0.25):
+
+```ts
+s.background(20, 30, 95)
+s.aroundCircle({ n: 24, r: 0.35 }, ([x, y], i) => {
+  s.setFillColor(i * 15, 70, 55)
+  s.fill(new Star({ at: [x, y], n: 5, r: 0.045, a: i * 0.3 }))
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(20, 30, 95)
+    s.aroundCircle({ n: 24, r: 0.35 }, ([x, y], i) => {
+      s.setFillColor(i * 15, 70, 55)
+      s.fill(new Star({ at: [x, y], n: 5, r: 0.045, a: i * 0.3 }))
+    })
+  }}
+/>
+
+## forPoissonDiskPoints
+
+[Poisson disk sampling](https://en.wikipedia.org/wiki/Supersampling#Poisson_disk) gives random points that are never closer than `minDist`: random but evenly spread, like scattered seeds. Much nicer than uniform random points for organic textures.
+
+```ts
+s.background(210, 60, 12)
+s.forPoissonDiskPoints({ minDist: 0.08 }, ([x, y], i) => {
+  s.setFillColor(180 + y * 100, 70, 60)
+  s.fill(new Circle({ at: [x, y], r: 0.025 }))
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(210, 60, 12)
+    s.forPoissonDiskPoints({ minDist: 0.08 }, ([x, y], i) => {
+      s.setFillColor(180 + y * 100, 70, 60)
+      s.fill(new Circle({ at: [x, y], r: 0.025 }))
+    })
+  }}
+/>
+
+## Higher order iteration: build and withRandomOrder
+
+Every iteration helper can be composed with two higher-order utilities.
+
+`build` runs an iteration helper but _collects_ the callback's return values into an array, so you can gather data first and draw later:
+
+```ts
+// collect tile centers, then connect them in a shuffled tour
+s.background(0, 0, 96)
+const centers = s.build(
+  s.forTiling,
+  { n: 6, type: "square" },
+  (_pt, _d, c) => c
+)
+s.shuffle(centers)
+s.lineWidth = 0.004
+s.setStrokeColor(215, 60, 45)
+centers.forEach((from, i) => {
+  const to = centers[(i + 1) % centers.length]
+  s.draw(new Line(from, to))
+})
+```
+
+`withRandomOrder` runs an iteration helper but executes the callbacks in shuffled order; essential when overlapping tiles should layer unpredictably:
+
+```ts
+s.background(40, 30, 95)
+s.withRandomOrder(
+  s.forTiling,
+  { n: 6, type: "square", margin: 0.1 },
+  ([x, y], [dX], _c, i) => {
+    s.setFillColor(i * 4, 70, 55, 0.95)
+    s.fill(new Square({ at: [x, y], s: dX * 1.4 }))
+  }
+)
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(40, 30, 95)
+    s.withRandomOrder(
+      s.forTiling,
+      { n: 6, type: "square", margin: 0.1 },
+      ([x, y], [dX], _c, i) => {
+        s.setFillColor(i * 4, 70, 55, 0.95)
+        s.fill(new Square({ at: [x, y], s: dX * 1.4 }))
+      }
+    )
+  }}
+/>
+
+## Choosing at random: proportionately and doProportion
+
+Two small helpers bridge iteration and [randomness](/docs/randomness). `doProportion(p, cb)` runs the callback with probability `p`. `proportionately` picks one of several weighted branches (weights need not sum to anything in particular):
+
+```ts
+s.background(220, 30, 14)
+s.forTiling({ n: 10, type: "square" }, ([x, y], [dX], [cX, cY]) => {
+  s.proportionately([
+    [
+      3,
+      () => {
+        s.setFillColor(45, 90, 60)
+        s.fill(new Circle({ at: [cX, cY], r: dX * 0.35 }))
+      },
+    ],
+    [
+      2,
+      () => {
+        s.setFillColor(340, 80, 60)
+        s.fill(new Square({ at: [cX, cY], s: dX * 0.6, align: "center" }))
+      },
+    ],
+    [1, () => {}], // sometimes do nothing
+  ])
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(220, 30, 14)
+    s.forTiling({ n: 10, type: "square" }, ([x, y], [dX], [cX, cY]) => {
+      s.proportionately([
+        [
+          3,
+          () => {
+            s.setFillColor(45, 90, 60)
+            s.fill(new Circle({ at: [cX, cY], r: dX * 0.35 }))
+          },
+        ],
+        [
+          2,
+          () => {
+            s.setFillColor(340, 80, 60)
+            s.fill(new Square({ at: [cX, cY], s: dX * 0.6, align: "center" }))
+          },
+        ],
+        [1, () => {}],
+      ])
+    })
+  }}
+/>
+
+Next up: [Randomness and Noise](/docs/randomness), which powers all the sampling used above.
+
+export default function Page({ children }) {
+  return <DocPageLayout>{children}</DocPageLayout>
+}
