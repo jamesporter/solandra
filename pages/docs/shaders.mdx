@@ -1,30 +1,245 @@
 import { DocPageLayout } from "../../src/components/DocPageLayout"
-import { Canvas } from "../../src/components/Canvas"
 import { ExampleCanvas } from "../../src/components/ExampleCanvas"
-import { Star } from "../../src/lib"
+import {
+  Circle,
+  Star,
+  RegularPolygon,
+  renderShader,
+  render,
+} from "../../src/lib"
 
-# Shaders
+# Shaders and Images
 
-<div className="w-[320px] h-[320px] flex flex-col">
-  <Canvas
-    aspectRatio={1}
-    sketch={(s) => {
-      s.setFillColor(210, 60, 40, 0.8)
-      s.fill(new Star({ at: s.meta.center, r: 0.4, n: 5 }))
-    }}
-    seed={0}
-    playing={false}
+Most of Solandra is vector-flavoured: shapes, paths and curves. Sometimes you want the opposite: efficient _per-pixel_ drawing. For that Solandra can render GLSL fragment shaders to images, and draw those images into a sketch (and vice versa: render a sketch to an image and feed it into a shader).
 
-/>
+This isn't aimed at realtime shader animation; it's a way to bring rich per-pixel textures into composed, layered artwork.
 
-</div>
+> These APIs use `OffscreenCanvas`, which is supported in all modern browsers (Safari from version 17).
+
+## renderShader
+
+`renderShader({ w, h, shader })` compiles a GLSL fragment shader, renders it offscreen at the given pixel size and returns an `ImageBitmap`. Your shader gets a `u_resolution` uniform, and should set `gl_FragColor` in `main`. Draw the result with `s.drawImage`:
+
+```ts
+import { renderShader } from "solandra"
+
+const image = renderShader({
+  w: 800,
+  h: 800,
+  shader: `
+  void main() {
+    vec2 pos = gl_FragCoord.xy / u_resolution;
+    float d = distance(pos, vec2(0.5));
+    gl_FragColor = vec4(pos.x, 0.4 + 0.4 * cos(d * 40.0), pos.y, 1.0);
+  }
+  `,
+})
+
+const sketch = (s: SCanvas) => {
+  s.drawImage({ image }) // fills the canvas by default
+}
+```
 
 <ExampleCanvas
   sketch={(s) => {
-    s.setFillColor(210, 60, 40, 0.8)
-    s.fill(new Star({ at: s.meta.center, r: 0.4, n: 5 }))
+    const image = renderShader({
+      w: 800,
+      h: 800,
+      shader: `
+      void main() {
+        vec2 pos = gl_FragCoord.xy / u_resolution;
+        float d = distance(pos, vec2(0.5));
+        gl_FragColor = vec4(pos.x, 0.4 + 0.4 * cos(d * 40.0), pos.y, 1.0);
+      }
+      `,
+    })
+    s.drawImage({ image })
   }}
 />
+
+`drawImage` takes optional `at`, `w` and `h` (in the usual normalized canvas units), so shader output is just another element to compose:
+
+```ts
+s.drawImage({ image, at: [0.1, 0.1], w: 0.35, h: 0.35 })
+```
+
+## Shader library includes
+
+A couple of frequently wanted GLSL helpers ship with Solandra; opt in with `includes`:
+
+- `"rand"` &mdash; a hash-based `rand(vec2)` pseudo-random function
+- `"palette"` &mdash; Inigo Quilez's cosine `palette(t, a, b, c, d)` function (the same idea as the [palette API](/docs/colors))
+
+```ts
+const image = renderShader({
+  w: 800,
+  h: 800,
+  includes: ["rand", "palette"],
+  shader: `
+  void main() {
+    vec2 pos = gl_FragCoord.xy / u_resolution;
+    vec3 color = palette(
+      pos.x + 0.15 * rand(pos),
+      vec3(0.5), vec3(0.5), vec3(1.0), vec3(0.0, 0.33, 0.67)
+    );
+    gl_FragColor = vec4(color, 1.0);
+  }
+  `,
+})
+s.drawImage({ image })
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    const image = renderShader({
+      w: 800,
+      h: 800,
+      includes: ["rand", "palette"],
+      shader: `
+      void main() {
+        vec2 pos = gl_FragCoord.xy / u_resolution;
+        vec3 color = palette(
+          pos.x + 0.15 * rand(pos),
+          vec3(0.5), vec3(0.5), vec3(1.0), vec3(0.0, 0.33, 0.67)
+        );
+        gl_FragColor = vec4(color, 1.0);
+      }
+      `,
+    })
+    s.drawImage({ image })
+  }}
+/>
+
+## render: sketches as images
+
+`render({ w, h, sketch, seed, time })` runs an ordinary Solandra sketch offscreen and returns it as an `ImageBitmap`. Combined with the `images` option of `renderShader` (which exposes each image as a `sampler2D` uniform), you can pipe Solandra drawings _through_ shaders:
+
+```ts
+import { render, renderShader } from "solandra"
+
+// 1. draw something with ordinary Solandra
+const source = render({
+  w: 800,
+  h: 800,
+  sketch: (s) => {
+    s.background(215, 70, 25)
+    s.setFillColor(45, 90, 65)
+    s.fill(new Star({ at: s.meta.center, r: 0.35, n: 5 }))
+  },
+})
+
+// 2. distort it with a shader
+const warped = renderShader({
+  w: 800,
+  h: 800,
+  images: { source },
+  shader: `
+  void main() {
+    vec2 pos = gl_FragCoord.xy / u_resolution;
+    pos.x += 0.08 * sin(pos.y * 20.0);
+    pos.y = 1.0 - pos.y; // textures are y-flipped
+    gl_FragColor = texture2D(source, pos);
+  }
+  `,
+})
+
+// 3. use it in a final sketch
+const sketch = (s: SCanvas) => {
+  s.drawImage({ image: warped })
+}
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    const source = render({
+      w: 800,
+      h: 800,
+      sketch: (sk) => {
+        sk.background(215, 70, 25)
+        sk.setFillColor(45, 90, 65)
+        sk.fill(new Star({ at: sk.meta.center, r: 0.35, n: 5 }))
+      },
+    })
+    const warped = renderShader({
+      w: 800,
+      h: 800,
+      images: { source },
+      shader: `
+      void main() {
+        vec2 pos = gl_FragCoord.xy / u_resolution;
+        pos.x += 0.08 * sin(pos.y * 20.0);
+        pos.y = 1.0 - pos.y;
+        gl_FragColor = texture2D(source, pos);
+      }
+      `,
+    })
+    s.drawImage({ image: warped })
+  }}
+/>
+
+## Composing both worlds
+
+Since shader output is just an image, everything else in Solandra applies: clip it, layer vector work over it, use [blend modes](/docs/transforms):
+
+```ts
+const texture = renderShader({
+  w: 800,
+  h: 800,
+  includes: ["rand"],
+  shader: `
+  void main() {
+    vec2 pos = gl_FragCoord.xy / u_resolution;
+    float n = rand(floor(pos * 60.0) / 60.0);
+    gl_FragColor = vec4(vec3(0.1 + 0.15 * n), 1.0);
+  }
+  `,
+})
+s.drawImage({ image: texture })
+s.withBlendMode("lighten", () => {
+  s.times(16, (n) => {
+    s.setFillColor(180 + n * 8, 80, 50, 0.6)
+    s.fill(
+      new RegularPolygon({
+        at: s.randomPoint(),
+        n: 6,
+        r: 0.04 + s.random() * 0.1,
+      })
+    )
+  })
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    const texture = renderShader({
+      w: 800,
+      h: 800,
+      includes: ["rand"],
+      shader: `
+      void main() {
+        vec2 pos = gl_FragCoord.xy / u_resolution;
+        float n = rand(floor(pos * 60.0) / 60.0);
+        gl_FragColor = vec4(vec3(0.1 + 0.15 * n), 1.0);
+      }
+      `,
+    })
+    s.drawImage({ image: texture })
+    s.withBlendMode("lighten", () => {
+      s.times(16, (n) => {
+        s.setFillColor(180 + n * 8, 80, 50, 0.6)
+        s.fill(
+          new RegularPolygon({
+            at: s.randomPoint(),
+            n: 6,
+            r: 0.04 + s.random() * 0.1,
+          })
+        )
+      })
+    })
+  }}
+/>
+
+More elaborate shader examples (simplex noise, multi-layer pipelines) live on the [shaders playground](/shaders).
 
 export default function Page({ children }) {
   return <DocPageLayout>{children}</DocPageLayout>

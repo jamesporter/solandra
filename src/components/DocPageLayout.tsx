@@ -14,10 +14,50 @@ const links = [
     href: "/docs/quickstart",
     name: "Get Started",
   },
-  // {
-  //   href: "/docs/shaders",
-  //   name: "Shaders",
-  // },
+  {
+    href: "/docs/canvas-basics",
+    name: "Canvas Basics",
+  },
+  {
+    href: "/docs/shapes",
+    name: "Shapes",
+  },
+  {
+    href: "/docs/paths",
+    name: "Paths & Curves",
+  },
+  {
+    href: "/docs/iteration",
+    name: "Iteration",
+  },
+  {
+    href: "/docs/randomness",
+    name: "Randomness & Noise",
+  },
+  {
+    href: "/docs/colors",
+    name: "Colour & Palettes",
+  },
+  {
+    href: "/docs/transforms",
+    name: "Transforms & Clipping",
+  },
+  {
+    href: "/docs/text",
+    name: "Text",
+  },
+  {
+    href: "/docs/animation",
+    name: "Animation & Time",
+  },
+  {
+    href: "/docs/vectors-and-utilities",
+    name: "Vectors & Utilities",
+  },
+  {
+    href: "/docs/shaders",
+    name: "Shaders & Images",
+  },
   {
     href: "/docs/release-notes",
     name: "Release Notes",

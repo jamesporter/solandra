@@ -1,0 +1,187 @@
+import { DocPageLayout } from "../../src/components/DocPageLayout"
+import { ExampleCanvas } from "../../src/components/ExampleCanvas"
+import {
+  Circle,
+  Rect,
+  Star,
+  RegularPolygon,
+  SimplePath,
+  v,
+  perlin2,
+} from "../../src/lib"
+
+# Animation and Time
+
+Solandra's model of animation is deliberately simple: a sketch is a pure function of a canvas, and the canvas carries the current **time in seconds** as `s.t`. To animate, re-run the sketch every frame with an advancing time; anything you derive from `s.t` moves.
+
+This has a nice property: an animation is just a still image parameterised by time. Every frame is reproducible (time plus seed fully determine the picture), and any animated sketch is automatically a still-image sketch too.
+
+```ts
+const sketch = (s: SCanvas) => {
+  s.background(220, 30, 15)
+  s.setFillColor(45, 90, 60)
+  s.fill(
+    new Circle({
+      at: [0.5 + 0.3 * Math.cos(s.t), 0.5 + 0.3 * Math.sin(s.t)],
+      r: 0.08,
+    })
+  )
+}
+```
+
+<ExampleCanvas
+  playing
+  sketch={(s) => {
+    s.background(220, 30, 15)
+    s.setFillColor(45, 90, 60)
+    s.fill(
+      new Circle({
+        at: [0.5 + 0.3 * Math.cos(s.t), 0.5 + 0.3 * Math.sin(s.t)],
+        r: 0.08,
+      })
+    )
+  }}
+/>
+
+## oscillate
+
+Raw trigonometry works, but `s.oscillate` is usually nicer: it smoothly bounces between two values, at a given `rate`:
+
+```ts
+s.oscillate() // between 0 and 1
+s.oscillate({ from: 0.1, to: 0.4 }) // between 0.1 and 0.4
+s.oscillate({ from: 0, to: 360, rate: 0.5 }) // slower, e.g. for hue
+```
+
+```ts
+s.background(0, 0, 12)
+s.forHorizontal({ n: 14, margin: 0.1 }, ([x, y], [dX, dY], _c, i) => {
+  const h = s.oscillate({ from: 0.1, to: 1, rate: 2 + i * 0.15 })
+  s.setFillColor(170 + i * 8, 80, 60)
+  s.fill(
+    new Rect({
+      at: [x + dX * 0.15, y + (dY * (1 - h)) / 2],
+      w: dX * 0.7,
+      h: dY * h,
+    })
+  )
+})
+```
+
+<ExampleCanvas
+  playing
+  sketch={(s) => {
+    s.background(0, 0, 12)
+    s.forHorizontal({ n: 14, margin: 0.1 }, ([x, y], [dX, dY], _c, i) => {
+      const h = s.oscillate({ from: 0.1, to: 1, rate: 2 + i * 0.15 })
+      s.setFillColor(170 + i * 8, 80, 60)
+      s.fill(
+        new Rect({
+          at: [x + dX * 0.15, y + (dY * (1 - h)) / 2],
+          w: dX * 0.7,
+          h: dY * h,
+        })
+      )
+    })
+  }}
+/>
+
+## Time plus noise
+
+Feeding `s.t` into [Perlin noise](/docs/randomness) gives drifting, organic motion rather than mechanical loops:
+
+```ts
+s.background(210, 50, 12)
+s.lineWidth = 0.004
+s.times(24, (n) => {
+  const path = SimplePath.withPoints(
+    s.build(s.range, { from: 0.05, to: 0.95, n: 30 }, (x) => [
+      x,
+      0.5 +
+        0.35 *
+          perlin2(x * 2 + s.t * 0.3, n * 0.15 + s.t * 0.1) *
+          Math.sin(x * Math.PI),
+    ])
+  )
+  s.setStrokeColor(150 + n * 5, 70, 60, 0.7)
+  s.draw(path.chaiken({ n: 2 }))
+})
+```
+
+<ExampleCanvas
+  playing
+  sketch={(s) => {
+    s.background(210, 50, 12)
+    s.lineWidth = 0.004
+    s.times(24, (n) => {
+      const path = SimplePath.withPoints(
+        s.build(s.range, { from: 0.05, to: 0.95, n: 30 }, (x) => [
+          x,
+          0.5 +
+            0.35 *
+              perlin2(x * 2 + s.t * 0.3, n * 0.15 + s.t * 0.1) *
+              Math.sin(x * Math.PI),
+        ])
+      )
+      s.setStrokeColor(150 + n * 5, 70, 60, 0.7)
+      s.draw(path.chaiken({ n: 2 }))
+    })
+  }}
+/>
+
+## Randomness in animations
+
+Take care combining `s.random()` with animation: the random sequence restarts each frame (same seed), so random _choices_ are stable across frames as long as you make the same number of calls in the same order. That's usually exactly what you want; positions stay put while time-based properties move:
+
+```ts
+s.background(260, 30, 10)
+s.times(80, (n) => {
+  const at = s.randomPoint() // same every frame (seeded)
+  const phase = s.random() * Math.PI * 2
+  const r = 0.01 + 0.03 * Math.abs(Math.sin(s.t * 2 + phase))
+  s.setFillColor(40 + s.random() * 40, 90, 65, 0.9)
+  s.fill(new Circle({ at, r }))
+})
+```
+
+<ExampleCanvas
+  playing
+  sketch={(s) => {
+    s.background(260, 30, 10)
+    s.times(80, (n) => {
+      const at = s.randomPoint()
+      const phase = s.random() * Math.PI * 2
+      const r = 0.01 + 0.03 * Math.abs(Math.sin(s.t * 2 + phase))
+      s.setFillColor(40 + s.random() * 40, 90, 65, 0.9)
+      s.fill(new Circle({ at, r }))
+    })
+  }}
+/>
+
+## Driving animation yourself
+
+If you're not using a ready-made canvas component, the loop is straightforward: create an `SCanvas` with a time (fourth constructor argument) and redraw with `requestAnimationFrame`. Reusing one instance and calling `updateTime` avoids re-allocating:
+
+```ts
+import { SCanvas } from "solandra"
+
+const ctx = canvasElement.getContext("2d")!
+const size = { width: canvasElement.width, height: canvasElement.height }
+const seed = 42
+
+let start: number | undefined
+const frame = (ms: number) => {
+  start ??= ms
+  const s = new SCanvas(ctx, size, seed, (ms - start) / 1000)
+  ctx.clearRect(0, 0, size.width, size.height)
+  sketch(s)
+  requestAnimationFrame(frame)
+}
+requestAnimationFrame(frame)
+```
+
+For interactive pieces there is also a `StatefulSketch` type: a sketch paired with an `initialState()` and a `handleMessage` reducer (for example for click events); the source of this site's [interactive examples](/main) shows the pattern in use.
+
+export default function Page({ children }) {
+  return <DocPageLayout>{children}</DocPageLayout>
+}
