@@ -38,7 +38,7 @@ const EPUB_OUT = path.join(PUBLIC_DIR, "solandra-book.epub")
 
 const BOOK_TITLE = "The Solandra Book"
 const BOOK_AUTHOR = "James Porter"
-const BOOK_ID = "urn:uuid:5b6f2c1a-1d3e-4a7b-9c2d-solandrabook01"
+const BOOK_ID = "urn:uuid:2a42e4e0-a24d-4be3-9500-c0c18508b079"
 
 interface SketchImage {
   name: string
@@ -299,7 +299,10 @@ async function main() {
       for (const img of images) {
         if (!img.dataUrl) continue
         const b64 = img.dataUrl.split(",")[1]
-        await fs.writeFile(path.join(IMG_DIR, img.name), Buffer.from(b64, "base64"))
+        await fs.writeFile(
+          path.join(IMG_DIR, img.name),
+          Buffer.from(b64, "base64")
+        )
       }
 
       // Static images referenced from /public (e.g. /images/sol.png). Copy the
@@ -319,11 +322,16 @@ async function main() {
         }
       }
 
-      const chapterImages = [...images.filter((i) => i.dataUrl), ...staticLoaded]
+      const chapterImages = [
+        ...images.filter((i) => i.dataUrl),
+        ...staticLoaded,
+      ]
       captured.push({ ...ch, xhtml, images: chapterImages })
       log(
         `  -> ${images.length} sketch image(s)` +
-          (staticLoaded.length ? `, ${staticLoaded.length} static image(s)` : "")
+          (staticLoaded.length
+            ? `, ${staticLoaded.length} static image(s)`
+            : "")
       )
     }
 
@@ -447,13 +455,13 @@ ${navItems.map((n) => `  ${n}`).join("\n")}
 <docTitle><text>${escapeXml(BOOK_TITLE)}</text></docTitle>
 <navMap>
 ${captured
-    .map(
-      (c, idx) => `  <navPoint id="np${idx + 1}" playOrder="${idx + 1}">
+  .map(
+    (c, idx) => `  <navPoint id="np${idx + 1}" playOrder="${idx + 1}">
     <navLabel><text>${escapeXml(c.title)}</text></navLabel>
     <content src="chapter-${String(idx + 1).padStart(2, "0")}.xhtml"/>
   </navPoint>`
-    )
-    .join("\n")}
+  )
+  .join("\n")}
 </navMap>
 </ncx>
 `
