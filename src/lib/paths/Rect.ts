@@ -1,7 +1,7 @@
-import { Point2D } from "../types/sol"
-import { Traceable } from "."
-import { v } from ".."
-import { SimplePath } from "./SimplePath"
+import { Point2D } from "../types/sol.js"
+import { Traceable } from "./index.js"
+import { v } from "../index.js"
+import { SimplePath } from "./SimplePath.js"
 export class Rect implements Traceable {
   readonly at: Point2D
   readonly w: number
@@ -60,7 +60,7 @@ export class Rect implements Traceable {
           c += p * this.w
         })
         return xDxs.map(
-          ([x, dX], i) =>
+          ([x, dX], _i) =>
             new Rect({
               at: [this.at[0] + x, this.at[1]],
               w: dX,
@@ -89,7 +89,7 @@ export class Rect implements Traceable {
           c += p * this.h
         })
         return yDys.map(
-          ([y, dY], i) =>
+          ([y, dY], _i) =>
             new Rect({
               at: [this.at[0], this.at[1] + y],
               w: this.w,

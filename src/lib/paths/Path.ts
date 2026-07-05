@@ -1,7 +1,7 @@
-import { Traceable } from "."
-import { Point2D, Vector2D } from "../types/sol"
-import { v } from ".."
-import { centroid } from "../util"
+import { Traceable } from "./index.js"
+import { Point2D, Vector2D } from "../types/sol.js"
+import { v } from "../index.js"
+import { centroid } from "../util.js"
 
 type PathEdge =
   | { kind: "line"; from: Point2D; to: Point2D }
@@ -149,7 +149,6 @@ export class Path implements Traceable {
   get segmented(): Path[] {
     const c = this.centroid
     if (this.edges.length < 2) throw new Error("Must have at least 2 edges")
-    const n = this.edges.length
     const paths: Path[] = []
     for (let e of this.edges) {
       const newPath = new Path(e.to)

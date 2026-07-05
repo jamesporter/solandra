@@ -1,7 +1,7 @@
-import { Point2D } from "../types/sol"
-import { Traceable } from "./index"
-import { SimplePath } from "./SimplePath"
-import { sampleArc } from "./pathUtil"
+import { Point2D } from "../types/sol.js"
+import { Traceable } from "./index.js"
+import { SimplePath } from "./SimplePath.js"
+import { sampleArc } from "./pathUtil.js"
 export class HollowArc implements Traceable {
   readonly cX: number
   readonly cY: number

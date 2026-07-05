@@ -5,9 +5,8 @@
  * @module poissonDisk
  */
 
-import { v } from "."
-import { Point2D } from "./types/sol"
-import { distance } from "./vectors"
+import { Point2D } from "./types/sol.js"
+import { distance } from "./vectors.js"
 
 /**
  * Generates Poisson disk sampled points within a rectangular region.

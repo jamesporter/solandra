@@ -1,6 +1,6 @@
 import childProcess from "child_process"
 
-const r1 = childProcess.execSync("npm run build:samples").toString()
+const _r1 = childProcess.execSync("npm run build:samples").toString()
 
 const result = childProcess.execSync("git diff samples").toString()
 

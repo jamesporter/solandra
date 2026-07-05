@@ -1,7 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest"
+import { describe, it, expect } from "vitest"
 import SCanvas from "../sCanvas"
-import { Rect } from "../paths/Rect"
-import { Circle } from "../paths/Circle"
 
 // Create a mock canvas context
 const createMockCtx = () => {

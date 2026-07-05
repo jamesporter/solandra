@@ -13,18 +13,18 @@ const createMockContext = () => {
 
   return {
     createLinearGradient: vi.fn(
-      (x0: number, y0: number, x1: number, y1: number) => {
+      (_x0: number, _y0: number, _x1: number, _y1: number) => {
         return mockGradient
       }
     ),
     createRadialGradient: vi.fn(
       (
-        x0: number,
-        y0: number,
-        r0: number,
-        x1: number,
-        y1: number,
-        r1: number
+        _x0: number,
+        _y0: number,
+        _r0: number,
+        _x1: number,
+        _y1: number,
+        _r1: number
       ) => {
         return mockGradient
       }

@@ -1,7 +1,7 @@
-import { Traceable } from "."
-import { Point2D, Vector2D } from "../types/sol"
-import { v } from ".."
-import { SimplePath } from "./SimplePath"
+import { Traceable } from "./index.js"
+import { Point2D, Vector2D } from "../types/sol.js"
+import { v } from "../index.js"
+import { SimplePath } from "./SimplePath.js"
 
 export class Line implements Traceable {
   constructor(

@@ -4,7 +4,7 @@
  * @module vectors
  */
 
-import { Point2D } from "./types/sol"
+import { Point2D } from "./types/sol.js"
 
 /**
  * Adds two 2D vectors component-wise.

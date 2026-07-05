@@ -57,7 +57,7 @@ export function Four() {
 })`}
       sketch={(p) => {
         p.background(220, 26, 14)
-        p.forHorizontal({ n: 6, margin: 0.1 }, (at, [w, h], c, i) => {
+        p.forHorizontal({ n: 6, margin: 0.1 }, (at, [w, _h], c, i) => {
           p.setFillColor(150 + i * 10, 54, 50)
           p.fill(new RegularPolygon({ at: c, r: w / 3, n: i + 3 }))
         })
@@ -76,7 +76,7 @@ export function Five() {
     })`}
       sketch={(p) => {
         p.background(220, 26, 14)
-        p.forHorizontal({ n: 6, margin: 0.1 }, (at, [w, h], c, i) => {
+        p.forHorizontal({ n: 6, margin: 0.1 }, (at, [w, _h], c, i) => {
           p.setFillColor(150 + i * 10, 54, 50)
           p.fill(
             new RegularPolygon({

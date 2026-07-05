@@ -1,4 +1,4 @@
-import { ShaderInclude, shaderLib } from "./shaderLib"
+import { ShaderInclude, shaderLib } from "./shaderLib.js"
 
 const vertexShaderCode = /* glsl */ `
 attribute vec2 a_position;

@@ -223,7 +223,7 @@ const curvify2 = (p: SCanvas) => {
   p.setStrokeColor(0, 0, 95)
   new RegularPolygon({ at: p.meta.center, r: 0.3, n: 12 }).path
     .exploded({ magnitude: 1.2, scale: 0.8 })
-    .map((sp, i) => sp.curvify(() => ({ curveSize: -0.25 })))
+    .map((sp, _i) => sp.curvify(() => ({ curveSize: -0.25 })))
     .forEach((s) => p.draw(s))
   const middle = new RegularPolygon({
     at: p.meta.center,

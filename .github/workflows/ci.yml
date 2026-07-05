@@ -23,3 +23,5 @@ jobs:
         run: pnpm format:check
       - name: Test
         run: pnpm test
+      - name: Build and check npm package
+        run: pnpm check:package

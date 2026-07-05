@@ -133,8 +133,8 @@ const glow = (p: SCanvas) => {
   p.forTiling(
     { n: 5, type: "square", order: "rowFirst", margin: 0.05 },
     (pt, [dX], c, t) => {
-      const i = t % 5
-      const j = Math.floor(t / 5)
+      const _i = t % 5
+      const _j = Math.floor(t / 5)
 
       p.setFillColor(t + 150, 90, 40, 0.75)
       p.shadow = {

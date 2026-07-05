@@ -473,13 +473,13 @@ const gradients4 = (p: SCanvas) => {
 
 const gradients5 = (p: SCanvas) => {
   const { right, bottom } = p.meta
-  const corners: Point2D[] = [
+  const _corners: Point2D[] = [
     [0, 0],
     [right, 0],
     [right, bottom],
     [0, bottom],
   ]
-  const hues = [10, 215, 50, 190]
+  const _hues = [10, 215, 50, 190]
 
   p.background(0, 0, 5)
   p.forHorizontal({ n: 30 }, (from, [dX, _]) => {
@@ -550,7 +550,7 @@ const transforms = (p: SCanvas) => {
 const transforms3 = (p: SCanvas) => {
   const { bottom: h } = p.meta
   const a = Math.sin(p.t)
-  p.forHorizontal({ n: 20, margin: 0.3 }, ([x, y], [dX, dY]) => {
+  p.forHorizontal({ n: 20, margin: 0.3 }, ([x, _y], [dX, dY]) => {
     p.range({ from: 0, to: 2 * Math.PI, n: 12 }, (n) =>
       p.withTranslation([x + dX / 2, (h * n) / 6 + dY / 6], () => {
         p.withRotation(x - n + a, () => {
@@ -1002,7 +1002,7 @@ const colourThemes2 = (p: SCanvas) => {
     const delta2 = p.gaussian({ sd: 0.1 })
 
     const g1 = hueRange({ h1: 0, h2: 360, s, l: 50, a: 0.7, steps: 12 })
-    p.forHorizontal({ n: 12 }, (pt, [dX, dY], c, i) => {
+    p.forHorizontal({ n: 12 }, (pt, [dX, _dY], c, i) => {
       p.setFillColorFromSpec(g1(i))
       p.fill(
         new Square({

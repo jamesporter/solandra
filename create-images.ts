@@ -7,7 +7,7 @@ import fs from "fs"
 const width = 900
 const height = 600
 
-Object.entries(sketches).forEach(([category, { sketches }]) => {
+Object.entries(sketches).forEach(([_category, { sketches }]) => {
   sketches.forEach(({ sketch, name }) => {
     const canvas = createCanvas(width, height)
     const ctx = canvas.getContext("2d")
@@ -46,4 +46,5 @@ Object.entries(sketches).forEach(([category, { sketches }]) => {
   })
 })
 
-fs.writeFileSync("./samples/samples.md", md)
+// Trim the final blank line so the output stays oxfmt-clean
+fs.writeFileSync("./samples/samples.md", md.replace(/\n+$/, "\n"))

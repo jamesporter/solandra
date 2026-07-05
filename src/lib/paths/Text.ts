@@ -1,5 +1,5 @@
-import { Point2D } from "../types/sol"
-import { SCanvas } from ".."
+import { Point2D } from "../types/sol.js"
+import { SCanvas } from "../index.js"
 
 export type TextSizing = "fixed" | "fitted"
 export type TextHorizontalAlign = CanvasRenderingContext2D["textAlign"]
@@ -54,7 +54,7 @@ export class Text {
     private text: string
   ) {}
 
-  textIn = (ctx: CanvasRenderingContext2D, s: SCanvas) => {
+  textIn = (ctx: CanvasRenderingContext2D, _s: SCanvas) => {
     const { size, at, kind, align = "center" } = this.config
     ctx.textAlign = align
 

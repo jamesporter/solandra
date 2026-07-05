@@ -1015,6 +1015,15 @@ const nextConfig = {
   output: "export",
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
   outputFileTracingRoot: __dirname,
+  webpack: (config) => {
+    // src/lib uses explicit .js extensions on relative imports (required for
+    // the published ESM build to resolve in Node); map them back to .ts here.
+    config.resolve.extensionAlias = {
+      ...config.resolve.extensionAlias,
+      ".js": [".ts", ".tsx", ".js"],
+    }
+    return config
+  },
 }
 
 /** @type {import('rehype-pretty-code').Options} */

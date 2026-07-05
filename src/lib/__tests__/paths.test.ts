@@ -3,7 +3,6 @@ import { Circle } from "../paths/Circle"
 import { Ellipse } from "../paths/Ellipse"
 import { Rect } from "../paths/Rect"
 import { SimplePath } from "../paths/SimplePath"
-import { Point2D } from "../types/sol"
 
 describe("paths", () => {
   describe("Rect", () => {

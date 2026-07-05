@@ -72,7 +72,7 @@ export function DocLinks() {
       <h3 className="font-semibold text-emerald-50  bg-emerald-500 p-4 px-6">
         Contents
       </h3>
-      {links.map(({ href, name }, i) => {
+      {links.map(({ href, name }, _i) => {
         const active = pathname.includes(href)
         return (
           <Link

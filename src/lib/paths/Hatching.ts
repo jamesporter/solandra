@@ -1,5 +1,5 @@
-import { Point2D } from "../types/sol"
-import { Traceable } from "./index"
+import { Point2D } from "../types/sol.js"
+import { Traceable } from "./index.js"
 /**
  * Hatching in a circle around a point, with a radius and delta between lines
  */

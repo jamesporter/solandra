@@ -1,17 +1,7 @@
 import { useEffect, useRef } from "react"
-import { Canvas } from "../src/components/Canvas"
 import Footer from "../src/components/Footer"
 import Header from "../src/components/Header"
-import {
-  Circle,
-  Rect,
-  RegularPolygon,
-  SCanvas,
-  Sketch,
-  Star,
-  render,
-  renderShader,
-} from "../src/lib"
+import { RegularPolygon, SCanvas, Sketch, Star, renderShader } from "../src/lib"
 
 const shaderOne = /* glsl */ `
 void main() {

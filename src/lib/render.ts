@@ -1,5 +1,5 @@
-import { SCanvas } from "."
-import { Sketch } from "./types/sol"
+import { SCanvas } from "./index.js"
+import { Sketch } from "./types/sol.js"
 
 export function render({
   w = 2048,

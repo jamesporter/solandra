@@ -1,5 +1,5 @@
-import { Point2D } from "../types/sol"
-import { Rect } from "./Rect"
+import { Point2D } from "../types/sol.js"
+import { Rect } from "./Rect.js"
 
 export class Square extends Rect {
   constructor(config: {
