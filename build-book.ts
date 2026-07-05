@@ -431,7 +431,9 @@ async function buildEpub(captured: CapturedChapter[]): Promise<void> {
     oebps.file("cover.xhtml", coverXhtml())
     hasCover = true
   } catch {
-    log(`  ! no cover image at ${path.relative(__dirname, COVER_SRC)} (skipped)`)
+    log(
+      `  ! no cover image at ${path.relative(__dirname, COVER_SRC)} (skipped)`
+    )
   }
 
   // Chapter XHTML files + images.
