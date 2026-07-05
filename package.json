@@ -42,7 +42,6 @@
     "solandra-svg": "^0.5.0"
   },
   "devDependencies": {
-    "@babel/preset-typescript": "^7.24.1",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
@@ -79,7 +78,19 @@
       "canvas",
       "esbuild",
       "unrs-resolver"
-    ]
+    ],
+    "overrides": {
+      "prismjs@<1.30.0": ">=1.30.0",
+      "mdast-util-to-hast@>=13.0.0 <13.2.1": ">=13.2.1",
+      "rollup@>=4.0.0 <4.59.0": ">=4.59.0",
+      "minimatch@<3.1.4": ">=3.1.4",
+      "brace-expansion@<1.1.13": ">=1.1.13",
+      "picomatch@>=4.0.0 <4.0.4": ">=4.0.4",
+      "postcss@<8.5.10": ">=8.5.10",
+      "js-cookie@<=3.0.5": ">=3.0.7",
+      "vite@<=6.4.2": ">=6.4.3",
+      "js-yaml@<3.15.0": ">=3.15.0"
+    }
   },
   "packageManager": "pnpm@10.6.2+sha512.47870716bea1572b53df34ad8647b42962bc790ce2bf4562ba0f643237d7302a3d6a8ecef9e4bdfc01d23af1969aa90485d4cebb0b9638fa5ef1daef656f6c1b"
 }
