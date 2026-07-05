@@ -1,4 +1,4 @@
-import SCanvas from "../sCanvas"
+import SCanvas from "../sCanvas.js"
 
 export type Sketch = {
   (play: SCanvas): void

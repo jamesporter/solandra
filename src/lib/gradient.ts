@@ -3,9 +3,9 @@
  * @module gradient
  */
 
-import { Gradientable } from "./sCanvas"
-import { Point2D } from "./types/sol"
-import { hsla, ColorSpec } from "./colors"
+import { Gradientable } from "./sCanvas.js"
+import { Point2D } from "./types/sol.js"
+import { hsla, ColorSpec } from "./colors.js"
 
 /**
  * Creates a linear gradient between two points with multiple color stops.

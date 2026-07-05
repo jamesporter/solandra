@@ -9,7 +9,7 @@ describe("Draw something with Solandra", () => {
     const pocFakeCanvas = new Proxy(
       {},
       {
-        get: function (target, property, receiver) {
+        get: function (target, property, _receiver) {
           history.push(`${String(property)}`)
           return (...args: any[]) => {
             history[history.length - 1] = `${String(property)}(${args.join(
@@ -17,7 +17,7 @@ describe("Draw something with Solandra", () => {
             )})`
           }
         },
-        set: function (target, property, value, receiver) {
+        set: function (target, property, value, _receiver) {
           history.push(`${String(property)} = ${value}`)
           return true
         },

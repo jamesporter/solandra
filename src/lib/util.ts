@@ -3,8 +3,7 @@
  * @module util
  */
 
-import { Point2D } from "./types/sol"
-import { v } from "."
+import { Point2D } from "./types/sol.js"
 
 /**
  * Clamps a number to be within a specified range.

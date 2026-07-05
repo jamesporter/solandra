@@ -1,8 +1,8 @@
-import { Point2D } from "../types/sol"
-import { Traceable } from "./index"
-import { v } from ".."
-import { SimplePath } from "./SimplePath"
-import { sampleQuadraticBezier } from "./pathUtil"
+import { Point2D } from "../types/sol.js"
+import { Traceable } from "./index.js"
+import { v } from "../index.js"
+import { SimplePath } from "./SimplePath.js"
+import { sampleQuadraticBezier } from "./pathUtil.js"
 export class RoundedRect implements Traceable {
   readonly at: Point2D
   readonly w: number

@@ -1,9 +1,9 @@
-import { Size, Point2D, Vector2D } from "./types/sol"
-import { hsla, ColorSpec } from "./colors"
-import { Traceable } from "./paths"
-import { TextConfig, Text, Rect } from "."
-import { RNG } from "./rng"
-import { poissonDiskPoints } from "./poissonDisk"
+import { Size, Point2D, Vector2D } from "./types/sol.js"
+import { hsla, ColorSpec } from "./colors.js"
+import { Traceable } from "./paths/index.js"
+import { TextConfig, Text, Rect } from "./index.js"
+import { RNG } from "./rng.js"
+import { poissonDiskPoints } from "./poissonDisk.js"
 
 /**
  * Interface for objects that can generate canvas gradients.

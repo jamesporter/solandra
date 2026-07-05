@@ -4,7 +4,7 @@
  * @module noise
  */
 
-import { dot } from "./vectors"
+import { dot } from "./vectors.js"
 
 /**
  * Smoothstep interpolation function for Perlin noise.

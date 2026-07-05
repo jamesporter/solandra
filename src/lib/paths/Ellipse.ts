@@ -1,6 +1,6 @@
-import { Point2D } from "../types/sol"
-import { Traceable } from "./index"
-import { SimplePath } from "./SimplePath"
+import { Point2D } from "../types/sol.js"
+import { Traceable } from "./index.js"
+import { SimplePath } from "./SimplePath.js"
 /**
  * Technically you can't do ellipses/circles properly with cubic beziers, but you can come very, very close
  *

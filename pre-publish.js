@@ -12,11 +12,37 @@ const packageTemplate = {
   name: "solandra",
   author: "James Porter <james@amimetic.co.uk>",
   version,
+  description: mainPackage.description,
+  keywords: [
+    "generative-art",
+    "algorithmic-art",
+    "creative-coding",
+    "canvas",
+    "graphics",
+    "typescript",
+  ],
+  license: "MIT",
+  repository: mainPackage.repository,
+  bugs: mainPackage.bugs,
+  homepage: "https://solandra.amimetic.co.uk",
+  sideEffects: false,
   main: "./cjs/index.js",
   module: "./esm/index.js",
-  license: "MIT",
+  types: "./cjs/index.d.ts",
+  exports: {
+    ".": {
+      import: {
+        types: "./esm/index.d.ts",
+        default: "./esm/index.js",
+      },
+      require: {
+        types: "./cjs/index.d.ts",
+        default: "./cjs/index.js",
+      },
+    },
+    "./package.json": "./package.json",
+  },
   dependencies: {},
-  types: "./esm/index.d.ts",
 }
 
 fs.writeFileSync(
@@ -24,4 +50,17 @@ fs.writeFileSync(
   JSON.stringify(packageTemplate, null, 2)
 )
 
+// Module-type markers so Node treats esm/*.js as ESM and cjs/*.js as CommonJS
+fs.mkdirSync(path.join("package", "esm"))
+fs.writeFileSync(
+  path.join("package", "esm", "package.json"),
+  JSON.stringify({ type: "module" }, null, 2)
+)
+fs.mkdirSync(path.join("package", "cjs"))
+fs.writeFileSync(
+  path.join("package", "cjs", "package.json"),
+  JSON.stringify({ type: "commonjs" }, null, 2)
+)
+
 fs.copyFileSync("README.md", path.join("package", "README.md"))
+fs.copyFileSync("LICENSE", path.join("package", "LICENSE"))

@@ -1,10 +1,10 @@
-import { Traceable } from "."
-import { Point2D, Vector2D } from "../types/sol"
-import { tripleWise, pairWise } from "../collectionOps"
-import { v } from ".."
-import { centroid } from "../util"
+import { Traceable } from "./index.js"
+import { Point2D, Vector2D } from "../types/sol.js"
+import { tripleWise, pairWise } from "../collectionOps.js"
+import { v } from "../index.js"
+import { centroid } from "../util.js"
 
-import { CurveConfig, Path } from "./Path"
+import { CurveConfig, Path } from "./Path.js"
 
 export class SimplePath implements Traceable {
   constructor(public points: Point2D[] = []) {}

@@ -1,6 +1,6 @@
-import { Traceable } from "."
-import { Point2D } from "../types/sol"
-import { SimplePath } from "./SimplePath"
+import { Traceable } from "./index.js"
+import { Point2D } from "../types/sol.js"
+import { SimplePath } from "./SimplePath.js"
 
 /**
  * NB Not all canvas stuff supported, don't export this!

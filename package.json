@@ -15,6 +15,7 @@
     "test": "vitest run",
     "test:w": "vitest",
     "build:package": "node pre-publish && npm run build:esm && npm run build:cjs",
+    "check:package": "npm run build:package && node check-package.mjs",
     "build:source": "node extract-source.js",
     "build:esm": "npx tsc -p tsconfig-esm.json",
     "build:cjs": "npx tsc -p tsconfig-cjs.json",

@@ -1,4 +1,4 @@
-import { Traceable } from "."
+import { Traceable } from "./index.js"
 
 export class CompoundPath implements Traceable {
   private constructor(private paths: Traceable[]) {}
