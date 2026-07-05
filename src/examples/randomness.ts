@@ -93,7 +93,7 @@ const rectangles = (p: SCanvas) => {
 
 const littleAbstracts = (p: SCanvas) => {
   p.background(200, 10, 20)
-  p.forTiling({ n: 8, margin: 0.1, type: "square" }, (at, d, c, i) => {
+  p.forTiling({ n: 8, margin: 0.1, type: "square" }, (at, d, c, _i) => {
     p.setFillColor(p.uniformRandomInt({ from: 200, to: 260 }), 50, 50)
     const rect = new Rect({
       at: add(at, scale(d, 0.1)),
@@ -481,7 +481,7 @@ const perturbedSpiral = (p: SCanvas) => {
 
   p.background(45, 85, 97)
   p.lineWidth = 0.001
-  p.times(800, (n) => {
+  p.times(800, (_n) => {
     p.setStrokeColor(p.sample([220, 190, 215]), 50, p.sample([20, 40]))
     const pA = a + p.gaussian({ sd: Math.PI })
     p.draw(
@@ -546,7 +546,7 @@ const poissonPoints = (p: SCanvas) => {
 const poissonPoints2 = (p: SCanvas) => {
   p.background(0, 0, 95)
 
-  const points = p.build(p.forPoissonDiskPoints, { minDist: 0.1 }, (pt, i) => {
+  const points = p.build(p.forPoissonDiskPoints, { minDist: 0.1 }, (pt, _i) => {
     return pt
   })
 

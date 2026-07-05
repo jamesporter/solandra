@@ -44,7 +44,7 @@ const Home: NextPage = () => {
               Modern TypeScript-first Creative Coding
             </h2>
             <div className="flex flex-row justify-center pt-4">
-              {headerLinks.map(({ href, name }, i) => (
+              {headerLinks.map(({ href, name }, _i) => (
                 <HLink to={href} key={href}>
                   {name}
                 </HLink>

@@ -21,7 +21,7 @@ export function ViewAll({ playing }: { playing?: boolean }) {
   }
   const goToPrev = () =>
     setSketchNo(sketchNo > 0 ? sketchNo - 1 : selectSketches.length - 1)
-  const onClick = (x: number, y: number, [w, h]: [number, number]) => {
+  const onClick = (x: number, y: number, [w, _h]: [number, number]) => {
     setHaveInteracted(true)
     if (x / w < 0.333333) {
       goToPrev()

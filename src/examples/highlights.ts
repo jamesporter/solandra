@@ -430,7 +430,7 @@ const fancyTiling = (p: SCanvas) => {
       ],
       [
         1,
-        () => (x: number, y: number, dX: number, dY: number) => {
+        () => (x: number, y: number, dX: number, _dY: number) => {
           p.lineWidth = lw
           p.setStrokeColor(...color)
           p.draw(new Line([x, y], [x + dX, y]))
@@ -466,7 +466,7 @@ const sketchingCurves = (p: SCanvas) => {
   const points = p.build(
     p.forHorizontal,
     { n: 40, margin: 0.05 },
-    (_pt, [dX, dY], [x, y]): Point2D => {
+    (_pt, [_dX, dY], [x, y]): Point2D => {
       return [x, y + dY / 2.2 + 0.1 * perlin2(x * 4, 0)]
     }
   )
@@ -821,7 +821,7 @@ const centralCurves = (p: SCanvas) => {
 
 const lineOfCurves = (p: SCanvas) => {
   p.background(170, 90, 10)
-  p.forHorizontal({ n: 120, margin: 0.2 }, ([x, y], [dX, dY], [cX, cY]) => {
+  p.forHorizontal({ n: 120, margin: 0.2 }, ([x, y], [dX, dY], [cX, _cY]) => {
     const height = p.gaussian({ mean: 0.5 * p.meta.bottom, sd: 0.1 })
     const dH = p.gaussian({ sd: 0.1 })
     const cS = p.gaussian({ mean: 0.3, sd: 0.1 })
@@ -914,7 +914,7 @@ const bokeh = (p: SCanvas) => {
 const advancedDivisions = (p: SCanvas) => {
   p.background(45, 100, 94)
   const path = Path.startAt([0.5, p.meta.center[1] - 0.3])
-  p.aroundCircle({ at: p.meta.center, r: 0.3, n: 20 }, (pt, i) => {
+  p.aroundCircle({ at: p.meta.center, r: 0.3, n: 20 }, (pt, _i) => {
     path.addCurveTo(pt, { curveSize: p.gaussian({ mean: 1.5, sd: 0.2 }) })
   })
 

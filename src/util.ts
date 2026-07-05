@@ -23,7 +23,7 @@ export const getNumber = (key: string): number | null => {
       if (typeof n === "number") {
         return n
       }
-    } catch (ex) {}
+    } catch {}
   }
   return null
 }
@@ -43,7 +43,7 @@ export const getBoolean = (
       if (typeof b === "boolean") {
         return b
       }
-    } catch (ex) {}
+    } catch {}
   }
   return defaultValue
 }
@@ -59,7 +59,7 @@ export const getSketchIdx = (): null | number => {
     // @ts-expect-error
     const i = parseInt(params.get("sketch"), 10)
     return Number.isNaN(i) ? null : i
-  } catch (ex) {
+  } catch {
     return null
   }
 }
@@ -74,7 +74,7 @@ export const getSketchCategory = (): SketchKind => {
     } else {
       return "Highlights"
     }
-  } catch (ex) {
+  } catch {
     return "Highlights"
   }
 }
