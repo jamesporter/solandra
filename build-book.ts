@@ -35,6 +35,8 @@ const IMG_DIR = path.join(OUT_DIR, "images")
 const HTML_OUT = path.join(OUT_DIR, "solandra-book.html")
 const PUBLIC_DIR = path.join(__dirname, "public")
 const EPUB_OUT = path.join(PUBLIC_DIR, "solandra-book.epub")
+const COVER_SRC = path.join(__dirname, "book-cover.png")
+const COVER_NAME = "cover.png"
 
 const BOOK_TITLE = "The Solandra Book"
 const BOOK_AUTHOR = "James Porter"
@@ -202,6 +204,27 @@ function pageXhtml(title: string, bodyXhtml: string): string {
 </head>
 <body>
 ${bodyXhtml}
+</body>
+</html>
+`
+}
+
+// Full-bleed cover page shown first in the reading order.
+function coverXhtml(): string {
+  return `<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="en" lang="en">
+<head>
+<meta charset="utf-8" />
+<title>${escapeXml(BOOK_TITLE)}</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body { text-align: center; }
+  img { max-width: 100%; max-height: 100%; object-fit: contain; }
+</style>
+</head>
+<body epub:type="cover">
+<img src="images/${COVER_NAME}" alt="${escapeXml(BOOK_TITLE)} cover" />
 </body>
 </html>
 `
@@ -399,6 +422,18 @@ async function buildEpub(captured: CapturedChapter[]): Promise<void> {
   if (!oebps) throw new Error("failed to create OEBPS folder")
   oebps.file("style.css", BOOK_CSS)
 
+  // Cover image + a dedicated cover page (first in the spine). If the cover
+  // file is missing, the book is still built without one.
+  let hasCover = false
+  try {
+    const coverBuf = await fs.readFile(COVER_SRC)
+    oebps.file(`images/${COVER_NAME}`, coverBuf)
+    oebps.file("cover.xhtml", coverXhtml())
+    hasCover = true
+  } catch {
+    log(`  ! no cover image at ${path.relative(__dirname, COVER_SRC)} (skipped)`)
+  }
+
   // Chapter XHTML files + images.
   const manifestItems: string[] = []
   const spineItems: string[] = []
@@ -476,15 +511,15 @@ ${captured
   <dc:creator>${escapeXml(BOOK_AUTHOR)}</dc:creator>
   <dc:language>en</dc:language>
   <meta property="dcterms:modified">${modified}</meta>
-</metadata>
+${hasCover ? `  <meta name="cover" content="cover-image"/>\n` : ""}</metadata>
 <manifest>
   <item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>
   <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
   <item id="css" href="style.css" media-type="text/css"/>
-${manifestItems.map((m) => `  ${m}`).join("\n")}
+${hasCover ? `  <item id="cover-image" href="images/${COVER_NAME}" media-type="${mimeFor(COVER_NAME)}" properties="cover-image"/>\n  <item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>\n` : ""}${manifestItems.map((m) => `  ${m}`).join("\n")}
 </manifest>
 <spine toc="ncx">
-${spineItems.map((s) => `  ${s}`).join("\n")}
+${hasCover ? `  <itemref idref="cover" linear="yes"/>\n` : ""}${spineItems.map((s) => `  ${s}`).join("\n")}
 </spine>
 </package>
 `
