@@ -1,5 +1,14 @@
 import { describe, it, expect } from "vitest"
-import { scaler, clamp, lerp, isoTransform, triTransform } from "../util"
+import {
+  scaler,
+  scaler2d,
+  clamp,
+  lerp,
+  isoTransform,
+  triTransform,
+  centroid,
+  hexTransform,
+} from "../util"
 
 describe("Scaler", () => {
   it("should be able to scale", () => {
@@ -75,5 +84,81 @@ describe("Describle Triangle Transform", () => {
 
     expect(tt([1, 0]).at[0]).toBeCloseTo(0.5)
     expect(tt([1, 0]).at[1]).toBeCloseTo(h - r)
+  })
+})
+
+describe("scaler2d", () => {
+  it("scales each axis independently", () => {
+    const s = scaler2d(
+      { minDomain: 0, maxDomain: 10, minRange: 0, maxRange: 1 },
+      { minDomain: 0, maxDomain: 100, minRange: 0, maxRange: 2 }
+    )
+    expect(s([5, 50])).toEqual([0.5, 1])
+    expect(s([0, 0])).toEqual([0, 0])
+    expect(s([10, 100])).toEqual([1, 2])
+  })
+})
+
+describe("centroid", () => {
+  it("averages a set of points", () => {
+    expect(
+      centroid([
+        [0, 0],
+        [2, 0],
+        [2, 2],
+        [0, 2],
+      ])
+    ).toEqual([1, 1])
+  })
+
+  it("ignores the repeated point of a closed path", () => {
+    expect(
+      centroid([
+        [0, 0],
+        [2, 0],
+        [2, 2],
+        [0, 2],
+        [0, 0],
+      ])
+    ).toEqual([1, 1])
+  })
+
+  it("returns the only point of a single point path", () => {
+    expect(centroid([[3, 4]])).toEqual([3, 4])
+  })
+
+  it("throws for no points", () => {
+    expect(() => centroid([])).toThrow(/at least one point/)
+  })
+})
+
+describe("hexTransform", () => {
+  it("offsets alternate rows when vertical", () => {
+    const h = hexTransform({ r: 1 })
+    const cp6 = Math.cos(Math.PI / 6)
+
+    expect(h([0, 0])[0]).toBeCloseTo(0)
+    expect(h([0, 0])[1]).toBeCloseTo(0)
+    // odd rows are shifted half a hexagon left
+    expect(h([0, 1])[0]).toBeCloseTo(-cp6)
+    expect(h([0, 1])[1]).toBeCloseTo(1.5)
+    expect(h([1, 0])[0]).toBeCloseTo(2 * cp6)
+  })
+
+  it("offsets alternate columns when horizontal", () => {
+    const h = hexTransform({ r: 1, vertical: false })
+    const cp6 = Math.cos(Math.PI / 6)
+
+    expect(h([0, 0])[0]).toBeCloseTo(0)
+    expect(h([1, 0])[0]).toBeCloseTo(1.5)
+    expect(h([1, 0])[1]).toBeCloseTo(-cp6)
+    expect(h([0, 1])[1]).toBeCloseTo(2 * cp6)
+  })
+
+  it("scales with the radius", () => {
+    const small = hexTransform({ r: 1 })
+    const big = hexTransform({ r: 2 })
+    expect(big([1, 0])[0]).toBeCloseTo(2 * small([1, 0])[0])
+    expect(big([0, 1])[1]).toBeCloseTo(2 * small([0, 1])[1])
   })
 })

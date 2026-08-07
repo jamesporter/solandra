@@ -119,15 +119,8 @@ export const hueRange = ({
   l: number
   a?: number
   steps: number
-}): ThemeColorable => {
-  const dH = h2 - h1
-  return (n: number) => ({
-    h: h1 + (dH * n) / steps,
-    s,
-    l,
-    a,
-  })
-}
+}): ThemeColorable =>
+  simpleLinearGradient({ h: h1, s, l, a }, { h: h2, s, l, a }, steps)
 
 /**
  * Creates a color gradient that varies only in saturation.
@@ -161,15 +154,8 @@ export const saturationRange = ({
   l: number
   a?: number
   steps: number
-}): ThemeColorable => {
-  const dS = s2 - s1
-  return (n: number) => ({
-    h,
-    s: s1 + (dS * n) / steps,
-    l,
-    a,
-  })
-}
+}): ThemeColorable =>
+  simpleLinearGradient({ h, s: s1, l, a }, { h, s: s2, l, a }, steps)
 
 /**
  * Creates a color gradient that varies only in lightness.
@@ -203,15 +189,8 @@ export const lightnessRange = ({
   l2: number
   a?: number
   steps: number
-}): ThemeColorable => {
-  const dL = l2 - l1
-  return (n: number) => ({
-    h,
-    s,
-    l: l1 + (dL * n) / steps,
-    a,
-  })
-}
+}): ThemeColorable =>
+  simpleLinearGradient({ h, s, l: l1, a }, { h, s, l: l2, a }, steps)
 
 /**
  * Creates a color gradient that varies only in alpha (opacity).
@@ -251,12 +230,5 @@ export const alphaRange = ({
   a1: number
   a2: number
   steps: number
-}): ThemeColorable => {
-  const dA = a2 - a1
-  return (n: number) => ({
-    h,
-    s,
-    l,
-    a: a1 + (dA * n) / steps,
-  })
-}
+}): ThemeColorable =>
+  simpleLinearGradient({ h, s, l, a: a1 }, { h, s, l, a: a2 }, steps)

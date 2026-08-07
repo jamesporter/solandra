@@ -112,23 +112,20 @@ export function Canvas({
 }: CanvasProps) {
   const [ref, { width, height }] = useMeasure<HTMLDivElement>()
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  // seems to be way more performant to re-use context
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
   const [painterRef] = useState(new CanvasPainterService())
 
   useLayoutEffect(() => {
-    let ctx
-    if (!ctxRef.current) {
-      const cvs = canvasRef.current
-      if (cvs) {
-        ctx = (cvs as HTMLCanvasElement).getContext("2d")
-        painterRef.canvas = cvs
-      }
-    } else {
-      ctx = ctxRef.current
+    // seems to be way more performant to re-use the context, so only ask the
+    // canvas for one the first time round
+    if (!ctxRef.current && canvasRef.current) {
+      ctxRef.current = canvasRef.current.getContext("2d")
+      painterRef.canvas = canvasRef.current
     }
 
-    // @ts-expect-error
+    const ctx = ctxRef.current
+    if (!ctx) return
+
     painterRef.ctx = ctx
     painterRef.configure({
       width,

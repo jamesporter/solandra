@@ -1,7 +1,8 @@
 import { Size, Point2D, Vector2D } from "./types/sol.js"
 import { hsla, ColorSpec } from "./colors.js"
 import { Traceable } from "./paths/index.js"
-import { TextConfig, Text, Rect } from "./index.js"
+import { TextConfig, Text } from "./paths/Text.js"
+import { Rect } from "./paths/Rect.js"
 import { RNG } from "./rng.js"
 import { poissonDiskPoints } from "./poissonDisk.js"
 
@@ -68,14 +69,7 @@ export default class SCanvas {
     ctx.fillStyle = "gray"
     this.lineStyle = { cap: "round" }
 
-    this.meta = {
-      top: 0,
-      bottom: 1 / this.aspectRatio,
-      right: 1,
-      left: 0,
-      aspectRatio: this.aspectRatio,
-      center: [0.5, 0.5 / this.aspectRatio],
-    }
+    this.meta = this.currentMeta()
 
     this.rng = new RNG(rngSeed)
     this.t = time || 0
@@ -106,7 +100,14 @@ export default class SCanvas {
     // i.e. size 1/100 of width
     this.ctx.scale(width, width)
 
-    this.meta = {
+    this.meta = this.currentMeta()
+  }
+
+  /**
+   * The bounds of the drawing area, derived from the current aspect ratio.
+   */
+  private currentMeta(): SCanvas["meta"] {
+    return {
       top: 0,
       bottom: 1 / this.aspectRatio,
       right: 1,
@@ -177,11 +178,7 @@ export default class SCanvas {
   }
 
   background(h: number, s: number, l: number, a: number = 1) {
-    this.pushState()
-    this.ctx.fillStyle = hsla(h, s, l, a)
-    const { right, bottom } = this.meta
-    this.fill(new Rect({ at: [0, 0], w: right, h: bottom }))
-    this.popState()
+    this.fillCanvas(() => hsla(h, s, l, a))
   }
 
   backgroundFromSpec({ h, s, l, a }: ColorSpec) {
@@ -189,11 +186,18 @@ export default class SCanvas {
   }
 
   backgroundGradient(gradient: Gradientable) {
-    this.pushState()
-    this.ctx.fillStyle = gradient.gradient(this.ctx)
-    const { right, bottom } = this.meta
-    this.fill(new Rect({ at: [0, 0], w: right, h: bottom }))
-    this.popState()
+    this.fillCanvas(() => gradient.gradient(this.ctx))
+  }
+
+  /**
+   * Cover the whole drawing area, leaving the current fill style unchanged.
+   */
+  private fillCanvas(style: () => string | CanvasGradient) {
+    this.withState(() => {
+      this.ctx.fillStyle = style()
+      const { right, bottom } = this.meta
+      this.fill(new Rect({ at: [0, 0], w: right, h: bottom }))
+    })
   }
 
   setStrokeColor(h: number, s: number, l: number, a: number = 1) {
@@ -336,29 +340,23 @@ export default class SCanvas {
     const sX = margin
     const sY = (1 / this.aspectRatio - hY) / 2
 
+    const tile = (i: number, j: number) => {
+      callback(
+        [sX + i * deltaX, sY + j * deltaY],
+        [deltaX, deltaY],
+        [sX + i * deltaX + deltaX / 2, sY + j * deltaY + deltaY / 2],
+        k
+      )
+      k++
+    }
+
     if (order === "columnFirst") {
       for (let i = 0; i < n; i++) {
-        for (let j = 0; j < nY; j++) {
-          callback(
-            [sX + i * deltaX, sY + j * deltaY],
-            [deltaX, deltaY],
-            [sX + i * deltaX + deltaX / 2, sY + j * deltaY + deltaY / 2],
-            k
-          )
-          k++
-        }
+        for (let j = 0; j < nY; j++) tile(i, j)
       }
     } else {
       for (let j = 0; j < nY; j++) {
-        for (let i = 0; i < n; i++) {
-          callback(
-            [sX + i * deltaX, sY + j * deltaY],
-            [deltaX, deltaY],
-            [sX + i * deltaX + deltaX / 2, sY + j * deltaY + deltaY / 2],
-            k
-          )
-          k++
-        }
+        for (let i = 0; i < n; i++) tile(i, j)
       }
     }
   }
@@ -486,19 +484,18 @@ export default class SCanvas {
     let k = 0
     const { minX, maxX, minY, maxY, order = "columnFirst" } = config
 
+    const point = (i: number, j: number) => {
+      callback([i, j], k)
+      k++
+    }
+
     if (order === "columnFirst") {
       for (let i = minX; i <= maxX; i++) {
-        for (let j = minY; j <= maxY; j++) {
-          callback([i, j], k)
-          k++
-        }
+        for (let j = minY; j <= maxY; j++) point(i, j)
       }
     } else {
       for (let j = minY; j <= maxY; j++) {
-        for (let i = minX; i <= maxX; i++) {
-          callback([i, j], k)
-          k++
-        }
+        for (let i = minX; i <= maxX; i++) point(i, j)
       }
     }
   }
@@ -689,51 +686,51 @@ export default class SCanvas {
 
   // Transforms and state
 
-  private pushState() {
+  /**
+   * Run a callback with the canvas state saved beforehand and restored after,
+   * so anything it changes (styles, transforms, clipping) stays local to it.
+   */
+  private withState(callback: () => void) {
     this.ctx.save()
-  }
-
-  private popState() {
+    callback()
     this.ctx.restore()
   }
 
   withClipping = (clipArea: Traceable, callback: () => void) => {
-    this.pushState()
-    this.ctx.beginPath()
-    clipArea.traceIn(this.ctx)
-    this.ctx.clip()
-    callback()
-    this.popState()
+    this.withState(() => {
+      this.ctx.beginPath()
+      clipArea.traceIn(this.ctx)
+      this.ctx.clip()
+      callback()
+    })
   }
 
   /**
    * Within a context all style/color changes are local.
    */
   withContext = (callback: () => void) => {
-    this.pushState()
-    callback()
-    this.popState()
+    this.withState(callback)
   }
 
   withRotation = (angle: number, callback: () => void) => {
-    this.pushState()
-    this.ctx.rotate(angle)
-    callback()
-    this.popState()
+    this.withState(() => {
+      this.ctx.rotate(angle)
+      callback()
+    })
   }
 
   withScale = (scale: Vector2D, callback: () => void) => {
-    this.pushState()
-    this.ctx.scale(scale[0], scale[1])
-    callback()
-    this.popState()
+    this.withState(() => {
+      this.ctx.scale(scale[0], scale[1])
+      callback()
+    })
   }
 
   withTranslation = (translation: Vector2D, callback: () => void) => {
-    this.pushState()
-    this.ctx.translate(translation[0], translation[1])
-    callback()
-    this.popState()
+    this.withState(() => {
+      this.ctx.translate(translation[0], translation[1])
+      callback()
+    })
   }
 
   withTransform = (
@@ -747,18 +744,18 @@ export default class SCanvas {
     },
     callback: () => void
   ) => {
-    this.pushState()
-    const { hScale, hSkew, vSkew, vScale, dX, dY } = config
-    this.ctx.transform(hScale, hSkew, vSkew, vScale, dX, dY)
-    callback()
-    this.popState()
+    this.withState(() => {
+      const { hScale, hSkew, vSkew, vScale, dX, dY } = config
+      this.ctx.transform(hScale, hSkew, vSkew, vScale, dX, dY)
+      callback()
+    })
   }
 
   withBlendMode = (mode: GlobalCompositeOperation, callback: () => void) => {
-    this.pushState()
-    this.ctx.globalCompositeOperation = mode
-    callback()
-    this.popState()
+    this.withState(() => {
+      this.ctx.globalCompositeOperation = mode
+      callback()
+    })
   }
 
   // Randomness

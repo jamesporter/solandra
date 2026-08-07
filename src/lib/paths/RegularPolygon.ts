@@ -1,6 +1,6 @@
 import { Traceable } from "./index.js"
 import { Point2D } from "../types/sol.js"
-import { traceSimplePath } from "./pathUtil.js"
+import { regularPolygonPoints } from "./pathUtil.js"
 import { SimplePath } from "./SimplePath.js"
 
 export class RegularPolygon implements Traceable {
@@ -19,27 +19,11 @@ export class RegularPolygon implements Traceable {
   }
 
   traceIn = (ctx: CanvasRenderingContext2D) => {
-    let {
-      at: [x, y],
-      n,
-      r,
-      a: startAngle = 0,
-    } = this.config
-    // Start from top... feels more natural?
-    startAngle -= Math.PI / 2
-    const dA = (Math.PI * 2) / n
-    ctx.moveTo(x + r * Math.cos(startAngle), y + r * Math.sin(startAngle))
-    for (let i = 1; i < n; i++) {
-      ctx.lineTo(
-        x + r * Math.cos(startAngle + i * dA),
-        y + r * Math.sin(startAngle + i * dA)
-      )
-    }
-    ctx.lineTo(x + r * Math.cos(startAngle), y + r * Math.sin(startAngle))
+    this.path.traceIn(ctx)
   }
 
   get path(): SimplePath {
-    return traceSimplePath(this)
+    return SimplePath.withPoints(regularPolygonPoints(this.config)).close()
   }
 }
 

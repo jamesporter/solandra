@@ -1,42 +1,6 @@
 import { describe, it, expect } from "vitest"
 import SCanvas from "../sCanvas"
-
-// Create a mock canvas context
-const createMockCtx = () => {
-  const history: string[] = []
-  const ctx = new Proxy(
-    {
-      fillStyle: "",
-      strokeStyle: "",
-      lineWidth: 0,
-      lineCap: "butt",
-      lineJoin: "miter",
-      shadowBlur: 0,
-      shadowColor: "",
-      shadowOffsetX: 0,
-      shadowOffsetY: 0,
-      globalCompositeOperation: "source-over",
-    } as any,
-    {
-      get: function (target, property) {
-        if (property in target) {
-          return target[property]
-        }
-        history.push(`${String(property)}`)
-        return (...args: any[]) => {
-          history[history.length - 1] =
-            `${String(property)}(${args.join(", ")})`
-        }
-      },
-      set: function (target, property, value) {
-        history.push(`${String(property)} = ${value}`)
-        target[property] = value
-        return true
-      },
-    }
-  )
-  return { ctx: ctx as CanvasRenderingContext2D, history }
-}
+import { createMockCtx } from "./testUtils"
 
 describe("SCanvas", () => {
   describe("constructor", () => {

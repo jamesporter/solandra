@@ -15,74 +15,74 @@ const safeLocalStorage = (): Storage | null => {
   return null
 }
 
-export const getNumber = (key: string): number | null => {
+/**
+ * Read a JSON encoded value of an expected type from localStorage, falling
+ * back when it is missing, unparseable or of the wrong type.
+ */
+const getStored = <T>(
+  key: string,
+  isExpected: (value: unknown) => value is T,
+  fallback: T | null
+): T | null => {
   const raw = safeLocalStorage()?.getItem(key)
   if (raw) {
     try {
-      const n = JSON.parse(raw)
-      if (typeof n === "number") {
-        return n
-      }
+      const value: unknown = JSON.parse(raw)
+      if (isExpected(value)) return value
     } catch {}
   }
-  return null
+  return fallback
 }
 
-export const setNumber = (key: string, n: number) => {
-  safeLocalStorage()?.setItem(key, JSON.stringify(n))
+const setStored = (key: string, value: number | boolean) => {
+  safeLocalStorage()?.setItem(key, JSON.stringify(value))
 }
+
+const isNumber = (value: unknown): value is number => typeof value === "number"
+const isBoolean = (value: unknown): value is boolean =>
+  typeof value === "boolean"
+
+export const getNumber = (key: string): number | null =>
+  getStored(key, isNumber, null)
+
+export const setNumber = (key: string, n: number) => setStored(key, n)
 
 export const getBoolean = (
   key: string,
   defaultValue: boolean = false
-): boolean => {
-  const raw = safeLocalStorage()?.getItem(key)
-  if (raw) {
-    try {
-      const b = JSON.parse(raw)
-      if (typeof b === "boolean") {
-        return b
-      }
-    } catch {}
-  }
-  return defaultValue
-}
+): boolean => getStored(key, isBoolean, defaultValue) as boolean
 
-export const setBoolean = (key: string, b: boolean) => {
-  safeLocalStorage()?.setItem(key, JSON.stringify(b))
-}
+export const setBoolean = (key: string, b: boolean) => setStored(key, b)
 
-export const getSketchIdx = (): null | number => {
+/**
+ * The current page's query parameters, or null where there is no document
+ * (i.e. during server rendering).
+ */
+const searchParams = (): URLSearchParams | null => {
   try {
-    // @ts-expect-error
-    const params = new URL(document.location).searchParams
-    // @ts-expect-error
-    const i = parseInt(params.get("sketch"), 10)
-    return Number.isNaN(i) ? null : i
+    return new URL(document.location.href).searchParams
   } catch {
     return null
   }
 }
 
+export const getSketchIdx = (): null | number => {
+  const raw = searchParams()?.get("sketch")
+  const i = parseInt(raw ?? "", 10)
+  return Number.isNaN(i) ? null : i
+}
+
 export const getSketchCategory = (): SketchKind => {
-  try {
-    // @ts-expect-error
-    const params = new URL(document.location).searchParams
-    const k = params.get("category")
-    if (sketchKinds.includes(k as any)) {
-      return k as SketchKind
-    } else {
-      return "Highlights"
-    }
-  } catch {
-    return "Highlights"
-  }
+  const k = searchParams()?.get("category")
+  return sketchKinds.includes(k as SketchKind)
+    ? (k as SketchKind)
+    : "Highlights"
 }
 
 export const setSketchIdxParam = (idx: number) => {
   if ("URLSearchParams" in window) {
-    var searchParams = new URLSearchParams(window.location.search)
-    searchParams.set("sketch", idx.toString())
-    window.location.search = searchParams.toString()
+    const params = new URLSearchParams(window.location.search)
+    params.set("sketch", idx.toString())
+    window.location.search = params.toString()
   }
 }
