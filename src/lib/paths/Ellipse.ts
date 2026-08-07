@@ -1,5 +1,6 @@
 import { Point2D } from "../types/sol.js"
 import { Traceable } from "./index.js"
+import { Align, boxCenter } from "./pathUtil.js"
 import { SimplePath } from "./SimplePath.js"
 /**
  * Technically you can't do ellipses/circles properly with cubic beziers, but you can come very, very close
@@ -14,13 +15,18 @@ export class Ellipse implements Traceable {
       at: Point2D
       w: number
       h: number
-      align?: "center" | "topLeft"
+      align?: Align
     }
   ) {}
+
+  /** Centre of the ellipse, however it was specified */
+  private get center(): Point2D {
+    return boxCenter(this.config)
+  }
+
   traceIn = (ctx: CanvasRenderingContext2D) => {
-    const { at, w: width, h: height, align = "center" } = this.config
-    const [cX, cY] =
-      align === "center" ? at : [at[0] + width / 2, at[1] + height / 2]
+    const { w: width, h: height } = this.config
+    const [cX, cY] = this.center
     const a = (4 / 3) * Math.tan(Math.PI / 8)
     ctx.moveTo(cX, cY - height / 2)
     ctx.bezierCurveTo(
@@ -59,9 +65,8 @@ export class Ellipse implements Traceable {
 
   toPath(detail: number): SimplePath {
     const d = Math.max(0, Math.floor(detail))
-    const { at, w: width, h: height, align = "center" } = this.config
-    const [cX, cY] =
-      align === "center" ? at : [at[0] + width / 2, at[1] + height / 2]
+    const { w: width, h: height } = this.config
+    const [cX, cY] = this.center
 
     if (d === 0) {
       // Return 4-point diamond approximation

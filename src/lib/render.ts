@@ -1,4 +1,4 @@
-import { SCanvas } from "./index.js"
+import SCanvas from "./sCanvas.js"
 import { Sketch } from "./types/sol.js"
 
 export function render({

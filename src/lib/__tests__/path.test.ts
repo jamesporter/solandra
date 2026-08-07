@@ -40,7 +40,9 @@ describe("Path", () => {
 
   describe("transformations", () => {
     it("moves the whole path", () => {
-      const points = recordTrace(triangle().moved([1, 1])).flatMap((c) => c.args)
+      const points = recordTrace(triangle().moved([1, 1])).flatMap(
+        (c) => c.args
+      )
       expect(points.slice(0, 2)).toEqual([1, 1])
     })
 
@@ -73,8 +75,7 @@ describe("Path", () => {
     it("reverses lines and curves", () => {
       const reversed = Path.startAt([0, 0])
         .addLineTo([1, 0])
-        .addCurveTo([1, 1])
-        .reversed
+        .addCurveTo([1, 1]).reversed
 
       const ops = recordTrace(reversed).map((c) => c.op)
       expect(ops).toEqual(["moveTo", "lineTo", "bezierCurveTo"])

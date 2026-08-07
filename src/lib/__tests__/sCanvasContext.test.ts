@@ -249,17 +249,14 @@ describe("SCanvas iteration order", () => {
 
   it("forTiling gives the same cells in either order", () => {
     const { s } = canvas(200, 100)
-    const columnFirst = s.build(s.forTiling, { n: 3 }, (at, delta, center) => [
-      at,
-      delta,
-      center,
-    ])
-    const rowFirst = s.build(
-      s.forTiling,
-      { n: 3, order: "rowFirst" as const },
-      (at, delta, center) => [at, delta, center]
-    )
-    expect([...rowFirst].sort()).toEqual([...columnFirst].sort())
+    const cells = (order: "columnFirst" | "rowFirst") =>
+      s
+        .build(s.forTiling, { n: 3, order }, (at, delta, center) =>
+          JSON.stringify([at, delta, center])
+        )
+        .sort((a, b) => a.localeCompare(b))
+
+    expect(cells("rowFirst")).toEqual(cells("columnFirst"))
   })
 
   it("forTiling indexes sequentially", () => {

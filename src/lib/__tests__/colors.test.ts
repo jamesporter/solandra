@@ -270,3 +270,47 @@ describe("colors", () => {
     })
   })
 })
+
+describe("range helpers", () => {
+  it("agree with simpleLinearGradient", () => {
+    const steps = 8
+    for (let n = 0; n <= steps; n++) {
+      expect(
+        hueRange({ h1: 20, h2: 300, s: 40, l: 60, a: 0.5, steps })(n)
+      ).toEqual(
+        simpleLinearGradient(
+          { h: 20, s: 40, l: 60, a: 0.5 },
+          { h: 300, s: 40, l: 60, a: 0.5 },
+          steps
+        )(n)
+      )
+      expect(
+        saturationRange({ h: 20, s1: 0, s2: 100, l: 60, steps })(n)
+      ).toEqual(
+        simpleLinearGradient(
+          { h: 20, s: 0, l: 60, a: 1 },
+          { h: 20, s: 100, l: 60, a: 1 },
+          steps
+        )(n)
+      )
+      expect(
+        lightnessRange({ h: 20, s: 40, l1: 10, l2: 90, steps })(n)
+      ).toEqual(
+        simpleLinearGradient(
+          { h: 20, s: 40, l: 10, a: 1 },
+          { h: 20, s: 40, l: 90, a: 1 },
+          steps
+        )(n)
+      )
+      expect(
+        alphaRange({ h: 20, s: 40, l: 60, a1: 0, a2: 1, steps })(n)
+      ).toEqual(
+        simpleLinearGradient(
+          { h: 20, s: 40, l: 60, a: 0 },
+          { h: 20, s: 40, l: 60, a: 1 },
+          steps
+        )(n)
+      )
+    }
+  })
+})

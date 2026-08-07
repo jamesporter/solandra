@@ -1,5 +1,5 @@
 import { Point2D } from "../types/sol.js"
-import { SCanvas } from "../index.js"
+import SCanvas from "../sCanvas.js"
 
 export type TextSizing = "fixed" | "fitted"
 export type TextHorizontalAlign = CanvasRenderingContext2D["textAlign"]

@@ -8,6 +8,20 @@ import { Point2D } from "./types/sol.js"
 import { hsla, ColorSpec } from "./colors.js"
 
 /**
+ * Applies colour stops to a canvas gradient.
+ * @internal
+ */
+const withColorStops = <G extends CanvasGradient>(
+  gradient: G,
+  colors: [number, ColorSpec][]
+): G => {
+  for (const [n, { h, s, l, a }] of colors) {
+    gradient.addColorStop(n, hsla(h, s, l, a))
+  }
+  return gradient
+}
+
+/**
  * Creates a linear gradient between two points with multiple color stops.
  * Use with `setFillGradient()` or `setStrokeGradient()` on SCanvas.
  *
@@ -54,11 +68,7 @@ export class LinearGradient implements Gradientable {
       to: [x2, y2],
       colors,
     } = this.config
-    const lg = ctx.createLinearGradient(x1, y1, x2, y2)
-    for (let [n, { h, s, l, a }] of colors) {
-      lg.addColorStop(n, hsla(h, s, l, a))
-    }
-    return lg
+    return withColorStops(ctx.createLinearGradient(x1, y1, x2, y2), colors)
   }
 }
 
@@ -117,10 +127,9 @@ export class RadialGradient implements Gradientable {
       rEnd,
       colors,
     } = this.config
-    const lg = ctx.createRadialGradient(x1, y1, rStart, x2, y2, rEnd)
-    for (let [n, { h, s, l, a }] of colors) {
-      lg.addColorStop(n, hsla(h, s, l, a))
-    }
-    return lg
+    return withColorStops(
+      ctx.createRadialGradient(x1, y1, rStart, x2, y2, rEnd),
+      colors
+    )
   }
 }

@@ -78,9 +78,21 @@ describe("Rect", () => {
 
     it("defaults to an even split when no split given", () => {
       const rect = new Rect({ at: [0, 0], w: 10, h: 6 })
-      expect(
-        rect.split({ orientation: "vertical" }).map((p) => p.h)
-      ).toEqual([3, 3])
+      expect(rect.split({ orientation: "vertical" }).map((p) => p.h)).toEqual([
+        3, 3,
+      ])
+    })
+
+    it("tiles the full extent whatever the proportions", () => {
+      const rect = new Rect({ at: [0, 0], w: 0.83, h: 0.37 })
+      for (const split of [[1, 2, 3], [0.1, 0.2, 0.7], 0.3] as (
+        | number
+        | number[]
+      )[]) {
+        const parts = rect.split({ orientation: "horizontal", split })
+        const last = parts[parts.length - 1]
+        expect(last.at[0] + last.w).toBe(rect.at[0] + rect.w)
+      }
     })
 
     it("handles a single proportion", () => {
@@ -185,6 +197,15 @@ describe("Arc", () => {
       new Arc({ at: [0.5, 0.5], r: 0.25, a: 0, a2: Math.PI })
     )
     expect(calls.map((c) => c.op)).toContain("arc")
+  })
+
+  it("closes back to the centre when anticlockwise", () => {
+    const calls = recordTrace(
+      new Arc({ at: [0.5, 0.4], r: 0.25, a: Math.PI, a2: 0 })
+    )
+    const last = calls[calls.length - 1]
+    expect(last.op).toBe("lineTo")
+    expect(last.args).toEqual([0.5, 0.4])
   })
 
   it("sampled path starts at the centre and stays on the radius", () => {
@@ -328,7 +349,10 @@ describe("Star", () => {
     // 2n vertices plus the closing repeat
     expect(points).toHaveLength(11)
     for (let i = 0; i < points.length - 1; i++) {
-      expect(radiusFrom([0, 0], points[i])).toBeCloseTo(i % 2 === 0 ? 1 : 0.4, 10)
+      expect(radiusFrom([0, 0], points[i])).toBeCloseTo(
+        i % 2 === 0 ? 1 : 0.4,
+        10
+      )
     }
     expect(points[points.length - 1]).toEqual(points[0])
   })
@@ -341,6 +365,11 @@ describe("Star", () => {
   it("starts from the top", () => {
     const star = new Star({ at: [0, 0], n: 5, r: 1 })
     closeTo(star.path.points[0], [0, -1])
+  })
+
+  it("honours an inner radius of zero", () => {
+    const star = new Star({ at: [0, 0], n: 5, r: 1, r2: 0 })
+    closeTo(star.path.points[1], [0, 0])
   })
 })
 
@@ -393,7 +422,9 @@ describe("Hatching", () => {
       new Hatching({ at: [0, 0], r: 1, a: 0, delta: 0.5 })
     )
     // moveTo/lineTo pairs only
-    expect(calls.every((c) => c.op === "moveTo" || c.op === "lineTo")).toBe(true)
+    expect(calls.every((c) => c.op === "moveTo" || c.op === "lineTo")).toBe(
+      true
+    )
     expect(calls).toHaveLength(2 + 4 * 2)
   })
 

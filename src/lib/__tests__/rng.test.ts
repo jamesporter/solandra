@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest"
 import { RNG } from "../rng"
 
-const take = (rng: RNG, n: number) => Array.from({ length: n }, () => rng.number())
+const take = (rng: RNG, n: number) =>
+  Array.from({ length: n }, () => rng.number())
 
 describe("RNG", () => {
   it("is deterministic for a given seed", () => {
@@ -23,7 +24,7 @@ describe("RNG", () => {
 
   it("is roughly uniform", () => {
     const rng = new RNG(5)
-    const buckets = new Array(10).fill(0)
+    const buckets = Array.from({ length: 10 }, () => 0)
     const n = 10000
     for (let i = 0; i < n; i++) {
       buckets[Math.floor(rng.number() * 10)]++

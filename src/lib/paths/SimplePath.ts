@@ -1,7 +1,7 @@
 import { Traceable } from "./index.js"
 import { Point2D, Vector2D } from "../types/sol.js"
 import { tripleWise, pairWise } from "../collectionOps.js"
-import { v } from "../index.js"
+import v from "../vectors.js"
 import { centroid } from "../util.js"
 
 import { CurveConfig, Path } from "./Path.js"
@@ -125,21 +125,14 @@ export class SimplePath implements Traceable {
   exploded(config: { magnitude?: number; scale?: number } = {}): SimplePath[] {
     const { magnitude = 1.2, scale = 1 } = config
     const c = this.centroid
-    if (this.points.length < 2) throw new Error("Must have at least 2 points")
-    const n = this.points.length - 1
-    const paths: SimplePath[] = []
-    for (let i = 0; i < n; i++) {
-      const newPath = SimplePath.withPoints([
-        this.points[i],
-        this.points[i + 1],
-        c,
-        this.points[i],
-      ]).scaled(scale)
-      const npc = newPath.centroid
-      const displacement = v.scale(v.subtract(npc, c), magnitude - 1.0)
-      paths.push(newPath.moved(displacement))
-    }
-    return paths
+    return this.segmented.map((segment) => {
+      const scaled = segment.scaled(scale)
+      const displacement = v.scale(
+        v.subtract(scaled.centroid, c),
+        magnitude - 1.0
+      )
+      return scaled.moved(displacement)
+    })
   }
 
   transformed(transform: (point: Point2D) => Point2D): SimplePath {
@@ -156,16 +149,13 @@ export class SimplePath implements Traceable {
     return new SimplePath(this.points.concat(other.points))
   }
 
+  /**
+   * Rotate a path about its centroid
+   * @param angle radians as always
+   */
   rotated(angle: number): SimplePath {
     const c = this.centroid
-    const [cX, cY] = c
-    return this.transformed((pt) => {
-      const [dX, dY] = v.subtract(pt, c)
-      return [
-        cX + Math.cos(angle) * dX - Math.sin(angle) * dY,
-        cY + Math.sin(angle) * dX + Math.cos(angle) * dY,
-      ]
-    })
+    return this.transformed((pt) => v.rotateAround(c, pt, angle))
   }
 
   subdivide(config: { m: number; n: number }): SimplePath[] {

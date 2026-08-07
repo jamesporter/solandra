@@ -1,22 +1,17 @@
 import { Point2D } from "../types/sol.js"
 import { Traceable } from "./index.js"
-import { v } from "../index.js"
+import { Align, boxTopLeft } from "./pathUtil.js"
 import { SimplePath } from "./SimplePath.js"
+
 export class Rect implements Traceable {
   readonly at: Point2D
   readonly w: number
   readonly h: number
 
-  constructor(config: {
-    at: Point2D
-    w: number
-    h: number
-    align?: "topLeft" | "center"
-  }) {
-    const { at, w, h, align = "topLeft" } = config
-    this.at = align === "topLeft" ? at : v.subtract(at, [w / 2, h / 2])
-    this.w = w
-    this.h = h
+  constructor(config: { at: Point2D; w: number; h: number; align?: Align }) {
+    this.at = boxTopLeft(config)
+    this.w = config.w
+    this.h = config.h
   }
 
   traceIn = (ctx: CanvasRenderingContext2D) => {
@@ -33,70 +28,38 @@ export class Rect implements Traceable {
     ]).close()
   }
 
+  /**
+   * Divide into a row (horizontal) or column (vertical) of rects.
+   *
+   * A single number splits in two at that proportion, an array of numbers
+   * splits into that many parts, sized in proportion to the numbers given
+   * (they need not sum to one).
+   */
   split = (config: {
     orientation: "vertical" | "horizontal"
     split?: number | number[]
   }): Rect[] => {
-    let { orientation, split } = config
-    split = split || 0.5
-    if (orientation === "horizontal") {
-      if (typeof split === "number") {
-        const w1 = this.w * split
-        return [
-          new Rect({ at: this.at, w: w1, h: this.h }),
-          new Rect({
-            at: [this.at[0] + w1, this.at[1]],
-            w: this.w - w1,
-            h: this.h,
-          }),
-        ]
-      } else {
-        const total = split.reduce((a, b) => a + b, 0)
-        const proportions = split.map((s) => s / total)
-        let xDxs: [number, number][] = []
-        let c = 0
-        proportions.forEach((p) => {
-          xDxs.push([c, p * this.w])
-          c += p * this.w
-        })
-        return xDxs.map(
-          ([x, dX], _i) =>
-            new Rect({
-              at: [this.at[0] + x, this.at[1]],
-              w: dX,
-              h: this.h,
-            })
-        )
-      }
-    } else {
-      if (typeof split === "number") {
-        const h1 = this.h * split
-        return [
-          new Rect({ at: this.at, w: this.w, h: h1 }),
-          new Rect({
-            at: [this.at[0], this.at[1] + h1],
-            w: this.w,
-            h: this.h - h1,
-          }),
-        ]
-      } else {
-        const total = split.reduce((a, b) => a + b, 0)
-        const proportions = split.map((s) => s / total)
-        let yDys: [number, number][] = []
-        let c = 0
-        proportions.forEach((p) => {
-          yDys.push([c, p * this.h])
-          c += p * this.h
-        })
-        return yDys.map(
-          ([y, dY], _i) =>
-            new Rect({
-              at: [this.at[0], this.at[1] + y],
-              w: this.w,
-              h: dY,
-            })
-        )
-      }
-    }
+    const { orientation, split = 0.5 } = config
+    const horizontal = orientation === "horizontal"
+    const extent = horizontal ? this.w : this.h
+
+    const parts = typeof split === "number" ? [split, 1 - split] : split
+    const total = parts.reduce((a, b) => a + b, 0)
+
+    const [x, y] = this.at
+    let offset = 0
+
+    return parts.map((part, i) => {
+      // the last part takes up whatever is left, so parts always tile exactly
+      const size =
+        i === parts.length - 1 ? extent - offset : extent * (part / total)
+      const rect = new Rect({
+        at: horizontal ? [x + offset, y] : [x, y + offset],
+        w: horizontal ? size : this.w,
+        h: horizontal ? this.h : size,
+      })
+      offset += size
+      return rect
+    })
   }
 }

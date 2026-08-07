@@ -16,14 +16,19 @@ export class Arc implements Traceable {
       a,
       a2,
     } = config
-    const antiClockwise = a > a2
     this.cX = cX
     this.cY = cY
     this.radius = r
     this.startAngle = a
     this.endAngle = a2
-    this.antiClockwise = antiClockwise
+    this.antiClockwise = a > a2
   }
+
+  /** Centre of the circle the arc is part of */
+  get center(): Point2D {
+    return [this.cX, this.cY]
+  }
+
   traceIn = (ctx: CanvasRenderingContext2D) => {
     if (Math.abs(this.startAngle - this.endAngle) > 0.0001)
       ctx.moveTo(this.cX, this.cY)
@@ -35,20 +40,18 @@ export class Arc implements Traceable {
       this.endAngle,
       this.antiClockwise
     )
-    if (this.startAngle - this.endAngle > 0.0001) ctx.lineTo(this.cX, this.cX)
+    if (this.startAngle - this.endAngle > 0.0001) ctx.lineTo(this.cX, this.cY)
   }
 
   toPath(detail: number): SimplePath {
-    const d = Math.max(0, Math.floor(detail))
-    const center: Point2D = [this.cX, this.cY]
     const points = sampleArc({
-      center,
+      center: this.center,
       radius: this.radius,
       startAngle: this.startAngle,
       endAngle: this.endAngle,
-      detail: d,
+      detail: Math.max(0, Math.floor(detail)),
       antiClockwise: this.antiClockwise,
     })
-    return SimplePath.withPoints([center, ...points]).close()
+    return SimplePath.withPoints([this.center, ...points]).close()
   }
 }

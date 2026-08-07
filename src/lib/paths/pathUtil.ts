@@ -1,6 +1,73 @@
 import { Traceable } from "./index.js"
 import { Point2D } from "../types/sol.js"
 import { SimplePath } from "./SimplePath.js"
+import { polarToCartesian, subtract } from "../vectors.js"
+
+/**
+ * How a shape's `at` point relates to its bounding box.
+ */
+export type Align = "topLeft" | "center"
+
+/**
+ * The top left of a box, however it was specified.
+ * @internal
+ */
+export const boxTopLeft = ({
+  at,
+  w,
+  h,
+  align = "topLeft",
+}: {
+  at: Point2D
+  w: number
+  h: number
+  align?: Align
+}): Point2D => (align === "topLeft" ? at : subtract(at, [w / 2, h / 2]))
+
+/**
+ * The centre of a box, however it was specified.
+ * @internal
+ */
+export const boxCenter = ({
+  at,
+  w,
+  h,
+  align = "center",
+}: {
+  at: Point2D
+  w: number
+  h: number
+  align?: Align
+}): Point2D => (align === "center" ? at : [at[0] + w / 2, at[1] + h / 2])
+
+/**
+ * Vertices of a regular polygon, starting from the top (which feels more
+ * natural than starting from the right) and going clockwise.
+ *
+ * @param config.at Centre of the polygon
+ * @param config.n Number of vertices
+ * @param config.r Distance of each vertex from the centre
+ * @param config.a Rotation applied to the whole polygon (radians)
+ * @internal
+ */
+export function regularPolygonPoints({
+  at,
+  n,
+  r,
+  a = 0,
+}: {
+  at: Point2D
+  n: number
+  r: number
+  a?: number
+}): Point2D[] {
+  // Start from top... feels more natural?
+  const startAngle = a - Math.PI / 2
+  const dA = (Math.PI * 2) / n
+  return Array.from({ length: n }, (_, i) =>
+    polarToCartesian(at, r, startAngle + i * dA)
+  )
+}
 
 /**
  * NB Not all canvas stuff supported, don't export this!

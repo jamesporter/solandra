@@ -144,13 +144,7 @@ export function palette({
  * ```
  */
 export function palettePreset(preset: Preset, steps: number) {
-  return palette(
-    // @ts-expect-error
-    {
-      ...presets[preset],
-      steps,
-    }
-  )
+  return palette({ ...presets[preset], steps })
 }
 
 /**
@@ -200,7 +194,7 @@ const presets = {
     c: [2.0, 1.0, 1.0],
     d: [0.0, 0.25, 0.25],
   },
-}
+} satisfies Record<string, { a: Point3D; b: Point3D; c: Point3D; d: Point3D }>
 
 /**
  * Valid preset palette names.

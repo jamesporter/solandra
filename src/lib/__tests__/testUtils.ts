@@ -41,7 +41,8 @@ export const createMockCtx = (): {
         }
         history.push(`${String(property)}`)
         return (...args: any[]) => {
-          history[history.length - 1] = `${String(property)}(${args.join(", ")})`
+          history[history.length - 1] =
+            `${String(property)}(${args.join(", ")})`
           // gradient factories have to return something usable
           if (String(property).endsWith("Gradient")) {
             return { addColorStop: () => {} }

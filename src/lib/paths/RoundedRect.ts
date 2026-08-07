@@ -1,8 +1,7 @@
 import { Point2D } from "../types/sol.js"
 import { Traceable } from "./index.js"
-import { v } from "../index.js"
 import { SimplePath } from "./SimplePath.js"
-import { sampleQuadraticBezier } from "./pathUtil.js"
+import { Align, boxTopLeft, sampleQuadraticBezier } from "./pathUtil.js"
 export class RoundedRect implements Traceable {
   readonly at: Point2D
   readonly w: number
@@ -14,34 +13,54 @@ export class RoundedRect implements Traceable {
     w: number
     h: number
     r: number
-    align?: "topLeft" | "center"
+    align?: Align
   }) {
-    const { at, w, h, r, align = "topLeft" } = config
-    this.at = align === "topLeft" ? at : v.subtract(at, [w / 2, h / 2])
-    this.w = w
-    this.h = h
-    this.r = r
+    this.at = boxTopLeft(config)
+    this.w = config.w
+    this.h = config.h
+    this.r = config.r
   }
 
-  traceIn = (ctx: CanvasRenderingContext2D) => {
-    const r = Math.min(this.r, this.h / 2, this.w / 2)
+  /** Corner radius, never more than half the shortest side */
+  private get cornerRadius(): number {
+    return Math.min(this.r, this.h / 2, this.w / 2)
+  }
+
+  /**
+   * The four rounded corners, clockwise from the top left, each as the point
+   * the straight edge before it ends at, the corner it curves around, and the
+   * point the next straight edge starts from.
+   */
+  private get corners(): {
+    start: Point2D
+    control: Point2D
+    end: Point2D
+  }[] {
+    const r = this.cornerRadius
     const [x1, y1] = this.at
     const x2 = x1 + this.w
     const y2 = y1 + this.h
-    ctx.moveTo(x1 + r, y1)
-    ctx.lineTo(x2 - r, y1)
-    ctx.quadraticCurveTo(x2, y1, x2, y1 + r)
-    ctx.lineTo(x2, y2 - r)
-    ctx.quadraticCurveTo(x2, y2, x2 - r, y2)
-    ctx.lineTo(x1 + r, y2)
-    ctx.quadraticCurveTo(x1, y2, x1, y2 - r)
-    ctx.lineTo(x1, y1 + r)
-    ctx.quadraticCurveTo(x1, y1, x1 + r, y1)
+
+    return [
+      { start: [x2 - r, y1], control: [x2, y1], end: [x2, y1 + r] },
+      { start: [x2, y2 - r], control: [x2, y2], end: [x2 - r, y2] },
+      { start: [x1 + r, y2], control: [x1, y2], end: [x1, y2 - r] },
+      { start: [x1, y1 + r], control: [x1, y1], end: [x1 + r, y1] },
+    ]
+  }
+
+  traceIn = (ctx: CanvasRenderingContext2D) => {
+    const [x1, y1] = this.at
+    ctx.moveTo(x1 + this.cornerRadius, y1)
+    for (const { start, control, end } of this.corners) {
+      ctx.lineTo(...start)
+      ctx.quadraticCurveTo(control[0], control[1], end[0], end[1])
+    }
   }
 
   toPath(detail: number): SimplePath {
     const d = Math.max(0, Math.floor(detail))
-    const r = Math.min(this.r, this.h / 2, this.w / 2)
+    const r = this.cornerRadius
     const [x1, y1] = this.at
     const x2 = x1 + this.w
     const y2 = y1 + this.h
@@ -56,62 +75,14 @@ export class RoundedRect implements Traceable {
       ]).close()
     }
 
-    const points: Point2D[] = []
-
-    // Start at top-left corner end
-    points.push([x1 + r, y1])
-
-    // Top edge
-    points.push([x2 - r, y1])
-
-    // Top-right corner
-    points.push(
-      ...sampleQuadraticBezier({
-        start: [x2 - r, y1],
-        control: [x2, y1],
-        end: [x2, y1 + r],
-        detail: d,
-      })
-    )
-
-    // Right edge
-    points.push([x2, y2 - r])
-
-    // Bottom-right corner
-    points.push(
-      ...sampleQuadraticBezier({
-        start: [x2, y2 - r],
-        control: [x2, y2],
-        end: [x2 - r, y2],
-        detail: d,
-      })
-    )
-
-    // Bottom edge
-    points.push([x1 + r, y2])
-
-    // Bottom-left corner
-    points.push(
-      ...sampleQuadraticBezier({
-        start: [x1 + r, y2],
-        control: [x1, y2],
-        end: [x1, y2 - r],
-        detail: d,
-      })
-    )
-
-    // Left edge
-    points.push([x1, y1 + r])
-
-    // Top-left corner
-    points.push(
-      ...sampleQuadraticBezier({
-        start: [x1, y1 + r],
-        control: [x1, y1],
-        end: [x1 + r, y1],
-        detail: d,
-      })
-    )
+    const points: Point2D[] = [[x1 + r, y1]]
+    for (const corner of this.corners) {
+      // the straight edge up to the corner, then the corner itself
+      points.push(
+        corner.start,
+        ...sampleQuadraticBezier({ ...corner, detail: d })
+      )
+    }
 
     return SimplePath.withPoints(points).close()
   }

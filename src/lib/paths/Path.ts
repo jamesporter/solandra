@@ -1,6 +1,6 @@
 import { Traceable } from "./index.js"
 import { Point2D, Vector2D } from "../types/sol.js"
-import { v } from "../index.js"
+import v from "../vectors.js"
 import { centroid } from "../util.js"
 
 type PathEdge =
@@ -167,19 +167,14 @@ export class Path implements Traceable {
   exploded(config: { magnitude?: number; scale?: number } = {}): Path[] {
     const { magnitude = 1.2, scale = 1 } = config
     const c = this.centroid
-    if (this.edges.length < 2) throw new Error("Must have at least 2 edges")
-    const paths: Path[] = []
-    for (let e of this.edges) {
-      const newPath = new Path(e.to)
-      newPath.edges = [e]
-      newPath.addLineTo(c)
-      newPath.addLineTo(e.from)
-      const snp = newPath.scaled(scale)
-      const npc = snp.centroid
-      const displacement = v.scale(v.subtract(npc, c), magnitude - 1.0)
-      paths.push(snp.moved(displacement))
-    }
-    return paths
+    return this.segmented.map((segment) => {
+      const scaled = segment.scaled(scale)
+      const displacement = v.scale(
+        v.subtract(scaled.centroid, c),
+        magnitude - 1.0
+      )
+      return scaled.moved(displacement)
+    })
   }
 
   /**
@@ -228,14 +223,7 @@ export class Path implements Traceable {
    */
   rotated(angle: number): Path {
     const c = this.centroid
-    const [cX, cY] = c
-    return this.transformed((pt) => {
-      const [dX, dY] = v.subtract(pt, c)
-      return [
-        cX + Math.cos(angle) * dX - Math.sin(angle) * dY,
-        cY + Math.sin(angle) * dX + Math.cos(angle) * dY,
-      ]
-    })
+    return this.transformed((pt) => v.rotateAround(c, pt, angle))
   }
 
   /**

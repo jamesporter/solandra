@@ -2,6 +2,7 @@ import { Point2D } from "../types/sol.js"
 import { Traceable } from "./index.js"
 import { SimplePath } from "./SimplePath.js"
 import { sampleArc } from "./pathUtil.js"
+import { polarToCartesian } from "../vectors.js"
 export class HollowArc implements Traceable {
   readonly cX: number
   readonly cY: number
@@ -24,24 +25,28 @@ export class HollowArc implements Traceable {
       a,
       a2,
     } = config
-    const antiClockwise = a > a2
     this.cX = cX
     this.cY = cY
     this.radius = r
     this.innerRadius = r2
     this.startAngle = a
     this.endAngle = a2
-    this.antiClockwise = antiClockwise
+    this.antiClockwise = a > a2
   }
+
+  /** Centre of the circles the arc is between */
+  get center(): Point2D {
+    return [this.cX, this.cY]
+  }
+
+  /** A point at the given radius and angle from the centre */
+  private at(radius: number, angle: number): Point2D {
+    return polarToCartesian(this.center, radius, angle)
+  }
+
   traceIn = (ctx: CanvasRenderingContext2D) => {
-    ctx.moveTo(
-      this.cX + this.innerRadius * Math.cos(this.startAngle),
-      this.cY + this.innerRadius * Math.sin(this.startAngle)
-    )
-    ctx.lineTo(
-      this.cX + this.radius * Math.cos(this.startAngle),
-      this.cY + this.radius * Math.sin(this.startAngle)
-    )
+    ctx.moveTo(...this.at(this.innerRadius, this.startAngle))
+    ctx.lineTo(...this.at(this.radius, this.startAngle))
     ctx.arc(
       this.cX,
       this.cY,
@@ -50,10 +55,7 @@ export class HollowArc implements Traceable {
       this.endAngle,
       this.antiClockwise
     )
-    ctx.lineTo(
-      this.cX + this.innerRadius * Math.cos(this.endAngle),
-      this.cY + this.innerRadius * Math.sin(this.endAngle)
-    )
+    ctx.lineTo(...this.at(this.innerRadius, this.endAngle))
     ctx.arc(
       this.cX,
       this.cY,
@@ -66,17 +68,9 @@ export class HollowArc implements Traceable {
 
   toPath(detail: number): SimplePath {
     const d = Math.max(0, Math.floor(detail))
-    const center: Point2D = [this.cX, this.cY]
 
-    // Start point on inner arc
-    const startInner: Point2D = [
-      this.cX + this.innerRadius * Math.cos(this.startAngle),
-      this.cY + this.innerRadius * Math.sin(this.startAngle),
-    ]
-
-    // Sample outer arc
     const outerPoints = sampleArc({
-      center,
+      center: this.center,
       radius: this.radius,
       startAngle: this.startAngle,
       endAngle: this.endAngle,
@@ -84,9 +78,9 @@ export class HollowArc implements Traceable {
       antiClockwise: this.antiClockwise,
     })
 
-    // Sample inner arc (reversed)
+    // back round the inside, in the opposite direction
     const innerPoints = sampleArc({
-      center,
+      center: this.center,
       radius: this.innerRadius,
       startAngle: this.endAngle,
       endAngle: this.startAngle,
@@ -94,9 +88,8 @@ export class HollowArc implements Traceable {
       antiClockwise: !this.antiClockwise,
     })
 
-    // Combine into ring path
     return SimplePath.withPoints([
-      startInner,
+      this.at(this.innerRadius, this.startAngle),
       ...outerPoints,
       ...innerPoints,
     ]).close()
