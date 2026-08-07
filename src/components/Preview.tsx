@@ -18,20 +18,16 @@ export default function Preview({
   name,
   category,
 }: CanvasProps) {
-  const canvasRef = useRef(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
 
   useLayoutEffect(() => {
-    let ctx
-    if (!ctxRef.current) {
-      const cvs = canvasRef.current
-      if (cvs) {
-        ctx = (cvs as HTMLCanvasElement).getContext("2d")
-      }
-    } else {
-      ctx = ctxRef.current
+    // re-using the context is much cheaper than asking for it every render
+    if (!ctxRef.current && canvasRef.current) {
+      ctxRef.current = canvasRef.current.getContext("2d")
     }
 
+    const ctx = ctxRef.current
     if (ctx) {
       ctx.clearRect(0, 0, size, size)
       const pts = new SCanvas(
