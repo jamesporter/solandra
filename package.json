@@ -52,7 +52,7 @@
     "oxlint": "^1.72.0",
     "oxlint-tsgolint": "^0.24.0",
     "playwright": "^1.61.1",
-    "postcss": "^8.4.14",
+    "postcss": "^8.5.23",
     "rimraf": "^3.0.2",
     "tailwindcss": "^4.0.0",
     "tsx": "^4.7.3",
