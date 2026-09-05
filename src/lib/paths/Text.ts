@@ -33,8 +33,18 @@ export type TextConfigWithKind = {
 
 export type TextConfig = Omit<TextConfigWithKind, "kind">
 
+/**
+ * The stack used when a caller does not name a font.
+ *
+ * `-apple-system` is quoted deliberately. Browsers accept it bare, but a
+ * leading hyphen makes it an invalid font family token to stricter parsers
+ * (node-canvas's among them) — and an invalid assignment to `ctx.font` is
+ * required to be a no-op, so the whole declaration was silently dropped and
+ * text kept whatever font, *and size*, the context happened to have. Quoting
+ * is valid CSS everywhere and keeps the macOS system font.
+ */
 export const systemFont =
-  "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif"
+  "'-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
 
 function configToFontSpecString({
   style,
@@ -42,10 +52,15 @@ function configToFontSpecString({
   weight,
   size,
   font,
-}: TextConfigWithKind): string {
-  return `${style ?? ""} ${variant ?? ""} ${weight ?? ""} ${size}px ${
-    font ?? systemFont
-  }`
+}: Pick<
+  TextConfigWithKind,
+  "style" | "variant" | "weight" | "size" | "font"
+>): string {
+  // Omitted parts are left out rather than written as empty strings: a font
+  // shorthand is all or nothing to parse, so the fewer moving parts the better.
+  return [style, variant, weight, `${size}px`, font ?? systemFont]
+    .filter(Boolean)
+    .join(" ")
 }
 
 export class Text {
@@ -74,27 +89,39 @@ export class Text {
     const { size, align = "center" } = this.config
     ctx.textAlign = align
 
-    // Safari messes up for small sizes
-    if (size < 1) {
-      ctx.font = configToFontSpecString({
-        ...this.config,
-        size: this.config.size * 100,
-      })
-
-      const m = ctx.measureText(this.text)
-      return {
-        actualBoundingBoxAscent: m.actualBoundingBoxAscent / 100,
-        actualBoundingBoxDescent: m.actualBoundingBoxDescent / 100,
-        actualBoundingBoxLeft: m.actualBoundingBoxLeft / 100,
-        actualBoundingBoxRight: m.actualBoundingBoxRight / 100,
-        fontBoundingBoxAscent: m.fontBoundingBoxAscent / 100,
-        fontBoundingBoxDescent: m.fontBoundingBoxDescent / 100,
-        width: m.width / 100,
-        // TODO should check this is okay, newer TS not happy with original returned stuff, but for many purposes likely fine
-      } as TextMetrics
-    } else {
+    if (size >= 1) {
       ctx.font = configToFontSpecString(this.config)
       return ctx.measureText(this.text)
     }
+
+    // Safari messes up for small sizes, so measure a 100x larger font and
+    // scale the metrics back down.
+    //
+    // Sketch coordinates are normalised, which means the context is scaled by
+    // the canvas size, which means that 100x lands somewhere around 20,000px
+    // once the transform is applied. Text metrics are defined in user space
+    // and so do not depend on the transform, but the font a renderer builds to
+    // produce them does: at that size node-canvas overflows the integer Pango
+    // keeps a font size in and measures with a font that failed to load. So
+    // measure with the transform reset, which changes nothing about the answer
+    // and everything about the font used to arrive at it.
+    ctx.save()
+    ctx.setTransform(1, 0, 0, 1, 0, 0)
+    ctx.font = configToFontSpecString({ ...this.config, size: size * 100 })
+
+    const m = ctx.measureText(this.text)
+    const metrics = {
+      actualBoundingBoxAscent: m.actualBoundingBoxAscent / 100,
+      actualBoundingBoxDescent: m.actualBoundingBoxDescent / 100,
+      actualBoundingBoxLeft: m.actualBoundingBoxLeft / 100,
+      actualBoundingBoxRight: m.actualBoundingBoxRight / 100,
+      fontBoundingBoxAscent: m.fontBoundingBoxAscent / 100,
+      fontBoundingBoxDescent: m.fontBoundingBoxDescent / 100,
+      width: m.width / 100,
+      // TODO should check this is okay, newer TS not happy with original returned stuff, but for many purposes likely fine
+    } as TextMetrics
+
+    ctx.restore()
+    return metrics
   }
 }

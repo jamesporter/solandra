@@ -47,6 +47,19 @@ export const createMockCtx = (): {
           if (String(property).endsWith("Gradient")) {
             return { addColorStop: () => {} }
           }
+          // as does measuring text; the numbers are arbitrary but distinct, so
+          // a test can tell which metric ended up where
+          if (property === "measureText") {
+            return {
+              width: 100,
+              actualBoundingBoxAscent: 10,
+              actualBoundingBoxDescent: 20,
+              actualBoundingBoxLeft: 30,
+              actualBoundingBoxRight: 40,
+              fontBoundingBoxAscent: 50,
+              fontBoundingBoxDescent: 60,
+            }
+          }
         }
       },
       set: function (target, property, value) {
