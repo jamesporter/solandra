@@ -9,8 +9,16 @@ import {
   Rect,
   Spiral,
 } from "../lib"
-import { add, distance, rotateAround, scale } from "../lib/vectors"
-import { fbm2, perlin2 } from "../lib/noise"
+import {
+  add,
+  distance,
+  normalize,
+  rotateAround,
+  scale,
+  subtract,
+  rotate,
+} from "../lib/vectors"
+import { curl2, fbm2, perlin2 } from "../lib/noise"
 import { RadialGradient } from "../lib/gradient"
 import { clamp } from "../lib"
 
@@ -621,10 +629,69 @@ const fractalRidges = (p: SCanvas) => {
   })
 }
 
+const curlField = (p: SCanvas) => {
+  p.background(220, 25, 12)
+  p.lineWidth = 0.002
+
+  // the field itself: a short line in the flow direction at each point
+  p.forTiling({ n: 40, type: "square" }, (_, [dX], [cX, cY]) => {
+    const [uX, uY] = normalize(curl2(cX * 2.5, cY * 2.5))
+    p.setStrokeColor(190 + uX * 60, 60, 70)
+    p.draw(
+      SimplePath.withPoints([
+        [cX, cY],
+        [cX + uX * dX, cY + uY * dX],
+      ])
+    )
+  })
+}
+
+const curlStreamers = (p: SCanvas) => {
+  p.background(215, 30, 10)
+  p.lineWidth = 0.0025
+
+  p.times(300, () => {
+    const from = p.randomPoint()
+    p.setStrokeColor(170 + from[0] * 90, 70, 60, 0.6)
+    p.draw(
+      SimplePath.flowLine({
+        from,
+        field: ([x, y]) => curl2(x * 2.5, y * 2.5, { octaves: 2 }),
+        n: 200,
+        step: 0.004,
+        // no point drawing what has left the canvas
+        until: (at) => !p.inDrawing(at),
+      })
+    )
+  })
+}
+
+const orbits = (p: SCanvas) => {
+  p.background(45, 30, 95)
+  p.lineWidth = 0.003
+
+  // nothing ties flowLine to noise: this field pulls things into an orbit,
+  // spiralling slowly inwards because it is not quite at right angles
+  p.aroundCircle({ n: 60, r: 0.44 }, (from, i) => {
+    p.setStrokeColor(10 + i * 5, 65, 50, 0.7)
+    p.draw(
+      SimplePath.flowLine({
+        from: p.perturb({ at: from, magnitude: 0.08 }),
+        field: (at) => rotate(subtract(p.meta.center, at), Math.PI / 2.1),
+        n: 260,
+        step: 0.005,
+      })
+    )
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: noiseField, name: "Noise Field" },
   { sketch: fractalClouds, name: "Fractal Clouds" },
   { sketch: fractalRidges, name: "Fractal Ridges" },
+  { sketch: curlField, name: "Curl Field" },
+  { sketch: curlStreamers, name: "Curl Streamers" },
+  { sketch: orbits, name: "Orbits" },
   { sketch: rectangles, name: "Rectangles" },
   { sketch: randomness1b, name: "Gaussian 2" },
   { sketch: randomness1c, name: "Gaussian 3" },

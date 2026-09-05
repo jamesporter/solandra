@@ -9,7 +9,10 @@ import {
   triTransform,
   centroid,
   hexTransform,
+  convexHull,
 } from "../util"
+import { SimplePath } from "../paths/SimplePath"
+import { Point2D } from "../types/sol"
 
 describe("Scaler", () => {
   it("should be able to scale", () => {
@@ -184,5 +187,104 @@ describe("evenProportions", () => {
   it("throws if asked for none", () => {
     expect(() => evenProportions({ n: 0 })).toThrow()
     expect(() => evenProportions({ n: -2 })).toThrow()
+  })
+})
+
+describe("convexHull", () => {
+  it("wraps points, leaving out the ones inside", () => {
+    const hull = convexHull([
+      [0, 0],
+      [1, 0],
+      [1, 1],
+      [0, 1],
+      [0.5, 0.5],
+    ])
+    expect(hull).toHaveLength(4)
+    expect(hull).toEqual(
+      expect.arrayContaining([
+        [0, 0],
+        [1, 0],
+        [1, 1],
+        [0, 1],
+      ])
+    )
+  })
+
+  it("does not repeat the first point at the end", () => {
+    const hull = convexHull([
+      [0, 0],
+      [1, 0],
+      [0, 1],
+    ])
+    expect(hull).toHaveLength(3)
+  })
+
+  it("starts from the leftmost point and goes round clockwise as drawn", () => {
+    const hull = convexHull([
+      [1, 1],
+      [0, 1],
+      [1, 0],
+      [0, 0],
+    ])
+    // y increases downwards on a canvas, so this reads clockwise on screen
+    expect(hull).toEqual([
+      [0, 0],
+      [1, 0],
+      [1, 1],
+      [0, 1],
+    ])
+  })
+
+  it("leaves out points lying along an edge", () => {
+    const hull = convexHull([
+      [0, 0],
+      [0.5, 0],
+      [1, 0],
+      [1, 1],
+      [0, 1],
+    ])
+    expect(hull).toHaveLength(4)
+    expect(hull).not.toContainEqual([0.5, 0])
+  })
+
+  it("contains every point it was given", () => {
+    const points: Point2D[] = Array.from(
+      { length: 50 },
+      (_, i) => [Math.cos(i * 2.4) * (1 + (i % 7)), Math.sin(i * 1.7) * 3] // arbitrary but fixed
+    )
+    const hull = convexHull(points)
+    const inside = SimplePath.withPoints(hull).close()
+    points.forEach((at) => {
+      const onHull = hull.some(([x, y]) => x === at[0] && y === at[1])
+      expect(onHull || inside.containsPoint(at)).toBe(true)
+    })
+  })
+
+  it("passes through anything too small to wrap", () => {
+    expect(convexHull([])).toEqual([])
+    expect(convexHull([[0, 0]])).toEqual([[0, 0]])
+    expect(
+      convexHull([
+        [0, 0],
+        [1, 1],
+      ])
+    ).toEqual([
+      [0, 0],
+      [1, 1],
+    ])
+  })
+
+  it("does not modify the points it was given", () => {
+    const points: Point2D[] = [
+      [1, 1],
+      [0, 0],
+      [1, 0],
+    ]
+    convexHull(points)
+    expect(points).toEqual([
+      [1, 1],
+      [0, 0],
+      [1, 0],
+    ])
   })
 })

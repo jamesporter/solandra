@@ -6,6 +6,7 @@ import {
   Square,
   Star,
   SimplePath,
+  curl2,
   fbm2,
   perlin2,
   v,
@@ -306,6 +307,123 @@ s.range({ from: 0.1, to: 0.9, n: 24 }, (y) => {
 />
 
 Like `perlin2`, `fbm2` is a pure function of its coordinates, not of the sketch's random number generator: the same point always gives the same value.
+
+## Curl noise and flow fields
+
+The obvious way to build a flow field is to take a noise value as an angle and follow it. Do that and everything eventually drains into the same few places: such a field has sources and sinks. `curl2` takes the _curl_ of the noise instead, `(∂n/∂y, -∂n/∂x)`, which is divergence free &mdash; nothing accumulates anywhere, so lines following it swirl endlessly around each other.
+
+It takes the same `octaves`, `persistence` and `lacunarity` as `fbm2` (one octave by default, i.e. plain `perlin2`), plus `epsilon`, the step used for the derivative. What matters is the vector's direction; its length depends on how fast the noise is changing.
+
+```ts
+import { curl2, v } from "solandra"
+
+s.background(220, 25, 12)
+s.lineWidth = 0.002
+s.forTiling({ n: 22, type: "square" }, (_, [dX], [cX, cY]) => {
+  const [uX, uY] = v.normalize(curl2(cX * 2.5, cY * 2.5))
+  s.setStrokeColor(190 + uX * 60, 60, 70)
+  s.draw(
+    SimplePath.withPoints([
+      [cX, cY],
+      [cX + uX * dX, cY + uY * dX],
+    ])
+  )
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(220, 25, 12)
+    s.lineWidth = 0.002
+    s.forTiling({ n: 22, type: "square" }, (_, [dX], [cX, cY]) => {
+      const [uX, uY] = v.normalize(curl2(cX * 2.5, cY * 2.5))
+      s.setStrokeColor(190 + uX * 60, 60, 70)
+      s.draw(
+        SimplePath.withPoints([
+          [cX, cY],
+          [cX + uX * dX, cY + uY * dX],
+        ])
+      )
+    })
+  }}
+/>
+
+Rather than drawing the field, follow it: `SimplePath.flowLine` starts somewhere and repeatedly steps in the direction the field points in. It samples the field for direction only, so every step is the same length and any function of a point will do. `until` stops a line early, most usefully when it wanders off the canvas.
+
+```ts
+s.background(215, 30, 10)
+s.lineWidth = 0.003
+s.times(120, () => {
+  const from = s.randomPoint()
+  s.setStrokeColor(180 + from[0] * 80, 70, 60, 0.7)
+  s.draw(
+    SimplePath.flowLine({
+      from,
+      field: ([x, y]) => curl2(x * 2.5, y * 2.5),
+      n: 120,
+      step: 0.005,
+      until: (at) => !s.inDrawing(at),
+    })
+  )
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(215, 30, 10)
+    s.lineWidth = 0.003
+    s.times(120, () => {
+      const from = s.randomPoint()
+      s.setStrokeColor(180 + from[0] * 80, 70, 60, 0.7)
+      s.draw(
+        SimplePath.flowLine({
+          from,
+          field: ([x, y]) => curl2(x * 2.5, y * 2.5),
+          n: 120,
+          step: 0.005,
+          until: (at) => !s.inDrawing(at),
+        })
+      )
+    })
+  }}
+/>
+
+Nothing ties `flowLine` to noise: the field is just a function from a point to a direction. This one pulls everything into a circling orbit around the centre.
+
+```ts
+s.background(45, 30, 95)
+s.lineWidth = 0.004
+s.aroundCircle({ n: 24, r: 0.42 }, (from, i) => {
+  s.setStrokeColor(10 + i * 6, 65, 50, 0.8)
+  s.draw(
+    SimplePath.flowLine({
+      from,
+      // at right angles to the centre, so it circles rather than falls in
+      field: (at) => v.rotate(v.subtract(s.meta.center, at), Math.PI / 2.2),
+      n: 200,
+      step: 0.005,
+    })
+  )
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(45, 30, 95)
+    s.lineWidth = 0.004
+    s.aroundCircle({ n: 24, r: 0.42 }, (from, i) => {
+      s.setStrokeColor(10 + i * 6, 65, 50, 0.8)
+      s.draw(
+        SimplePath.flowLine({
+          from,
+          field: (at) => v.rotate(v.subtract(s.meta.center, at), Math.PI / 2.2),
+          n: 200,
+          step: 0.005,
+        })
+      )
+    })
+  }}
+/>
 
 ## Seeds and reproducibility
 

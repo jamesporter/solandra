@@ -293,3 +293,62 @@ export const evenProportions = ({
   const d = inclusive ? n - 1 : n
   return Array.from({ length: n }, (_, i) => i / d)
 }
+
+/**
+ * The convex hull of a set of points: the smallest convex polygon containing
+ * them all, as if a rubber band were stretched around the outside.
+ *
+ * Points are returned starting from the leftmost (the topmost of them, where
+ * several share that x) and going round clockwise as drawn, y increasing
+ * downwards as it does on a canvas. The first point is not repeated at the
+ * end. Points inside the hull, and points lying along one of its edges, are
+ * left out.
+ *
+ * Uses Andrew's monotone chain algorithm, so the cost is dominated by sorting
+ * the points.
+ *
+ * @param points - The points to wrap
+ * @returns The hull's corners, or the points themselves if there are fewer
+ * than three
+ * @example
+ * ```ts
+ * convexHull([[0, 0], [1, 0], [1, 1], [0, 1], [0.5, 0.5]])
+ * // Returns the four corners; the middle point is inside them
+ *
+ * // Wrap a scattered cloud of points
+ * const cloud = s.build(s.times, 50, () => s.randomPoint())
+ * s.fill(SimplePath.withPoints(convexHull(cloud)).close())
+ * ```
+ */
+export const convexHull = (points: Point2D[]): Point2D[] => {
+  if (points.length < 3) return points.slice()
+
+  const sorted = points
+    .slice()
+    .sort(([x1, y1], [x2, y2]) => (x1 === x2 ? y1 - y2 : x1 - x2))
+
+  // > 0 when the turn from a to b to c is clockwise on screen
+  const turn = (a: Point2D, b: Point2D, c: Point2D): number =>
+    (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])
+
+  const half = (ordered: Point2D[]): Point2D[] => {
+    const chain: Point2D[] = []
+    for (const point of ordered) {
+      while (
+        chain.length >= 2 &&
+        turn(chain[chain.length - 2], chain[chain.length - 1], point) <= 0
+      ) {
+        chain.pop()
+      }
+      chain.push(point)
+    }
+    // the last point of each half is the first of the other
+    chain.pop()
+    return chain
+  }
+
+  // one half going left to right, the other coming back
+  const lower = half(sorted)
+  const upper = half(sorted.slice().reverse())
+  return lower.concat(upper)
+}

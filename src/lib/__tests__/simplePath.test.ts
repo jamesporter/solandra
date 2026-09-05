@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest"
 import { asSimplePath, SimplePath } from "../paths/SimplePath"
 import { Star } from "../paths/Star"
 import v from "../vectors"
+import { curl2 } from "../noise"
+import { pairWise } from "../collectionOps"
 import { Point2D } from "../types/sol"
 import { recordTrace } from "./testUtils"
 
@@ -12,6 +14,27 @@ const square = () =>
     [2, 2],
     [0, 2],
   ]).close()
+
+const straightLine = () =>
+  SimplePath.withPoints([
+    [0, 0],
+    [1, 0],
+  ])
+
+/** How far a point sits from the nearest part of a path (not just its points) */
+const distanceToPath = (at: Point2D, path: SimplePath): number =>
+  Math.min(
+    ...pairWise(path.points).map(([a, b]) => {
+      const line = v.subtract(b, a)
+      const length = v.magnitude(line)
+      if (length === 0) return v.distance(at, a)
+      const t = Math.max(
+        0,
+        Math.min(1, v.dot(v.subtract(at, a), line) / length ** 2)
+      )
+      return v.distance(at, v.pointAlong(a, b, t))
+    })
+  )
 
 const closeToPoints = (
   actual: Point2D[],
@@ -417,6 +440,307 @@ describe("SimplePath", () => {
 
     it("throws if asked for no points", () => {
       expect(() => line().pointsAlong({ n: 0 })).toThrow()
+    })
+  })
+
+  describe("flowLine", () => {
+    // a field pointing straight down the x axis, whatever its strength
+    const rightwards = () => [3, 0] as Point2D
+
+    it("steps through the field from the starting point", () => {
+      const path = SimplePath.flowLine({
+        from: [0, 0],
+        field: rightwards,
+        n: 3,
+        step: 0.5,
+      })
+      closeToPoints(path.points, [
+        [0, 0],
+        [0.5, 0],
+        [1, 0],
+        [1.5, 0],
+      ])
+    })
+
+    it("uses the field for direction only, so steps are all the same length", () => {
+      const path = SimplePath.flowLine({
+        from: [0, 0],
+        field: ([x]) => [10 * (x + 1), 0],
+        n: 3,
+        step: 0.1,
+      })
+      pairWise(path.points).forEach(([a, b]) => {
+        expect(v.distance(a, b)).toBeCloseTo(0.1)
+      })
+    })
+
+    it("follows a turning field around", () => {
+      // circling an attractor: always at right angles to the way in
+      const path = SimplePath.flowLine({
+        from: [1, 0],
+        field: (at) => v.rotate(v.subtract([0, 0], at), Math.PI / 2),
+        n: 20,
+        step: 0.05,
+      })
+      path.points.forEach((at) => {
+        // Euler integration drifts outwards a little, but should stay near
+        expect(v.magnitude(at)).toBeGreaterThan(0.9)
+        expect(v.magnitude(at)).toBeLessThan(1.2)
+      })
+    })
+
+    it("stops where the field has no direction to give", () => {
+      const path = SimplePath.flowLine({
+        from: [0, 0],
+        field: ([x]) => (x < 0.25 ? [1, 0] : [0, 0]),
+        n: 100,
+        step: 0.1,
+      })
+      expect(path.points).toHaveLength(4)
+    })
+
+    it("stops as soon as until says so", () => {
+      const path = SimplePath.flowLine({
+        from: [0, 0],
+        field: rightwards,
+        n: 100,
+        step: 0.1,
+        until: ([x]) => x > 0.25,
+      })
+      closeToPoints(path.points, [
+        [0, 0],
+        [0.1, 0],
+        [0.2, 0],
+        [0.3, 0],
+      ])
+    })
+
+    it("can be traced through curl noise", () => {
+      const path = SimplePath.flowLine({
+        from: [0.5, 0.5],
+        field: ([x, y]) => curl2(x * 3, y * 3),
+        n: 50,
+        step: 0.01,
+      })
+      expect(path.points).toHaveLength(51)
+      expect(path.length).toBeCloseTo(0.5)
+    })
+
+    it("takes no steps when asked for none", () => {
+      const path = SimplePath.flowLine({
+        from: [0, 0],
+        field: rightwards,
+        n: 0,
+      })
+      expect(path.points).toEqual([[0, 0]])
+    })
+
+    it("throws if asked for a negative number of steps", () => {
+      expect(() =>
+        SimplePath.flowLine({ from: [0, 0], field: rightwards, n: -1 })
+      ).toThrow()
+    })
+  })
+
+  describe("boundingBox", () => {
+    it("is the smallest box containing every point", () => {
+      const path = SimplePath.withPoints([
+        [0.2, 0.3],
+        [0.6, 0.1],
+        [0.4, 0.9],
+      ])
+      const { at, w, h } = path.boundingBox
+      closeToPoints([at], [[0.2, 0.1]])
+      expect(w).toBeCloseTo(0.4)
+      expect(h).toBeCloseTo(0.8)
+    })
+
+    it("has no size for a single point", () => {
+      const box = SimplePath.withPoints([[0.5, 0.5]]).boundingBox
+      expect(box).toEqual({ at: [0.5, 0.5], w: 0, h: 0 })
+    })
+
+    it("throws for a path with no points", () => {
+      expect(() => new SimplePath().boundingBox).toThrow()
+    })
+  })
+
+  describe("area", () => {
+    it("measures the area enclosed by a square", () => {
+      expect(square().area).toBeCloseTo(4)
+    })
+
+    it("does not care whether the path was closed", () => {
+      const points: Point2D[] = [
+        [0, 0],
+        [2, 0],
+        [2, 2],
+        [0, 2],
+      ]
+      expect(SimplePath.withPoints(points).area).toBeCloseTo(4)
+      expect(SimplePath.withPoints(points).close().area).toBeCloseTo(4)
+    })
+
+    it("is positive whichever way round the points go", () => {
+      expect(square().reversed.area).toBeCloseTo(4)
+    })
+
+    it("measures a triangle", () => {
+      expect(
+        SimplePath.withPoints([
+          [0, 0],
+          [1, 0],
+          [0, 1],
+        ]).area
+      ).toBeCloseTo(0.5)
+    })
+
+    it("is zero for anything that cannot enclose an area", () => {
+      expect(new SimplePath().area).toBe(0)
+      expect(straightLine().area).toBe(0)
+    })
+  })
+
+  describe("containsPoint", () => {
+    it("knows what is inside and what is outside", () => {
+      const s = square()
+      expect(s.containsPoint([1, 1])).toBe(true)
+      expect(s.containsPoint([0.01, 0.01])).toBe(true)
+      expect(s.containsPoint([3, 1])).toBe(false)
+      expect(s.containsPoint([1, -1])).toBe(false)
+      expect(s.containsPoint([-1, -1])).toBe(false)
+    })
+
+    it("handles a concave shape, where a bounding box would not", () => {
+      // a chevron: the notch at the top is outside the shape
+      const chevron = SimplePath.withPoints([
+        [0, 0],
+        [1, 1],
+        [2, 0],
+        [2, 2],
+        [0, 2],
+      ]).close()
+      expect(chevron.containsPoint([1, 1.5])).toBe(true)
+      expect(chevron.containsPoint([1, 0.2])).toBe(false)
+      expect(chevron.containsPoint([0.2, 0.5])).toBe(true)
+    })
+
+    it("contains nothing when there is no area to be inside", () => {
+      expect(straightLine().containsPoint([0.5, 0])).toBe(false)
+      expect(new SimplePath().containsPoint([0, 0])).toBe(false)
+    })
+  })
+
+  describe("simplified", () => {
+    it("drops points that barely change the shape", () => {
+      const path = SimplePath.withPoints([
+        [0, 0],
+        [0.5, 0.0001],
+        [1, 0],
+      ])
+      closeToPoints(path.simplified({ tolerance: 0.01 }).points, [
+        [0, 0],
+        [1, 0],
+      ])
+    })
+
+    it("keeps points that do change the shape", () => {
+      const path = SimplePath.withPoints([
+        [0, 0],
+        [0.5, 0.5],
+        [1, 0],
+      ])
+      expect(path.simplified({ tolerance: 0.01 }).points).toHaveLength(3)
+    })
+
+    it("keeps the ends of the path", () => {
+      const wiggly = SimplePath.withPoints(
+        Array.from(
+          { length: 50 },
+          (_, i) => [i / 49, Math.sin(i) * 0.02] as Point2D
+        )
+      )
+      const simplified = wiggly.simplified({ tolerance: 0.5 })
+      closeToPoints(simplified.points, [
+        [0, 0],
+        [1, Math.sin(49) * 0.02],
+      ])
+    })
+
+    it("thins out a smoothed path, keeping every point within the tolerance", () => {
+      const wiggly = SimplePath.withPoints(
+        Array.from(
+          { length: 200 },
+          (_, i) => [i / 199, Math.sin(i / 10) * 0.2] as Point2D
+        )
+      )
+      const tolerance = 0.005
+      const simplified = wiggly.simplified({ tolerance })
+
+      expect(simplified.points.length).toBeLessThan(60)
+      expect(simplified.points.length).toBeGreaterThan(2)
+      // the guarantee the algorithm makes: nothing dropped strays further than
+      // the tolerance from the path that is left
+      wiggly.points.forEach((at) => {
+        expect(distanceToPath(at, simplified)).toBeLessThanOrEqual(tolerance)
+      })
+    })
+
+    it("leaves the original path alone", () => {
+      const path = SimplePath.withPoints([
+        [0, 0],
+        [0.5, 0.0001],
+        [1, 0],
+      ])
+      path.simplified()
+      expect(path.points).toHaveLength(3)
+    })
+
+    it("passes through paths too short to simplify", () => {
+      expect(straightLine().simplified().points).toHaveLength(2)
+      expect(new SimplePath().simplified().points).toHaveLength(0)
+    })
+
+    it("throws for a negative tolerance", () => {
+      expect(() => square().simplified({ tolerance: -1 })).toThrow()
+    })
+  })
+
+  describe("convexHull", () => {
+    it("wraps the path's points, leaving out the ones inside", () => {
+      const path = SimplePath.withPoints([
+        [0, 0],
+        [2, 0],
+        [1, 1],
+        [2, 2],
+        [0, 2],
+      ])
+      const hull = path.convexHull
+      // closed, so the first point is repeated at the end
+      expect(hull.points).toHaveLength(5)
+      expect(hull.area).toBeCloseTo(4)
+      expect(hull.containsPoint([1, 1])).toBe(true)
+    })
+
+    it("contains every point of the original path", () => {
+      const path = SimplePath.withPoints([
+        [0.1, 0.4],
+        [0.8, 0.2],
+        [0.5, 0.9],
+        [0.3, 0.5],
+        [0.6, 0.6],
+      ])
+      const hull = path.convexHull
+      path.points.forEach((at) => {
+        expect(
+          hull.containsPoint(at) ||
+            hull.points.some((p) => p[0] === at[0] && p[1] === at[1])
+        ).toBe(true)
+      })
+    })
+
+    it("throws for a path with no points", () => {
+      expect(() => new SimplePath().convexHull).toThrow()
     })
   })
 

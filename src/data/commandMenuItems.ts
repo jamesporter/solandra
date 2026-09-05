@@ -289,6 +289,27 @@ const concepts: CommandMenuItem[] = [
     keywords: "chaiken subdivide length pointAt segment split",
   },
   {
+    name: "Measuring paths & hit testing",
+    href: "/docs/paths",
+    kind: "concept",
+    section: "Paths & Curves",
+    keywords: "boundingBox area containsPoint inside enclosed size box",
+  },
+  {
+    name: "Convex hull",
+    href: "/docs/paths",
+    kind: "concept",
+    section: "Paths & Curves",
+    keywords: "convexHull wrap rubber band cloud points hull",
+  },
+  {
+    name: "Simplifying paths",
+    href: "/docs/paths",
+    kind: "concept",
+    section: "Paths & Curves",
+    keywords: "simplified tolerance douglas peucker thin reduce facet",
+  },
+  {
     name: "Rect, Square & RoundedRect",
     href: "/docs/shapes",
     kind: "concept",
@@ -359,6 +380,14 @@ const concepts: CommandMenuItem[] = [
     keywords: "scheme step wise ramp palette random harmony",
   },
   {
+    name: "Colour schemes & mixing",
+    href: "/docs/colors",
+    kind: "concept",
+    section: "Colour",
+    keywords:
+      "harmony complementary analogous triadic tetradic monochrome mixColors blend hue circle",
+  },
+  {
     name: "withContext",
     href: "/docs/transforms",
     kind: "concept",
@@ -392,6 +421,13 @@ const concepts: CommandMenuItem[] = [
     kind: "concept",
     section: "Randomness",
     keywords: "perlin2 noise field organic octaves",
+  },
+  {
+    name: "Curl noise & flow fields",
+    href: "/docs/randomness",
+    kind: "concept",
+    section: "Randomness",
+    keywords: "curl2 flowLine streamline swirl divergence free vector field",
   },
   {
     name: "perturb & distributions",

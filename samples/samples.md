@@ -312,6 +312,18 @@
 
 ![Colour Palettes](./Colour-Palettes.png)
 
+### Colour Schemes
+
+![Colour Schemes](./Colour-Schemes.png)
+
+### Harmonious Scatter
+
+![Harmonious Scatter](./Harmonious-Scatter.png)
+
+### Colour Mixing
+
+![Colour Mixing](./Colour-Mixing.png)
+
 ## Animated
 
 ### Blob
@@ -458,6 +470,18 @@
 
 ![Along a Star](./Along-a-Star.png)
 
+### Inside a Star
+
+![Inside a Star](./Inside-a-Star.png)
+
+### Hulls
+
+![Hulls](./Hulls.png)
+
+### Faceted
+
+![Faceted](./Faceted.png)
+
 ## Isometric
 
 ### Isometric
@@ -517,6 +541,18 @@
 ### Fractal Ridges
 
 ![Fractal Ridges](./Fractal-Ridges.png)
+
+### Curl Field
+
+![Curl Field](./Curl-Field.png)
+
+### Curl Streamers
+
+![Curl Streamers](./Curl-Streamers.png)
+
+### Orbits
+
+![Orbits](./Orbits.png)
 
 ### Rectangles
 

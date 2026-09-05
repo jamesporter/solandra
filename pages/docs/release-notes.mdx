@@ -7,6 +7,9 @@ import { DocPageLayout } from "../../src/components/DocPageLayout"
 - `fbm2`, fractal (fractional Brownian motion) noise: several octaves of `perlin2` summed together, for noise with detail at every scale rather than at just one. Configurable `octaves`, `persistence` and `lacunarity`.
 - Measuring and sampling a `SimplePath`, all by distance travelled rather than by point index: `length`, `pointAt`, `tangentAt` and `pointsAlong`. Plus `alongPath`, which iterates over evenly spaced points along a path (or anything with one, e.g. `Star`), handing you the point and the angle the path heads in there.
 - `withSymmetry`, which draws its callback several times over with the canvas already rotated and/or reflected: `"rotational"`, `"mirror"` or `"kaleidoscope"`.
+- `curl2`, curl noise: a divergence free vector field taken from the curl of `perlin2`/`fbm2`, so lines following it swirl around each other instead of draining into the same few places as a naive noise-as-angle field does. Plus `SimplePath.flowLine`, which traces a path through any vector field.
+- Measuring a `SimplePath` as a shape: `boundingBox` (in the form `Rect` takes), `area`, `containsPoint` and `convexHull`, along with a standalone `convexHull` for bare points. And `simplified`, which drops the points that barely change a path's shape (Ramer-Douglas-Peucker).
+- `harmony`, which builds the classic colour schemes (complementary, analogous, triadic, tetradic, split complementary, monochrome) around a colour, and `mixColors`, which blends two colours the short way round the hue circle.
 
 ## 0.20.0
 
