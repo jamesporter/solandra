@@ -36,21 +36,29 @@ export function useCommandMenu() {
 /** Wraps the app: owns the ⌘K shortcut and renders the menu when open. */
 export function CommandMenuProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false)
+  const returnFocusRef = useRef<HTMLElement | null>(null)
 
-  const open = useCallback(() => setIsOpen(true), [])
-  const close = useCallback(() => setIsOpen(false), [])
+  const open = useCallback(() => {
+    returnFocusRef.current = document.activeElement as HTMLElement | null
+    setIsOpen(true)
+  }, [])
+  const close = useCallback(() => {
+    setIsOpen(false)
+    requestAnimationFrame(() => returnFocusRef.current?.focus())
+  }, [])
 
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
         event.preventDefault()
-        setIsOpen((wasOpen) => !wasOpen)
+        if (isOpen) close()
+        else open()
       }
     }
 
     window.addEventListener("keydown", handler)
     return () => window.removeEventListener("keydown", handler)
-  }, [])
+  }, [close, isOpen, open])
 
   const value = useMemo(() => ({ isOpen, open, close }), [isOpen, open, close])
 
@@ -105,6 +113,7 @@ function CommandMenu({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState("")
   const [activeIndex, setActiveIndex] = useState(0)
   const listRef = useRef<HTMLDivElement>(null)
+  const dialogRef = useRef<HTMLDivElement>(null)
 
   const results = useMemo(() => searchCommandMenu(query).slice(0, 50), [query])
 
@@ -137,6 +146,26 @@ function CommandMenu({ onClose }: { onClose: () => void }) {
   )
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === "Tab") {
+      const focusable = Array.from(
+        dialogRef.current?.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), input:not([disabled]), [href], [tabindex]:not([tabindex="-1"])'
+        ) ?? []
+      )
+      if (focusable.length > 0) {
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault()
+          last.focus()
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault()
+          first.focus()
+        }
+      }
+      return
+    }
+
     switch (event.key) {
       case "ArrowDown":
         event.preventDefault()
@@ -180,7 +209,10 @@ function CommandMenu({ onClose }: { onClose: () => void }) {
       aria-modal="true"
       aria-label="Search Solandra"
     >
-      <div className="flex max-h-[70vh] w-full max-w-xl flex-col overflow-hidden rounded-xl bg-gray-50 shadow-2xl">
+      <div
+        ref={dialogRef}
+        className="flex max-h-[70vh] w-full max-w-xl flex-col overflow-hidden rounded-xl bg-gray-50 shadow-2xl"
+      >
         <div className="flex flex-row items-center gap-2 bg-gradient-to-b from-emerald-500 to-emerald-600 p-3">
           <MagnifyingGlassIcon className="h-5 w-5 shrink-0 text-emerald-100" />
           <input

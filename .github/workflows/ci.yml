@@ -23,5 +23,9 @@ jobs:
         run: pnpm format:check
       - name: Test
         run: pnpm test
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+      - name: End-to-end test
+        run: pnpm test:e2e
       - name: Build and check npm package
         run: pnpm check:package
