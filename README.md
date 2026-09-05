@@ -33,7 +33,13 @@ Or if you want to play locally clone this repo, install dependencies with `pnpm 
 pnpm dev
 ```
 
-Then open [http://localhost:3000](http://localhost:3000) and in your editor `sketches.ts` and try things out. It does things like the below
+Then open [http://localhost:3000](http://localhost:3000) and in your editor `sketches.ts` and try things out.
+
+`pnpm test` runs the unit tests, and `pnpm check:samples` re-renders every
+example and checks it still looks like the image committed in `samples/` — see
+[scripts/README.md](./scripts/README.md) if that one fails on you.
+
+It does things like the below
 
 ![A simple example drawn with tiles](/public/images/tiles.png)
 
