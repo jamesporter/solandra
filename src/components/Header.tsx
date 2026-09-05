@@ -1,4 +1,4 @@
-import { SearchIcon } from "@heroicons/react/outline"
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
 import React from "react"
 import { useCommandMenu, useIsApple } from "./CommandMenu"
@@ -60,7 +60,7 @@ function SearchButton() {
       aria-label="Search Solandra"
       className="flex flex-row items-center gap-2 text-white font-semibold hover:text-emerald-200 p-2 md:px-4 drop-shadow-sm text-sm md:text-base md:ml-auto"
     >
-      <SearchIcon className="h-4 w-4" />
+      <MagnifyingGlassIcon className="h-4 w-4" />
       Search
       <span className="rounded-sm bg-emerald-400/60 px-1.5 py-0.5 text-xs font-mono max-sm:hidden">
         {isApple ? "⌘" : "Ctrl"} K

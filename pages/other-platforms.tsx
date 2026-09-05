@@ -3,10 +3,10 @@ import Head from "next/head"
 
 import Footer from "../src/components/Footer"
 import {
-  CodeIcon,
-  DownloadIcon,
+  ArrowDownTrayIcon,
+  CodeBracketIcon,
   InformationCircleIcon,
-} from "@heroicons/react/outline"
+} from "@heroicons/react/24/outline"
 
 import { SVGSketch } from "../src/components/SVGSketch"
 import Header from "../src/components/Header"
@@ -66,7 +66,7 @@ const Other: NextPage = () => {
                 rel="noreferrer"
                 className="flex flex-row gap-x-4 items-center p-2 hover:bg-gradient-to-r from-amber-400 to-rose-500 hover:text-sky-900 rounded-lg"
               >
-                <CodeIcon className="h-8 w-8" />
+                <CodeBracketIcon className="h-8 w-8" />
                 Documentation and Source Code
               </a>
 
@@ -76,7 +76,7 @@ const Other: NextPage = () => {
                 rel="noreferrer"
                 className="flex flex-row gap-x-4 items-center p-2 hover:bg-gradient-to-r from-amber-400 to-rose-500 hover:text-sky-900 rounded-lg"
               >
-                <DownloadIcon className="h-8 w-8" />
+                <ArrowDownTrayIcon className="h-8 w-8" />
                 Dart Package on Pub
               </a>
             </div>
@@ -120,7 +120,7 @@ const Other: NextPage = () => {
                 rel="noreferrer"
                 className="flex flex-row gap-x-4 items-center p-2 hover:bg-gradient-to-r from-emerald-400 to-sky-500  rounded-lg"
               >
-                <CodeIcon className="h-8 w-8" />
+                <CodeBracketIcon className="h-8 w-8" />
                 Source Code
               </a>
 

@@ -10,8 +10,7 @@
     "lib": ["DOM", "ESNext"],
     "declaration": true,
     "skipLibCheck": true,
-    "moduleResolution": "node",
-    "ignoreDeprecations": "6.0"
+    "moduleResolution": "bundler"
   },
   "include": ["./src/lib/index.ts"]
 }

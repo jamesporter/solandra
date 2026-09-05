@@ -7,7 +7,7 @@ import Footer from "../src/components/Footer"
 import HLink from "../src/components/HLink"
 import { ViewAll } from "../src/components/ViewAll"
 
-import { ArrowsExpandIcon } from "@heroicons/react/outline"
+import { ArrowsPointingOutIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
 import { Logo } from "../src/components/Logo"
 import {
@@ -137,7 +137,7 @@ const Home: NextPage = () => {
               href="/viewAll"
               className="absolute bottom-0 right-0 bg-slate-800  bg-opacity-30 hover:bg-opacity-60 rounded-tl-xl"
             >
-              <ArrowsExpandIcon className="text-white h-6 w-6 m-2" />
+              <ArrowsPointingOutIcon className="text-white h-6 w-6 m-2" />
             </Link>
           </div>
 
