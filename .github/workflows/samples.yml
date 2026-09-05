@@ -1,0 +1,27 @@
+name: Sample images
+
+on: [push]
+
+jobs:
+  check-samples:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Check sample images
+        run: pnpm check:samples --diff-output ./sample-diffs
+      - name: Upload diffs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sample-diffs
+          path: ./sample-diffs
+          if-no-files-found: ignore
+          retention-days: 7

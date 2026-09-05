@@ -1,50 +1,44 @@
-import { createCanvas } from "canvas"
+/**
+ * Regenerate the sample images in ./samples (and their markdown index).
+ *
+ * Run this whenever a change is meant to alter what the sketches draw, then
+ * commit the result. `pnpm check:samples` compares fresh renders against
+ * what is committed.
+ */
+import fs from "node:fs"
+import path from "node:path"
 
-import sketches from "./src/examples/sketches"
-import { SCanvas } from "./src/lib"
-import fs from "fs"
+import { assertPinnedFontsInUse } from "./scripts/fonts"
+import { renderAllSamples, samplesMarkdown } from "./scripts/renderSamples"
 
-const width = 900
-const height = 600
+const outputDirectory = path.resolve("./samples")
 
-Object.entries(sketches).forEach(([_category, { sketches }]) => {
-  sketches.forEach(({ sketch, name }) => {
-    const canvas = createCanvas(width, height)
-    const ctx = canvas.getContext("2d")
+function main() {
+  // A different typeface is not something the image comparison should be
+  // asked to judge; say so plainly instead.
+  assertPinnedFontsInUse()
 
-    const sC = new SCanvas(
-      // supports all the basics but not fully as per modern HTML canvas
-      ctx as unknown as CanvasRenderingContext2D,
-      {
-        width,
-        height,
-      },
-      42,
-      0
-    )
+  const samples = renderAllSamples(outputDirectory, ({ name }) =>
+    console.log(`Done: ${name}`)
+  )
 
-    sketch(sC)
+  fs.writeFileSync(path.join(outputDirectory, "samples.md"), samplesMarkdown())
 
-    const stream = canvas.createPNGStream()
-    const out = fs.createWriteStream(
-      `./samples/${name.replaceAll(/[^A-z0-9]/g, "-")}.png`
-    )
+  // Sketches get renamed and deleted; don't leave orphaned images behind.
+  const expected = new Set([...samples.map((s) => s.fileName), "samples.md"])
+  for (const file of fs.readdirSync(outputDirectory)) {
+    if (!expected.has(file)) {
+      fs.rmSync(path.join(outputDirectory, file))
+      console.log(`Removed stale sample: ${file}`)
+    }
+  }
 
-    stream.pipe(out)
-    out.on("finish", () => console.log(`Done: ${name}`))
-  })
-})
+  console.log(`\nWrote ${samples.length} samples to ${outputDirectory}`)
+}
 
-let md = "# Sketches\n\n"
-
-Object.entries(sketches).forEach(([category, { sketches }]) => {
-  md += `## ${category}\n\n`
-
-  sketches.forEach(({ name }) => {
-    md += `### ${name}\n\n`
-    md += `![${name}](./${name.replaceAll(/[^A-z0-9]/g, "-")}.png)\n\n`
-  })
-})
-
-// Trim the final blank line so the output stays oxfmt-clean
-fs.writeFileSync("./samples/samples.md", md.replace(/\n+$/, "\n"))
+try {
+  main()
+} catch (error) {
+  console.error(error)
+  process.exit(1)
+}
