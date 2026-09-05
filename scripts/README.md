@@ -30,33 +30,78 @@ The graphics stack itself is not really a variable: node-canvas ships prebuilt
 binaries with cairo, pango, freetype and harfbuzz bundled, so the lockfile pins
 it.
 
-Fonts were, though, and they were the worst of it — `sans-serif` means DejaVu
-Sans on a Linux CI box and Helvetica on a Mac, which is not a small difference
-in an image made mostly of text. `assets/fonts` now holds the three DejaVu
-faces, and `scripts/fonts.ts` points fontconfig at a generated config exposing
-only those, with every other family aliased onto them. Text renders the same
-everywhere. `scripts/__tests__/fonts.test.ts` guards that the aliases actually
-resolve the way they are meant to.
+Fonts were, though, and they were the worst of it. `sans-serif` is not a font,
+it is a request, and each platform answers it differently — DejaVu Sans on a
+Linux CI box, Helvetica on a Mac. That is not a small difference in an image
+made mostly of text, and no amount of tolerance in the comparison should
+paper over it.
+
+So `assets/fonts` holds the three DejaVu faces, and `scripts/fonts.ts`:
+
+1. registers them with node-canvas under names nothing else can claim
+   (`Solandra Sample Sans` and friends), and
+2. wraps the rendering context so that every font declaration a sketch sets is
+   rewritten onto one of those three faces. The platform never gets to resolve
+   a family name, so it never gets to disagree.
+
+`registerFont` is node-canvas's own API and works everywhere. This used to be a
+fontconfig config instead, which worked on Linux and was **silently ignored on
+macOS**, where pango is not using fontconfig — so the Mac rendered every text
+sample in Helvetica and six samples failed for reasons the error messages could
+not explain.
+
+That is why `check:samples` now calls `assertPinnedFontsInUse()` before it
+compares anything: it measures each registered face and fails with a plain
+message if the machine has substituted its own font. "Which typeface is this?"
+is a question with an exact answer, and it should not be left to an image
+comparison to guess at. `scripts/__tests__/fonts.test.ts` asserts the same
+thing, so `pnpm test` catches it too.
 
 ### 2. Tolerate the differences that cannot
 
-`scripts/imageDiff.ts` compares two images perceptually rather than exactly.
-A pixel only counts against the comparison if:
+Two renders of the same sketch, with the same font file, still are not
+identical: rasterisation depends on hinting, on freetype's version, and on the
+platform. `scripts/imageDiff.ts` compares images perceptually. A pixel only
+counts against the comparison if all three of these hold:
 
 - it differs by more than `colorTolerance` (0.1 by default), measured as a
   distance in YIQ space, which weights brightness the way an eye does rather
-  than treating a change in red as a change in blue; **and**
+  than treating a change in red as a change in blue;
 - nothing within `shiftTolerance` pixels of it in the other image looks like
-  it — in both directions. This is what absorbs antialiasing and sub pixel
-  shifts, which is where renderers disagree most, without also excusing a
-  shape that has appeared out of nowhere next to an existing edge.
+  it, in both directions — this absorbs sub pixel shifts without also excusing
+  a shape that has appeared out of nowhere next to an existing edge; and
+- the average colour of the `structureRadius` neighbourhood around it also
+  differs, by more than `structureTolerance`.
 
-What survives both is counted, and an image passes if at least `threshold`
-(99% by default) of its pixels match. On a real change — a sketch that draws
-something different, or an RNG change that reshuffles a composition — the
-number lands far below that, so the threshold is not as loose as it sounds:
-the failures this replaces the exact comparison for were fractions of a
-percent, and a genuinely changed sketch is usually 20-40% different.
+That last one is what makes text survivable. A glyph is mostly edge, and two
+platforms rasterise edges differently, moving individual pixels a long way.
+But moving an edge only takes ink from one pixel and gives it to its
+neighbour, so the average across the neighbourhood barely moves. Recolouring
+something, or moving a whole shape, moves both. Hence the much tighter
+tolerance on the average: the differences it exists to forgive shrink almost
+to nothing, so it does not need much room.
+
+What survives all three is counted, and an image passes if at least
+`threshold` (99% by default) of its pixels match.
+
+### Why these numbers
+
+They were fitted against real pairs of images rather than guessed, with two
+opposing requirements: a render that differs only in rasterisation has to pass
+comfortably, and one that draws something genuinely different has to fail.
+
+|                                                        | at defaults | verdict                                                     |
+| ------------------------------------------------------ | ----------- | ----------------------------------------------------------- |
+| Same font file, different rasterisation (worst sample) | 99.85%      | passes, ~6x margin                                          |
+| A sketch whose hue moved 210 -> 205                    | 100.00%     | passes                                                      |
+| A sketch whose hue moved 210 -> 190                    | 99.97%      | passes                                                      |
+| A sketch whose hue moved 210 -> 120                    | 95.97%      | fails                                                       |
+| A sketch whose geometry moved 2.5%                     | 98.06%      | fails                                                       |
+| Baselines one library change out of date               | 54-98.9%    | fails                                                       |
+| Text rendered in the wrong typeface                    | 67-99.5%    | mostly fails, and `assertPinnedFontsInUse` catches the rest |
+
+The neighbourhood test costs nothing on the differences that matter: the
+210 -> 120 hue change scores 95.973% with it and 95.973% without.
 
 ## When it fails
 
@@ -81,6 +126,7 @@ pnpm check:samples --filter Bokeh          # just the samples matching a name
 pnpm check:samples --threshold 0.995       # stricter
 pnpm check:samples --color-tolerance 0.05  # stricter per pixel
 pnpm check:samples --shift-tolerance 0     # exact positions, no shift allowance
+pnpm check:samples --structure-radius 0    # per pixel only, no neighbourhoods
 ```
 
 The check also fails on a sample image that no sketch renders any more, and on

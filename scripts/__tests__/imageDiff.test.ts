@@ -95,8 +95,61 @@ describe("compareImages", () => {
     const result = compareImages(image(square(10, 10)), image(square(30, 10)), {
       threshold: 0.99,
     })
+    // Both squares, minus nothing: the neighbourhood average moved too.
     expect(result.significantPixels).toBe(200)
     expect(result.passed).toBe(false)
+  })
+
+  it("forgives a redrawn edge, which is what text looks like", () => {
+    // A hairline moved by two pixels: too far for the shift tolerance, but it
+    // barely moves the average colour around it. This is the shape of the
+    // difference between two platforms rasterising the same glyph.
+    const hairline =
+      (at: number): Draw =>
+      (x) =>
+        x === at ? [0, 0, 0] : [255, 255, 255]
+
+    const result = compareImages(image(hairline(20)), image(hairline(22)))
+    expect(result.changedPixels).toBeGreaterThan(0)
+    expect(result.significantPixels).toBe(0)
+    expect(result.passed).toBe(true)
+  })
+
+  it("still counts a solid area that moved", () => {
+    // Same displacement as above, but wide enough to change what the picture
+    // looks like rather than just how an edge landed.
+    const result = compareImages(
+      image(square(10, 10, 12)),
+      image(square(22, 10, 12))
+    )
+    expect(result.significantPixels).toBeGreaterThan(100)
+    expect(result.passed).toBe(false)
+  })
+
+  it("still counts a colour change, however local the detail", () => {
+    const hairline =
+      (colour: [number, number, number]): Draw =>
+      (x) =>
+        x === 20 ? colour : [255, 255, 255]
+
+    const result = compareImages(
+      image(hairline([0, 0, 0])),
+      image(hairline([255, 0, 0])),
+      { shiftTolerance: 0 }
+    )
+    expect(result.significantPixels).toBeGreaterThan(0)
+  })
+
+  it("can have the neighbourhood test turned off", () => {
+    const hairline =
+      (at: number): Draw =>
+      (x) =>
+        x === at ? [0, 0, 0] : [255, 255, 255]
+
+    const result = compareImages(image(hairline(20)), image(hairline(22)), {
+      structureRadius: 0,
+    })
+    expect(result.significantPixels).toBeGreaterThan(0)
   })
 
   it("fails when a shape is a different colour", () => {
@@ -127,12 +180,12 @@ describe("compareImages", () => {
       return img
     }
 
+    const options = { threshold: 0.99, structureRadius: 0 }
+    expect(compareImages(image(white), speckle(budget), options).passed).toBe(
+      true
+    )
     expect(
-      compareImages(image(white), speckle(budget), { threshold: 0.99 }).passed
-    ).toBe(true)
-    expect(
-      compareImages(image(white), speckle(budget * 4), { threshold: 0.99 })
-        .passed
+      compareImages(image(white), speckle(budget * 4), options).passed
     ).toBe(false)
   })
 
@@ -140,6 +193,7 @@ describe("compareImages", () => {
     const strict = compareImages(image(white), image(square(0, 0, 6)), {
       threshold: 0.999,
       shiftTolerance: 0,
+      structureRadius: 0,
     })
     expect(strict.similarity).toBeCloseTo(1 - 36 / (width * height), 6)
     expect(strict.passed).toBe(false)

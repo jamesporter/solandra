@@ -8,15 +8,15 @@
 import fs from "node:fs"
 import path from "node:path"
 
-import { useBundledFonts } from "./scripts/fonts"
+import { assertPinnedFontsInUse } from "./scripts/fonts"
+import { renderAllSamples, samplesMarkdown } from "./scripts/renderSamples"
 
 const outputDirectory = path.resolve("./samples")
 
-async function main() {
-  // Before anything pulls in `canvas`, so text renders the same everywhere.
-  useBundledFonts()
-  const { renderAllSamples, samplesMarkdown } =
-    await import("./scripts/renderSamples")
+function main() {
+  // A different typeface is not something the image comparison should be
+  // asked to judge; say so plainly instead.
+  assertPinnedFontsInUse()
 
   const samples = renderAllSamples(outputDirectory, ({ name }) =>
     console.log(`Done: ${name}`)
@@ -36,7 +36,9 @@ async function main() {
   console.log(`\nWrote ${samples.length} samples to ${outputDirectory}`)
 }
 
-main().catch((error) => {
+try {
+  main()
+} catch (error) {
   console.error(error)
   process.exit(1)
-})
+}

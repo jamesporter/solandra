@@ -4,6 +4,7 @@ import path from "node:path"
 
 import sketches from "../src/examples/sketches"
 import { SCanvas } from "../src/lib"
+import { pinFonts } from "./fonts"
 
 export const sampleWidth = 900
 export const sampleHeight = 600
@@ -34,11 +35,11 @@ export function renderSample(name: string): Buffer {
   if (!entry) throw new Error(`No sketch called "${name}"`)
 
   const canvas = createCanvas(sampleWidth, sampleHeight)
-  const ctx = canvas.getContext("2d")
 
   const sC = new SCanvas(
-    // supports all the basics but not fully as per modern HTML canvas
-    ctx as unknown as CanvasRenderingContext2D,
+    // supports all the basics but not fully as per modern HTML canvas, and
+    // wrapped so text renders with the bundled fonts rather than the machine's
+    pinFonts(canvas.getContext("2d") as unknown as CanvasRenderingContext2D),
     { width: sampleWidth, height: sampleHeight },
     seed,
     time

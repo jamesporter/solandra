@@ -14,16 +14,23 @@
  *   pnpm check:samples --filter Bokeh      # only samples matching a substring
  *   pnpm check:samples --color-tolerance 0.05  # stricter per pixel
  *   pnpm check:samples --shift-tolerance 0     # no allowance for shifted edges
+ *   pnpm check:samples --structure-radius 0    # per pixel only
  */
 import fs from "node:fs"
 import path from "node:path"
 
-import { useBundledFonts } from "./scripts/fonts"
+import { assertPinnedFontsInUse } from "./scripts/fonts"
 import {
   compareImages,
   defaultCompareOptions,
   type CompareResult,
 } from "./scripts/imageDiff"
+import { decodePng, readPng, writePng } from "./scripts/png"
+import {
+  listSamples,
+  renderSample,
+  samplesMarkdown,
+} from "./scripts/renderSamples"
 
 const args = process.argv.slice(2)
 
@@ -53,6 +60,16 @@ const shiftTolerance = numericFlag(
   defaultCompareOptions.shiftTolerance,
   16
 )
+const structureRadius = numericFlag(
+  "structure-radius",
+  defaultCompareOptions.structureRadius,
+  64
+)
+const structureTolerance = numericFlag(
+  "structure-tolerance",
+  defaultCompareOptions.structureTolerance,
+  1
+)
 const filter = flag("filter")
 const diffOutput = flag("diff-output")
 
@@ -63,11 +80,9 @@ type Failure = { name: string; fileName: string; reason: string }
 const percent = (value: number) => `${(value * 100).toFixed(3)}%`
 
 async function main() {
-  // Before anything pulls in `canvas`, so text renders the same everywhere.
-  useBundledFonts()
-  const { decodePng, readPng, writePng } = await import("./scripts/png")
-  const { listSamples, renderSample, samplesMarkdown } =
-    await import("./scripts/renderSamples")
+  // A different typeface is not something the image comparison should be
+  // asked to judge; say so plainly instead.
+  assertPinnedFontsInUse()
 
   const samples = listSamples().filter(
     (s) => !filter || s.name.toLowerCase().includes(filter.toLowerCase())
@@ -109,7 +124,13 @@ async function main() {
       result = compareImages(
         expected,
         actual,
-        { threshold, colorTolerance, shiftTolerance },
+        {
+          threshold,
+          colorTolerance,
+          shiftTolerance,
+          structureRadius,
+          structureTolerance,
+        },
         diff
       )
     } catch (error) {
