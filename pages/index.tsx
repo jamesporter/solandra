@@ -19,6 +19,21 @@ import {
   Two,
 } from "../src/components/CodeAndSketchExamples"
 import { headerLinks } from "../src/components/Header"
+import { useCommandMenu, useIsApple } from "../src/components/CommandMenu"
+
+function HeroSearchLink() {
+  const { open } = useCommandMenu()
+  const isApple = useIsApple()
+
+  return (
+    <button
+      onClick={open}
+      className="text-white font-bold text-md px-4 hover:text-sky-200 p-2 text-center"
+    >
+      Search <span className="font-mono">{isApple ? "⌘" : "Ctrl"} K</span>
+    </button>
+  )
+}
 
 const Home: NextPage = () => {
   return (
@@ -56,6 +71,7 @@ const Home: NextPage = () => {
               >
                 Download Book
               </a>
+              <HeroSearchLink />
             </div>
           </div>
         </div>
