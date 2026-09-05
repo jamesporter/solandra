@@ -10,7 +10,8 @@ test("search can be opened, navigated, and returns focus", async ({ page }) => {
   await page
     .getByRole("textbox", { name: "Search pages, docs and concepts" })
     .fill("quickstart")
-  await expect(page.getByRole("option", { name: /Quickstart/i })).toBeVisible()
+  // "Get Started" is the quickstart doc, matched here on its hidden keywords.
+  await expect(page.getByRole("option", { name: /Get Started/i })).toBeVisible()
   await page.keyboard.press("Escape")
   await expect(dialog).toBeHidden()
   await expect(searchButton).toBeFocused()
@@ -40,6 +41,9 @@ test("export configuration validates dimensions and offers formats", async ({
   await page.getByLabel("Format").selectOption("image/webp")
   await expect(page.getByText("Quality: 92%")).toBeVisible()
   await page.getByLabel("Width").fill("0")
-  await expect(page.getByRole("alert")).toContainText("positive whole numbers")
+  // Scoped to main: Next's route announcer is also a role="alert" element.
+  await expect(page.getByRole("main").getByRole("alert")).toContainText(
+    "positive whole numbers"
+  )
   await expect(page.getByRole("button", { name: /Generate/ })).toBeDisabled()
 })
