@@ -103,6 +103,20 @@ comfortably, and one that draws something genuinely different has to fail.
 The neighbourhood test costs nothing on the differences that matter: the
 210 -> 120 hue change scores 95.973% with it and 95.973% without.
 
+### When a sample cannot be held to this
+
+`unverifiedSamples` in `renderSamples.ts` lists samples that are rendered and
+committed but not compared, each with a reason. There is one: `Hello World`,
+which is almost entirely the edge of a glyph at a size where macOS and Linux
+disagree by more than any of the above can absorb — 96.8% between an arm64 Mac
+and a Linux baseline, with the same font file, on two images that look the
+same. Nothing else is close; the next worst text sample is 99.99%.
+
+This is a last resort, not a pressure valve. Each entry gives up the whole
+point of the check for one sketch, so prefer fixing the cause, and delete
+entries when the reason stops being true. `--filter <name>` compares one
+anyway, which is what to do after deliberately changing it.
+
 ## When it fails
 
 ```

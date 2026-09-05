@@ -19,6 +19,28 @@ export const fileNameFor = (name: string) =>
 
 export type Sample = { name: string; fileName: string }
 
+/**
+ * Samples that are rendered and committed, but not compared, and why.
+ *
+ * A last resort. Everything here is a sketch whose image genuinely cannot be
+ * held to the same standard on every machine, not a sketch whose differences
+ * are inconvenient — the point of the check is to notice when a sketch draws
+ * something different, and an entry here gives that up for one sketch. Prefer
+ * fixing the cause (see scripts/README.md), and delete entries when the reason
+ * stops being true.
+ *
+ * `pnpm check:samples --filter <name>` compares one of these anyway, which is
+ * what to do after deliberately changing one.
+ */
+export const unverifiedSamples: Record<string, string> = {
+  "Hello World":
+    "almost every pixel of it is the edge of a glyph, drawn at a size where " +
+    "macOS and Linux disagree about edges by more than the comparison can " +
+    "absorb (96.8% on an arm64 Mac against a Linux baseline, same font file, " +
+    "and visually identical). Nothing else is close: the next worst text " +
+    "sample is 99.99%.",
+}
+
 /** Every sketch that gets a sample image, in the order they are documented. */
 export function listSamples(): Sample[] {
   return Object.values(sketches).flatMap(({ sketches }) =>

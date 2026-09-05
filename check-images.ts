@@ -15,6 +15,9 @@
  *   pnpm check:samples --color-tolerance 0.05  # stricter per pixel
  *   pnpm check:samples --shift-tolerance 0     # no allowance for shifted edges
  *   pnpm check:samples --structure-radius 0    # per pixel only
+ *
+ * A few samples are rendered but not compared; see `unverifiedSamples` in
+ * ./scripts/renderSamples.ts. Naming one with --filter compares it anyway.
  */
 import fs from "node:fs"
 import path from "node:path"
@@ -30,6 +33,7 @@ import {
   listSamples,
   renderSample,
   samplesMarkdown,
+  unverifiedSamples,
 } from "./scripts/renderSamples"
 
 const args = process.argv.slice(2)
@@ -84,12 +88,26 @@ async function main() {
   // asked to judge; say so plainly instead.
   assertPinnedFontsInUse()
 
-  const samples = listSamples().filter(
-    (s) => !filter || s.name.toLowerCase().includes(filter.toLowerCase())
-  )
+  const all = listSamples()
+
+  // Naming a sample explicitly means you want it compared, skip list or not.
+  const samples = filter
+    ? all.filter((s) => s.name.toLowerCase().includes(filter.toLowerCase()))
+    : all.filter((s) => !(s.name in unverifiedSamples))
 
   if (samples.length === 0) {
     console.error(filter ? `No samples match "${filter}"` : "No samples found")
+    process.exit(2)
+  }
+
+  // A skip list that has drifted away from the sketches is worse than none.
+  const unknown = Object.keys(unverifiedSamples).filter(
+    (name) => !all.some((s) => s.name === name)
+  )
+  if (unknown.length > 0) {
+    console.error(
+      `Not compared, but no sketch renders them: ${unknown.join(", ")}\nRemove them from unverifiedSamples in scripts/renderSamples.ts.`
+    )
     process.exit(2)
   }
 
@@ -190,6 +208,16 @@ async function main() {
   const worst = [...results].sort(
     (a, b) => a.result.similarity - b.result.similarity
   )[0]
+
+  const skipped = filter
+    ? []
+    : Object.keys(unverifiedSamples).filter((name) =>
+        all.some((s) => s.name === name)
+      )
+
+  for (const name of skipped) {
+    console.log(`  not compared: ${name} — ${unverifiedSamples[name]}`)
+  }
 
   console.log(
     `\nChecked ${samples.length} samples against ${samplesDirectory}` +
