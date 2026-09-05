@@ -28,9 +28,10 @@ function HeroSearchLink() {
   return (
     <button
       onClick={open}
-      className="text-white font-bold text-md px-4 hover:text-sky-200 p-2 text-center"
+      className="text-white font-bold text-md px-4 py-2 ml-2 rounded-lg bg-white/10 hover:bg-white/20 ring-1 ring-white/20 hover:text-sky-200 text-center"
     >
-      Search <span className="font-mono">{isApple ? "⌘" : "Ctrl"} K</span>
+      Search{" "}
+      <span className="font-mono text-sky-100">{isApple ? "⌘" : "Ctrl"} K</span>
     </button>
   )
 }
