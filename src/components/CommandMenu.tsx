@@ -1,4 +1,7 @@
-import { ExternalLinkIcon, SearchIcon } from "@heroicons/react/outline"
+import {
+  ArrowTopRightOnSquareIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline"
 import cx from "classnames"
 import { useRouter } from "next/router"
 import React, {
@@ -179,7 +182,7 @@ function CommandMenu({ onClose }: { onClose: () => void }) {
     >
       <div className="flex max-h-[70vh] w-full max-w-xl flex-col overflow-hidden rounded-xl bg-gray-50 shadow-2xl">
         <div className="flex flex-row items-center gap-2 bg-gradient-to-b from-emerald-500 to-emerald-600 p-3">
-          <SearchIcon className="h-5 w-5 shrink-0 text-emerald-100" />
+          <MagnifyingGlassIcon className="h-5 w-5 shrink-0 text-emerald-100" />
           <input
             autoFocus
             value={query}
@@ -229,7 +232,7 @@ function CommandMenu({ onClose }: { onClose: () => void }) {
                   <Highlighted text={item.name} indices={indices} />
                 </span>
                 {item.external ? (
-                  <ExternalLinkIcon className="h-4 w-4 shrink-0 text-gray-400" />
+                  <ArrowTopRightOnSquareIcon className="h-4 w-4 shrink-0 text-gray-400" />
                 ) : (
                   item.section && (
                     <span className="shrink-0 text-xs text-gray-500">
