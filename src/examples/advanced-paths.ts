@@ -11,6 +11,7 @@ import {
   HollowArc,
   RoundedRect,
   Ellipse,
+  Circle,
 } from "../lib"
 import { arrayOf } from "../lib/collectionOps"
 import { perlin2, v } from "../lib"
@@ -353,6 +354,69 @@ const alongAStar = (p: SCanvas) => {
   })
 }
 
+const insideAStar = (p: SCanvas) => {
+  p.background(35, 25, 95)
+  const outline = new Star({ at: p.meta.center, n: 7, r: 0.35, r2: 0.16 }).path
+
+  p.lineWidth = 0.003
+  p.setStrokeColor(215, 30, 40, 0.5)
+  // boundingBox is in exactly the form Rect takes
+  p.draw(new Rect(outline.boundingBox))
+  p.setStrokeColor(215, 30, 40)
+  p.draw(outline)
+
+  // dots inside the star itself, not merely inside the box around it
+  p.times(2000, () => {
+    const at = p.randomPoint()
+    if (outline.containsPoint(at)) {
+      p.setFillColor(20 + 300 * outline.area, 70, 55, 0.7)
+      p.fill(new Circle({ at, r: 0.005 }))
+    }
+  })
+}
+
+const hulls = (p: SCanvas) => {
+  p.background(215, 35, 15)
+
+  p.forTiling({ n: 3, type: "square", margin: 0.05 }, (_at, [dX], c, i) => {
+    // the shape a scattered set of points suggests, from the points alone
+    const cloud = SimplePath.withPoints(
+      p.build(p.times, 9, () => p.perturb({ at: c, magnitude: dX * 0.8 }))
+    )
+
+    p.setFillColor(20 + i * 24, 70, 55, 0.55)
+    p.fill(cloud.convexHull)
+    p.setFillColor(0, 0, 95, 0.9)
+    cloud.points.forEach((at) => p.fill(new Circle({ at, r: 0.006 })))
+  })
+}
+
+const faceted = (p: SCanvas) => {
+  p.background(40, 20, 95)
+  p.lineWidth = 0.004
+
+  // a smoothed loop carries far more points than its shape needs; dropping
+  // the ones that barely matter is a tidy up, and, done heavily, an effect
+  const blob = SimplePath.withPoints(
+    p.build(p.aroundCircle, { at: [0, 0], r: 0.4, n: 20 }, (at) =>
+      p.perturb({ at, magnitude: 0.2 })
+    )
+  )
+    .close()
+    .chaiken({ n: 4, looped: true })
+
+  const tolerances = [0, 0.001, 0.004, 0.01, 0.03, 0.08]
+  p.forTiling({ n: 3, type: "square", margin: 0.05 }, (_at, [dX], c, i) => {
+    const tolerance = tolerances[i % tolerances.length]
+    const path = (
+      tolerance === 0 ? blob : blob.simplified({ tolerance })
+    ).scaled(dX * 0.85)
+    p.setStrokeColor(200 + i * 25, 60, 45)
+    // simplifying moves the centroid a little, so centre each one on its tile
+    p.draw(path.moved(v.subtract(c, path.centroid)))
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: dividing3, name: "Dividing 3" },
   { sketch: dividing4, name: "Dividing 4" },
@@ -369,6 +433,9 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: pathConversions, name: "Path Conversions" },
   { sketch: beadsOnAPath, name: "Beads on a Path" },
   { sketch: alongAStar, name: "Along a Star" },
+  { sketch: insideAStar, name: "Inside a Star" },
+  { sketch: hulls, name: "Hulls" },
+  { sketch: faceted, name: "Faceted" },
 ]
 
 export default sketches

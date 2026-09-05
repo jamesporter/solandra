@@ -6,6 +6,8 @@ import {
   saturationRange,
   lightnessRange,
   alphaRange,
+  harmony,
+  mixColors,
 } from "../colors"
 
 describe("colors", () => {
@@ -312,5 +314,146 @@ describe("range helpers", () => {
         )(n)
       )
     }
+  })
+})
+
+describe("harmony", () => {
+  const base = { h: 210, s: 70, l: 50 }
+
+  it("starts with the colour it was given", () => {
+    expect(harmony(base)[0]).toEqual({ h: 210, s: 70, l: 50 })
+  })
+
+  it("puts the complement opposite by default", () => {
+    expect(harmony(base)).toEqual([
+      { h: 210, s: 70, l: 50 },
+      { h: 30, s: 70, l: 50 },
+    ])
+  })
+
+  it("spaces a triad evenly round the circle", () => {
+    expect(harmony({ h: 0, s: 70, l: 50 }, { type: "triadic" })).toEqual([
+      { h: 0, s: 70, l: 50 },
+      { h: 120, s: 70, l: 50 },
+      { h: 240, s: 70, l: 50 },
+    ])
+  })
+
+  it("makes a tetrad of two complementary pairs", () => {
+    const colors = harmony({ h: 20, s: 70, l: 50 }, { type: "tetradic" })
+    expect(colors.map((c) => c.h)).toEqual([20, 110, 200, 290])
+  })
+
+  it("splits the complement either side", () => {
+    const colors = harmony(base, { type: "splitComplementary", spread: 20 })
+    expect(colors.map((c) => c.h)).toEqual([210, 10, 50])
+  })
+
+  it("takes neighbouring hues either side for an analogous scheme", () => {
+    const colors = harmony(base, { type: "analogous", n: 5, spread: 10 })
+    expect(colors.map((c) => c.h)).toEqual([210, 220, 200, 230, 190])
+  })
+
+  it("varies lightness rather than hue for a monochrome scheme", () => {
+    const colors = harmony(base, { type: "monochrome", n: 3, spread: 40 })
+    expect(colors).toEqual([
+      { h: 210, s: 70, l: 30 },
+      { h: 210, s: 70, l: 50 },
+      { h: 210, s: 70, l: 70 },
+    ])
+  })
+
+  it("keeps a monochrome scheme within the range lightness has", () => {
+    const colors = harmony({ h: 0, s: 50, l: 95 }, { type: "monochrome" })
+    colors.forEach(({ l }) => {
+      expect(l).toBeGreaterThanOrEqual(0)
+      expect(l).toBeLessThanOrEqual(100)
+    })
+  })
+
+  it("wraps hues back into 0 to 360", () => {
+    const colors = harmony({ h: 350, s: 70, l: 50 }, { type: "triadic" })
+    colors.forEach(({ h }) => {
+      expect(h).toBeGreaterThanOrEqual(0)
+      expect(h).toBeLessThan(360)
+    })
+    expect(colors.map((c) => c.h)).toEqual([350, 110, 230])
+  })
+
+  it("carries saturation, lightness and alpha over from the base colour", () => {
+    const colors = harmony(
+      { h: 100, s: 33, l: 66, a: 0.5 },
+      { type: "triadic" }
+    )
+    colors.forEach(({ s, l, a }) => {
+      expect(s).toBe(33)
+      expect(l).toBe(66)
+      expect(a).toBe(0.5)
+    })
+  })
+
+  it("gives as many colours as asked for", () => {
+    expect(harmony(base, { type: "analogous", n: 1 })).toHaveLength(1)
+    expect(harmony(base, { type: "analogous", n: 4 })).toHaveLength(4)
+    expect(harmony(base, { type: "monochrome", n: 1 })).toEqual([base])
+    expect(harmony(base, { type: "monochrome", n: 8 })).toHaveLength(8)
+  })
+
+  it("throws if asked for no colours at all", () => {
+    expect(() => harmony(base, { type: "analogous", n: 0 })).toThrow()
+    expect(() => harmony(base, { type: "monochrome", n: 0 })).toThrow()
+  })
+})
+
+describe("mixColors", () => {
+  const red = { h: 0, s: 100, l: 50 }
+  const blue = { h: 240, s: 50, l: 30 }
+
+  it("mixes evenly by default", () => {
+    expect(
+      mixColors({ h: 0, s: 0, l: 0, a: 0 }, { h: 100, s: 50, l: 80, a: 1 })
+    ).toEqual({ h: 50, s: 25, l: 40, a: 0.5 })
+  })
+
+  it("returns the ends at 0 and 1", () => {
+    expect(mixColors(red, blue, 0)).toEqual({ ...red, a: 1 })
+    expect(mixColors(red, blue, 1)).toEqual({ ...blue, a: 1 })
+  })
+
+  it("takes the short way round the hue circle", () => {
+    expect(mixColors({ h: 350, s: 80, l: 50 }, { h: 10, s: 80, l: 50 }).h).toBe(
+      0
+    )
+    expect(mixColors({ h: 10, s: 80, l: 50 }, { h: 350, s: 80, l: 50 }).h).toBe(
+      0
+    )
+    // exactly opposite colours are a tie, and turn the increasing way
+    expect(mixColors({ h: 0, s: 80, l: 50 }, { h: 180, s: 80, l: 50 }).h).toBe(
+      90
+    )
+  })
+
+  it("always gives a hue in 0 to 360", () => {
+    for (const p of [-1, -0.25, 0.5, 1.5, 3]) {
+      const { h } = mixColors(
+        { h: 20, s: 50, l: 50 },
+        { h: 300, s: 50, l: 50 },
+        p
+      )
+      expect(h).toBeGreaterThanOrEqual(0)
+      expect(h).toBeLessThan(360)
+    }
+  })
+
+  it("treats a missing alpha as fully opaque", () => {
+    expect(mixColors({ h: 0, s: 0, l: 0 }, { h: 0, s: 0, l: 0, a: 0 }).a).toBe(
+      0.5
+    )
+  })
+
+  it("carries on past the two colours when asked to", () => {
+    expect(
+      mixColors({ h: 0, s: 20, l: 40 }, { h: 0, s: 40, l: 50 }, 2)
+    ).toEqual({ h: 0, s: 60, l: 60, a: 1 })
   })
 })

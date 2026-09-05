@@ -215,3 +215,62 @@ export function fbm2(
 
   return total / totalAmplitude
 }
+
+/**
+ * Curl noise: a smooth vector field derived from {@link fbm2}, in which
+ * nothing ever converges or piles up.
+ *
+ * The obvious way to make a flow field is to take a noise value as an angle,
+ * but such fields have sources and sinks: follow them and everything drains
+ * into the same few places. This instead takes the noise as a stream function
+ * and returns its curl, `(∂n/∂y, -∂n/∂x)`, which is divergence free, so lines
+ * following it swirl around each other indefinitely without collapsing
+ * together.
+ *
+ * The vector's direction is what matters; its magnitude depends on how fast
+ * the underlying noise is changing. `SimplePath.flowLine` normalizes it, and
+ * `v.normalize` will do the same by hand.
+ *
+ * @param ax - X coordinate (can be any real number)
+ * @param ay - Y coordinate (can be any real number)
+ * @param config - Configuration
+ * @param config.epsilon - The step used to take the numerical derivative
+ * (default: 0.0001). Larger smooths the field out, much smaller loses
+ * precision.
+ * @param config.octaves - Octaves of the underlying noise (default: 1, i.e.
+ * plain `perlin2`). More octaves give a more turbulent field.
+ * @param config.persistence - How much quieter each octave is (default: 0.5)
+ * @param config.lacunarity - How much finer each octave is (default: 2)
+ * @returns A vector [x, y], the curl of the noise at that point
+ * @example
+ * ```ts
+ * // Draw the field itself: a short line in the flow direction at each point
+ * s.forTiling({ n: 25, type: "square" }, ([x, y], [dX], [cX, cY]) => {
+ *   const [uX, uY] = v.normalize(curl2(cX * 3, cY * 3))
+ *   s.draw(SimplePath.withPoints([[cX, cY], [cX + uX * dX, cY + uY * dX]]))
+ * })
+ *
+ * // More turbulent
+ * curl2(x, y, { octaves: 4 })
+ * ```
+ */
+export function curl2(
+  ax: number,
+  ay: number,
+  config: {
+    epsilon?: number
+    octaves?: number
+    persistence?: number
+    lacunarity?: number
+  } = {}
+): [number, number] {
+  const { epsilon = 0.0001, octaves = 1, persistence, lacunarity } = config
+
+  const n = (x: number, y: number) =>
+    fbm2(x, y, { octaves, persistence, lacunarity })
+
+  const dNdX = (n(ax + epsilon, ay) - n(ax - epsilon, ay)) / (2 * epsilon)
+  const dNdY = (n(ax, ay + epsilon) - n(ax, ay - epsilon)) / (2 * epsilon)
+
+  return [dNdY, -dNdX]
+}

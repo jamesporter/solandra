@@ -105,6 +105,28 @@ centroid([
 ]) // [0.5, 0.5]
 ```
 
+## Wrapping points up
+
+`convexHull` gives the smallest convex polygon containing a set of points, as if a rubber band were stretched around them: the corners, starting from the leftmost and going round clockwise as drawn, with points inside (and points lying along an edge) left out.
+
+```ts
+import { convexHull, SimplePath } from "solandra"
+
+convexHull([
+  [0, 0],
+  [1, 0],
+  [1, 1],
+  [0, 1],
+  [0.5, 0.5], // inside, so left out
+]) // the four corners
+
+// wrap a scattered cloud of points
+const cloud = s.build(s.times, 30, () => s.randomPoint())
+s.fill(SimplePath.withPoints(convexHull(cloud)).close())
+```
+
+A `SimplePath` will do this for its own points, as [`path.convexHull`](/docs/paths).
+
 ## Collection helpers
 
 Available individually or under the `c` namespace:

@@ -48,6 +48,14 @@ describe("searchCommandMenu", () => {
     expect(top("withcontext")).toBe("withContext")
   })
 
+  it("finds the newer parts of the library", () => {
+    expect(top("curl")).toBe("Curl noise & flow fields")
+    expect(top("flowline")).toBe("Curl noise & flow fields")
+    expect(top("convex hull")).toBe("Convex hull")
+    expect(top("simplif")).toBe("Simplifying paths")
+    expect(top("mixcolors")).toBe("Colour schemes & mixing")
+  })
+
   it("copes with typo-ish, partial input", () => {
     expect(top("posdisk")).toBe("forPoissonDiskPoints")
     expect(top("cmpndpth")).toBe("CompoundPath")

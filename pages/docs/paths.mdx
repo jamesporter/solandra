@@ -6,6 +6,7 @@ import {
   RegularPolygon,
   Circle,
   Rect,
+  Star,
   v,
 } from "../../src/lib"
 
@@ -152,6 +153,137 @@ wave.pointsAlong({ n: 30 }).forEach((at, i) => {
 />
 
 Doing this whilst drawing is common enough that `SCanvas` has [`alongPath`](/docs/iteration) for it, which hands you the point and the angle together.
+
+## Measuring shape: boxes, area and what is inside
+
+Sampling tells you where a path goes; these tell you what shape it is.
+
+- `path.boundingBox` &mdash; the smallest box containing every point, given as `{ at, w, h }`, exactly what `Rect` takes, so `new Rect(path.boundingBox)` is the box itself
+- `path.area` &mdash; the area enclosed, taking the path as closed whether or not `close` was called, and always positive whichever way round the points go
+- `path.containsPoint(at)` &mdash; whether a point falls inside it, concave shapes and all
+- `path.convexHull` &mdash; the smallest convex path containing the whole thing, as if a rubber band were stretched around it (the standalone `convexHull` does the same for bare points)
+
+Together they cover the usual jobs: framing something, sorting shapes by size, and scattering things inside an outline rather than merely near it.
+
+```ts
+const outline = new Star({ at: [0.5, 0.5], n: 7, r: 0.35, r2: 0.16 }).path
+
+s.setStrokeColor(215, 30, 40)
+s.lineWidth = 0.003
+s.draw(outline)
+s.draw(new Rect(outline.boundingBox)) // the box it fits in
+
+// dots inside the star, not merely inside its bounding box
+s.times(500, () => {
+  const at = s.randomPoint()
+  if (outline.containsPoint(at)) {
+    s.setFillColor(20 + 300 * outline.area, 70, 55, 0.8)
+    s.fill(new Circle({ at, r: 0.006 }))
+  }
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(35, 25, 95)
+    const outline = new Star({ at: [0.5, 0.5], n: 7, r: 0.35, r2: 0.16 }).path
+    s.setStrokeColor(215, 30, 40)
+    s.lineWidth = 0.003
+    s.draw(outline)
+    s.draw(new Rect(outline.boundingBox))
+    s.times(500, () => {
+      const at = s.randomPoint()
+      if (outline.containsPoint(at)) {
+        s.setFillColor(20 + 300 * outline.area, 70, 55, 0.8)
+        s.fill(new Circle({ at, r: 0.006 }))
+      }
+    })
+  }}
+/>
+
+A convex hull wraps a scattered cloud of points in the shape they suggest, from the points alone:
+
+```ts
+s.background(215, 35, 15)
+s.forTiling({ n: 2, type: "square", margin: 0.05 }, (_at, [dX], c, i) => {
+  const cloud = SimplePath.withPoints(
+    s.build(s.times, 9, () => s.perturb({ at: c, magnitude: dX * 0.8 }))
+  )
+  s.setFillColor(20 + i * 40, 70, 55, 0.55)
+  s.fill(cloud.convexHull)
+  s.setFillColor(0, 0, 95, 0.9)
+  cloud.points.forEach((at) => s.fill(new Circle({ at, r: 0.008 })))
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(215, 35, 15)
+    s.forTiling({ n: 2, type: "square", margin: 0.05 }, (_at, [dX], c, i) => {
+      const cloud = SimplePath.withPoints(
+        s.build(s.times, 9, () => s.perturb({ at: c, magnitude: dX * 0.8 }))
+      )
+      s.setFillColor(20 + i * 40, 70, 55, 0.55)
+      s.fill(cloud.convexHull)
+      s.setFillColor(0, 0, 95, 0.9)
+      cloud.points.forEach((at) => s.fill(new Circle({ at, r: 0.008 })))
+    })
+  }}
+/>
+
+## Thinning paths out
+
+Chaikin smoothing, tracing a flow field or sampling a curve all leave paths with far more points than their shape needs. `simplified({ tolerance })` drops the ones that barely matter (the Ramer&ndash;Douglas&ndash;Peucker algorithm): everything left out lies within `tolerance` of the path that remains. That keeps later work &mdash; and exported SVG &mdash; manageable, and a heavy tolerance is an effect in its own right, faceting a smooth curve into something angular.
+
+```ts
+s.background(40, 20, 95)
+s.lineWidth = 0.004
+
+const blob = SimplePath.withPoints(
+  s.build(s.aroundCircle, { at: [0, 0], r: 0.4, n: 20 }, (at) =>
+    s.perturb({ at, magnitude: 0.2 })
+  )
+)
+  .close()
+  .chaiken({ n: 4, looped: true })
+
+// the same loop, progressively less detailed
+const tolerances = [0, 0.004, 0.03]
+s.forHorizontal({ n: 3, margin: 0.05 }, (_at, [dX], c, i) => {
+  const path = (
+    tolerances[i] === 0 ? blob : blob.simplified({ tolerance: tolerances[i] })
+  ).scaled(dX * 0.9)
+  s.setStrokeColor(200 + i * 40, 60, 45)
+  // simplifying moves the centroid a little, so centre each one on its tile
+  s.draw(path.moved(v.subtract(c, path.centroid)))
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(40, 20, 95)
+    s.lineWidth = 0.004
+    const blob = SimplePath.withPoints(
+      s.build(s.aroundCircle, { at: [0, 0], r: 0.4, n: 20 }, (at) =>
+        s.perturb({ at, magnitude: 0.2 })
+      )
+    )
+      .close()
+      .chaiken({ n: 4, looped: true })
+    const tolerances = [0, 0.004, 0.03]
+    s.forHorizontal({ n: 3, margin: 0.05 }, (_at, [dX], c, i) => {
+      const path = (
+        tolerances[i] === 0
+          ? blob
+          : blob.simplified({ tolerance: tolerances[i] })
+      ).scaled(dX * 0.9)
+      s.setStrokeColor(200 + i * 40, 60, 45)
+      s.draw(path.moved(v.subtract(c, path.centroid)))
+    })
+  }}
+/>
+
+`SimplePath.flowLine`, another way to end up with more points than you need, is covered under [Randomness and Noise](/docs/randomness).
 
 ## Path: curves made easy
 

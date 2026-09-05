@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { fbm2, perlin2 } from "../noise"
+import { curl2, fbm2, perlin2 } from "../noise"
 
 describe("noise", () => {
   describe("perlin2", () => {
@@ -163,6 +163,63 @@ describe("noise", () => {
     it("throws if asked for less than an octave", () => {
       expect(() => fbm2(0.3, 0.7, { octaves: 0 })).toThrow()
       expect(() => fbm2(0.3, 0.7, { octaves: -1 })).toThrow()
+    })
+  })
+
+  describe("curl2", () => {
+    it("returns consistent values for the same input", () => {
+      expect(curl2(1.5, 2.5)).toEqual(curl2(1.5, 2.5))
+    })
+
+    it("varies over space", () => {
+      const a = curl2(0.5, 0.5)
+      const b = curl2(5.5, 3.25)
+      expect(a).not.toEqual(b)
+    })
+
+    it("is smooth: nearby points give nearby vectors", () => {
+      const [x1, y1] = curl2(3, 4)
+      const [x2, y2] = curl2(3.001, 4)
+      expect(Math.abs(x1 - x2)).toBeLessThan(0.1)
+      expect(Math.abs(y1 - y2)).toBeLessThan(0.1)
+    })
+
+    it("is divergence free (the point of curl noise)", () => {
+      // the whole reason for taking the curl: nothing is a source or a sink, so
+      // flow lines never collapse together
+      const h = 0.001
+      for (const [x, y] of [
+        [1.3, 2.7],
+        [10.25, 0.5],
+        [-4.1, 6.6],
+      ]) {
+        const dXdX = (curl2(x + h, y)[0] - curl2(x - h, y)[0]) / (2 * h)
+        const dYdY = (curl2(x, y + h)[1] - curl2(x, y - h)[1]) / (2 * h)
+        expect(dXdX + dYdY).toBeCloseTo(0, 3)
+      }
+    })
+
+    it("is perpendicular to the gradient of the noise it comes from", () => {
+      const h = 0.0001
+      const x = 2.35
+      const y = 1.15
+      const gradient = [
+        (perlin2(x + h, y) - perlin2(x - h, y)) / (2 * h),
+        (perlin2(x, y + h) - perlin2(x, y - h)) / (2 * h),
+      ]
+      const [cX, cY] = curl2(x, y)
+      // dot product of two perpendicular vectors is zero
+      expect(gradient[0] * cX + gradient[1] * cY).toBeCloseTo(0, 3)
+    })
+
+    it("takes more octaves, giving a more varied field", () => {
+      const simple = curl2(1.5, 2.5)
+      const turbulent = curl2(1.5, 2.5, { octaves: 4 })
+      expect(turbulent).not.toEqual(simple)
+    })
+
+    it("rejects fewer than one octave, as fbm2 does", () => {
+      expect(() => curl2(1, 1, { octaves: 0 })).toThrow()
     })
   })
 })

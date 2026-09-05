@@ -12,6 +12,8 @@ import {
   simpleLinearGradient,
   palettePreset,
   palette,
+  harmony,
+  mixColors,
 } from "../../src/lib"
 
 # Colour, Gradients and Palettes
@@ -151,6 +153,117 @@ s.forHorizontal({ n: 12, margin: 0.06 }, ([x, y], [dX, dY], _c, i) => {
     })
   }}
 />
+
+## Colour schemes
+
+Hues picked at random rarely look intentional. `harmony` builds a scheme around a colour by the usual relationships of colour theory, returning the base colour first and then its companions, ready to sample from or step through:
+
+- `complementary` (the default) &mdash; the opposite hue, maximum contrast
+- `analogous` &mdash; neighbouring hues, calm and closely related
+- `triadic` &mdash; three hues evenly spaced round the circle
+- `tetradic` &mdash; four hues, two complementary pairs
+- `splitComplementary` &mdash; the two hues either side of the complement: nearly the contrast of complementary, easier to live with
+- `monochrome` &mdash; one hue at a range of lightnesses
+
+Saturation, lightness and alpha come from the base colour (except in a `monochrome` scheme, which is what varies the lightness). `n` sets how many colours the open-ended schemes give, and `spread` how far apart they sit: degrees of hue for `analogous` and `splitComplementary`, of lightness for `monochrome`.
+
+```ts
+import { harmony } from "solandra"
+
+s.background(0, 0, 96)
+const base = { h: 205, s: 70, l: 50 }
+const schemes = [
+  harmony(base, { type: "analogous", n: 5 }),
+  harmony(base, { type: "triadic" }),
+  harmony(base, { type: "splitComplementary" }),
+  harmony(base, { type: "monochrome", n: 5 }),
+]
+
+s.forVertical({ n: 4, margin: 0.05 }, ([x, y], [dX, dY], _c, i) => {
+  schemes[i].forEach((color, j) => {
+    s.setFillColorFromSpec(color)
+    const w = dX / schemes[i].length
+    s.fill(new Rect({ at: [x + j * w, y], w: w * 0.94, h: dY * 0.8 }))
+  })
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(0, 0, 96)
+    const base = { h: 205, s: 70, l: 50 }
+    const schemes = [
+      harmony(base, { type: "analogous", n: 5 }),
+      harmony(base, { type: "triadic" }),
+      harmony(base, { type: "splitComplementary" }),
+      harmony(base, { type: "monochrome", n: 5 }),
+    ]
+    s.forVertical({ n: 4, margin: 0.05 }, ([x, y], [dX, dY], _c, i) => {
+      schemes[i].forEach((color, j) => {
+        s.setFillColorFromSpec(color)
+        const w = dX / schemes[i].length
+        s.fill(new Rect({ at: [x + j * w, y], w: w * 0.94, h: dY * 0.8 }))
+      })
+    })
+  }}
+/>
+
+A scheme is just an array of `ColorSpec`s, so `sample` picks from it and `setFillColorFromSpec` uses it directly:
+
+```ts
+s.background(30, 15, 92)
+const scheme = harmony(
+  { h: 15, s: 70, l: 55 },
+  { type: "analogous", n: 5, spread: 18 }
+)
+s.forTiling({ n: 12, type: "square", margin: 0.05 }, (at, [w, h]) => {
+  s.setFillColorFromSpec(s.sample(scheme))
+  s.fill(new Rect({ at, w, h }))
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(30, 15, 92)
+    const scheme = harmony(
+      { h: 15, s: 70, l: 55 },
+      { type: "analogous", n: 5, spread: 18 }
+    )
+    s.forTiling({ n: 12, type: "square", margin: 0.05 }, (at, [w, h]) => {
+      s.setFillColorFromSpec(s.sample(scheme))
+      s.fill(new Rect({ at, w, h }))
+    })
+  }}
+/>
+
+## Mixing colours
+
+`mixColors(a, b, proportion)` blends two colours, and unlike plain interpolation it takes the **short way round the hue circle**. Interpolating hue as a number sweeps the long way whenever that crosses 0/360: red (350) to orange (10) would pass through the entire spectrum instead of the 20 degrees actually between them.
+
+```ts
+import { mixColors } from "solandra"
+
+const sunset = { h: 350, s: 80, l: 55 }
+const gold = { h: 40, s: 85, l: 60 }
+
+s.forHorizontal({ n: 24 }, (at, [dX, dY], _c, i) => {
+  s.setFillColorFromSpec(mixColors(sunset, gold, i / 23))
+  s.fill(new Rect({ at, w: dX, h: dY }))
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    const sunset = { h: 350, s: 80, l: 55 }
+    const gold = { h: 40, s: 85, l: 60 }
+    s.forHorizontal({ n: 24 }, (at, [dX, dY], _c, i) => {
+      s.setFillColorFromSpec(mixColors(sunset, gold, i / 23))
+      s.fill(new Rect({ at, w: dX, h: dY }))
+    })
+  }}
+/>
+
+It pairs naturally with `harmony`: pick a scheme, then blend between its colours for everything in between. Proportions are not clamped, so values beyond 0 and 1 carry on past the two colours.
 
 ## Generative palettes
 

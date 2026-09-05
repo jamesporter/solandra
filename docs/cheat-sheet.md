@@ -75,6 +75,16 @@ A `SimplePath` can also be measured and sampled, everything by distance travelle
 - `tangentAt` the unit vector the path is heading in there (`v.heading` for the angle)
 - `pointsAlong` `n` evenly spaced points along the path
 
+And measured as a shape:
+
+- `boundingBox` the smallest box containing it, in the form `Rect` takes
+- `area` the area it encloses, taking it as closed
+- `containsPoint` whether a point falls inside it
+- `convexHull` the smallest convex path wrapping its points (`convexHull` does the same for bare points)
+- `simplified` a copy with the points that barely change its shape dropped
+
+`SimplePath.flowLine` traces a path through a vector field, stepping in whatever direction the field points in (see `curl2` under Noise).
+
 ## Control Flow
 
 You can use normal Javascript control flow. But Solandra adds some of its own APIs. Most take a configuration and callback arguments.
@@ -140,6 +150,7 @@ Call to get pseudorandom values. Most have sensible default configurations
 
 - `perlin2` 2D Perlin noise, roughly -1 to 1
 - `fbm2` fractal noise: several octaves of `perlin2`, for detail at every scale
+- `curl2` curl noise: a swirling vector field with no sources or sinks, for flow fields
 
 ## Fancy
 

@@ -248,6 +248,47 @@ const beads = (s: SCanvas) => {
 }
 ```
 
+#### Measuring a SimplePath as a shape
+
+- `boundingBox`: the smallest box containing every point, as `{ at, w, h }`, which is what `Rect` takes, so `new Rect(path.boundingBox)` is the box itself
+- `area`: the area enclosed, taking the path as closed whether or not `close` was called, always positive whichever way round the points go
+- `containsPoint(at)`: whether a point falls inside it, concave shapes included
+- `convexHull`: the smallest convex path containing all its points, closed (the standalone `convexHull(points)` does the same for bare points)
+- `simplified({ tolerance })`: a copy with the points that barely change the shape dropped (Ramer-Douglas-Peucker); everything left out lies within `tolerance` (default 0.01) of what remains
+
+```ts
+const inside = (s: SCanvas) => {
+  const outline = new Star({ at: s.meta.center, n: 7, r: 0.35, r2: 0.16 }).path
+  s.draw(outline)
+  s.draw(new Rect(outline.boundingBox))
+  // dots inside the star itself, not merely inside its bounding box
+  s.times(500, () => {
+    const at = s.randomPoint()
+    if (outline.containsPoint(at)) s.fill(new Circle({ at, r: 0.006 }))
+  })
+}
+```
+
+#### `SimplePath.flowLine`
+
+Traces a path through a vector field, starting at `from` and repeatedly stepping in whatever direction the field points in there. The field is sampled for direction only (the vector is normalized), so every step is `step` long (default 0.01) however strong the field is, and `n` (default 100) sets how many steps to take. `until` stops a line early, most usefully when it leaves the canvas. Any function from a point to a vector will do; `curl2` is the usual one.
+
+```ts
+const streamers = (s: SCanvas) => {
+  s.times(120, () => {
+    s.draw(
+      SimplePath.flowLine({
+        from: s.randomPoint(),
+        field: ([x, y]) => curl2(x * 2.5, y * 2.5),
+        n: 120,
+        step: 0.005,
+        until: (at) => !s.inDrawing(at),
+      })
+    )
+  })
+}
+```
+
 ### Path (with curves)
 
 A `Path` can contain both straight and curved segments. The `addCurveTo` method allows for creating complex, organic shapes.
@@ -526,6 +567,27 @@ Solandra includes helper functions to generate color palettes and ranges.
 - `saturationRange`: Creates a range of colors by interpolating saturation.
 - `lightnessRange`: Creates a range of colors by interpolating lightness.
 - `palettePreset`: Provides access to a set of predefined color palettes.
+- `harmony(base, config)`: The classic colour schemes around a colour. `type` is `"complementary"` (default), `"analogous"`, `"triadic"`, `"tetradic"`, `"splitComplementary"` or `"monochrome"`. The base colour comes first, then its companions, all carrying its saturation, lightness and alpha (except `"monochrome"`, which varies lightness). `n` sets how many colours the open ended schemes give, `spread` how far apart they sit (degrees of hue, or of lightness for `"monochrome"`).
+- `mixColors(a, b, proportion)`: Blends two colours, taking the short way round the hue circle, so red (350) to orange (10) passes through 0 rather than sweeping the whole spectrum. Proportion defaults to 0.5 and is not clamped.
+
+```ts
+const scheme = (s: SCanvas) => {
+  const colors = harmony({ h: 15, s: 75, l: 55 }, { type: "analogous", n: 4 })
+  s.forTiling({ n: 12, type: "square" }, (at, [w, h]) => {
+    s.setFillColorFromSpec(s.sample(colors))
+    s.fill(new Rect({ at, w, h }))
+  })
+}
+
+const blend = (s: SCanvas) => {
+  s.forHorizontal({ n: 24 }, (at, [dX, dY], _c, i) => {
+    s.setFillColorFromSpec(
+      mixColors({ h: 350, s: 80, l: 55 }, { h: 40, s: 85, l: 60 }, i / 23)
+    )
+    s.fill(new Rect({ at, w: dX, h: dY }))
+  })
+}
+```
 
 ```ts
 const colourPalettes = (s: SCanvas) => {
@@ -629,6 +691,24 @@ const fractalClouds = (s: SCanvas) => {
     const n = fbm2(x * 3, y * 3, { octaves: 6, persistence: 0.55 })
     s.setFillColor(210 - n * 30, 40 + n * 20, 55 + n * 45)
     s.fill(new Rect({ at: [x, y], w: dX * 1.2, h: dY * 1.2 }))
+  })
+}
+```
+
+### Curl Noise
+
+`curl2` gives a smooth vector field taken from the curl of the noise, `(dn/dy, -dn/dx)`. Taking a noise value as an angle instead produces a field with sources and sinks, where everything eventually drains into the same few places; the curl of a field is divergence free, so lines following it swirl around each other indefinitely. Takes the same `octaves`, `persistence` and `lacunarity` as `fbm2` (one octave by default, i.e. plain `perlin2`) plus `epsilon`, the step used for the derivative (default 0.0001). Direction is what matters; use `v.normalize` (as `SimplePath.flowLine` does) if you need a unit vector.
+
+```ts
+const flowField = (s: SCanvas) => {
+  s.forTiling({ n: 22, type: "square" }, (_, [dX], [cX, cY]) => {
+    const [uX, uY] = v.normalize(curl2(cX * 2.5, cY * 2.5))
+    s.draw(
+      SimplePath.withPoints([
+        [cX, cY],
+        [cX + uX * dX, cY + uY * dX],
+      ])
+    )
   })
 }
 ```
@@ -821,6 +901,8 @@ There are also numeric helpers:
 - `clamp({ from, to }, n)`: Constrain a number to a range.
 - `lerp({ from, to }, proportion)`: Linear interpolation between two numbers.
 - `scaler(config)` and `scaler2d(c1, c2)`: Map values between ranges.
+- `centroid(points)`: The average of a set of points.
+- `convexHull(points)`: The smallest convex polygon containing a set of points, as if a rubber band were stretched around them, starting from the leftmost and going round clockwise as drawn. Points inside, or along an edge, are left out.
 
 ```ts
 import { v, clamp, lerp } from "solandra"

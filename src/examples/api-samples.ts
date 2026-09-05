@@ -24,6 +24,8 @@ import {
   hueRange,
   saturationRange,
   lightnessRange,
+  harmony,
+  mixColors,
 } from "../lib/colors"
 
 const rainbow = (p: SCanvas) => {
@@ -1160,6 +1162,66 @@ const colourPalettes = (p: SCanvas) => {
   })
 }
 
+const colourSchemes = (p: SCanvas) => {
+  p.background(0, 0, 96)
+  const base = { h: 205, s: 70, l: 50 }
+
+  // the classic relationships of colour theory, around one colour
+  const schemes = [
+    harmony(base, { type: "analogous", n: 5 }),
+    harmony(base, { type: "triadic" }),
+    harmony(base, { type: "splitComplementary" }),
+    harmony(base, { type: "tetradic" }),
+    harmony(base, { type: "monochrome", n: 5 }),
+  ]
+
+  p.forVertical(
+    { n: schemes.length, margin: 0.05 },
+    ([x, y], [dX, dY], c, i) => {
+      const scheme = schemes[i]
+      scheme.forEach((color, j) => {
+        p.setFillColorFromSpec(color)
+        const w = dX / scheme.length
+        p.fill(new Rect({ at: [x + j * w, y], w: w * 0.94, h: dY * 0.8 }))
+      })
+    }
+  )
+}
+
+const harmoniousScatter = (p: SCanvas) => {
+  p.background(30, 15, 92)
+  // a scheme is just an array of colours, so sample from it; neighbouring
+  // hues stay calm together in a way randomly picked ones do not
+  const scheme = harmony(
+    { h: 15, s: 70, l: 55 },
+    { type: "analogous", n: 5, spread: 18 }
+  )
+
+  p.times(150, () => {
+    p.setFillColorFromSpec({ ...p.sample(scheme), a: 0.75 })
+    p.fill(
+      new Circle({
+        at: p.randomPoint(),
+        r: 0.01 + p.random() * 0.08,
+      })
+    )
+  })
+}
+
+const colourMixing = (p: SCanvas) => {
+  const sunset = { h: 350, s: 80, l: 55 }
+  const gold = { h: 40, s: 85, l: 60 }
+  const deep = { h: 250, s: 60, l: 25 }
+
+  // mixColors takes the short way round the hue circle, so this blend passes
+  // through red rather than sweeping the whole spectrum
+  p.forTiling({ n: 24, type: "square" }, ([x, y], [dX, dY], [cX, cY]) => {
+    const across = mixColors(sunset, gold, cX)
+    p.setFillColorFromSpec(mixColors(across, deep, cY * 0.8))
+    p.fill(new Rect({ at: [x, y], w: dX * 1.05, h: dY * 1.05 }))
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: rainbow, name: "Rainbow Drips" },
   { sketch: horizontal, name: "Horizontal" },
@@ -1206,6 +1268,9 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: colourThemes3, name: "Colour Themes 3" },
   { sketch: colourThemes4, name: "Colour Themes 4" },
   { sketch: colourPalettes, name: "Colour Palettes" },
+  { sketch: colourSchemes, name: "Colour Schemes" },
+  { sketch: harmoniousScatter, name: "Harmonious Scatter" },
+  { sketch: colourMixing, name: "Colour Mixing" },
 ]
 
 export default sketches
