@@ -61,12 +61,47 @@ export function ViewAll({ playing }: { playing?: boolean }) {
   ])
 
   return (
-    <Canvas
-      sketch={selectSketches[sketchNo].sketch}
-      seed={seed}
-      playing={playing}
-      noShadow
-      onClick={([x, y], size) => onClick(x, y, size)}
-    />
+    <div className="relative flex min-h-0 flex-1 self-stretch">
+      <Canvas
+        sketch={selectSketches[sketchNo].sketch}
+        seed={seed}
+        playing={playing}
+        noShadow
+        ariaLabel={`${selectSketches[sketchNo].name}, generative artwork`}
+        onClick={([x, y], size) => onClick(x, y, size)}
+      />
+      <div className="absolute inset-x-0 bottom-3 flex justify-center gap-2 opacity-80 hover:opacity-100 focus-within:opacity-100">
+        <button
+          type="button"
+          onClick={() => {
+            setHaveInteracted(true)
+            goToPrev()
+          }}
+          aria-label="Previous artwork"
+          className="rounded-full bg-slate-900/80 px-3 py-1 text-white"
+        >
+          ←
+        </button>
+        <button
+          type="button"
+          onClick={() => setHaveInteracted(true)}
+          aria-label="Pause automatic slideshow"
+          className="rounded-full bg-slate-900/80 px-3 py-1 text-white"
+        >
+          Pause
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setHaveInteracted(true)
+            goToNext()
+          }}
+          aria-label="Next artwork"
+          className="rounded-full bg-slate-900/80 px-3 py-1 text-white"
+        >
+          →
+        </button>
+      </div>
+    </div>
   )
 }

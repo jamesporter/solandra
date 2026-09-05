@@ -15,12 +15,13 @@ type CanvasProps = {
   playing?: boolean
   noShadow?: boolean
   onClick?: (position: [number, number], size: [number, number]) => void
+  ariaLabel?: string
 }
 
 /**
  * Because this is actually a massive pain to do with hooks
  */
-class CanvasPainterService {
+export class CanvasPainterService {
   ctx?: CanvasRenderingContext2D
   canvas?: HTMLCanvasElement
   sketch?: Sketch
@@ -31,6 +32,8 @@ class CanvasPainterService {
   height = 100
   aspectRatio = 100
   af: number | null = null
+  lastFrameTime: number | null = null
+  pixelRatio = 1
 
   constructor() {
     this.time = getNumber(TIME_KEY) || 0
@@ -44,6 +47,7 @@ class CanvasPainterService {
     seed,
     playing,
     noShadow,
+    pixelRatio,
   }: {
     width: number
     height: number
@@ -52,6 +56,7 @@ class CanvasPainterService {
     seed: number
     playing: boolean
     noShadow: boolean
+    pixelRatio: number
   }) {
     if (width && height) {
       if (width / height > aspectRatio) {
@@ -70,16 +75,28 @@ class CanvasPainterService {
       setNumber(TIME_KEY, this.time)
     }
     this.playing = playing
+    this.pixelRatio = pixelRatio
 
-    this.canvas!.height = this.height
-    this.canvas!.width = this.width
-    if (this.af) cancelAnimationFrame(this.af)
+    this.canvas!.style.height = `${this.height}px`
+    this.canvas!.style.width = `${this.width}px`
+    this.canvas!.height = Math.round(this.height * pixelRatio)
+    this.canvas!.width = Math.round(this.width * pixelRatio)
+    this.stop()
+    this.lastFrameTime = null
     this.updateTime()
   }
 
-  updateTime = () => {
+  stop = () => {
+    if (this.af !== null) cancelAnimationFrame(this.af)
+    this.af = null
+  }
+
+  updateTime = (timestamp?: number) => {
     if (this.playing) {
-      this.time += 0.01666666666
+      if (timestamp !== undefined && this.lastFrameTime !== null) {
+        this.time += Math.min((timestamp - this.lastFrameTime) / 1000, 0.1)
+      }
+      if (timestamp !== undefined) this.lastFrameTime = timestamp
       this.af = requestAnimationFrame(this.updateTime)
     }
     this.draw()
@@ -87,12 +104,15 @@ class CanvasPainterService {
 
   draw = () => {
     if (this.ctx) {
-      this.ctx.clearRect(0, 0, this.width, this.height)
+      this.ctx.save()
+      this.ctx.setTransform(1, 0, 0, 1, 0, 0)
+      this.ctx.clearRect(0, 0, this.canvas!.width, this.canvas!.height)
+      this.ctx.restore()
       const pts = new SCanvas(
         this.ctx,
         {
-          width: this.width,
-          height: this.height,
+          width: this.canvas!.width,
+          height: this.canvas!.height,
         },
         this.seed,
         this.time
@@ -109,6 +129,7 @@ export function Canvas({
   playing = false,
   noShadow = false,
   onClick = () => {},
+  ariaLabel = "Generative artwork",
 }: CanvasProps) {
   const [ref, { width, height }] = useMeasure<HTMLDivElement>()
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -135,7 +156,9 @@ export function Canvas({
       seed,
       playing,
       noShadow: !!noShadow,
+      pixelRatio: Math.max(window.devicePixelRatio || 1, 1),
     })
+    return () => painterRef.stop()
   }, [playing, seed, sketch, aspectRatio, width, height, painterRef, noShadow])
 
   return (
@@ -146,11 +169,13 @@ export function Canvas({
         const { top, left } = canvasRef.current!.getBoundingClientRect()
         const x = evt.clientX - left
         const y = evt.clientY - top
-        onClick([x, y], [width, height])
+        onClick([x, y], [painterRef.width, painterRef.height])
       }}
     >
       <canvas
         id="myCanvas"
+        role="img"
+        aria-label={ariaLabel}
         ref={canvasRef}
         className={`${noShadow ? "" : "shadow-md"}`}
       />

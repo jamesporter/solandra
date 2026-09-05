@@ -14,6 +14,7 @@
     "format:check": "oxfmt --check",
     "test": "vitest run",
     "test:w": "vitest",
+    "test:e2e": "playwright test",
     "build:package": "node pre-publish && pnpm build:esm && pnpm build:cjs",
     "check:package": "pnpm build:package && node check-package.mjs",
     "build:source": "node extract-source.js",
