@@ -302,6 +302,57 @@ const pathConversions = (p: SCanvas) => {
   p.fill(new Ellipse({ at: [0.75, 0.75 * h], w: 0.2, h: 0.15 }).toPath(6))
 }
 
+const beadsOnAPath = (p: SCanvas) => {
+  p.background(35, 25, 95)
+  const wire = SimplePath.withPoints(
+    p.build(p.range, { from: 0, to: 1, n: 40 }, (x) => {
+      return [x, 0.33 + 0.12 * Math.sin(x * 7) + 0.05 * perlin2(x * 3, 0)]
+    })
+  ).chaiken({ n: 2 })
+
+  p.lineWidth = 0.004
+  p.setStrokeColor(210, 30, 40)
+  p.draw(wire)
+
+  // evenly spaced by distance, so the beads do not bunch up on the bends
+  p.alongPath({ path: wire, n: 40 }, (at, angle, i) => {
+    p.setFillColor(20 + i * 4, 75, 55)
+    p.withTranslation(at, () => {
+      p.withRotation(angle, () => {
+        p.fill(new Ellipse({ at: [0, 0], w: 0.02, h: 0.035 }))
+      })
+    })
+  })
+}
+
+const alongAStar = (p: SCanvas) => {
+  p.background(215, 40, 15)
+
+  const star = new Star({ at: p.meta.center, n: 5, r: 0.28, r2: 0.13 })
+  p.setStrokeColor(45, 70, 50, 0.4)
+  p.lineWidth = 0.002
+  p.draw(star)
+
+  // a shape can be followed directly: Star (like Line, Rect, RegularPolygon
+  // and Spiral) has a path. Each tick is turned to sit across the outline,
+  // which is what the angle the callback gets is for.
+  p.alongPath({ path: star, n: 60, inclusive: false }, (at, angle, i) => {
+    p.setFillColor(45 + i * 3, 85, 60)
+    p.withTranslation(at, () => {
+      p.withRotation(angle, () => {
+        p.fill(
+          new Rect({
+            at: [0, 0],
+            w: 0.006,
+            h: 0.03 + 0.03 * (i % 3),
+            align: "center",
+          })
+        )
+      })
+    })
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: dividing3, name: "Dividing 3" },
   { sketch: dividing4, name: "Dividing 4" },
@@ -316,6 +367,8 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: spirals, name: "Spirals" },
   { sketch: spirals2, name: "Spirals 2" },
   { sketch: pathConversions, name: "Path Conversions" },
+  { sketch: beadsOnAPath, name: "Beads on a Path" },
+  { sketch: alongAStar, name: "Along a Star" },
 ]
 
 export default sketches

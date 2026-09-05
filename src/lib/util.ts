@@ -262,3 +262,34 @@ export const triTransform = ({ s }: { s: number }) => {
     }
   }
 }
+
+/**
+ * Evenly spaced proportions in [0, 1], the positions to sample something at.
+ *
+ * With `inclusive` (the default) both ends are included, so the `n` values span
+ * from 0 to 1. Otherwise they start at 0 and stop short of 1, which is what a
+ * closed loop wants: the point at 1 is the point at 0 again.
+ *
+ * @param config - How many proportions, and whether to include the end
+ * @param config.n - How many proportions to produce (at least 1)
+ * @param config.inclusive - Whether to include 1 (default: true)
+ * @returns An array of n proportions
+ * @throws Error if fewer than one proportion is requested
+ * @example
+ * ```ts
+ * evenProportions({ n: 3 }) // Returns [0, 0.5, 1]
+ * evenProportions({ n: 4, inclusive: false }) // Returns [0, 0.25, 0.5, 0.75]
+ * ```
+ */
+export const evenProportions = ({
+  n,
+  inclusive = true,
+}: {
+  n: number
+  inclusive?: boolean
+}): number[] => {
+  if (n < 1) throw new Error(`Must have at least one point, n was set to ${n}`)
+  if (n === 1) return [0]
+  const d = inclusive ? n - 1 : n
+  return Array.from({ length: n }, (_, i) => i / d)
+}

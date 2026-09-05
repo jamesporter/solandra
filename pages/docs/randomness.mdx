@@ -6,6 +6,7 @@ import {
   Square,
   Star,
   SimplePath,
+  fbm2,
   perlin2,
   v,
 } from "../../src/lib"
@@ -239,6 +240,72 @@ s.times(120, (i) => {
     })
   }}
 />
+
+## Fractal noise
+
+Perlin noise is smooth at exactly one scale, which is why hand-rolled terrain and clouds tend to look soft and samey. `fbm2` (fractional Brownian motion) sums several **octaves** of `perlin2`, each one at a higher frequency and lower amplitude than the last, so the large shapes survive whilst fine detail piles up on top of them. The result is scaled back into roughly [-1, 1], so it drops into anywhere `perlin2` fits.
+
+- `octaves` &mdash; how many layers (default 4); one octave is exactly `perlin2`
+- `persistence` &mdash; how much quieter each octave is than the last (default 0.5); higher is rougher
+- `lacunarity` &mdash; how much finer each octave is than the last (default 2)
+
+```ts
+import { fbm2 } from "solandra"
+
+s.background(205, 45, 70)
+s.forTiling({ n: 60, type: "square" }, ([x, y], [dX, dY]) => {
+  const n = fbm2(x * 3, y * 3, { octaves: 6, persistence: 0.55 })
+  s.setFillColor(210 - n * 30, 40 + n * 20, 55 + n * 45)
+  s.fill(new Rect({ at: [x, y], w: dX * 1.2, h: dY * 1.2 }))
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(205, 45, 70)
+    s.forTiling({ n: 60, type: "square" }, ([x, y], [dX, dY]) => {
+      const n = fbm2(x * 3, y * 3, { octaves: 6, persistence: 0.55 })
+      s.setFillColor(210 - n * 30, 40 + n * 20, 55 + n * 45)
+      s.fill(new Rect({ at: [x, y], w: dX * 1.2, h: dY * 1.2 }))
+    })
+  }}
+/>
+
+Side by side with a single octave the difference is the detail, not the shape: the same hills, but with texture on them.
+
+```ts
+s.background(30, 30, 12)
+s.lineWidth = 0.004
+s.range({ from: 0.1, to: 0.9, n: 24 }, (y) => {
+  const line = SimplePath.withPoints(
+    s.build(s.range, { from: 0, to: 1, n: 80 }, (x) => [
+      x,
+      y * s.meta.bottom + fbm2(x * 2.5, y * 2.5, { octaves: 5 }) * 0.07,
+    ])
+  )
+  s.setStrokeColor(40, 70, 85, 0.8)
+  s.draw(line)
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(30, 30, 12)
+    s.lineWidth = 0.004
+    s.range({ from: 0.1, to: 0.9, n: 24 }, (y) => {
+      const line = SimplePath.withPoints(
+        s.build(s.range, { from: 0, to: 1, n: 80 }, (x) => [
+          x,
+          y * s.meta.bottom + fbm2(x * 2.5, y * 2.5, { octaves: 5 }) * 0.07,
+        ])
+      )
+      s.setStrokeColor(40, 70, 85, 0.8)
+      s.draw(line)
+    })
+  }}
+/>
+
+Like `perlin2`, `fbm2` is a pure function of its coordinates, not of the sketch's random number generator: the same point always gives the same value.
 
 ## Seeds and reproducibility
 

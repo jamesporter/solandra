@@ -340,4 +340,103 @@ describe("SCanvas images and text", () => {
     s.drawText({ at: [0.5, 0.5], size: 0.1 }, "hello")
     expect(history.some((h) => h.startsWith("strokeText(hello"))).toBe(true)
   })
+
+  describe("withSymmetry", () => {
+    it("draws n rotated copies, each with its own saved state", () => {
+      const { s, history } = canvas()
+      let copies = 0
+      s.withSymmetry({ n: 4 }, () => copies++)
+
+      expect(copies).toBe(4)
+      expect(history.filter((h) => h === "save()")).toHaveLength(4)
+      expect(history.filter((h) => h === "restore()")).toHaveLength(4)
+      expect(history.filter((h) => h.startsWith("rotate("))).toEqual([
+        "rotate(0)",
+        `rotate(${Math.PI / 2})`,
+        `rotate(${Math.PI})`,
+        `rotate(${(3 * Math.PI) / 2})`,
+      ])
+    })
+
+    it("rotates about the centre of the canvas by default", () => {
+      const { s, history } = canvas()
+      s.withSymmetry({ n: 2 }, () => {})
+
+      expect(history).toContain("translate(0.5, 0.5)")
+      expect(history).toContain("translate(-0.5, -0.5)")
+    })
+
+    it("rotates about a given point", () => {
+      const { s, history } = canvas()
+      s.withSymmetry({ n: 2, at: [0.25, 0.75] }, () => {})
+
+      expect(history).toContain("translate(0.25, 0.75)")
+      expect(history).toContain("translate(-0.25, -0.75)")
+    })
+
+    it("counts copies and says which are reflections", () => {
+      const { s } = canvas()
+      const copies: [number, boolean][] = []
+      s.withSymmetry({ type: "kaleidoscope", n: 2 }, (i, reflected) =>
+        copies.push([i, reflected])
+      )
+
+      expect(copies).toEqual([
+        [0, false],
+        [1, true],
+        [2, false],
+        [3, true],
+      ])
+    })
+
+    it("mirrors into a reflected pair, without rotating", () => {
+      const { s, history } = canvas()
+      let copies = 0
+      s.withSymmetry({ type: "mirror" }, () => copies++)
+
+      expect(copies).toBe(2)
+      expect(history.filter((h) => h.startsWith("scale("))).toEqual([
+        "scale(-1, 1)",
+      ])
+      expect(history.filter((h) => h.startsWith("rotate("))).toEqual([
+        "rotate(0)",
+        "rotate(0)",
+      ])
+    })
+
+    it("mirrors in the horizontal axis when asked", () => {
+      const { s, history } = canvas()
+      s.withSymmetry({ type: "mirror", axis: "horizontal" }, () => {})
+
+      expect(history.filter((h) => h.startsWith("scale("))).toEqual([
+        "scale(1, -1)",
+      ])
+    })
+
+    it("kaleidoscope draws each rotation twice, once reflected", () => {
+      const { s, history } = canvas()
+      let copies = 0
+      s.withSymmetry({ type: "kaleidoscope", n: 3 }, () => copies++)
+
+      expect(copies).toBe(6)
+      expect(history.filter((h) => h === "save()")).toHaveLength(6)
+      expect(history.filter((h) => h.startsWith("scale("))).toHaveLength(3)
+    })
+
+    it("restores state even for nested symmetry", () => {
+      const { s, history } = canvas()
+      s.withSymmetry({ n: 2 }, () => {
+        s.withSymmetry({ n: 2 }, () => {})
+      })
+
+      expect(history.filter((h) => h === "save()")).toHaveLength(6)
+      expect(history.filter((h) => h === "restore()")).toHaveLength(6)
+      expect(history[history.length - 1]).toBe("restore()")
+    })
+
+    it("throws if asked for no copies", () => {
+      const { s } = canvas()
+      expect(() => s.withSymmetry({ n: 0 }, () => {})).toThrow()
+    })
+  })
 })

@@ -1,6 +1,13 @@
 import { DocPageLayout } from "../../src/components/DocPageLayout"
 import { ExampleCanvas } from "../../src/components/ExampleCanvas"
-import { SimplePath, Path, RegularPolygon, Circle, v } from "../../src/lib"
+import {
+  SimplePath,
+  Path,
+  RegularPolygon,
+  Circle,
+  Rect,
+  v,
+} from "../../src/lib"
 
 # Paths and Curves
 
@@ -88,6 +95,63 @@ s.times(5, (n) => {
     })
   }}
 />
+
+## Measuring and sampling
+
+A `SimplePath` knows how long it is and what happens where along it, all measured by **distance travelled** rather than by point index, so evenly spaced proportions give evenly spaced results however lumpily the path's own points are spread.
+
+- `path.length` &mdash; the total length
+- `path.pointAt(proportion)` &mdash; the point a proportion of the way along (0 is the start, 1 the end; anything outside is clamped)
+- `path.tangentAt(proportion)` &mdash; the unit vector the path is heading in there, so `v.heading(...)` gives an angle to rotate by
+- `path.pointsAlong({ n, inclusive })` &mdash; `n` evenly spaced points; pass `inclusive: false` for a closed path, where the end is the start again
+
+```ts
+const wave = SimplePath.withPoints(
+  s.build(s.range, { from: 0.05, to: 0.95, n: 40 }, (x) => [
+    x,
+    0.3 + 0.15 * Math.sin(x * 8),
+  ])
+)
+
+s.setStrokeColor(215, 30, 45)
+s.lineWidth = 0.004
+s.draw(wave)
+
+// beads spread evenly by distance, each turned to follow the wave
+wave.pointsAlong({ n: 30 }).forEach((at, i) => {
+  s.setFillColor(20 + i * 6, 75, 55)
+  s.withTranslation(at, () => {
+    s.withRotation(v.heading(wave.tangentAt(i / 29)), () => {
+      s.fill(new Rect({ at: [0, 0], w: 0.02, h: 0.05, align: "center" }))
+    })
+  })
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(35, 25, 95)
+    const wave = SimplePath.withPoints(
+      s.build(s.range, { from: 0.05, to: 0.95, n: 40 }, (x) => [
+        x,
+        0.3 + 0.15 * Math.sin(x * 8),
+      ])
+    )
+    s.setStrokeColor(215, 30, 45)
+    s.lineWidth = 0.004
+    s.draw(wave)
+    wave.pointsAlong({ n: 30 }).forEach((at, i) => {
+      s.setFillColor(20 + i * 6, 75, 55)
+      s.withTranslation(at, () => {
+        s.withRotation(v.heading(wave.tangentAt(i / 29)), () => {
+          s.fill(new Rect({ at: [0, 0], w: 0.02, h: 0.05, align: "center" }))
+        })
+      })
+    })
+  }}
+/>
+
+Doing this whilst drawing is common enough that `SCanvas` has [`alongPath`](/docs/iteration) for it, which hands you the point and the angle together.
 
 ## Path: curves made easy
 

@@ -384,6 +384,18 @@
 
 ![Triangles](./Triangles.png)
 
+### Rosette
+
+![Rosette](./Rosette.png)
+
+### Kaleidoscope
+
+![Kaleidoscope](./Kaleidoscope.png)
+
+### Mirrored
+
+![Mirrored](./Mirrored.png)
+
 ## Advanced Paths
 
 ### Dividing 3
@@ -438,6 +450,14 @@
 
 ![Path Conversions](./Path-Conversions.png)
 
+### Beads on a Path
+
+![Beads on a Path](./Beads-on-a-Path.png)
+
+### Along a Star
+
+![Along a Star](./Along-a-Star.png)
+
 ## Isometric
 
 ### Isometric
@@ -489,6 +509,14 @@
 ### Noise Field
 
 ![Noise Field](./Noise-Field.png)
+
+### Fractal Clouds
+
+![Fractal Clouds](./Fractal-Clouds.png)
+
+### Fractal Ridges
+
+![Fractal Ridges](./Fractal-Ridges.png)
 
 ### Rectangles
 

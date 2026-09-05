@@ -1,6 +1,9 @@
 import { describe, it, expect } from "vitest"
 import SCanvas from "../sCanvas"
 import { createMockCtx } from "./testUtils"
+import { SimplePath } from "../paths/SimplePath"
+import { Line } from "../paths/Line"
+import { Point2D } from "../types/sol"
 
 describe("SCanvas", () => {
   describe("constructor", () => {
@@ -464,6 +467,82 @@ describe("SCanvas", () => {
       // At t=PI, cos(PI) = -1, so value = 0 + (1-0)*(1-1)/2 = 0
       const val = s.oscillate()
       expect(val).toBeCloseTo(0)
+    })
+  })
+
+  describe("alongPath", () => {
+    const canvas = () => {
+      const { ctx } = createMockCtx()
+      return new SCanvas(ctx, { width: 100, height: 100 }, 1, 0)
+    }
+
+    const corner = () =>
+      SimplePath.withPoints([
+        [0, 0],
+        [1, 0],
+        [1, 1],
+      ])
+
+    it("visits evenly spaced points along the path", () => {
+      const s = canvas()
+      const points: Point2D[] = []
+      s.alongPath({ path: corner(), n: 5 }, (at) => points.push(at))
+
+      expect(points).toEqual([
+        [0, 0],
+        [0.5, 0],
+        [1, 0],
+        [1, 0.5],
+        [1, 1],
+      ])
+    })
+
+    it("gives the angle the path is heading in", () => {
+      const s = canvas()
+      const angles: number[] = []
+      s.alongPath({ path: corner(), n: 3 }, (_at, angle) => angles.push(angle))
+
+      expect(angles[0]).toBeCloseTo(0, 10)
+      expect(angles[2]).toBeCloseTo(Math.PI / 2, 10)
+    })
+
+    it("counts the points it visits", () => {
+      const s = canvas()
+      const indices: number[] = []
+      s.alongPath({ path: corner(), n: 4 }, (_at, _angle, i) => indices.push(i))
+
+      expect(indices).toEqual([0, 1, 2, 3])
+    })
+
+    it("stops short of the end when not inclusive", () => {
+      const s = canvas()
+      const points: Point2D[] = []
+      s.alongPath({ path: corner(), n: 4, inclusive: false }, (at) =>
+        points.push(at)
+      )
+
+      expect(points).toHaveLength(4)
+      expect(points[points.length - 1]).not.toEqual([1, 1])
+    })
+
+    it("takes anything with a path, not just a SimplePath", () => {
+      const s = canvas()
+      const points: Point2D[] = []
+      s.alongPath({ path: new Line([0, 0], [1, 0]), n: 3 }, (at) =>
+        points.push(at)
+      )
+
+      expect(points).toEqual([
+        [0, 0],
+        [0.5, 0],
+        [1, 0],
+      ])
+    })
+
+    it("works with build, like the other iteration helpers", () => {
+      const s = canvas()
+      const xs = s.build(s.alongPath, { path: corner(), n: 3 }, ([x]) => x)
+      expect(xs).toEqual([0, 1, 1])
     })
   })
 })

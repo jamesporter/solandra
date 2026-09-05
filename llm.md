@@ -224,6 +224,30 @@ const tilesOfChaiken = (s: SCanvas) => {
 }
 ```
 
+#### Measuring and sampling a SimplePath
+
+A `SimplePath` can be measured and sampled by distance travelled (not by point index), so evenly spaced proportions give evenly spaced results however unevenly the path's own points are spread.
+
+- `length`: the total length of the path
+- `pointAt(proportion)`: the point a proportion (0 to 1, clamped) of the way along
+- `tangentAt(proportion)`: the unit vector the path heads in there (`v.heading` for an angle)
+- `pointsAlong({ n, inclusive })`: `n` evenly spaced points; `inclusive: false` stops short of the end, which is what a closed path wants
+
+```ts
+const beads = (s: SCanvas) => {
+  const wave = SimplePath.withPoints(
+    s.build(s.range, { from: 0.05, to: 0.95, n: 40 }, (x) => [
+      x,
+      0.3 + 0.15 * Math.sin(x * 8),
+    ])
+  )
+  s.draw(wave)
+  wave.pointsAlong({ n: 30 }).forEach((at) => {
+    s.fill(new Circle({ at, r: 0.01 }))
+  })
+}
+```
+
 ### Path (with curves)
 
 A `Path` can contain both straight and curved segments. The `addCurveTo` method allows for creating complex, organic shapes.
@@ -390,6 +414,24 @@ const vertical = (s: SCanvas) => {
     s.lineWidth = 0.01 / s.meta.aspectRatio
     s.setStrokeColor(y * 60, 90, 40)
     s.draw(SimplePath.withPoints(points))
+  })
+}
+```
+
+### `alongPath`
+
+Iterates over `n` points spread evenly by distance along a path, giving the point, the angle the path is heading in there, and an index. Takes a `SimplePath` or anything with a `path` (`Line`, `Rect`, `RegularPolygon`, `Star`, `Spiral`). Pass `inclusive: false` for a closed path.
+
+```ts
+const alongAStar = (s: SCanvas) => {
+  const star = new Star({ at: s.meta.center, n: 5, r: 0.28, r2: 0.13 })
+  s.alongPath({ path: star, n: 60, inclusive: false }, (at, angle, i) => {
+    s.setFillColor(45 + i * 3, 85, 60)
+    s.withTranslation(at, () => {
+      s.withRotation(angle, () => {
+        s.fill(new Rect({ at: [0, 0], w: 0.006, h: 0.04, align: "center" }))
+      })
+    })
   })
 }
 ```
@@ -577,6 +619,20 @@ const noise = (s: SCanvas) => {
 }
 ```
 
+### Fractal Noise
+
+`fbm2` sums several octaves of `perlin2`, each at a higher frequency and lower amplitude than the last, giving noise with detail at every scale (clouds, terrain, texture) rather than at just one. It stays in roughly the same range as `perlin2`. Configure with `octaves` (default 4), `persistence` (how much quieter each octave is, default 0.5) and `lacunarity` (how much finer each octave is, default 2).
+
+```ts
+const fractalClouds = (s: SCanvas) => {
+  s.forTiling({ n: 120, type: "square" }, ([x, y], [dX, dY]) => {
+    const n = fbm2(x * 3, y * 3, { octaves: 6, persistence: 0.55 })
+    s.setFillColor(210 - n * 30, 40 + n * 20, 55 + n * 45)
+    s.fill(new Rect({ at: [x, y], w: dX * 1.2, h: dY * 1.2 }))
+  })
+}
+```
+
 ## Transforms
 
 Solandra allows you to apply transformations like translation, rotation, and scaling to your drawing operations. These are scoped operations, meaning they only affect the code within the supplied function.
@@ -602,6 +658,27 @@ const transforms = (s: SCanvas) => {
         s.fill(new Rect({ at: [-dX / 4, -dY / 4], w: dX / 2, h: dY / 2 }))
       })
     )
+  })
+}
+```
+
+### `withSymmetry`
+
+Draws the same thing several times over, arranged symmetrically: the callback runs once per copy with the canvas already rotated and/or reflected about `at` (the centre of the canvas by default). `type` is `"rotational"` (default, `n` copies around a full turn), `"mirror"` (a reflected pair, in the `"vertical"` or `"horizontal"` axis) or `"kaleidoscope"` (`n` rotations, each also drawn reflected, so 2n copies). The callback is given the index of the copy and whether it is a reflection.
+
+```ts
+const rosette = (s: SCanvas) => {
+  s.background(255, 30, 12)
+  s.withSymmetry({ n: 12 }, (i) => {
+    s.setFillColor(280 + i * 4, 70, 55, 0.55)
+    s.fill(new Ellipse({ at: [0.5, 0.16], w: 0.14, h: 0.34 }))
+  })
+}
+
+const kaleidoscope = (s: SCanvas) => {
+  s.withSymmetry({ type: "kaleidoscope", n: 6 }, (i, reflected) => {
+    s.setFillColor(reflected ? 195 : 45, 85, 60, 0.7)
+    s.fill(new Circle({ at: [0.53, 0.08], r: 0.03 }))
   })
 }
 ```
