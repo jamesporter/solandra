@@ -199,6 +199,57 @@ s.forPoissonDiskPoints({ minDist: 0.08 }, ([x, y], i) => {
   }}
 />
 
+## alongPath
+
+`alongPath` walks a path instead of a grid: it visits `n` points spread evenly **by distance** along it, and gives you the angle the path is heading in at each one, so things can be laid out following the path rather than merely sitting on it.
+
+It takes a `SimplePath`, or anything that has one &mdash; `Line`, `Rect`, `RegularPolygon`, `Star` and `Spiral` all do. Pass `inclusive: false` for a closed path, where the last point would otherwise repeat the first.
+
+```ts
+s.background(215, 40, 15)
+const star = new Star({ at: s.meta.center, n: 5, r: 0.28, r2: 0.13 })
+
+s.alongPath({ path: star, n: 60, inclusive: false }, (at, angle, i) => {
+  s.setFillColor(45 + i * 3, 85, 60)
+  s.withTranslation(at, () => {
+    s.withRotation(angle, () => {
+      s.fill(
+        new Rect({
+          at: [0, 0],
+          w: 0.006,
+          h: 0.03 + 0.03 * (i % 3),
+          align: "center",
+        })
+      )
+    })
+  })
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(215, 40, 15)
+    const star = new Star({ at: s.meta.center, n: 5, r: 0.28, r2: 0.13 })
+    s.alongPath({ path: star, n: 60, inclusive: false }, (at, angle, i) => {
+      s.setFillColor(45 + i * 3, 85, 60)
+      s.withTranslation(at, () => {
+        s.withRotation(angle, () => {
+          s.fill(
+            new Rect({
+              at: [0, 0],
+              w: 0.006,
+              h: 0.03 + 0.03 * (i % 3),
+              align: "center",
+            })
+          )
+        })
+      })
+    })
+  }}
+/>
+
+The underlying measurements are on `SimplePath` itself (`length`, `pointAt`, `tangentAt`, `pointsAlong`) if you want the points without drawing; see [Paths and Curves](/docs/paths).
+
 ## Higher order iteration: build and withRandomOrder
 
 Every iteration helper can be composed with two higher-order utilities.

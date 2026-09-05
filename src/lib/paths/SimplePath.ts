@@ -2,7 +2,7 @@ import { Traceable } from "./index.js"
 import { Point2D, Vector2D } from "../types/sol.js"
 import { tripleWise, pairWise } from "../collectionOps.js"
 import v from "../vectors.js"
-import { centroid } from "../util.js"
+import { centroid, clamp, evenProportions } from "../util.js"
 
 import { CurveConfig, Path } from "./Path.js"
 
@@ -193,7 +193,130 @@ export class SimplePath implements Traceable {
     return path
   }
 
+  /**
+   * The total length of the path: the sum of the lengths of its segments.
+   *
+   * @example
+   * ```ts
+   * SimplePath.withPoints([[0, 0], [0.3, 0], [0.3, 0.4]]).length // 0.7
+   * ```
+   */
+  get length(): number {
+    return pairWise(this.points).reduce(
+      (total, [a, b]) => total + v.distance(a, b),
+      0
+    )
+  }
+
+  /**
+   * Which segment a proportion of the way along the path falls in, and how far
+   * into that segment it is.
+   */
+  private locate(proportion: number): {
+    from: Point2D
+    to: Point2D
+    t: number
+  } {
+    if (this.points.length === 0)
+      throw new Error("Cannot sample a path with no points")
+    if (this.points.length === 1)
+      return { from: this.points[0], to: this.points[0], t: 0 }
+
+    const edges = pairWise(this.points)
+    const target = clamp({ from: 0, to: 1 }, proportion) * this.length
+
+    let travelled = 0
+    for (const [from, to] of edges) {
+      const d = v.distance(from, to)
+      // >= so a path of zero length still resolves to its first segment
+      if (travelled + d >= target) {
+        return { from, to, t: d === 0 ? 0 : (target - travelled) / d }
+      }
+      travelled += d
+    }
+
+    // only reachable through floating point drift right at the end of the path
+    const [from, to] = edges[edges.length - 1]
+    return { from, to, t: 1 }
+  }
+
+  /**
+   * The point a given proportion of the way along the path, measured by
+   * distance travelled (so evenly spaced proportions give evenly spaced
+   * points, however unevenly spaced the path's own points are).
+   *
+   * @param proportion Where along the path, 0 is the start and 1 the end.
+   * Values outside that range are clamped.
+   * @throws Error if the path has no points
+   * @example
+   * ```ts
+   * const path = SimplePath.withPoints([[0, 0], [1, 0], [1, 1]])
+   * path.pointAt(0.5) // [1, 0], the halfway point by distance
+   * ```
+   */
+  pointAt(proportion: number): Point2D {
+    const { from, to, t } = this.locate(proportion)
+    return v.pointAlong(from, to, t)
+  }
+
+  /**
+   * The unit tangent (the direction of travel) a given proportion of the way
+   * along the path. Use `v.heading` on it for the angle, e.g. to rotate
+   * something to follow the path.
+   *
+   * A path that goes nowhere has no direction, so that gives [0, 0].
+   *
+   * @param proportion Where along the path, 0 is the start and 1 the end.
+   * Values outside that range are clamped.
+   * @throws Error if the path has no points
+   * @example
+   * ```ts
+   * const path = SimplePath.withPoints([[0, 0], [1, 0]])
+   * path.tangentAt(0.5) // [1, 0]
+   * v.heading(path.tangentAt(0.5)) // 0
+   * ```
+   */
+  tangentAt(proportion: number): Vector2D {
+    const { from, to } = this.locate(proportion)
+    return v.normalize(v.subtract(to, from))
+  }
+
+  /**
+   * n points evenly spaced along the path by distance. Handy for scattering
+   * shapes along an outline, or resampling a path with uneven points.
+   *
+   * @param config.n Number of points (at least 1)
+   * @param config.inclusive Whether to include the end point (default: true).
+   * Pass false for a closed path, where the end is the start again.
+   * @throws Error if the path has no points, or fewer than one point is asked for
+   * @example
+   * ```ts
+   * // Ten circles spread evenly along a wiggly path
+   * path.pointsAlong({ n: 10 }).forEach((at) => s.fill(new Circle({ at, r: 0.01 })))
+   * ```
+   */
+  pointsAlong(config: { n: number; inclusive?: boolean }): Point2D[] {
+    return evenProportions(config).map((proportion) => this.pointAt(proportion))
+  }
+
   get edges(): SimplePath[] {
     return pairWise(this.points).map((points) => SimplePath.withPoints(points))
   }
 }
+
+/**
+ * A `SimplePath`, or anything that can produce one: `Line`, `Rect`,
+ * `RegularPolygon`, `Star` and `Spiral` all expose a `path`.
+ */
+export type SimplePathLike = SimplePath | { path: SimplePath }
+
+/**
+ * The `SimplePath` of anything path-like.
+ *
+ * @example
+ * ```ts
+ * asSimplePath(new Star({ at: [0.5, 0.5], n: 5, r: 0.2 })).pointsAlong({ n: 20 })
+ * ```
+ */
+export const asSimplePath = (path: SimplePathLike): SimplePath =>
+  path instanceof SimplePath ? path : path.path

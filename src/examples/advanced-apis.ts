@@ -1,5 +1,6 @@
 import SCanvas from "../lib/sCanvas"
 import { Path, CompoundPath, Star, RegularPolygon, Circle } from "../lib"
+import { Ellipse, Line } from "../lib"
 import {
   v,
   Rect,
@@ -294,6 +295,51 @@ const tri = (p: SCanvas) => {
   })
 }
 
+const rosette = (p: SCanvas) => {
+  p.background(255, 30, 12)
+
+  // one petal, drawn twelve times round the centre
+  p.withSymmetry({ n: 12 }, (i) => {
+    p.setFillColor(280 + i * 4, 70, 55, 0.55)
+    p.fill(new Ellipse({ at: [0.5, 0.16], w: 0.14, h: 0.34 }))
+  })
+
+  p.setFillColor(45, 85, 65)
+  p.fill(new Circle({ at: p.meta.center, r: 0.06 }))
+}
+
+const kaleidoscope = (p: SCanvas) => {
+  p.background(230, 25, 12)
+  const [cX, cY] = p.meta.center
+
+  // the motif sits off the axis, so mirroring each of the six rotations (and
+  // hence drawing twelve copies) is what turns a pinwheel into a kaleidoscope
+  p.withSymmetry({ type: "kaleidoscope", n: 6 }, (i, reflected) => {
+    p.setFillColor(30 + i * 25, 75, 55, 0.5)
+    p.fill(new Ellipse({ at: [cX + 0.06, cY - 0.16], w: 0.13, h: 0.22 }))
+
+    p.setFillColor(reflected ? 195 : 45, 85, 60, 0.7)
+    p.fill(new Circle({ at: [cX + 0.025, cY - 0.25], r: 0.028 }))
+
+    p.setStrokeColor(0, 0, 100, 0.4)
+    p.lineWidth = 0.003
+    p.draw(new Line([cX, cY], [cX + 0.05, cY - 0.31]))
+  })
+}
+
+const mirrored = (p: SCanvas) => {
+  p.background(190, 20, 92)
+
+  // a mirror pair around the vertical axis: draw half, get the whole
+  p.withSymmetry({ type: "mirror", at: [0.5, 0.5] }, (_i, reflected) => {
+    p.setFillColor(reflected ? 340 : 200, 60, 50, 0.75)
+    p.forTiling({ n: 7, margin: 0.1 }, ([x, y], [dX, dY], _c, i) => {
+      if (x > 0.45) return
+      p.fill(new Rect({ at: [x, y], w: dX * (0.2 + (i % 5) * 0.15), h: dY }))
+    })
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: compoundPath, name: "Compound Path" },
   { sketch: compoundPath2, name: "Compound Path 2" },
@@ -307,6 +353,9 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: hex, name: "Hex" },
   { sketch: hexH, name: "Hex (Horizontal)" },
   { sketch: tri, name: "Triangles" },
+  { sketch: rosette, name: "Rosette" },
+  { sketch: kaleidoscope, name: "Kaleidoscope" },
+  { sketch: mirrored, name: "Mirrored" },
 ]
 
 export default sketches

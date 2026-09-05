@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
 import {
+  evenProportions,
   scaler,
   scaler2d,
   clamp,
@@ -160,5 +161,28 @@ describe("hexTransform", () => {
     const big = hexTransform({ r: 2 })
     expect(big([1, 0])[0]).toBeCloseTo(2 * small([1, 0])[0])
     expect(big([0, 1])[1]).toBeCloseTo(2 * small([0, 1])[1])
+  })
+})
+
+describe("evenProportions", () => {
+  it("spans 0 to 1 inclusively by default", () => {
+    expect(evenProportions({ n: 3 })).toEqual([0, 0.5, 1])
+    expect(evenProportions({ n: 5 })).toEqual([0, 0.25, 0.5, 0.75, 1])
+  })
+
+  it("stops short of 1 when not inclusive", () => {
+    expect(evenProportions({ n: 4, inclusive: false })).toEqual([
+      0, 0.25, 0.5, 0.75,
+    ])
+  })
+
+  it("gives just the start for one proportion", () => {
+    expect(evenProportions({ n: 1 })).toEqual([0])
+    expect(evenProportions({ n: 1, inclusive: false })).toEqual([0])
+  })
+
+  it("throws if asked for none", () => {
+    expect(() => evenProportions({ n: 0 })).toThrow()
+    expect(() => evenProportions({ n: -2 })).toThrow()
   })
 })

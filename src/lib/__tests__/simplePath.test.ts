@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { SimplePath } from "../paths/SimplePath"
+import { asSimplePath, SimplePath } from "../paths/SimplePath"
+import { Star } from "../paths/Star"
+import v from "../vectors"
 import { Point2D } from "../types/sol"
 import { recordTrace } from "./testUtils"
 
@@ -269,6 +271,164 @@ describe("SimplePath", () => {
       expect(a.points[0]).toEqual(a.points[a.points.length - 1])
       expect(a.points.length).toBeGreaterThan(2)
       expect(b.points.length).toBeGreaterThan(2)
+    })
+  })
+
+  describe("length", () => {
+    it("sums the lengths of the segments", () => {
+      const path = SimplePath.withPoints([
+        [0, 0],
+        [3, 0],
+        [3, 4],
+      ])
+      expect(path.length).toBe(7)
+    })
+
+    it("is 0 for a path that goes nowhere", () => {
+      expect(SimplePath.withPoints([[1, 1]]).length).toBe(0)
+      expect(SimplePath.withPoints([]).length).toBe(0)
+      expect(
+        SimplePath.withPoints([
+          [1, 1],
+          [1, 1],
+        ]).length
+      ).toBe(0)
+    })
+
+    it("includes the closing segment of a closed path", () => {
+      // 2 by 2 square, so all four sides
+      expect(square().length).toBe(8)
+    })
+  })
+
+  describe("pointAt", () => {
+    const path = () =>
+      SimplePath.withPoints([
+        [0, 0],
+        [1, 0],
+        [1, 1],
+      ])
+
+    it("gives the ends at 0 and 1", () => {
+      expect(path().pointAt(0)).toEqual([0, 0])
+      expect(path().pointAt(1)).toEqual([1, 1])
+    })
+
+    it("measures by distance, not by point index", () => {
+      // half of the total length of 2 is the corner
+      expect(path().pointAt(0.5)).toEqual([1, 0])
+      closeToPoints([path().pointAt(0.25)], [[0.5, 0]])
+      closeToPoints([path().pointAt(0.75)], [[1, 0.5]])
+    })
+
+    it("spaces evenly however uneven the points are", () => {
+      // the same line, but with a redundant point crammed near the start
+      const uneven = SimplePath.withPoints([
+        [0, 0],
+        [0.01, 0],
+        [1, 0],
+      ])
+      closeToPoints([uneven.pointAt(0.5)], [[0.5, 0]])
+    })
+
+    it("clamps proportions outside [0, 1]", () => {
+      expect(path().pointAt(-1)).toEqual([0, 0])
+      expect(path().pointAt(2)).toEqual([1, 1])
+    })
+
+    it("copes with a path of zero length", () => {
+      const stuck = SimplePath.withPoints([
+        [1, 1],
+        [1, 1],
+      ])
+      expect(stuck.pointAt(0.5)).toEqual([1, 1])
+      expect(SimplePath.withPoints([[1, 1]]).pointAt(0.5)).toEqual([1, 1])
+    })
+
+    it("throws for a path with no points", () => {
+      expect(() => SimplePath.withPoints([]).pointAt(0.5)).toThrow(/no points/)
+    })
+  })
+
+  describe("tangentAt", () => {
+    const path = () =>
+      SimplePath.withPoints([
+        [0, 0],
+        [1, 0],
+        [1, 1],
+      ])
+
+    it("is a unit vector in the direction of travel", () => {
+      closeToPoints([path().tangentAt(0.25)], [[1, 0]])
+      closeToPoints([path().tangentAt(0.75)], [[0, 1]])
+    })
+
+    it("gives an angle usable for rotation", () => {
+      expect(v.heading(path().tangentAt(0.75))).toBeCloseTo(Math.PI / 2, 10)
+    })
+
+    it("is [0, 0] where the path goes nowhere", () => {
+      expect(
+        SimplePath.withPoints([
+          [1, 1],
+          [1, 1],
+        ]).tangentAt(0.5)
+      ).toEqual([0, 0])
+    })
+  })
+
+  describe("pointsAlong", () => {
+    const line = () =>
+      SimplePath.withPoints([
+        [0, 0],
+        [1, 0],
+      ])
+
+    it("includes both ends by default", () => {
+      closeToPoints(line().pointsAlong({ n: 3 }), [
+        [0, 0],
+        [0.5, 0],
+        [1, 0],
+      ])
+    })
+
+    it("stops short of the end when not inclusive", () => {
+      closeToPoints(line().pointsAlong({ n: 4, inclusive: false }), [
+        [0, 0],
+        [0.25, 0],
+        [0.5, 0],
+        [0.75, 0],
+      ])
+    })
+
+    it("gives the start for a single point", () => {
+      expect(line().pointsAlong({ n: 1 })).toEqual([[0, 0]])
+    })
+
+    it("spaces points evenly by distance around a closed path", () => {
+      const points = square().pointsAlong({ n: 4, inclusive: false })
+      closeToPoints(points, [
+        [0, 0],
+        [2, 0],
+        [2, 2],
+        [0, 2],
+      ])
+    })
+
+    it("throws if asked for no points", () => {
+      expect(() => line().pointsAlong({ n: 0 })).toThrow()
+    })
+  })
+
+  describe("asSimplePath", () => {
+    it("passes a SimplePath straight through", () => {
+      const path = square()
+      expect(asSimplePath(path)).toBe(path)
+    })
+
+    it("takes the path of anything that has one", () => {
+      const star = new Star({ at: [0, 0], n: 5, r: 1 })
+      expect(asSimplePath(star).points).toEqual(star.path.points)
     })
   })
 })

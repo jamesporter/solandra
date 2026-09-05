@@ -2,6 +2,12 @@ import { DocPageLayout } from "../../src/components/DocPageLayout"
 
 # Release Notes
 
+## Unreleased
+
+- `fbm2`, fractal (fractional Brownian motion) noise: several octaves of `perlin2` summed together, for noise with detail at every scale rather than at just one. Configurable `octaves`, `persistence` and `lacunarity`.
+- Measuring and sampling a `SimplePath`, all by distance travelled rather than by point index: `length`, `pointAt`, `tangentAt` and `pointsAlong`. Plus `alongPath`, which iterates over evenly spaced points along a path (or anything with one, e.g. `Star`), handing you the point and the angle the path heads in there.
+- `withSymmetry`, which draws its callback several times over with the canvas already rotated and/or reflected: `"rotational"`, `"mirror"` or `"kaleidoscope"`.
+
 ## 0.20.0
 
 - Additional conversions from Arc, HollowArc, Ellipse, Circle and RoundedRect to SimplePath

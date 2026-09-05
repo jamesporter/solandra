@@ -5,6 +5,9 @@ import { TextConfig, Text } from "./paths/Text.js"
 import { Rect } from "./paths/Rect.js"
 import { RNG } from "./rng.js"
 import { poissonDiskPoints } from "./poissonDisk.js"
+import { asSimplePath, SimplePathLike } from "./paths/SimplePath.js"
+import { evenProportions } from "./util.js"
+import { heading } from "./vectors.js"
 
 /**
  * Interface for objects that can generate canvas gradients.
@@ -664,6 +667,63 @@ export default class SCanvas {
     points.forEach(callback)
   }
 
+  /**
+   * Iterates over points evenly spaced along a path, by distance travelled.
+   *
+   * The callback also gets the angle the path is heading in at each point, so
+   * things can be laid out following the path rather than just sitting on it.
+   *
+   * @param config - Configuration
+   * @param config.path - The path to follow. A `SimplePath`, or anything with
+   * one: `Line`, `Rect`, `RegularPolygon`, `Star` and `Spiral` all do.
+   * @param config.n - How many points
+   * @param config.inclusive - Whether to include the end of the path
+   * (default: true). Pass false for a closed path, where the end is the start.
+   * @param callback - Called with the point, the angle of the path there
+   * (radians), and a sequential index
+   * @example
+   * ```ts
+   * // Beads on a wiggly wire
+   * const wire = SimplePath.withPoints(
+   *   s.build(s.range, { n: 20 }, (x) => [x, 0.3 + 0.1 * Math.sin(x * 10)])
+   * )
+   * s.alongPath({ path: wire, n: 40 }, (at) => {
+   *   s.fill(new Circle({ at, r: 0.01 }))
+   * })
+   *
+   * // Rectangles turned to follow the outline of a star
+   * s.alongPath(
+   *   { path: new Star({ at: s.meta.center, n: 5, r: 0.3 }), n: 60 },
+   *   (at, angle) => {
+   *     s.withTranslation(at, () => {
+   *       s.withRotation(angle, () => {
+   *         s.fill(new Rect({ at: [0, 0], w: 0.03, h: 0.01, align: "center" }))
+   *       })
+   *     })
+   *   }
+   * )
+   * ```
+   */
+  alongPath = (
+    config: {
+      path: SimplePathLike
+      n: number
+      inclusive?: boolean
+    },
+    callback: (point: Point2D, angle: number, i: number) => void
+  ) => {
+    const { path, n, inclusive = true } = config
+    const simplePath = asSimplePath(path)
+
+    evenProportions({ n, inclusive }).forEach((proportion, i) => {
+      callback(
+        simplePath.pointAt(proportion),
+        heading(simplePath.tangentAt(proportion)),
+        i
+      )
+    })
+  }
+
   range = (
     config: { from?: number; to?: number; n: number; inclusive?: boolean },
     callback: (n: number) => void
@@ -756,6 +816,87 @@ export default class SCanvas {
       this.ctx.globalCompositeOperation = mode
       callback()
     })
+  }
+
+  /**
+   * Draws the same thing several times over, arranged symmetrically: the
+   * callback runs once per copy, with the canvas already rotated and/or
+   * reflected, so a single shape becomes a rosette, a mirrored pair or a
+   * kaleidoscope.
+   *
+   * @param config - Configuration
+   * @param config.type - "rotational" (default) for `n` rotated copies,
+   * "mirror" for a reflected pair, or "kaleidoscope" for `n` rotated pairs,
+   * each reflected (so 2n copies)
+   * @param config.n - How many rotations (default: 6). Ignored by "mirror".
+   * @param config.at - The centre of the symmetry (default: the canvas centre)
+   * @param config.axis - Which line to reflect in, "vertical" (default, so the
+   * copy is flipped left to right) or "horizontal". Ignored by "rotational".
+   * @param callback - Called once per copy, with the index of the copy and
+   * whether this copy is a reflection
+   * @throws Error if fewer than one rotation is requested
+   * @example
+   * ```ts
+   * // A six petalled rosette from one petal
+   * s.withSymmetry({ n: 6 }, () => {
+   *   s.fill(new Ellipse({ at: [0.5, 0.25], w: 0.1, h: 0.3 }))
+   * })
+   *
+   * // Kaleidoscope: each of the 8 rotations is drawn twice, mirrored
+   * s.withSymmetry({ type: "kaleidoscope", n: 8 }, (i, reflected) => {
+   *   s.setFillColor(reflected ? 200 : 40, 80, 50, 0.6)
+   *   s.fill(new Rect({ at: [0.5, 0.1], w: 0.2, h: 0.15 }))
+   * })
+   * ```
+   */
+  withSymmetry = (
+    config: {
+      type?: "rotational" | "mirror" | "kaleidoscope"
+      n?: number
+      at?: Point2D
+      axis?: "vertical" | "horizontal"
+    },
+    callback: (i: number, reflected: boolean) => void
+  ) => {
+    const {
+      type = "rotational",
+      n = 6,
+      at: [cX, cY] = this.meta.center,
+      axis = "vertical",
+    } = config
+
+    if (n < 1) throw new Error(`Must have at least one copy, n was set to ${n}`)
+
+    let i = 0
+    const copy = (angle: number, reflected: boolean) => {
+      this.withState(() => {
+        // rotate and reflect about the centre of symmetry, not the origin
+        this.ctx.translate(cX, cY)
+        this.ctx.rotate(angle)
+        if (reflected) {
+          if (axis === "vertical") {
+            this.ctx.scale(-1, 1)
+          } else {
+            this.ctx.scale(1, -1)
+          }
+        }
+        this.ctx.translate(-cX, -cY)
+        callback(i, reflected)
+      })
+      i++
+    }
+
+    if (type === "mirror") {
+      copy(0, false)
+      copy(0, true)
+      return
+    }
+
+    const dA = (Math.PI * 2) / n
+    for (let j = 0; j < n; j++) {
+      copy(j * dA, false)
+      if (type === "kaleidoscope") copy(j * dA, true)
+    }
   }
 
   // Randomness

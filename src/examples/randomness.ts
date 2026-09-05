@@ -10,7 +10,7 @@ import {
   Spiral,
 } from "../lib"
 import { add, distance, rotateAround, scale } from "../lib/vectors"
-import { perlin2 } from "../lib/noise"
+import { fbm2, perlin2 } from "../lib/noise"
 import { RadialGradient } from "../lib/gradient"
 import { clamp } from "../lib"
 
@@ -579,8 +579,52 @@ const poissonPoints3 = (p: SCanvas) => {
   })
 }
 
+const fractalClouds = (p: SCanvas) => {
+  const scale = 3
+  // a background in the middle of the range, so the tiles have something to
+  // blend into rather than leaving a faint grid of seams
+  p.background(205, 45, 70)
+
+  p.forTiling({ n: 120, type: "square" }, ([x, y], [dX, dY]) => {
+    // several octaves of noise, so there is detail at every scale
+    const n = fbm2(x * scale, y * scale, { octaves: 6, persistence: 0.55 })
+    p.setFillColor(210 - n * 30, 40 + n * 20, 55 + n * 45)
+    p.fill(new Rect({ at: [x, y], w: dX * 1.2, h: dY * 1.2 }))
+  })
+}
+
+const fractalRidges = (p: SCanvas) => {
+  p.background(30, 30, 12)
+  p.lineWidth = 0.004
+
+  p.range({ from: 0.15, to: 0.9, n: 30 }, (y) => {
+    const path = SimplePath.withPoints(
+      p.build(p.range, { from: 0, to: 1, n: 100 }, (x) => {
+        const n = fbm2(x * 2.5, y * 2.5, { octaves: 5, persistence: 0.6 })
+        return [x, y * p.meta.bottom + n * 0.08] as Point2D
+      })
+    )
+
+    p.setFillColor(30 + y * 20, 60, 12 + y * 25)
+    p.fill(
+      path
+        .withAppended(
+          SimplePath.withPoints([
+            [1, p.meta.bottom],
+            [0, p.meta.bottom],
+          ])
+        )
+        .close()
+    )
+    p.setStrokeColor(40, 70, 85, 0.8)
+    p.draw(path)
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: noiseField, name: "Noise Field" },
+  { sketch: fractalClouds, name: "Fractal Clouds" },
+  { sketch: fractalRidges, name: "Fractal Ridges" },
   { sketch: rectangles, name: "Rectangles" },
   { sketch: randomness1b, name: "Gaussian 2" },
   { sketch: randomness1c, name: "Gaussian 3" },

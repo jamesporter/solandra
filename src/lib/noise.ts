@@ -148,3 +148,70 @@ export function perlin2(ax: number, ay: number) {
   // Interpolate the four results
   return lerp(lerp(n00, n10, u), lerp(n01, n11, u), fade(y))
 }
+
+/**
+ * Fractal (fractional Brownian motion) noise: several octaves of {@link perlin2}
+ * summed together, each at a higher frequency and lower amplitude than the last.
+ *
+ * Plain Perlin noise is smooth at exactly one scale, which is why hand rolled
+ * terrain and cloud textures tend to look soft and samey. Adding octaves keeps
+ * the large scale shape whilst piling detail on top of it.
+ *
+ * The result is scaled by the total amplitude, so it stays in roughly the same
+ * range as `perlin2` (approximately [-1, 1]) whatever the settings.
+ *
+ * @param ax - X coordinate (can be any real number)
+ * @param ay - Y coordinate (can be any real number)
+ * @param config - Fractal configuration
+ * @param config.octaves - How many layers of noise to sum (default: 4). One
+ * octave is just `perlin2`; each further octave adds finer detail.
+ * @param config.persistence - How much quieter each octave is than the last
+ * (default: 0.5). Higher is rougher, lower is smoother.
+ * @param config.lacunarity - How much finer each octave is than the last
+ * (default: 2, i.e. each octave has twice the frequency)
+ * @returns A noise value approximately in the range [-1, 1]
+ * @throws Error if fewer than one octave is requested
+ * @example
+ * ```ts
+ * // Cloudy, multi-scale texture rather than smooth blobs
+ * s.forTiling({ n: 100, type: "square" }, ([x, y], [dX, dY]) => {
+ *   const n = fbm2(x * 4, y * 4, { octaves: 5 })
+ *   s.setFillColor(210, 40, 50 + n * 40)
+ *   s.fill(new Rect({ at: [x, y], w: dX, h: dY }))
+ * })
+ *
+ * // Rougher (more high frequency detail)
+ * fbm2(x, y, { octaves: 6, persistence: 0.7 })
+ * ```
+ */
+export function fbm2(
+  ax: number,
+  ay: number,
+  config: {
+    octaves?: number
+    persistence?: number
+    lacunarity?: number
+  } = {}
+): number {
+  const { octaves = 4, persistence = 0.5, lacunarity = 2 } = config
+  const n = Math.floor(octaves)
+  if (n < 1)
+    throw new Error(
+      `Must have at least one octave, octaves was set to ${octaves}`
+    )
+
+  let total = 0
+  // the first octave always has amplitude 1, so this can never be zero
+  let totalAmplitude = 0
+  let amplitude = 1
+  let frequency = 1
+
+  for (let i = 0; i < n; i++) {
+    total += amplitude * perlin2(ax * frequency, ay * frequency)
+    totalAmplitude += Math.abs(amplitude)
+    amplitude *= persistence
+    frequency *= lacunarity
+  }
+
+  return total / totalAmplitude
+}

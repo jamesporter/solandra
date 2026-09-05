@@ -1,6 +1,13 @@
 import { DocPageLayout } from "../../src/components/DocPageLayout"
 import { ExampleCanvas } from "../../src/components/ExampleCanvas"
-import { Circle, Rect, Line, RegularPolygon, SimplePath } from "../../src/lib"
+import {
+  Circle,
+  Ellipse,
+  Rect,
+  Line,
+  RegularPolygon,
+  SimplePath,
+} from "../../src/lib"
 
 # Transforms, Clipping and State
 
@@ -206,6 +213,69 @@ s.withBlendMode("multiply", () => {
     })
   }}
 />
+
+## Symmetry
+
+`withSymmetry(config, cb)` runs the callback once per copy with the canvas already rotated and/or reflected around a centre, so drawing one thing gives you a symmetric arrangement of it. It is the `with...` idea applied to composition rather than to style: draw a petal, get a flower.
+
+- `type: "rotational"` (the default) &mdash; `n` copies, evenly spaced around a full turn
+- `type: "mirror"` &mdash; a reflected pair; `axis` is `"vertical"` (the default, flipping left to right) or `"horizontal"`
+- `type: "kaleidoscope"` &mdash; `n` rotations, each drawn twice, once reflected, so 2n copies
+- `at` &mdash; the centre of the symmetry, the middle of the canvas unless you say otherwise
+
+The callback is given the index of the copy and whether that copy is a reflection.
+
+```ts
+s.background(255, 30, 12)
+s.withSymmetry({ n: 12 }, (i) => {
+  s.setFillColor(280 + i * 4, 70, 55, 0.55)
+  s.fill(new Ellipse({ at: [0.5, 0.16], w: 0.14, h: 0.34 }))
+})
+s.setFillColor(45, 85, 65)
+s.fill(new Circle({ at: s.meta.center, r: 0.06 }))
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(255, 30, 12)
+    s.withSymmetry({ n: 12 }, (i) => {
+      s.setFillColor(280 + i * 4, 70, 55, 0.55)
+      s.fill(new Ellipse({ at: [0.5, 0.16], w: 0.14, h: 0.34 }))
+    })
+    s.setFillColor(45, 85, 65)
+    s.fill(new Circle({ at: s.meta.center, r: 0.06 }))
+  }}
+/>
+
+A motif placed off the axis is what makes a kaleidoscope look like one: each rotation appears twice, mirrored.
+
+```ts
+s.background(230, 25, 12)
+const [cX, cY] = s.meta.center
+
+s.withSymmetry({ type: "kaleidoscope", n: 6 }, (i, reflected) => {
+  s.setFillColor(30 + i * 25, 75, 55, 0.5)
+  s.fill(new Ellipse({ at: [cX + 0.06, cY - 0.16], w: 0.13, h: 0.22 }))
+
+  s.setFillColor(reflected ? 195 : 45, 85, 60, 0.7)
+  s.fill(new Circle({ at: [cX + 0.025, cY - 0.25], r: 0.028 }))
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(230, 25, 12)
+    const [cX, cY] = s.meta.center
+    s.withSymmetry({ type: "kaleidoscope", n: 6 }, (i, reflected) => {
+      s.setFillColor(30 + i * 25, 75, 55, 0.5)
+      s.fill(new Ellipse({ at: [cX + 0.06, cY - 0.16], w: 0.13, h: 0.22 }))
+      s.setFillColor(reflected ? 195 : 45, 85, 60, 0.7)
+      s.fill(new Circle({ at: [cX + 0.025, cY - 0.25], r: 0.028 }))
+    })
+  }}
+/>
+
+Being a `with...` helper, each copy is drawn in its own saved state, so transforms and styles set inside one copy do not leak into the next, and symmetry nests inside (and around) everything else here.
 
 ## Everything composes
 

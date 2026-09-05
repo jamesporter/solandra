@@ -68,6 +68,13 @@ For custom paths there is:
 
 Many standard shapes can be converted to a primitive `SimplePath` via `.path`. There are then operations which you can perform such as `chaiken` which smooths a path. See the examples.
 
+A `SimplePath` can also be measured and sampled, everything by distance travelled rather than by point index:
+
+- `length` the total length of the path
+- `pointAt` the point a proportion (0 to 1) of the way along
+- `tangentAt` the unit vector the path is heading in there (`v.heading` for the angle)
+- `pointsAlong` `n` evenly spaced points along the path
+
 ## Control Flow
 
 You can use normal Javascript control flow. But Solandra adds some of its own APIs. Most take a configuration and callback arguments.
@@ -94,6 +101,7 @@ s.forTiling({ n: 10 }, ([x, y], [dX, dY], [cX, cY], i) => {})
 - `forHorizontal`
 - `forVertical`
 - `aroundCircle`
+- `alongPath` follow a path (or any shape with one), point and angle at a time
 
 You can get fancier with these, which take one of the above as an argument
 
@@ -109,6 +117,7 @@ Each of these takes a configuration and callback. The configuration alters how t
 - `withScale` draw with a scale
 - `withTranslation` draw with a translation (move)
 - `withTransform` fully custom
+- `withSymmetry` draw the callback several times over, rotated and/or mirrored (rotational, mirror or kaleidoscope)
 
 ## Randomness
 
@@ -126,6 +135,11 @@ Call to get pseudorandom values. Most have sensible default configurations
 ## Time
 
 `s.t` gives you the current time. For sketches that are 'playing'.
+
+## Noise
+
+- `perlin2` 2D Perlin noise, roughly -1 to 1
+- `fbm2` fractal noise: several octaves of `perlin2`, for detail at every scale
 
 ## Fancy
 
