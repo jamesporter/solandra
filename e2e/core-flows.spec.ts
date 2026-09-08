@@ -17,6 +17,22 @@ test("search can be opened, navigated, and returns focus", async ({ page }) => {
   await expect(searchButton).toBeFocused()
 })
 
+test("the colour theme can be picked and is remembered", async ({ page }) => {
+  await page.goto("/")
+  const html = page.locator("html")
+  await expect(page.getByRole("radio", { name: "System theme" })).toBeChecked()
+
+  await page.getByRole("radio", { name: "Dark theme" }).click()
+  await expect(html).toHaveClass(/dark/)
+
+  await page.reload()
+  await expect(html).toHaveClass(/dark/)
+  await expect(page.getByRole("radio", { name: "Dark theme" })).toBeChecked()
+
+  await page.getByRole("radio", { name: "Light theme" }).click()
+  await expect(html).not.toHaveClass(/dark/)
+})
+
 test("the slideshow exposes keyboard-accessible controls", async ({ page }) => {
   await page.goto("/viewAll")
   await expect(

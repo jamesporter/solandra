@@ -20,6 +20,7 @@ import {
 } from "../src/components/CodeAndSketchExamples"
 import { headerLinks } from "../src/components/Header"
 import { useCommandMenu, useIsApple } from "../src/components/CommandMenu"
+import { ThemeSwitcher } from "../src/components/ThemeSwitcher"
 
 function HeroSearchLink() {
   const { open } = useCommandMenu()
@@ -50,7 +51,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <div className="bg-gradient-to-b from-emerald-400  to-sky-900 py-4 overflow-hidden">
+        <div className="bg-gradient-to-b from-emerald-400 to-sky-900 dark:from-emerald-800 dark:to-sky-950 py-4 overflow-hidden">
           <Logo />
 
           <div className="px-8 pt-4 flex flex-col">
@@ -60,7 +61,7 @@ const Home: NextPage = () => {
             <h2 className="text-sky-100 text-center text-[calc(max(4vh,16px))] drop-shadow-md">
               Modern TypeScript-first Creative Coding
             </h2>
-            <div className="flex flex-row justify-center pt-4">
+            <div className="flex flex-row flex-wrap items-center justify-center pt-4">
               {headerLinks.map(({ href, name }, _i) => (
                 <HLink to={href} key={href}>
                   {name}
@@ -73,6 +74,7 @@ const Home: NextPage = () => {
               >
                 Download Book
               </a>
+              <ThemeSwitcher />
               <HeroSearchLink />
             </div>
           </div>
@@ -85,7 +87,7 @@ const Home: NextPage = () => {
             <li>
               <Link
                 href="/main"
-                className="font-bold text-emerald-600 hover:text-sky-500"
+                className="font-bold text-emerald-600 hover:text-sky-500 dark:text-emerald-400 dark:hover:text-sky-300"
               >
                 Look at some examples
               </Link>
@@ -96,7 +98,7 @@ const Home: NextPage = () => {
               Have a look at these{" "}
               <Link
                 href="/docs/quickstart"
-                className="font-bold text-emerald-600 hover:text-sky-500"
+                className="font-bold text-emerald-600 hover:text-sky-500 dark:text-emerald-400 dark:hover:text-sky-300"
               >
                 getting started tutorials and examples
               </Link>
@@ -105,7 +107,7 @@ const Home: NextPage = () => {
               Use with AI/LLMs by dropping{" "}
               <a
                 href="https://github.com/jamesporter/solandra/blob/main/llm.md"
-                className="font-bold text-emerald-600 hover:text-sky-500"
+                className="font-bold text-emerald-600 hover:text-sky-500 dark:text-emerald-400 dark:hover:text-sky-300"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -153,7 +155,7 @@ const Home: NextPage = () => {
             algorithmic art. See my{" "}
             <a
               href="https://www.amimetic.co.uk/art/"
-              className="text-blue-700 underline"
+              className="text-blue-700 underline dark:text-sky-400"
             >
               essays
             </a>{" "}
@@ -283,7 +285,7 @@ const Home: NextPage = () => {
           <h2>Other Platforms</h2>
           <Link
             href={"/other-platforms"}
-            className="font-bold text-emerald-600 hover:text-sky-500"
+            className="font-bold text-emerald-600 hover:text-sky-500 dark:text-emerald-400 dark:hover:text-sky-300"
           >
             Versions of Solandra are available on other platforms
           </Link>

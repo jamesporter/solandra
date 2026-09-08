@@ -15,14 +15,17 @@ const QuickStart = () => (
 
       <h2>Examples</h2>
 
-      <div className="w-full bg-gray-100 rounded-xl flex flex-col items-center h-[480px] overflow-hidden shadow-md">
+      <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-xl flex flex-col items-center h-[480px] overflow-hidden shadow-md">
         <div className="h-96 w-full flex flex-col bg-white">
           <ViewAll />
         </div>
 
         <p className="p-4">
           Recommended:{" "}
-          <Link href="/main" className="text-blue-700 underline">
+          <Link
+            href="/main"
+            className="text-blue-700 underline dark:text-sky-400"
+          >
             over 100 examples with source code to learn from (click on the
             Source Code button).
           </Link>
@@ -69,15 +72,25 @@ const QuickStart = () => (
       </p>
       <p>
         On <a href="https://www.npmjs.com/package/solandra">NPM</a>. Install
-        with <span className="text-gray-500 font-mono">pnpm add solandra</span>,{" "}
-        <span className="text-gray-500 font-mono">npm i solandra</span> or{" "}
-        <span className="text-gray-500 font-mono">yarn add solandra</span>.
+        with{" "}
+        <span className="text-gray-500 dark:text-gray-400 font-mono">
+          pnpm add solandra
+        </span>
+        ,{" "}
+        <span className="text-gray-500 dark:text-gray-400 font-mono">
+          npm i solandra
+        </span>{" "}
+        or{" "}
+        <span className="text-gray-500 dark:text-gray-400 font-mono">
+          yarn add solandra
+        </span>
+        .
       </p>
       <div className="start-item-text">
         There is a React wrapper for those using the most popular front end
         framework, install from{" "}
         <a href="https://www.npmjs.com/package/solandra-react">NPM</a> with{" "}
-        <span className="text-gray-500 font-mono">
+        <span className="text-gray-500 dark:text-gray-400 font-mono">
           npm i solandra-react solandra react react-dom
         </span>
       </div>

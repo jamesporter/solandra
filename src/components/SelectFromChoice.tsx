@@ -19,8 +19,8 @@ export default function SelectFromChoice<T>({
             key={i}
             className={
               v == value
-                ? "bg-sky-200 p-2 rounded-lg "
-                : "bg-gray-200 p-2 rounded-lg hover:bg-sky-400"
+                ? "bg-sky-200 text-sky-950 p-2 rounded-lg dark:bg-sky-400"
+                : "bg-gray-200 text-gray-900 p-2 rounded-lg hover:bg-sky-400 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-sky-600"
             }
             onClick={() => onSelect(v)}
           >

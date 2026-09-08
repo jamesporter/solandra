@@ -2,6 +2,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
 import React from "react"
 import { useCommandMenu, useIsApple } from "./CommandMenu"
+import { ThemeSwitcher } from "./ThemeSwitcher"
 
 export const headerLinks = [
   {
@@ -20,7 +21,7 @@ export const headerLinks = [
 
 export default function Header() {
   return (
-    <div className="bg-gradient-to-b from-emerald-500  to-emerald-600 px-8 flex flex-col md:flex-row items-center max-sm:py-2 print:hidden">
+    <div className="bg-gradient-to-b from-emerald-500 to-emerald-600 dark:from-emerald-800 dark:to-emerald-900 px-8 flex flex-col md:flex-row items-center max-sm:py-2 print:hidden">
       <Link
         href="/"
         className="text-white font-bold hover:text-sky-100 p-2 md:p-4 text-xl drop-shadow-sm"
@@ -45,7 +46,10 @@ export default function Header() {
       >
         Download Book
       </a>
-      <SearchButton />
+      <div className="flex flex-row items-center gap-2 md:ml-auto">
+        <ThemeSwitcher />
+        <SearchButton />
+      </div>
     </div>
   )
 }
@@ -58,7 +62,7 @@ function SearchButton() {
     <button
       onClick={open}
       aria-label="Search Solandra"
-      className="flex flex-row items-center gap-2 text-white font-semibold hover:text-emerald-200 p-2 md:px-4 drop-shadow-sm text-sm md:text-base md:ml-auto"
+      className="flex flex-row items-center gap-2 text-white font-semibold hover:text-emerald-200 p-2 md:px-4 drop-shadow-sm text-sm md:text-base"
     >
       <MagnifyingGlassIcon className="h-4 w-4" />
       Search

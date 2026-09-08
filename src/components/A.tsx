@@ -8,7 +8,7 @@ export default function A({
   href: string
 }) {
   return (
-    <a className="text-blue-700 underline" href={href}>
+    <a className="text-blue-700 underline dark:text-sky-400" href={href}>
       {children}
     </a>
   )

@@ -95,7 +95,7 @@ export default function Shaders() {
       <Header />
 
       <div className="container mx-auto flex flex-col gap-4">
-        <h1 className="text-4xl text-sky-700 mt-16 mb-4 text-center">
+        <h1 className="text-4xl text-sky-700 dark:text-sky-300 mt-16 mb-4 text-center">
           Shaders (Preview)
         </h1>
         <p>
@@ -164,7 +164,7 @@ export default function Shaders() {
           }}
         />
 
-        <h2 className="text-2xl text-sky-700 mt-16 mb-4 text-center">
+        <h2 className="text-2xl text-sky-700 dark:text-sky-300 mt-16 mb-4 text-center">
           Stacking and Combining
         </h2>
 
