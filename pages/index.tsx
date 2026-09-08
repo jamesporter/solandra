@@ -51,7 +51,9 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <div className="bg-gradient-to-b from-emerald-400 to-sky-900 dark:from-emerald-800 dark:to-sky-950 py-4 overflow-hidden">
+        <div className="relative bg-gradient-to-b from-emerald-400 to-sky-900 dark:from-emerald-800 dark:to-sky-950 py-4 overflow-hidden">
+          <ThemeSwitcher className="absolute top-3 right-3 z-10" />
+
           <Logo />
 
           <div className="px-8 pt-4 flex flex-col">
@@ -74,7 +76,6 @@ const Home: NextPage = () => {
               >
                 Download Book
               </a>
-              <ThemeSwitcher />
               <HeroSearchLink />
             </div>
           </div>
