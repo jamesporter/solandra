@@ -11,7 +11,7 @@ export function Main({ category }: { category: string }) {
 
       <ExampleLinks />
 
-      <h1 className="text-4xl text-sky-700 mt-16 mb-4 text-center">
+      <h1 className="text-4xl text-sky-700 dark:text-sky-300 mt-16 mb-4 text-center">
         {category}
       </h1>
       <p className="text-center max-w-xl m-auto mb-12">

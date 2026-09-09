@@ -133,13 +133,13 @@ export default function Export() {
   }
 
   const inputClass =
-    "rounded border border-sky-300 bg-white px-3 py-2 text-sky-950"
+    "rounded border border-sky-300 bg-white px-3 py-2 text-sky-950 dark:border-sky-700 dark:bg-gray-800 dark:text-gray-100"
 
   return (
     <>
       <Header />
       <main className="p-4">
-        <div className="mx-auto flex max-w-xl flex-col gap-y-4 rounded-xl bg-sky-700 p-4">
+        <div className="mx-auto flex max-w-xl flex-col gap-y-4 rounded-xl bg-sky-700 dark:bg-sky-900 p-4">
           <h1 className="text-4xl text-sky-100">Export artwork</h1>
           <p className="text-sky-100">
             Configure a high-resolution export of {sketch.name}.

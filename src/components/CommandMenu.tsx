@@ -98,7 +98,9 @@ function Highlighted({ text, indices }: { text: string; indices: number[] }) {
       {text.split("").map((character, i) => (
         <span
           key={i}
-          className={cx({ "text-emerald-600 font-bold": matched.has(i) })}
+          className={cx({
+            "text-emerald-600 dark:text-emerald-300 font-bold": matched.has(i),
+          })}
         >
           {character}
         </span>
@@ -200,7 +202,7 @@ function CommandMenu({ onClose }: { onClose: () => void }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center bg-sky-950/50 p-4 pt-[12vh] backdrop-blur-sm print:hidden"
+      className="fixed inset-0 z-50 flex items-start justify-center bg-sky-950/50 dark:bg-black/70 p-4 pt-[12vh] backdrop-blur-sm print:hidden"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose()
       }}
@@ -211,22 +213,22 @@ function CommandMenu({ onClose }: { onClose: () => void }) {
     >
       <div
         ref={dialogRef}
-        className="flex max-h-[70vh] w-full max-w-xl flex-col overflow-hidden rounded-xl bg-gray-50 shadow-2xl"
+        className="flex max-h-[70vh] w-full max-w-xl flex-col overflow-hidden rounded-xl bg-gray-50 dark:bg-gray-900 shadow-2xl"
       >
-        <div className="flex flex-row items-center gap-2 bg-gradient-to-b from-emerald-500 to-emerald-600 p-3">
-          <MagnifyingGlassIcon className="h-5 w-5 shrink-0 text-emerald-100" />
+        <div className="flex flex-row items-center gap-2 bg-emerald-950 p-3">
+          <MagnifyingGlassIcon className="h-5 w-5 shrink-0 text-emerald-300" />
           <input
             autoFocus
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search pages, docs and concepts..."
             aria-label="Search pages, docs and concepts"
-            className="w-full bg-transparent font-semibold text-white outline-hidden placeholder:font-normal placeholder:text-emerald-100"
+            className="w-full bg-transparent font-semibold text-white outline-hidden placeholder:font-normal placeholder:text-emerald-200/80"
           />
           <button
             onClick={onClose}
             aria-label="Close search"
-            className="shrink-0 rounded-sm px-2 py-1 text-xs font-semibold text-emerald-100 hover:bg-emerald-400 hover:text-white"
+            className="shrink-0 rounded-sm px-2 py-1 text-xs font-semibold text-emerald-200 hover:bg-emerald-800 hover:text-white"
           >
             esc
           </button>
@@ -234,7 +236,7 @@ function CommandMenu({ onClose }: { onClose: () => void }) {
 
         <div ref={listRef} className="overflow-y-auto" role="listbox">
           {results.length === 0 && (
-            <p className="p-6 text-center text-gray-500">
+            <p className="p-6 text-center text-gray-500 dark:text-gray-400">
               Nothing matches &ldquo;{query}&rdquo;
             </p>
           )}
@@ -251,23 +253,24 @@ function CommandMenu({ onClose }: { onClose: () => void }) {
                 className={cx(
                   "flex w-full flex-row items-center gap-3 border-l-8 p-3 px-4 text-left",
                   {
-                    "border-l-emerald-500 bg-emerald-100": active,
-                    "border-l-transparent bg-emerald-50 hover:bg-emerald-100":
+                    "border-l-emerald-500 bg-emerald-100 dark:border-l-emerald-400 dark:bg-emerald-900":
+                      active,
+                    "border-l-transparent bg-emerald-50 hover:bg-emerald-100 dark:bg-gray-900 dark:hover:bg-emerald-950":
                       !active,
                   }
                 )}
               >
-                <span className="w-16 shrink-0 text-xs font-semibold text-sky-700 uppercase">
+                <span className="w-16 shrink-0 text-xs font-semibold text-sky-700 dark:text-sky-300 uppercase">
                   {kindLabels[item.kind]}
                 </span>
-                <span className="flex-1 truncate font-semibold text-emerald-800">
+                <span className="flex-1 truncate font-semibold text-emerald-800 dark:text-emerald-50">
                   <Highlighted text={item.name} indices={indices} />
                 </span>
                 {item.external ? (
                   <ArrowTopRightOnSquareIcon className="h-4 w-4 shrink-0 text-gray-400" />
                 ) : (
                   item.section && (
-                    <span className="shrink-0 text-xs text-gray-500">
+                    <span className="shrink-0 text-xs text-gray-500 dark:text-gray-400">
                       {item.section}
                     </span>
                   )
@@ -277,7 +280,7 @@ function CommandMenu({ onClose }: { onClose: () => void }) {
           })}
         </div>
 
-        <div className="flex flex-row justify-between gap-4 bg-gray-100 px-4 py-2 text-xs text-gray-500">
+        <div className="flex flex-row justify-between gap-4 bg-gray-100 dark:bg-gray-800 px-4 py-2 text-xs text-gray-500 dark:text-gray-400">
           <span>
             <span className="font-semibold">&uarr;&darr;</span> navigate{" "}
             <span className="font-semibold">&crarr;</span> open{" "}

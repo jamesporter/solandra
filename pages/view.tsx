@@ -39,9 +39,9 @@ function ViewSingle() {
   return (
     <div className="flex flex-col w-screen h-screen">
       <Header />
-      <div className="bg-sky-800 px-2 py-4 flex flex-row">
+      <div className="bg-sky-800 dark:bg-sky-950 px-2 py-4 flex flex-row">
         <button
-          className={`bg-gray-200 hover:bg-sky-400 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2`}
+          className={`bg-gray-200 text-gray-900 hover:bg-sky-400 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-sky-600`}
           onClick={updateSeed}
           title="Refresh"
         >
@@ -50,8 +50,10 @@ function ViewSingle() {
 
         <button
           className={`${
-            isPlaying ? "bg-sky-200" : "bg-gray-200"
-          } hover:bg-sky-400 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2 items-center w-20`}
+            isPlaying
+              ? "bg-sky-200 text-sky-950 dark:bg-sky-400"
+              : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100"
+          } hover:bg-sky-400 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2 items-center w-20 dark:hover:bg-sky-600`}
           onClick={() => setPlaying(!isPlaying)}
           title={isPlaying ? "Pause" : "Play"}
         >
@@ -70,8 +72,10 @@ function ViewSingle() {
 
         <button
           className={`${
-            showSource ? "bg-sky-200" : "bg-gray-200"
-          } hover:bg-sky-400 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2 items-center`}
+            showSource
+              ? "bg-sky-200 text-sky-950 dark:bg-sky-400"
+              : "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100"
+          } hover:bg-sky-400 focus:outline-none focus:shadow-outline px-2 py-1 rounded ml-2 items-center dark:hover:bg-sky-600`}
           onClick={() => setShowSource(!showSource)}
           title="Toggle Source Code"
         >
@@ -80,7 +84,7 @@ function ViewSingle() {
 
         <Link
           href={`/export?sketch=${sketchNo}&category=${category}`}
-          className="bg-gray-200 hover:bg-sky-400 focus:outline-none focus:shadow-outline px-2 mr-2 py-3 rounded ml-2"
+          className="bg-gray-200 text-gray-900 hover:bg-sky-400 focus:outline-none focus:shadow-outline px-2 mr-2 py-3 rounded ml-2 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-sky-600"
         >
           Export
         </Link>

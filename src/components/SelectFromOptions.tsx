@@ -13,7 +13,7 @@ export default function SelectOption({
 }: SelectOptionProps) {
   return (
     <select
-      className="appearance-none bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-40"
+      className="appearance-none bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 w-40 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 dark:focus:bg-gray-800"
       onChange={(evt) => onSelect(evt.target.value)}
       value={selection || ""}
     >
