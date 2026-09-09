@@ -18,7 +18,7 @@ import {
   subtract,
   rotate,
 } from "../lib/vectors"
-import { curl2, fbm2, perlin2 } from "../lib/noise"
+import { curl2, fbm2, perlin2, worley2, worleyCell2 } from "../lib/noise"
 import { RadialGradient } from "../lib/gradient"
 import { clamp } from "../lib"
 
@@ -685,6 +685,59 @@ const orbits = (p: SCanvas) => {
   })
 }
 
+const cellular = (p: SCanvas) => {
+  p.background(25, 20, 8)
+
+  // Worley noise: the distance to the nearest of a scattering of feature
+  // points, so each cell shades outwards from its own middle
+  p.forTiling({ n: 150, type: "square" }, ([x, y], [dX, dY]) => {
+    const d = worley2(x * 7, y * 7)
+    p.setFillColor(25 + d * 25, 55, 12 + d * 55)
+    p.fill(new Rect({ at: [x, y], w: dX, h: dY }))
+  })
+}
+
+const cellWalls = (p: SCanvas) => {
+  p.background(205, 25, 96)
+
+  // the gap between the two nearest feature points falls to zero exactly on
+  // the boundary between cells, so this draws the cracks rather than the cells
+  p.forTiling({ n: 200, type: "square" }, ([x, y], [dX, dY]) => {
+    const d = worley2(x * 5, y * 5, { feature: "difference" })
+    if (d > 0.14) return
+    p.setFillColor(215, 45, 20, 1 - d / 0.14)
+    p.fill(new Rect({ at: [x, y], w: dX, h: dY }))
+  })
+}
+
+const mosaic = (p: SCanvas) => {
+  p.background(0, 0, 10)
+
+  p.forTiling({ n: 160, type: "square" }, ([x, y], [dX, dY], at) => {
+    const { id, f1, f2 } = worleyCell2(at[0] * 8, at[1] * 8, { jitter: 0.9 })
+    // grouting: leave the tiles either side of a boundary unpainted
+    if (f2 - f1 < 0.04) return
+    // every point in a cell shares an id, so each cell comes out one colour
+    p.setFillColor(190 + (id % 100), 55, 30 + (id % 45))
+    p.fill(new Rect({ at: [x, y], w: dX, h: dY }))
+  })
+}
+
+const tiledCells = (p: SCanvas) => {
+  p.background(175, 35, 12)
+
+  // measuring distance the Chebyshev way gives square cells, and keeping the
+  // jitter down holds them near their grid: tiles rather than pebbles
+  p.forTiling({ n: 160, type: "square" }, ([x, y], [dX, dY], at) => {
+    const d = worley2(at[0] * 9, at[1] * 9, {
+      metric: "chebyshev",
+      jitter: 0.35,
+    })
+    p.setFillColor(170 + d * 40, 55, 15 + d * 65)
+    p.fill(new Rect({ at: [x, y], w: dX, h: dY }))
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: noiseField, name: "Noise Field" },
   { sketch: fractalClouds, name: "Fractal Clouds" },
@@ -692,6 +745,10 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: curlField, name: "Curl Field" },
   { sketch: curlStreamers, name: "Curl Streamers" },
   { sketch: orbits, name: "Orbits" },
+  { sketch: cellular, name: "Cellular" },
+  { sketch: cellWalls, name: "Cell Walls" },
+  { sketch: mosaic, name: "Mosaic" },
+  { sketch: tiledCells, name: "Tiled Cells" },
   { sketch: rectangles, name: "Rectangles" },
   { sketch: randomness1b, name: "Gaussian 2" },
   { sketch: randomness1c, name: "Gaussian 3" },

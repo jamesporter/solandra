@@ -83,6 +83,10 @@ And measured as a shape:
 - `convexHull` the smallest convex path wrapping its points (`convexHull` does the same for bare points)
 - `simplified` a copy with the points that barely change its shape dropped
 
+And offset sideways:
+
+- `offset` the parallel path, a fixed distance to one side (positive is a quarter turn clockwise from the direction of travel, so inwards for the built in shapes). Offset a line each way and join the two up for a filled ribbon, or step the distance for contours.
+
 `SimplePath.flowLine` traces a path through a vector field, stepping in whatever direction the field points in (see `curl2` under Noise).
 
 ## Control Flow
@@ -111,6 +115,7 @@ s.forTiling({ n: 10 }, ([x, y], [dX, dY], [cX, cY], i) => {})
 - `forHorizontal`
 - `forVertical`
 - `aroundCircle`
+- `forRadialTiling` a polar grid: rings of cells out from a centre, each one a `HollowArc`
 - `alongPath` follow a path (or any shape with one), point and angle at a time
 
 You can get fancier with these, which take one of the above as an argument
@@ -151,6 +156,7 @@ Call to get pseudorandom values. Most have sensible default configurations
 - `perlin2` 2D Perlin noise, roughly -1 to 1
 - `fbm2` fractal noise: several octaves of `perlin2`, for detail at every scale
 - `curl2` curl noise: a swirling vector field with no sources or sinks, for flow fields
+- `worley2` cellular noise: distance to the nearest of a scattering of feature points, for scales, cobbles and cracks (`worleyCell2` for which cell a point is in)
 
 ## Fancy
 

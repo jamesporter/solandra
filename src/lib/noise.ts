@@ -274,3 +274,219 @@ export function curl2(
 
   return [dNdY, -dNdX]
 }
+
+/**
+ * Which of the distances to the feature points around a point {@link worley2}
+ * should report.
+ */
+export type WorleyFeature = "f1" | "f2" | "difference"
+
+/**
+ * How distance is measured for {@link worley2}. Euclidean gives round cells,
+ * Manhattan diamonds, Chebyshev squares.
+ */
+export type WorleyMetric = "euclidean" | "manhattan" | "chebyshev"
+
+/**
+ * Configuration shared by {@link worley2} and {@link worleyCell2}.
+ */
+type WorleyConfig = {
+  /**
+   * How far a cell's feature point may stray from the middle of its cell, 0
+   * (a perfectly regular grid) to 1 (anywhere in the cell). Default 1.
+   */
+  jitter?: number
+  /** How distance is measured (default: "euclidean") */
+  metric?: WorleyMetric
+}
+
+/**
+ * The feature point belonging to the cell at integer coordinates (i, j), and
+ * a stable hash of that cell.
+ *
+ * The hash comes from the same permutation table as `perlin2`, so a cell
+ * always gets the same point and the same id, without anything having to be
+ * stored.
+ * @internal
+ */
+function worleyPoint(i: number, j: number, jitter: number) {
+  const hA = perm[(i & 255) + perm[j & 255]]
+  const hB = perm[(j & 255) + perm[(i + 149) & 255]]
+  return {
+    // jitter of 1 puts the point anywhere in the cell, 0 in the middle of it
+    at: [
+      i + 0.5 + jitter * (hA / 255 - 0.5),
+      j + 0.5 + jitter * (hB / 255 - 0.5),
+    ] as [number, number],
+    id: hA * 256 + hB,
+  }
+}
+
+/**
+ * Distance under one of the {@link WorleyMetric}s.
+ * @internal
+ */
+function worleyDistance(dX: number, dY: number, metric: WorleyMetric): number {
+  switch (metric) {
+    case "manhattan":
+      return Math.abs(dX) + Math.abs(dY)
+    case "chebyshev":
+      return Math.max(Math.abs(dX), Math.abs(dY))
+    default:
+      return Math.sqrt(dX * dX + dY * dY)
+  }
+}
+
+/**
+ * The nearest feature point to a point, and the two smallest distances.
+ * @internal
+ */
+function worleyNearest(
+  ax: number,
+  ay: number,
+  config: WorleyConfig = {}
+): {
+  f1: number
+  f2: number
+  cell: [number, number]
+  at: [number, number]
+  id: number
+} {
+  const { jitter = 1, metric = "euclidean" } = config
+  if (jitter < 0 || jitter > 1)
+    throw new Error(`Jitter must be between 0 and 1, was ${jitter}`)
+
+  const cX = Math.floor(ax)
+  const cY = Math.floor(ay)
+
+  let f1 = Infinity
+  let f2 = Infinity
+  let cell: [number, number] = [cX, cY]
+  let at: [number, number] = [ax, ay]
+  let id = 0
+
+  // a feature point never leaves its own cell, so the neighbours are enough
+  for (let i = cX - 1; i <= cX + 1; i++) {
+    for (let j = cY - 1; j <= cY + 1; j++) {
+      const point = worleyPoint(i, j, jitter)
+      const d = worleyDistance(point.at[0] - ax, point.at[1] - ay, metric)
+      if (d < f1) {
+        f2 = f1
+        f1 = d
+        cell = [i, j]
+        at = point.at
+        id = point.id
+      } else if (d < f2) {
+        f2 = d
+      }
+    }
+  }
+
+  return { f1, f2, cell, at, id }
+}
+
+/**
+ * Worley (cellular) noise: space divided into cells, each with a feature point
+ * somewhere inside it, and the value at a point given by how far away the
+ * nearest of those points is.
+ *
+ * Where `perlin2` gives soft clouds, this gives structure - scales, cobbles,
+ * cracked mud, stained glass, cells under a microscope. Coordinates are in
+ * cells, so `worley2(x * 8, y * 8)` puts eight cells across the canvas.
+ *
+ * `"difference"` (the distance to the second nearest point minus the distance
+ * to the nearest) is the useful one for outlines: it falls to zero exactly on
+ * the boundaries between cells, drawing the cracks rather than filling the
+ * cells.
+ *
+ * @param ax - X coordinate, in cells (can be any real number)
+ * @param ay - Y coordinate, in cells (can be any real number)
+ * @param config - Configuration
+ * @param config.feature - Which distance to report: `"f1"` (default) the
+ * nearest feature point, `"f2"` the second nearest, or `"difference"` the gap
+ * between them
+ * @param config.jitter - How far a feature point may stray from the middle of
+ * its cell, 0 (a regular grid) to 1 (anywhere in the cell, the default)
+ * @param config.metric - `"euclidean"` (default) for round cells,
+ * `"manhattan"` for diamonds, `"chebyshev"` for squares
+ * @returns A distance in cells, roughly in the range [0, 1]
+ * @throws Error if jitter is outside [0, 1]
+ * @example
+ * ```ts
+ * // Cobbles: dark in the middle of each cell, light at the edges
+ * s.forTiling({ n: 100, type: "square" }, ([x, y], [dX, dY]) => {
+ *   const d = worley2(x * 8, y * 8)
+ *   s.setFillColor(30, 40, 20 + d * 60)
+ *   s.fill(new Rect({ at: [x, y], w: dX, h: dY }))
+ * })
+ *
+ * // Just the cracks between the cells
+ * worley2(x * 8, y * 8, { feature: "difference" })
+ *
+ * // Square cells on a regular grid: a woven, tiled look
+ * worley2(x * 8, y * 8, { metric: "chebyshev", jitter: 0.4 })
+ * ```
+ */
+export function worley2(
+  ax: number,
+  ay: number,
+  config: WorleyConfig & { feature?: WorleyFeature } = {}
+): number {
+  const { feature = "f1" } = config
+  const { f1, f2 } = worleyNearest(ax, ay, config)
+
+  switch (feature) {
+    case "f2":
+      return f2
+    case "difference":
+      return f2 - f1
+    default:
+      return f1
+  }
+}
+
+/**
+ * The cell a point falls in, for colouring each cell as a whole rather than
+ * shading by distance.
+ *
+ * Everywhere within one cell gets the same `id` and `at`, so a mosaic can be
+ * built by asking for every pixel (or tile) and looking the colour up from the
+ * id, and shapes can be placed on the feature points themselves.
+ *
+ * @param ax - X coordinate, in cells (can be any real number)
+ * @param ay - Y coordinate, in cells (can be any real number)
+ * @param config - Configuration
+ * @param config.jitter - How far a feature point may stray from the middle of
+ * its cell, 0 to 1 (default: 1)
+ * @param config.metric - How distance is measured (default: "euclidean")
+ * @returns The cell's integer coordinates, its feature point, a stable id for
+ * it (an integer in [0, 65535], handy modulo something for a colour), and the
+ * distances to the nearest and second nearest feature points
+ * @throws Error if jitter is outside [0, 1]
+ * @example
+ * ```ts
+ * // A mosaic: every tile takes the colour of the cell it falls in
+ * s.forTiling({ n: 120, type: "square" }, ([x, y], [dX, dY], at) => {
+ *   const { id } = worleyCell2(at[0] * 7, at[1] * 7)
+ *   s.setFillColor(id % 60 + 180, 60, 40 + (id % 30))
+ *   s.fill(new Rect({ at: [x, y], w: dX, h: dY }))
+ * })
+ *
+ * // A dot on the feature point of each cell
+ * const { at } = worleyCell2(x * 7, y * 7)
+ * s.fill(new Circle({ at: [at[0] / 7, at[1] / 7], r: 0.005 }))
+ * ```
+ */
+export function worleyCell2(
+  ax: number,
+  ay: number,
+  config: WorleyConfig = {}
+): {
+  cell: [number, number]
+  at: [number, number]
+  id: number
+  f1: number
+  f2: number
+} {
+  return worleyNearest(ax, ay, config)
+}

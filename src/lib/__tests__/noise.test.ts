@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { curl2, fbm2, perlin2 } from "../noise"
+import { curl2, fbm2, perlin2, worley2, worleyCell2 } from "../noise"
 
 describe("noise", () => {
   describe("perlin2", () => {
@@ -220,6 +220,135 @@ describe("noise", () => {
 
     it("rejects fewer than one octave, as fbm2 does", () => {
       expect(() => curl2(1, 1, { octaves: 0 })).toThrow()
+    })
+  })
+  describe("worley2", () => {
+    it("returns consistent values for the same input", () => {
+      expect(worley2(1.5, 2.5)).toBe(worley2(1.5, 2.5))
+      expect(worleyCell2(1.5, 2.5)).toEqual(worleyCell2(1.5, 2.5))
+    })
+
+    it("returns distances in roughly [0, 1]", () => {
+      for (let i = 0; i < 200; i++) {
+        const value = worley2(Math.random() * 50, Math.random() * 50)
+        expect(value).toBeGreaterThanOrEqual(0)
+        expect(value).toBeLessThan(1.5)
+      }
+    })
+
+    it("finds the nearest feature point, so f2 is never smaller than f1", () => {
+      for (let i = 0; i < 100; i++) {
+        const x = Math.random() * 20
+        const y = Math.random() * 20
+        expect(worley2(x, y, { feature: "f2" })).toBeGreaterThanOrEqual(
+          worley2(x, y)
+        )
+      }
+    })
+
+    it("gives the gap between the two nearest points as the difference", () => {
+      const x = 3.3
+      const y = 7.1
+      expect(worley2(x, y, { feature: "difference" })).toBeCloseTo(
+        worley2(x, y, { feature: "f2" }) - worley2(x, y),
+        10
+      )
+    })
+
+    it("is a distance, so it changes no faster than the point moves", () => {
+      const h = 0.01
+      for (let i = 0; i < 100; i++) {
+        const x = Math.random() * 20
+        const y = Math.random() * 20
+        // the nearest feature point can only get h closer or h further away
+        expect(Math.abs(worley2(x + h, y) - worley2(x, y))).toBeLessThanOrEqual(
+          h + 1e-12
+        )
+      }
+    })
+
+    it("puts the feature point in the middle of its cell with no jitter", () => {
+      // the middle of a cell, so the point in it is the nearest thing there is
+      expect(worley2(4.5, 6.5, { jitter: 0 })).toBeCloseTo(0, 10)
+      // and a corner is half a cell away in each direction
+      expect(worley2(4, 6, { jitter: 0 })).toBeCloseTo(Math.sqrt(0.5), 10)
+    })
+
+    it("measures distance the way it is asked to", () => {
+      const at: [number, number] = [4.2, 6.1]
+      const config = { jitter: 0 } as const
+      const euclidean = worley2(...at, config)
+      const manhattan = worley2(...at, { ...config, metric: "manhattan" })
+      const chebyshev = worley2(...at, { ...config, metric: "chebyshev" })
+
+      // for the same point, chebyshev <= euclidean <= manhattan
+      expect(chebyshev).toBeLessThanOrEqual(euclidean)
+      expect(euclidean).toBeLessThanOrEqual(manhattan)
+      expect(manhattan).toBeCloseTo(0.3 + 0.4, 10)
+      expect(chebyshev).toBeCloseTo(0.4, 10)
+    })
+
+    it("scatters the feature points when jittered", () => {
+      const regular = worleyCell2(4.2, 6.1, { jitter: 0 })
+      const jittered = worleyCell2(4.2, 6.1, { jitter: 1 })
+      expect(jittered.at).not.toEqual(regular.at)
+      expect(regular.at).toEqual([4.5, 6.5])
+    })
+
+    it("rejects jitter outside [0, 1]", () => {
+      expect(() => worley2(1, 1, { jitter: -0.1 })).toThrow()
+      expect(() => worley2(1, 1, { jitter: 1.5 })).toThrow()
+      expect(() => worleyCell2(1, 1, { jitter: 2 })).toThrow()
+    })
+  })
+
+  describe("worleyCell2", () => {
+    it("gives every point in a cell the same id and feature point", () => {
+      const { cell, id, at } = worleyCell2(4.2, 6.1, { jitter: 0.5 })
+
+      // the cell a point belongs to is the one its nearest feature point is in
+      for (let i = 0; i < 50; i++) {
+        const x = cell[0] + Math.random()
+        const y = cell[1] + Math.random()
+        const other = worleyCell2(x, y, { jitter: 0.5 })
+        if (other.cell[0] === cell[0] && other.cell[1] === cell[1]) {
+          expect(other.id).toBe(id)
+          expect(other.at).toEqual(at)
+        }
+      }
+    })
+
+    it("gives neighbouring cells different ids", () => {
+      const ids = new Set<number>()
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+          ids.add(worleyCell2(i + 0.5, j + 0.5, { jitter: 0 }).id)
+        }
+      }
+      // hashes can collide, but 64 cells should not nearly all land together
+      expect(ids.size).toBeGreaterThan(50)
+    })
+
+    it("keeps the feature point inside its own cell", () => {
+      for (let i = 0; i < 100; i++) {
+        const { cell, at } = worleyCell2(Math.random() * 30, Math.random() * 30)
+        expect(at[0]).toBeGreaterThanOrEqual(cell[0])
+        expect(at[0]).toBeLessThanOrEqual(cell[0] + 1)
+        expect(at[1]).toBeGreaterThanOrEqual(cell[1])
+        expect(at[1]).toBeLessThanOrEqual(cell[1] + 1)
+      }
+    })
+
+    it("works with negative coordinates", () => {
+      const { cell, at } = worleyCell2(-3.4, -7.8, { jitter: 0 })
+      expect(cell).toEqual([-4, -8])
+      expect(at).toEqual([-3.5, -7.5])
+    })
+
+    it("reports the distances worley2 does", () => {
+      const { f1, f2 } = worleyCell2(2.3, 5.7)
+      expect(f1).toBeCloseTo(worley2(2.3, 5.7), 10)
+      expect(f2).toBeCloseTo(worley2(2.3, 5.7, { feature: "f2" }), 10)
     })
   })
 })

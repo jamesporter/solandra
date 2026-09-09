@@ -408,6 +408,18 @@
 
 ![Mirrored](./Mirrored.png)
 
+### Dartboard
+
+![Dartboard](./Dartboard.png)
+
+### Rose Window
+
+![Rose Window](./Rose-Window.png)
+
+### Radial Field
+
+![Radial Field](./Radial-Field.png)
+
 ## Advanced Paths
 
 ### Dividing 3
@@ -482,6 +494,18 @@
 
 ![Faceted](./Faceted.png)
 
+### Ribbons
+
+![Ribbons](./Ribbons.png)
+
+### Contours
+
+![Contours](./Contours.png)
+
+### Offset Blobs
+
+![Offset Blobs](./Offset-Blobs.png)
+
 ## Isometric
 
 ### Isometric
@@ -553,6 +577,22 @@
 ### Orbits
 
 ![Orbits](./Orbits.png)
+
+### Cellular
+
+![Cellular](./Cellular.png)
+
+### Cell Walls
+
+![Cell Walls](./Cell-Walls.png)
+
+### Mosaic
+
+![Mosaic](./Mosaic.png)
+
+### Tiled Cells
+
+![Tiled Cells](./Tiled-Cells.png)
 
 ### Rectangles
 

@@ -1,5 +1,6 @@
 import SCanvas from "../lib/sCanvas"
 import { Path, CompoundPath, Star, RegularPolygon, Circle } from "../lib"
+import { perlin2 } from "../lib/noise"
 import { Ellipse, Line } from "../lib"
 import {
   v,
@@ -340,6 +341,63 @@ const mirrored = (p: SCanvas) => {
   })
 }
 
+const dartboard = (p: SCanvas) => {
+  p.background(0, 0, 8)
+
+  // a polar grid: rings of cells going out from the centre, each one a
+  // HollowArc ready to fill
+  p.forRadialTiling(
+    { n: 20, rings: 5, r: 0.32 },
+    (_at, cell, { ring, sector }) => {
+      p.setFillColor(
+        (sector % 2 === 0 ? 8 : 22) + ring * 4,
+        sector % 2 === 0 ? 75 : 45,
+        (ring + sector) % 2 === 0 ? 48 : 24
+      )
+      p.fill(cell)
+    }
+  )
+}
+
+const roseWindow = (p: SCanvas) => {
+  p.background(235, 25, 8)
+
+  p.forRadialTiling(
+    { n: 12, rings: 3, r: 0.32, innerRadius: 0.07 },
+    (at, cell, { ring, a, a2 }) => {
+      p.setFillColor(210 + ring * 40, 60, 25 + ring * 8, 0.9)
+      p.fill(cell)
+
+      // the middle of the cell, turned to face outwards along it
+      p.withTranslation(at, () => {
+        p.withRotation((a + a2) / 2, () => {
+          p.setFillColor(40 - ring * 10, 80, 60, 0.85)
+          p.fill(new Ellipse({ at: [0, 0], w: 0.07 + ring * 0.02, h: 0.03 }))
+        })
+      })
+    }
+  )
+
+  p.setFillColor(45, 85, 65)
+  p.fill(new Circle({ at: p.meta.center, r: 0.05 }))
+}
+
+const radialField = (p: SCanvas) => {
+  p.background(195, 30, 96)
+
+  // noise sampled at the middle of each cell, so the field shows up in polar
+  // coordinates rather than square ones
+  p.forRadialTiling(
+    { n: 48, rings: 9, r: 0.32, innerRadius: 0.05 },
+    (at, cell, { ring }) => {
+      const n = perlin2(at[0] * 4, at[1] * 4)
+      if (n < -0.05) return
+      p.setFillColor(190 + ring * 6, 55, 30 + n * 45, 0.5 + n)
+      p.fill(cell)
+    }
+  )
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: compoundPath, name: "Compound Path" },
   { sketch: compoundPath2, name: "Compound Path 2" },
@@ -356,6 +414,9 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: rosette, name: "Rosette" },
   { sketch: kaleidoscope, name: "Kaleidoscope" },
   { sketch: mirrored, name: "Mirrored" },
+  { sketch: dartboard, name: "Dartboard" },
+  { sketch: roseWindow, name: "Rose Window" },
+  { sketch: radialField, name: "Radial Field" },
 ]
 
 export default sketches
