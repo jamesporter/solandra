@@ -63,6 +63,16 @@
   @apply font-bold text-emerald-600 hover:text-sky-500 dark:text-emerald-400 dark:hover:text-sky-300;
 }
 
+/*
+ * No rubber-band scrolling past the header or footer: the bounce exposes the
+ * page background above/below them, which reads as a glitch rather than a
+ * flourish.
+ */
+html,
+body {
+  overscroll-behavior-y: none;
+}
+
 body {
   @apply bg-gray-100 min-h-screen dark:bg-gray-950 dark:text-gray-100;
 }

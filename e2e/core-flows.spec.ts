@@ -63,3 +63,27 @@ test("export configuration validates dimensions and offers formats", async ({
   )
   await expect(page.getByRole("button", { name: /Generate/ })).toBeDisabled()
 })
+
+test("the docs contents collapse on narrow viewports", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 800 })
+  await page.goto("/docs/shapes")
+
+  const contents = page.getByRole("navigation")
+  const introduction = contents.getByRole("link", { name: "Introduction" })
+  // Collapsed by default, so the article rather than a list of links is what
+  // you land on.
+  await expect(introduction).toBeHidden()
+
+  await page.getByRole("button", { name: /Contents/ }).click()
+  await expect(introduction).toBeVisible()
+
+  await introduction.click()
+  await expect(
+    page.getByRole("heading", { name: "Introduction to Solandra" })
+  ).toBeVisible()
+  await expect(contents.getByRole("link", { name: "Shapes" })).toBeHidden()
+
+  // Wide enough for the sidebar, where the links are always on show.
+  await page.setViewportSize({ width: 1280, height: 900 })
+  await expect(contents.getByRole("link", { name: "Shapes" })).toBeVisible()
+})
