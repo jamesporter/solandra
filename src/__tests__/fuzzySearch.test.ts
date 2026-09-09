@@ -54,6 +54,10 @@ describe("searchCommandMenu", () => {
     expect(top("convex hull")).toBe("Convex hull")
     expect(top("simplif")).toBe("Simplifying paths")
     expect(top("mixcolors")).toBe("Colour schemes & mixing")
+    expect(top("worley")).toBe("Worley & cellular noise")
+    expect(top("cellular")).toBe("Worley & cellular noise")
+    expect(top("offset")).toBe("Offsetting paths")
+    expect(top("radial tiling")).toBe("Radial tiling")
   })
 
   it("copes with typo-ish, partial input", () => {

@@ -3,11 +3,12 @@ import { hsla, ColorSpec } from "./colors.js"
 import { Traceable } from "./paths/index.js"
 import { TextConfig, Text } from "./paths/Text.js"
 import { Rect } from "./paths/Rect.js"
+import { HollowArc } from "./paths/HollowArc.js"
 import { RNG } from "./rng.js"
 import { poissonDiskPoints } from "./poissonDisk.js"
 import { asSimplePath, SimplePathLike } from "./paths/SimplePath.js"
 import { evenProportions } from "./util.js"
-import { heading } from "./vectors.js"
+import { heading, polarToCartesian } from "./vectors.js"
 
 /**
  * Interface for objects that can generate canvas gradients.
@@ -602,6 +603,132 @@ export default class SCanvas {
     for (let i = 0; i < n; i++) {
       callback([cX + r * Math.cos(a + da), cY + r * Math.sin(a + da)], i)
       a += da
+    }
+  }
+
+  /**
+   * Iterates over a polar grid: rings of cells going out from a centre, each
+   * ring divided into the same number of sectors. The `forTiling` of circles,
+   * for dartboards, rose windows, sunbursts and radial charts.
+   *
+   * Each cell arrives as a `HollowArc`, ready to fill or draw, along with the
+   * point at the middle of it and its bounds, so things can be placed in a
+   * cell and, using the mid angle of `a` and `a2`, turned to face outwards.
+   *
+   * @param config - Configuration
+   * @param config.n - How many sectors each ring is divided into
+   * @param config.rings - How many rings (default: 3)
+   * @param config.at - The centre (default: the centre of the canvas)
+   * @param config.r - The radius of the outermost ring (default: 0.5, which
+   * reaches the left and right edges of the canvas)
+   * @param config.innerRadius - The radius of the hole in the middle
+   * (default: 0)
+   * @param config.from - The angle the first sector starts at (default: 0, i.e.
+   * pointing right; angles increase clockwise as drawn)
+   * @param config.to - The angle the last sector ends at (default: all the way
+   * round). A smaller span gives a fan rather than a full circle.
+   * @param config.order - "ringFirst" (default) goes round each ring in turn,
+   * "sectorFirst" goes out along each sector in turn
+   * @param callback - Called for each cell with the point at its middle, the
+   * cell itself, its bounds (in the form `HollowArc` takes, plus which ring
+   * and sector it is) and a sequential index
+   * @throws Error if fewer than one sector or ring is asked for, or the inner
+   * radius is negative or not smaller than the outer radius
+   * @example
+   * ```ts
+   * // A dartboard
+   * s.forRadialTiling({ n: 12, rings: 4, r: 0.45 }, (at, cell, { ring }) => {
+   *   s.setFillColor(20 + ring * 40, 70, 50)
+   *   s.fill(cell)
+   * })
+   *
+   * // Petals facing outwards, in a fan rather than a full circle
+   * s.forRadialTiling(
+   *   { n: 9, rings: 2, innerRadius: 0.1, from: Math.PI, to: Math.PI * 2 },
+   *   (at, _cell, { a, a2 }) => {
+   *     s.withTranslation(at, () => {
+   *       s.withRotation((a + a2) / 2, () => {
+   *         s.fill(new Ellipse({ at: [0, 0], w: 0.1, h: 0.04 }))
+   *       })
+   *     })
+   *   }
+   * )
+   * ```
+   */
+  forRadialTiling = (
+    config: {
+      n: number
+      rings?: number
+      at?: Point2D
+      r?: number
+      innerRadius?: number
+      from?: number
+      to?: number
+      order?: "ringFirst" | "sectorFirst"
+    },
+    callback: (
+      at: Point2D,
+      cell: HollowArc,
+      bounds: {
+        r: number
+        r2: number
+        a: number
+        a2: number
+        ring: number
+        sector: number
+      },
+      i: number
+    ) => void
+  ) => {
+    const {
+      n,
+      rings = 3,
+      at = this.meta.center,
+      r = 0.5,
+      innerRadius = 0,
+      from = 0,
+      to = from + Math.PI * 2,
+      order = "ringFirst",
+    } = config
+
+    if (n < 1)
+      throw new Error(`Must have at least one sector, n was set to ${n}`)
+    if (rings < 1)
+      throw new Error(`Must have at least one ring, rings was set to ${rings}`)
+    if (innerRadius < 0)
+      throw new Error(`Inner radius must not be negative, was ${innerRadius}`)
+    if (innerRadius >= r)
+      throw new Error(
+        `Inner radius must be smaller than the radius, was ${innerRadius} of ${r}`
+      )
+
+    const dR = (r - innerRadius) / rings
+    const dA = (to - from) / n
+
+    let i = 0
+    const cell = (ring: number, sector: number) => {
+      const r2 = innerRadius + ring * dR
+      const outer = r2 + dR
+      const a = from + sector * dA
+      const a2 = a + dA
+
+      callback(
+        polarToCartesian(at, (r2 + outer) / 2, (a + a2) / 2),
+        new HollowArc({ at, r: outer, r2, a, a2 }),
+        { r: outer, r2, a, a2, ring, sector },
+        i
+      )
+      i++
+    }
+
+    if (order === "ringFirst") {
+      for (let ring = 0; ring < rings; ring++) {
+        for (let sector = 0; sector < n; sector++) cell(ring, sector)
+      }
+    } else {
+      for (let sector = 0; sector < n; sector++) {
+        for (let ring = 0; ring < rings; ring++) cell(ring, sector)
+      }
     }
   }
 

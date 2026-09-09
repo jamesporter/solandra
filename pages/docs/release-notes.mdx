@@ -10,6 +10,9 @@ import { DocPageLayout } from "../../src/components/DocPageLayout"
 - `curl2`, curl noise: a divergence free vector field taken from the curl of `perlin2`/`fbm2`, so lines following it swirl around each other instead of draining into the same few places as a naive noise-as-angle field does. Plus `SimplePath.flowLine`, which traces a path through any vector field.
 - Measuring a `SimplePath` as a shape: `boundingBox` (in the form `Rect` takes), `area`, `containsPoint` and `convexHull`, along with a standalone `convexHull` for bare points. And `simplified`, which drops the points that barely change a path's shape (Ramer-Douglas-Peucker).
 - `harmony`, which builds the classic colour schemes (complementary, analogous, triadic, tetradic, split complementary, monochrome) around a colour, and `mixColors`, which blends two colours the short way round the hue circle.
+- `worley2`, cellular noise: the distance to the nearest of a scattering of feature points, for the structured textures Perlin noise cannot give (scales, cobbles, cracked mud, stained glass). Configurable `feature` (`"f1"`, `"f2"` or `"difference"`, which draws the boundaries between cells), `metric` and `jitter`. Plus `worleyCell2`, which says which cell a point falls in, for colouring cells as a whole.
+- `offset` on a `SimplePath`: the parallel path, a fixed distance to one side, with mitred corners. Offset a line both ways and join the two up for a filled ribbon, or step the distance for contours inside a shape.
+- `forRadialTiling`, a polar `forTiling`: rings of cells going out from a centre, each ring divided into sectors, each cell a `HollowArc` ready to fill, with an optional hole in the middle and an optional partial turn for a fan.
 
 ## 0.20.0
 

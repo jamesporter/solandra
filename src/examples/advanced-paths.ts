@@ -417,6 +417,67 @@ const faceted = (p: SCanvas) => {
   })
 }
 
+const ribbons = (p: SCanvas) => {
+  p.background(205, 30, 12)
+  p.lineWidth = 0.0015
+
+  p.times(9, (i) => {
+    const line = SimplePath.withPoints(
+      p.build(p.range, { from: -0.02, to: 1.02, n: 14 }, (x) => [
+        x,
+        0.05 + i * 0.07 + 0.03 * perlin2(x * 2.5, i * 1.7),
+      ])
+    ).chaiken({ n: 3 })
+
+    // one edge out, the other back: offsetting a line each way and joining the
+    // two up turns it into a filled band
+    const halfWidth = 0.006 + 0.016 * p.random()
+    const ribbon = line
+      .offset({ distance: halfWidth })
+      .withAppended(line.offset({ distance: -halfWidth }).reversed)
+      .close()
+
+    p.setFillColor(185 + i * 9, 70, 55, 0.85)
+    p.fill(ribbon)
+    p.setStrokeColor(0, 0, 100, 0.5)
+    p.draw(ribbon)
+  })
+}
+
+const contours = (p: SCanvas) => {
+  p.background(35, 25, 96)
+  p.lineWidth = 0.0025
+
+  // the built in shapes trace clockwise, so a positive offset works inwards;
+  // mitred corners keep the points sharp the whole way in
+  const outline = new Star({ at: p.meta.center, n: 7, r: 0.3, r2: 0.21 }).path
+  p.range({ from: 0, to: 0.18, n: 20 }, (d) => {
+    p.setStrokeColor(20 + d * 260, 70, 45)
+    p.draw(outline.offset({ distance: d }))
+  })
+}
+
+const offsetBlobs = (p: SCanvas) => {
+  p.background(280, 30, 10)
+
+  p.forTiling({ n: 3, type: "square", margin: 0.06 }, (_at, [dX], c, i) => {
+    const blob = SimplePath.withPoints(
+      p.build(p.aroundCircle, { at: c, r: dX * 0.36, n: 11 }, (at) =>
+        p.perturb({ at, magnitude: dX * 0.12 })
+      )
+    )
+      .close()
+      .chaiken({ n: 3, looped: true })
+
+    // rings inside one another, each a step further in than the last
+    p.range({ from: 0, to: dX * 0.22, n: 6 }, (d) => {
+      p.setStrokeColor(260 + i * 12, 70, 40 + d * 200, 0.9)
+      p.lineWidth = 0.004
+      p.draw(blob.offset({ distance: d }))
+    })
+  })
+}
+
 const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: dividing3, name: "Dividing 3" },
   { sketch: dividing4, name: "Dividing 4" },
@@ -436,6 +497,9 @@ const sketches: { name: string; sketch: (p: SCanvas) => void }[] = [
   { sketch: insideAStar, name: "Inside a Star" },
   { sketch: hulls, name: "Hulls" },
   { sketch: faceted, name: "Faceted" },
+  { sketch: ribbons, name: "Ribbons" },
+  { sketch: contours, name: "Contours" },
+  { sketch: offsetBlobs, name: "Offset Blobs" },
 ]
 
 export default sketches

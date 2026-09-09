@@ -744,6 +744,185 @@ describe("SimplePath", () => {
     })
   })
 
+  describe("offset", () => {
+    it("moves a straight line sideways by the distance", () => {
+      const line = SimplePath.withPoints([
+        [0, 0],
+        [1, 0],
+      ])
+
+      // a quarter turn clockwise from travel, so downwards going right
+      expect(line.offset({ distance: 0.1 }).points).toEqual([
+        [0, 0.1],
+        [1, 0.1],
+      ])
+      expect(line.offset({ distance: -0.1 }).points).toEqual([
+        [0, -0.1],
+        [1, -0.1],
+      ])
+    })
+
+    it("keeps the offset path parallel, at the right distance", () => {
+      const path = SimplePath.withPoints([
+        [0, 0],
+        [0.5, 0.2],
+        [1, 0],
+      ])
+      const offset = path.offset({ distance: 0.05 })
+
+      // the ends move perpendicular to their own segment, so exactly 0.05
+      expect(v.distance(path.points[0], offset.points[0])).toBeCloseTo(0.05, 10)
+      expect(v.distance(path.points[2], offset.points[2])).toBeCloseTo(0.05, 10)
+      // and each segment stays parallel to the one it came from
+      pairWise(path.points).forEach(([a, b], i) => {
+        const original = v.heading(v.subtract(b, a))
+        const [c, d] = [offset.points[i], offset.points[i + 1]]
+        expect(v.heading(v.subtract(d, c))).toBeCloseTo(original, 10)
+      })
+    })
+
+    it("mitres corners, so the offset segments meet exactly", () => {
+      const corner = SimplePath.withPoints([
+        [0, 0],
+        [1, 0],
+        [1, 1],
+      ])
+      const offset = corner.offset({ distance: 0.1 })
+
+      // a right angle turned clockwise, so the corner moves inside it, along
+      // the bisector by distance / cos(45 degrees)
+      expect(offset.points[1][0]).toBeCloseTo(0.9, 10)
+      expect(offset.points[1][1]).toBeCloseTo(0.1, 10)
+      expect(v.distance(corner.points[1], offset.points[1])).toBeCloseTo(
+        0.1 * Math.SQRT2,
+        10
+      )
+    })
+
+    it("caps how far a sharp corner is thrown out", () => {
+      const spike = SimplePath.withPoints([
+        [0, 0],
+        [1, 0.01],
+        [0, 0.02],
+      ])
+
+      const generous = spike.offset({ distance: 0.1, miterLimit: 20 })
+      const limited = spike.offset({ distance: 0.1, miterLimit: 2 })
+
+      expect(v.distance(spike.points[1], generous.points[1])).toBeGreaterThan(
+        0.5
+      )
+      expect(v.distance(spike.points[1], limited.points[1])).toBeCloseTo(
+        0.2,
+        10
+      )
+    })
+
+    it("keeps a closed path closed, and offsets a clockwise one inwards", () => {
+      const offset = square().offset({ distance: 0.5 })
+
+      expect(offset.points[0]).toEqual(offset.points[offset.points.length - 1])
+      // the same corners, half a unit further in in each direction
+      expect(offset.points.slice(0, 4)).toEqual([
+        [0.5, 0.5],
+        [1.5, 0.5],
+        [1.5, 1.5],
+        [0.5, 1.5],
+      ])
+      expect(offset.area).toBeLessThan(square().area)
+    })
+
+    it("offsets a closed path outwards the other way", () => {
+      const offset = square().offset({ distance: -0.5 })
+      expect(offset.points.slice(0, 4)).toEqual([
+        [-0.5, -0.5],
+        [2.5, -0.5],
+        [2.5, 2.5],
+        [-0.5, 2.5],
+      ])
+      expect(offset.area).toBeGreaterThan(square().area)
+    })
+
+    it("leaves a path where it is when the distance is zero", () => {
+      const path = SimplePath.withPoints([
+        [0, 0],
+        [0.5, 0.3],
+        [1, 0],
+      ])
+      const offset = path.offset({ distance: 0 })
+
+      offset.points.forEach((point, i) => {
+        expect(point[0]).toBeCloseTo(path.points[i][0], 10)
+        expect(point[1]).toBeCloseTo(path.points[i][1], 10)
+      })
+    })
+
+    it("does not change the path it came from", () => {
+      const path = SimplePath.withPoints([
+        [0, 0],
+        [1, 0],
+      ])
+      path.offset({ distance: 0.2 })
+      expect(path.points).toEqual([
+        [0, 0],
+        [1, 0],
+      ])
+    })
+
+    it("ignores repeated points, which say nothing about direction", () => {
+      const offset = SimplePath.withPoints([
+        [0, 0],
+        [0.5, 0],
+        [0.5, 0],
+        [1, 0],
+      ]).offset({ distance: 0.1 })
+
+      expect(offset.points).toEqual([
+        [0, 0.1],
+        [0.5, 0.1],
+        [1, 0.1],
+      ])
+    })
+
+    it("copes with a path that doubles back on itself", () => {
+      const offset = SimplePath.withPoints([
+        [0, 0],
+        [1, 0],
+        [0, 0],
+      ]).offset({ distance: 0.1 })
+
+      expect(offset.points).toHaveLength(3)
+      offset.points.forEach(([x, y]) => {
+        expect(Number.isFinite(x)).toBe(true)
+        expect(Number.isFinite(y)).toBe(true)
+      })
+    })
+
+    it("works on the path of any shape", () => {
+      const star = new Star({ at: [0, 0], n: 5, r: 1 })
+      const offset = star.path.offset({ distance: 0.05 })
+      expect(offset.points.length).toBeGreaterThan(0)
+      // the built in shapes trace clockwise, so this is a contour inside it
+      expect(offset.area).toBeLessThan(star.path.area)
+    })
+
+    it("throws for a path that cannot be offset", () => {
+      expect(() => new SimplePath().offset({ distance: 0.1 })).toThrow()
+      expect(() =>
+        SimplePath.withPoints([[0, 0]]).offset({ distance: 0.1 })
+      ).toThrow()
+      expect(() =>
+        SimplePath.withPoints([
+          [0, 0],
+          [0, 0],
+        ]).offset({ distance: 0.1 })
+      ).toThrow()
+      expect(() =>
+        straightLine().offset({ distance: 0.1, miterLimit: 0.5 })
+      ).toThrow()
+    })
+  })
+
   describe("asSimplePath", () => {
     it("passes a SimplePath straight through", () => {
       const path = square()

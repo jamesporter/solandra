@@ -289,6 +289,31 @@ const streamers = (s: SCanvas) => {
 }
 ```
 
+#### `offset`
+
+`offset({ distance, miterLimit })` gives back the parallel path: every point shifted sideways by the same amount. A positive distance moves a quarter turn clockwise from the direction of travel as it appears on screen (y increases downwards), so a path drawn left to right is offset downwards, and a closed path drawn clockwise, as the built in shapes' paths are, is offset inwards. Corners are mitred; `miterLimit` (default 4, in multiples of the distance) caps how far a very sharp corner may be thrown out. Offsetting further than the radius of a path's own curves folds it into loops, so `simplified` first or offset less far.
+
+```ts
+const ribbonsAndContours = (s: SCanvas) => {
+  // a line offset each way and joined up: a filled band
+  const line = SimplePath.withPoints(
+    s.build(s.range, { n: 14 }, (x) => [x, 0.3 + 0.05 * Math.sin(x * 9)])
+  ).chaiken({ n: 3 })
+  s.fill(
+    line
+      .offset({ distance: 0.02 })
+      .withAppended(line.offset({ distance: -0.02 }).reversed)
+      .close()
+  )
+
+  // stepping the distance instead: contours, each further inside the last
+  const outline = new Star({ at: [0.5, 0.7], n: 7, r: 0.25 }).path
+  s.range({ from: 0, to: 0.12, n: 10 }, (d) => {
+    s.draw(outline.offset({ distance: d }))
+  })
+}
+```
+
 ### Path (with curves)
 
 A `Path` can contain both straight and curved segments. The `addCurveTo` method allows for creating complex, organic shapes.
@@ -496,6 +521,30 @@ const circleText = (s: SCanvas) => {
       )
     })
   })
+}
+```
+
+### `forRadialTiling`
+
+`forTiling` in circles: `rings` of cells going out from a centre, each ring divided into `n` sectors. The callback gets the point at the middle of the cell, the cell itself as a `HollowArc` (ready to `fill` or `draw`), its bounds (`r`, `r2`, `a`, `a2`, plus `ring` and `sector`) and a sequential index. `at` defaults to the canvas centre and `r` to 0.5; `innerRadius` leaves a hole in the middle, `from`/`to` cover part of a turn for a fan rather than a full circle, and `order` is `"ringFirst"` (default, round each ring in turn) or `"sectorFirst"` (out along each sector).
+
+```ts
+const rose = (s: SCanvas) => {
+  s.background(235, 25, 8)
+  s.forRadialTiling(
+    { n: 12, rings: 3, r: 0.46, innerRadius: 0.09 },
+    (at, cell, { ring, a, a2 }) => {
+      s.setFillColor(210 + ring * 40, 60, 25 + ring * 8, 0.9)
+      s.fill(cell)
+      // the middle of the cell, turned to face outwards along it
+      s.withTranslation(at, () => {
+        s.withRotation((a + a2) / 2, () => {
+          s.setFillColor(40 - ring * 10, 80, 60, 0.85)
+          s.fill(new Ellipse({ at: [0, 0], w: 0.1 + ring * 0.03, h: 0.035 }))
+        })
+      })
+    }
+  )
 }
 ```
 
@@ -709,6 +758,28 @@ const flowField = (s: SCanvas) => {
         [cX + uX * dX, cY + uY * dX],
       ])
     )
+  })
+}
+```
+
+### Worley Noise
+
+`worley2` is cellular noise: space divided into cells, each with a feature point somewhere inside it, and the value at a point given by how far away the nearest of those points is. Where `perlin2` gives soft clouds this gives structure - scales, cobbles, cracked mud, stained glass. Coordinates are in cells, so `worley2(x * 8, y * 8)` puts eight cells across the canvas, and the value is a distance, roughly in [0, 1].
+
+- `feature`: `"f1"` (default, the nearest feature point), `"f2"` (the second nearest) or `"difference"` (the gap between them, which falls to zero exactly on the boundary between cells, so it draws the cracks rather than the cells)
+- `metric`: `"euclidean"` (default, round cells), `"manhattan"` (diamonds) or `"chebyshev"` (squares)
+- `jitter`: how far a feature point may stray from the middle of its cell, 1 (anywhere, the default) down to 0 (a perfectly regular grid)
+
+`worleyCell2` answers which cell a point is in rather than how far it is from one, for colouring cells as a whole: it gives the cell's integer coordinates, its feature point, a stable `id` (an integer in [0, 65535], handy modulo something for a colour) and both distances. Every point in a cell gets the same answer.
+
+```ts
+const mosaic = (s: SCanvas) => {
+  s.background(0, 0, 10)
+  s.forTiling({ n: 160, type: "square" }, ([x, y], [dX, dY], at) => {
+    const { id, f1, f2 } = worleyCell2(at[0] * 8, at[1] * 8, { jitter: 0.9 })
+    if (f2 - f1 < 0.04) return // grouting between the tiles
+    s.setFillColor(190 + (id % 100), 55, 30 + (id % 45))
+    s.fill(new Rect({ at: [x, y], w: dX, h: dY }))
   })
 }
 ```

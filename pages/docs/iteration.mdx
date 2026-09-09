@@ -1,6 +1,13 @@
 import { DocPageLayout } from "../../src/components/DocPageLayout"
 import { ExampleCanvas } from "../../src/components/ExampleCanvas"
-import { Circle, Rect, Square, RegularPolygon, Star } from "../../src/lib"
+import {
+  Circle,
+  Ellipse,
+  Rect,
+  Square,
+  RegularPolygon,
+  Star,
+} from "../../src/lib"
 
 # Iteration
 
@@ -176,6 +183,83 @@ s.aroundCircle({ n: 24, r: 0.35 }, ([x, y], i) => {
     })
   }}
 />
+
+## forRadialTiling
+
+`forTiling`, but in circles: `rings` of cells going out from a centre, each ring divided into `n` sectors. Each cell arrives as a `HollowArc`, ready to `fill` or `draw`, along with the point at the middle of it, its bounds (`r`, `r2`, `a`, `a2`, plus which `ring` and `sector` it is) and a sequential index.
+
+```ts
+s.background(0, 0, 8)
+s.forRadialTiling(
+  { n: 20, rings: 5, r: 0.45 },
+  (_at, cell, { ring, sector }) => {
+    s.setFillColor(
+      (sector % 2 === 0 ? 8 : 22) + ring * 4,
+      sector % 2 === 0 ? 75 : 45,
+      (ring + sector) % 2 === 0 ? 48 : 24
+    )
+    s.fill(cell)
+  }
+)
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(0, 0, 8)
+    s.forRadialTiling(
+      { n: 20, rings: 5, r: 0.45 },
+      (_at, cell, { ring, sector }) => {
+        s.setFillColor(
+          (sector % 2 === 0 ? 8 : 22) + ring * 4,
+          sector % 2 === 0 ? 75 : 45,
+          (ring + sector) % 2 === 0 ? 48 : 24
+        )
+        s.fill(cell)
+      }
+    )
+  }}
+/>
+
+`innerRadius` leaves a hole in the middle, and `from`/`to` cover part of a turn rather than all of it, for a fan. The point handed over is the middle of the cell, and the mid angle of its bounds is the direction out to it, so anything drawn there can be turned to face outwards:
+
+```ts
+s.background(235, 25, 8)
+s.forRadialTiling(
+  { n: 12, rings: 3, r: 0.46, innerRadius: 0.09 },
+  (at, cell, { ring, a, a2 }) => {
+    s.setFillColor(210 + ring * 40, 60, 25 + ring * 8, 0.9)
+    s.fill(cell)
+
+    s.withTranslation(at, () => {
+      s.withRotation((a + a2) / 2, () => {
+        s.setFillColor(40 - ring * 10, 80, 60, 0.85)
+        s.fill(new Ellipse({ at: [0, 0], w: 0.1 + ring * 0.03, h: 0.035 }))
+      })
+    })
+  }
+)
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(235, 25, 8)
+    s.forRadialTiling(
+      { n: 12, rings: 3, r: 0.46, innerRadius: 0.09 },
+      (at, cell, { ring, a, a2 }) => {
+        s.setFillColor(210 + ring * 40, 60, 25 + ring * 8, 0.9)
+        s.fill(cell)
+        s.withTranslation(at, () => {
+          s.withRotation((a + a2) / 2, () => {
+            s.setFillColor(40 - ring * 10, 80, 60, 0.85)
+            s.fill(new Ellipse({ at: [0, 0], w: 0.1 + ring * 0.03, h: 0.035 }))
+          })
+        })
+      }
+    )
+  }}
+/>
+
+By default it goes round each ring in turn (`order: "ringFirst"`); `"sectorFirst"` goes out along each sector instead, which is what you want when the colour or size should build outwards.
 
 ## forPoissonDiskPoints
 

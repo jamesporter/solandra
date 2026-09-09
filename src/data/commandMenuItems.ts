@@ -247,6 +247,14 @@ const concepts: CommandMenuItem[] = [
     keywords: "radial polar ring",
   },
   {
+    name: "Radial tiling",
+    href: "/docs/iteration",
+    kind: "concept",
+    section: "Iteration",
+    keywords:
+      "forRadialTiling polar grid rings sectors HollowArc dartboard rose window fan",
+  },
+  {
     name: "forPoissonDiskPoints",
     href: "/docs/iteration",
     kind: "concept",
@@ -308,6 +316,13 @@ const concepts: CommandMenuItem[] = [
     kind: "concept",
     section: "Paths & Curves",
     keywords: "simplified tolerance douglas peucker thin reduce facet",
+  },
+  {
+    name: "Offsetting paths",
+    href: "/docs/paths",
+    kind: "concept",
+    section: "Paths & Curves",
+    keywords: "offset parallel ribbon contour outline inset miter sideways",
   },
   {
     name: "Rect, Square & RoundedRect",
@@ -428,6 +443,14 @@ const concepts: CommandMenuItem[] = [
     kind: "concept",
     section: "Randomness",
     keywords: "curl2 flowLine streamline swirl divergence free vector field",
+  },
+  {
+    name: "Worley & cellular noise",
+    href: "/docs/randomness",
+    kind: "concept",
+    section: "Randomness",
+    keywords:
+      "worley2 worleyCell2 cellular voronoi cells cracks mosaic feature points jitter metric",
   },
   {
     name: "perturb & distributions",

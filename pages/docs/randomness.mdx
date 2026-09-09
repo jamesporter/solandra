@@ -9,6 +9,8 @@ import {
   curl2,
   fbm2,
   perlin2,
+  worley2,
+  worleyCell2,
   v,
 } from "../../src/lib"
 
@@ -421,6 +423,103 @@ s.aroundCircle({ n: 24, r: 0.42 }, (from, i) => {
           step: 0.005,
         })
       )
+    })
+  }}
+/>
+
+## Worley noise
+
+Perlin and its fractal cousins give soft, cloudy noise. `worley2` gives **structure**. It divides space into cells, drops a feature point in each, and answers "how far is the nearest one?". That single idea produces scales, cobbles, cracked mud, stained glass and cells under a microscope.
+
+Coordinates are in cells, so `worley2(x * 8, y * 8)` puts eight cells across the canvas. The value is a distance, roughly in `[0, 1]`: zero on a feature point, largest in the awkward gaps between them.
+
+```ts
+s.forTiling({ n: 150, type: "square" }, ([x, y], [dX, dY]) => {
+  const d = worley2(x * 7, y * 7)
+  s.setFillColor(25 + d * 25, 55, 12 + d * 55)
+  s.fill(new Rect({ at: [x, y], w: dX, h: dY }))
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.forTiling({ n: 150, type: "square" }, ([x, y], [dX, dY]) => {
+      const d = worley2(x * 7, y * 7)
+      s.setFillColor(25 + d * 25, 55, 12 + d * 55)
+      s.fill(new Rect({ at: [x, y], w: dX, h: dY }))
+    })
+  }}
+/>
+
+`feature` picks which distance you get. `"difference"` &mdash; the second nearest point minus the nearest &mdash; falls to zero exactly on the boundary between two cells, so it draws the cracks rather than the cells:
+
+```ts
+s.background(205, 25, 96)
+s.forTiling({ n: 200, type: "square" }, ([x, y], [dX, dY]) => {
+  const d = worley2(x * 5, y * 5, { feature: "difference" })
+  if (d > 0.14) return
+  s.setFillColor(215, 45, 20, 1 - d / 0.14)
+  s.fill(new Rect({ at: [x, y], w: dX, h: dY }))
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(205, 25, 96)
+    s.forTiling({ n: 200, type: "square" }, ([x, y], [dX, dY]) => {
+      const d = worley2(x * 5, y * 5, { feature: "difference" })
+      if (d > 0.14) return
+      s.setFillColor(215, 45, 20, 1 - d / 0.14)
+      s.fill(new Rect({ at: [x, y], w: dX, h: dY }))
+    })
+  }}
+/>
+
+Two more knobs change the character entirely. `metric` decides what "near" means: `"euclidean"` (the default) gives round cells, `"manhattan"` diamonds, `"chebyshev"` squares. `jitter` says how far a feature point may stray from the middle of its cell, from 1 (anywhere, the default) down to 0 (a perfectly regular grid).
+
+```ts
+s.background(175, 35, 12)
+s.forTiling({ n: 160, type: "square" }, ([x, y], [dX, dY], at) => {
+  const d = worley2(at[0] * 9, at[1] * 9, { metric: "chebyshev", jitter: 0.35 })
+  s.setFillColor(170 + d * 40, 55, 15 + d * 65)
+  s.fill(new Rect({ at: [x, y], w: dX, h: dY }))
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(175, 35, 12)
+    s.forTiling({ n: 160, type: "square" }, ([x, y], [dX, dY], at) => {
+      const d = worley2(at[0] * 9, at[1] * 9, {
+        metric: "chebyshev",
+        jitter: 0.35,
+      })
+      s.setFillColor(170 + d * 40, 55, 15 + d * 65)
+      s.fill(new Rect({ at: [x, y], w: dX, h: dY }))
+    })
+  }}
+/>
+
+To colour each cell as a whole rather than shading by distance, ask which cell a point is in. `worleyCell2` gives the cell's coordinates, its feature point, a stable `id` (handy modulo something for a colour) and both distances &mdash; and every point in a cell gets the same answer.
+
+```ts
+s.background(0, 0, 10)
+s.forTiling({ n: 160, type: "square" }, ([x, y], [dX, dY], at) => {
+  const { id, f1, f2 } = worleyCell2(at[0] * 8, at[1] * 8, { jitter: 0.9 })
+  if (f2 - f1 < 0.04) return // grouting between the tiles
+  s.setFillColor(190 + (id % 100), 55, 30 + (id % 45))
+  s.fill(new Rect({ at: [x, y], w: dX, h: dY }))
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(0, 0, 10)
+    s.forTiling({ n: 160, type: "square" }, ([x, y], [dX, dY], at) => {
+      const { id, f1, f2 } = worleyCell2(at[0] * 8, at[1] * 8, { jitter: 0.9 })
+      if (f2 - f1 < 0.04) return
+      s.setFillColor(190 + (id % 100), 55, 30 + (id % 45))
+      s.fill(new Rect({ at: [x, y], w: dX, h: dY }))
     })
   }}
 />

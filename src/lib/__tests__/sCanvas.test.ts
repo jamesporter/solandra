@@ -1,9 +1,11 @@
 import { describe, it, expect } from "vitest"
 import SCanvas from "../sCanvas"
-import { createMockCtx } from "./testUtils"
+import { createMockCtx, recordTrace } from "./testUtils"
 import { SimplePath } from "../paths/SimplePath"
 import { Line } from "../paths/Line"
 import { Point2D } from "../types/sol"
+import { HollowArc } from "../paths/HollowArc"
+import { distance } from "../vectors"
 
 describe("SCanvas", () => {
   describe("constructor", () => {
@@ -467,6 +469,144 @@ describe("SCanvas", () => {
       // At t=PI, cos(PI) = -1, so value = 0 + (1-0)*(1-1)/2 = 0
       const val = s.oscillate()
       expect(val).toBeCloseTo(0)
+    })
+  })
+
+  describe("forRadialTiling", () => {
+    const canvas = () => {
+      const { ctx } = createMockCtx()
+      return new SCanvas(ctx, { width: 100, height: 100 }, 1, 0)
+    }
+
+    it("covers every cell of the polar grid once", () => {
+      const s = canvas()
+      const cells: { ring: number; sector: number }[] = []
+      s.forRadialTiling({ n: 4, rings: 3 }, (_at, _cell, { ring, sector }) =>
+        cells.push({ ring, sector })
+      )
+
+      expect(cells).toHaveLength(12)
+      expect(
+        new Set(cells.map(({ ring, sector }) => `${ring},${sector}`)).size
+      ).toBe(12)
+    })
+
+    it("divides the radius into rings and the circle into sectors", () => {
+      const s = canvas()
+      const bounds: { r: number; r2: number; a: number; a2: number }[] = []
+      s.forRadialTiling({ n: 4, rings: 2, r: 0.4 }, (_at, _cell, b) =>
+        bounds.push(b)
+      )
+
+      expect(bounds[0].r2).toBeCloseTo(0, 10)
+      expect(bounds[0].r).toBeCloseTo(0.2, 10)
+      expect(bounds[0].a).toBeCloseTo(0, 10)
+      expect(bounds[0].a2).toBeCloseTo(Math.PI / 2, 10)
+      // the last cell reaches the outer radius and comes back round to the start
+      expect(bounds[7].r).toBeCloseTo(0.4, 10)
+      expect(bounds[7].a2).toBeCloseTo(Math.PI * 2, 10)
+    })
+
+    it("leaves a hole in the middle when asked", () => {
+      const s = canvas()
+      const bounds: { r: number; r2: number }[] = []
+      s.forRadialTiling(
+        { n: 3, rings: 2, r: 0.5, innerRadius: 0.1 },
+        (_at, _cell, b) => bounds.push(b)
+      )
+
+      expect(bounds[0].r2).toBeCloseTo(0.1, 10)
+      expect(bounds[0].r).toBeCloseTo(0.3, 10)
+    })
+
+    it("gives the point at the middle of each cell", () => {
+      const s = canvas()
+      const points: Point2D[] = []
+      s.forRadialTiling({ n: 4, rings: 1, r: 0.4, at: [0.5, 0.5] }, (at) =>
+        points.push(at)
+      )
+
+      // the first cell spans 0 to a quarter turn, so its middle heads down and
+      // right from the centre, half way out
+      expect(points[0][0]).toBeCloseTo(0.5 + 0.2 * Math.cos(Math.PI / 4), 10)
+      expect(points[0][1]).toBeCloseTo(0.5 + 0.2 * Math.sin(Math.PI / 4), 10)
+      points.forEach((at) => {
+        expect(distance(at, [0.5, 0.5])).toBeCloseTo(0.2, 10)
+      })
+    })
+
+    it("centres on the canvas by default", () => {
+      const { ctx } = createMockCtx()
+      const s = new SCanvas(ctx, { width: 100, height: 200 }, 1, 0)
+      const points: Point2D[] = []
+      s.forRadialTiling({ n: 2, rings: 1, r: 0.4 }, (at) => points.push(at))
+
+      points.forEach((at) => {
+        expect(distance(at, s.meta.center)).toBeCloseTo(0.2, 10)
+      })
+    })
+
+    it("hands over a cell that traces the arc it describes", () => {
+      const s = canvas()
+      const cells: HollowArc[] = []
+      s.forRadialTiling({ n: 4, rings: 1, r: 0.4 }, (_at, cell) =>
+        cells.push(cell)
+      )
+
+      expect(cells[0]).toBeInstanceOf(HollowArc)
+      expect(cells[0].radius).toBeCloseTo(0.4, 10)
+      expect(cells[0].innerRadius).toBeCloseTo(0, 10)
+      expect(recordTrace(cells[0]).some(({ op }) => op === "arc")).toBe(true)
+    })
+
+    it("covers only the span it is given, for a fan", () => {
+      const s = canvas()
+      const bounds: { a: number; a2: number }[] = []
+      s.forRadialTiling({ n: 2, rings: 1, from: 0, to: Math.PI }, (_a, _c, b) =>
+        bounds.push(b)
+      )
+
+      expect(bounds[0].a).toBeCloseTo(0, 10)
+      expect(bounds[1].a2).toBeCloseTo(Math.PI, 10)
+    })
+
+    it("goes round each ring in turn, or out along each sector", () => {
+      const s = canvas()
+
+      const ringFirst: string[] = []
+      s.forRadialTiling({ n: 2, rings: 2 }, (_at, _cell, { ring, sector }) =>
+        ringFirst.push(`${ring}${sector}`)
+      )
+      expect(ringFirst).toEqual(["00", "01", "10", "11"])
+
+      const sectorFirst: string[] = []
+      s.forRadialTiling(
+        { n: 2, rings: 2, order: "sectorFirst" },
+        (_at, _cell, { ring, sector }) => sectorFirst.push(`${ring}${sector}`)
+      )
+      expect(sectorFirst).toEqual(["00", "10", "01", "11"])
+    })
+
+    it("counts the cells it visits", () => {
+      const s = canvas()
+      const indices: number[] = []
+      s.forRadialTiling({ n: 3, rings: 2 }, (_at, _cell, _bounds, i) =>
+        indices.push(i)
+      )
+      expect(indices).toEqual([0, 1, 2, 3, 4, 5])
+    })
+
+    it("rejects a grid it cannot make", () => {
+      const s = canvas()
+      const noop = () => {}
+      expect(() => s.forRadialTiling({ n: 0 }, noop)).toThrow()
+      expect(() => s.forRadialTiling({ n: 3, rings: 0 }, noop)).toThrow()
+      expect(() =>
+        s.forRadialTiling({ n: 3, innerRadius: -0.1 }, noop)
+      ).toThrow()
+      expect(() =>
+        s.forRadialTiling({ n: 3, r: 0.3, innerRadius: 0.3 }, noop)
+      ).toThrow()
     })
   })
 

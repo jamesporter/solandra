@@ -7,6 +7,7 @@ import {
   Circle,
   Rect,
   Star,
+  perlin2,
   v,
 } from "../../src/lib"
 
@@ -284,6 +285,88 @@ s.forHorizontal({ n: 3, margin: 0.05 }, (_at, [dX], c, i) => {
 />
 
 `SimplePath.flowLine`, another way to end up with more points than you need, is covered under [Randomness and Noise](/docs/randomness).
+
+## Offsetting: ribbons and contours
+
+`offset({ distance })` gives back the **parallel path**: every point shifted sideways by the same amount. A positive distance moves a quarter turn clockwise from the direction of travel, as it appears on screen &mdash; so a path drawn left to right is offset downwards, and a closed path drawn clockwise (as the built-in shapes' paths are) is offset inwards.
+
+Offset a line each way and join the two up and you have a filled band, which is how you get a stroke whose width you control per line rather than per context:
+
+```ts
+s.background(205, 30, 12)
+s.lineWidth = 0.0015
+
+s.times(9, (i) => {
+  const line = SimplePath.withPoints(
+    s.build(s.range, { from: -0.02, to: 1.02, n: 14 }, (x) => [
+      x,
+      0.06 + i * 0.1 + 0.04 * perlin2(x * 2.5, i * 1.7),
+    ])
+  ).chaiken({ n: 3 })
+
+  const halfWidth = 0.008 + 0.022 * s.random()
+  const ribbon = line
+    .offset({ distance: halfWidth })
+    .withAppended(line.offset({ distance: -halfWidth }).reversed)
+    .close()
+
+  s.setFillColor(185 + i * 9, 70, 55, 0.85)
+  s.fill(ribbon)
+  s.setStrokeColor(0, 0, 100, 0.5)
+  s.draw(ribbon)
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(205, 30, 12)
+    s.lineWidth = 0.0015
+    s.times(9, (i) => {
+      const line = SimplePath.withPoints(
+        s.build(s.range, { from: -0.02, to: 1.02, n: 14 }, (x) => [
+          x,
+          0.06 + i * 0.1 + 0.04 * perlin2(x * 2.5, i * 1.7),
+        ])
+      ).chaiken({ n: 3 })
+      const halfWidth = 0.008 + 0.022 * s.random()
+      const ribbon = line
+        .offset({ distance: halfWidth })
+        .withAppended(line.offset({ distance: -halfWidth }).reversed)
+        .close()
+      s.setFillColor(185 + i * 9, 70, 55, 0.85)
+      s.fill(ribbon)
+      s.setStrokeColor(0, 0, 100, 0.5)
+      s.draw(ribbon)
+    })
+  }}
+/>
+
+Stepping the distance instead gives contours, each one further inside the last. Corners are mitred, so the points of a star stay sharp all the way in; `miterLimit` (in multiples of the distance, 4 by default) caps how far a very sharp corner may be thrown out.
+
+```ts
+s.background(35, 25, 96)
+s.lineWidth = 0.0025
+
+const outline = new Star({ at: s.meta.center, n: 7, r: 0.44, r2: 0.3 }).path
+s.range({ from: 0, to: 0.26, n: 22 }, (d) => {
+  s.setStrokeColor(20 + d * 260, 70, 45)
+  s.draw(outline.offset({ distance: d }))
+})
+```
+
+<ExampleCanvas
+  sketch={(s) => {
+    s.background(35, 25, 96)
+    s.lineWidth = 0.0025
+    const outline = new Star({ at: s.meta.center, n: 7, r: 0.44, r2: 0.3 }).path
+    s.range({ from: 0, to: 0.26, n: 22 }, (d) => {
+      s.setStrokeColor(20 + d * 260, 70, 45)
+      s.draw(outline.offset({ distance: d }))
+    })
+  }}
+/>
+
+Every point moves, so a path offset by more than the radius of its own curves will fold over itself into little loops. That is sometimes the effect you want; when it is not, offset less far, or `simplified` first.
 
 ## Path: curves made easy
 

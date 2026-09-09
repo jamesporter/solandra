@@ -543,6 +543,108 @@ export class SimplePath implements Traceable {
     return SimplePath.withPoints(convexHull(this.points)).close()
   }
 
+  /**
+   * A copy of the path shifted sideways by a fixed distance: the parallel
+   * path, as an outline around a line or a contour inside a shape.
+   *
+   * A positive distance moves each point a quarter turn clockwise from the
+   * direction of travel, as it appears on screen (where y increases
+   * downwards): a path drawn left to right is offset downwards, and a closed
+   * path drawn clockwise, as the built in shapes' paths are, is offset
+   * inwards. A negative distance goes the other way, so drawing both gives a
+   * ribbon either side of the original.
+   *
+   * Corners are mitred: the offset points sit on the bisector of the angle,
+   * far enough out that both offset segments meet exactly there. A very sharp
+   * corner would throw that point a long way off, so `miterLimit` caps how
+   * far it can go, in multiples of the distance.
+   *
+   * Every point of the original is offset, so a path that crosses itself, or
+   * one offset by more than the radius of its own curves, will produce loops.
+   * `simplified` first, or a smaller distance, generally sorts it out.
+   *
+   * @param config - Configuration
+   * @param config.distance - How far to move sideways, positive being a
+   * quarter turn clockwise from the direction of travel
+   * @param config.miterLimit - How far a corner point may be thrown out, in
+   * multiples of the distance (default: 4)
+   * @throws Error if the path has fewer than two distinct points, or the miter
+   * limit is less than 1
+   * @example
+   * ```ts
+   * // A ribbon either side of a wiggly line
+   * const line = SimplePath.withPoints(points).chaiken({ n: 3 })
+   * s.draw(line.offset({ distance: 0.02 }))
+   * s.draw(line.offset({ distance: -0.02 }))
+   *
+   * // Contours inside a shape, each one a little further in
+   * const outline = new Star({ at: s.meta.center, n: 5, r: 0.4 }).path
+   * s.range({ from: 0, to: 0.1, n: 8 }, (d) => {
+   *   s.draw(outline.offset({ distance: d }))
+   * })
+   * ```
+   */
+  offset(config: { distance: number; miterLimit?: number }): SimplePath {
+    const { distance, miterLimit = 4 } = config
+    if (miterLimit < 1)
+      throw new Error(`Miter limit must be at least 1, was ${miterLimit}`)
+    if (this.points.length < 2)
+      throw new Error("Cannot offset a path with fewer than two points")
+
+    const first = this.points[0]
+    const last = this.points[this.points.length - 1]
+    const looped = first[0] === last[0] && first[1] === last[1]
+
+    // a repeated point has no direction, so it says nothing about which way
+    // this path is going and cannot be offset
+    const points = (looped ? this.points.slice(0, -1) : this.points).filter(
+      (point, i, all) => i === 0 || v.distance(point, all[i - 1]) > 0
+    )
+    if (points.length < 2)
+      throw new Error("Cannot offset a path that goes nowhere")
+
+    // the unit normal a quarter turn clockwise on screen from the direction of
+    // travel
+    const normalOf = (from: Point2D, to: Point2D): Vector2D => {
+      const [tX, tY] = v.normalize(v.subtract(to, from))
+      return [-tY, tX]
+    }
+
+    const normals = pairWise(points).map(([a, b]) => normalOf(a, b))
+    if (looped) normals.push(normalOf(points[points.length - 1], points[0]))
+
+    const shift = (into: Vector2D | null, outOf: Vector2D | null): Vector2D => {
+      // the ends of an open path have only the one segment to go on
+      if (!into) return v.scale(outOf as Vector2D, distance)
+      if (!outOf) return v.scale(into, distance)
+
+      const bisector = v.normalize(v.add(into, outOf))
+      // how far along the bisector the offset segments actually meet
+      const cos = v.dot(bisector, into)
+      // the path doubles straight back on itself: there is no corner to mitre
+      if (cos === 0) return v.scale(into, distance)
+
+      return v.scale(bisector, distance * Math.min(1 / cos, miterLimit))
+    }
+
+    const offsetPoints = points.map((point, i) =>
+      v.add(
+        point,
+        shift(
+          i === 0
+            ? looped
+              ? normals[normals.length - 1]
+              : null
+            : normals[i - 1],
+          i === points.length - 1 && !looped ? null : normals[i]
+        )
+      )
+    )
+
+    const path = SimplePath.withPoints(offsetPoints)
+    return looped ? path.close() : path
+  }
+
   get edges(): SimplePath[] {
     return pairWise(this.points).map((points) => SimplePath.withPoints(points))
   }
