@@ -7,14 +7,14 @@ import { clamp, isoTransform, SimplePath } from "../lib"
 const isometricExample = (p: SCanvas) => {
   const { bottom, right } = p.meta
   p.background(0, 0, 95)
-  // make origin a point centred horizontally, but near bottom
+  // Place the origin near the bottom centre.
   p.withTranslation([right / 2, bottom * 0.8], () => {
     // 1/200 of width = height of 1 unit
     const iso = isoTransform(0.005)
     p.times(10, (n) => {
       const sp = SimplePath.withPoints([])
       p.times(100, (m) => {
-        // adjust all x,y,z for vertical size: as in isometric all get scaled linearly in vertical direction
+        // Scale all three axes by the same amount before projection.
         sp.addPoint(
           iso([
             bottom * (10 - n) * 10,
@@ -95,7 +95,6 @@ const isometricExample3 = (p: SCanvas) => {
         sp.addPoint(iso([n, h, m + 1]))
         sp.addPoint(iso([n, h - 1, m + 1]))
         sp.addPoint(iso([n, h - 1, m]))
-        // sp.addPoint(iso([n + 1, h - 1, m + 1]))
         sp.close()
 
         p.setFillColor(h * 10 + 10 * Math.cos(h * 3), 95, 65, 0.9)
@@ -146,7 +145,7 @@ const isometricExample5 = (p: SCanvas) => {
   p.lineWidth = 0.005 * bottom
   p.background(40, 40, 90)
   p.setStrokeColor(30, 5, 20)
-  // make origin a point centred horizontally, but near bottom
+  // Place the origin near the bottom centre.
   p.withTranslation([right / 2, bottom * 0.95], () => {
     const iso = isoTransform(0.05 * bottom)
 
@@ -182,7 +181,7 @@ const isometricExample6 = (p: SCanvas) => {
   p.lineWidth = 0.005 * bottom
   p.background(0, 0, 90)
   p.setStrokeColor(30, 5, 20)
-  // make origin a point centred horizontally, but near bottom
+  // Place the origin near the bottom centre.
   p.withTranslation([right / 2, bottom * 0.95], () => {
     const iso = isoTransform(0.05 * bottom)
     p.downFrom(11, (n) => {
@@ -227,7 +226,7 @@ const isometricExample7 = (p: SCanvas) => {
   p.lineWidth = 0.005 * bottom
   p.background(0, 0, 90)
   p.setStrokeColor(30, 5, 20)
-  // make origin a point centred horizontally, but near bottom
+  // Place the origin near the bottom centre.
   p.withTranslation([right / 2, bottom * 0.95], () => {
     const iso = isoTransform(0.05 * bottom)
 
@@ -318,7 +317,7 @@ const isometricExample8 = (p: SCanvas) => {
   const { bottom, right } = p.meta
   p.lineWidth = 0.005 * bottom
   p.setStrokeColor(30, 5, 20)
-  // make origin a point centred horizontally, but near bottom
+  // Place the origin near the bottom centre.
   p.withTranslation([right / 2, bottom * 0.95], () => {
     const iso = isoTransform(0.05 * bottom)
 
@@ -367,7 +366,7 @@ const isometricExample9 = (p: SCanvas) => {
   p.withTranslation([r / 2, bottom * 0.5], () => {
     const iso = isoTransform(0.1 * bottom)
 
-    // Experimenting with helper functions... probably want to include in framework or as helpers somehow?
+    // Local helpers for drawing the isometric faces.
     const top = (x: number, y: number, z: number, s: number) => [
       iso([x, y, z]),
       iso([x + s, y, z]),

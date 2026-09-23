@@ -4,7 +4,7 @@ import { Circle, Rect } from "../../src/lib"
 
 # Text
 
-Text on canvas is usually painful; Solandra wraps it in the same small, declarative style as everything else. There are three methods:
+Solandra provides three text methods:
 
 - `s.fillText(config, text)` &mdash; solid text in the current fill colour
 - `s.drawText(config, text)` &mdash; outlined text in the current stroke colour
@@ -24,7 +24,7 @@ type TextConfig = {
 }
 ```
 
-Crucially `size` is in the same normalized units as coordinates: `0.1` means a tenth of the canvas width, at any resolution.
+`size` uses canvas units: `0.1` is one tenth of the canvas width at any resolution.
 
 ## Filled and stroked text
 
@@ -57,7 +57,7 @@ s.fillText({ at: [0.5, 0.72], size: 0.08, style: "italic" }, "generative art")
 
 ## Text as texture
 
-Since text is just another drawing operation, it participates in iteration, randomness and transforms like anything else:
+Use text with iteration, randomness and transforms:
 
 ```ts
 s.background(230, 40, 12)
@@ -157,7 +157,7 @@ s.fillText({ at: [0.5, 0.5], size, weight: "bold" }, label)
 
 ## Fonts
 
-By default Solandra uses a native system font stack (`systemFont` is exported if you want to extend it). You can use any font available on the page via the `font` option; just make sure webfonts are loaded before you render.
+The default is the exported `systemFont` stack. Set `font` to use another font available on the page. Load web fonts before drawing.
 
 ```ts
 s.fillText({ at: [0.5, 0.5], size: 0.1, font: "Georgia, serif" }, "Serif!")

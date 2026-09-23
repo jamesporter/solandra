@@ -19,7 +19,7 @@ type CanvasProps = {
 }
 
 /**
- * Because this is actually a massive pain to do with hooks
+ * Manages drawing, animation timing and canvas size outside the React render cycle.
  */
 export class CanvasPainterService {
   ctx?: CanvasRenderingContext2D
@@ -71,7 +71,7 @@ export class CanvasPainterService {
     this.sketch = sketch
     this.seed = seed
     if (this.playing && !playing) {
-      // Paused, so save time for the export?
+      // Save the paused time for image exports.
       setNumber(TIME_KEY, this.time)
     }
     this.playing = playing
@@ -137,8 +137,7 @@ export function Canvas({
   const [painterRef] = useState(new CanvasPainterService())
 
   useLayoutEffect(() => {
-    // seems to be way more performant to re-use the context, so only ask the
-    // canvas for one the first time round
+    // Cache the context across frames.
     if (!ctxRef.current && canvasRef.current) {
       ctxRef.current = canvasRef.current.getContext("2d")
       painterRef.canvas = canvasRef.current

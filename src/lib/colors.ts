@@ -234,14 +234,13 @@ export const alphaRange = ({
   simpleLinearGradient({ h, s, l, a: a1 }, { h, s, l, a: a2 }, steps)
 
 /**
- * The classic colour schemes, the ways of picking hues that sit well together.
+ * Supported colour schemes.
  *
- * - `complementary`: the opposite hue, for maximum contrast
- * - `analogous`: neighbouring hues, calm and closely related
- * - `triadic`: three hues evenly spaced round the circle, lively but balanced
+ * - `complementary`: the base hue and its opposite
+ * - `analogous`: neighbouring hues
+ * - `triadic`: three hues evenly spaced around the circle
  * - `tetradic`: four hues, two complementary pairs
- * - `splitComplementary`: the two hues either side of the complement, nearly
- *   as much contrast as complementary but easier to live with
+ * - `splitComplementary`: the base hue and two hues either side of its opposite
  * - `monochrome`: one hue, varied in lightness instead
  */
 export type HarmonyType =
@@ -253,15 +252,10 @@ export type HarmonyType =
   | "monochrome"
 
 /**
- * Builds a colour scheme around a colour, by the usual rules of colour theory.
- *
- * Picking hues at random rarely looks intentional. These are the relationships
- * that do: each returns the base colour first, then its companions, so the
- * result can be sampled from or stepped through directly.
- *
- * Saturation, lightness and alpha are carried over from the base colour, apart
- * from in a `monochrome` scheme, which is exactly the same hue at different
- * lightnesses. Hues are wrapped back into 0 to 360.
+ * Builds a colour scheme from a base colour.
+ * Preserves saturation, lightness and alpha, except in monochrome schemes,
+ * which vary lightness. Hues wrap into [0, 360).
+ * Monochrome schemes run from dark to light; others start with the base colour.
  *
  * @param base - The colour to build around
  * @param config - Configuration
@@ -273,7 +267,7 @@ export type HarmonyType =
  * neighbouring hues (default: 30); for "splitComplementary", how far either
  * side of the complement to go (default: 30); for "monochrome", the total
  * range of lightness covered (default: 50)
- * @returns The colours of the scheme, starting with the base colour
+ * @returns Colours in scheme order; monochrome runs from dark to light
  * @throws Error if fewer than one colour is asked for
  * @example
  * ```ts
@@ -336,15 +330,9 @@ export const harmony = (
 }
 
 /**
- * Mixes two colours, taking the short way round the hue circle.
- *
- * Interpolating hue as a plain number goes the long way whenever that crosses
- * 0/360: red (350) to orange (10) would sweep through the entire spectrum
- * rather than the 20 degrees between them. This turns the shorter way, so
- * mixing neighbouring colours stays neighbourly.
- *
- * Exactly opposite colours are a tie, with nothing to choose between the two
- * ways round; those turn the increasing way.
+ * Blends two colours along the shortest route around the hue circle.
+ * For example, hues 350 and 10 blend through 0. Opposite hues blend in the
+ * increasing direction. Other channels interpolate linearly.
  *
  * @param a - The colour at proportion 0
  * @param b - The colour at proportion 1
@@ -368,8 +356,7 @@ export const mixColors = (
   b: ColorSpec,
   proportion: number = 0.5
 ): Required<ColorSpec> => {
-  // the difference either way round the circle; take whichever is smaller,
-  // and for exactly opposite colours (a tie) turn the increasing way
+  // Use the shortest hue difference; resolve a 180-degree tie upwards.
   const wrapped = ((((b.h - a.h) % 360) + 540) % 360) - 180
   const dH = wrapped === -180 ? 180 : wrapped
   const h = a.h + dH * proportion

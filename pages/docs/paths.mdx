@@ -13,11 +13,11 @@ import {
 
 # Paths and Curves
 
-Beyond the built-in [shapes](/docs/shapes), Solandra has two classes for building your own: `SimplePath` (straight lines between points) and `Path` (lines and curves). Both offer a fluent, chainable API and a rich set of transformations.
+Use `SimplePath` for straight lines between points and `Path` for a mix of lines and curves. Both support chained method calls and transformations.
 
 ## SimplePath
 
-A `SimplePath` is just an ordered list of points:
+A `SimplePath` is an ordered list of points:
 
 ```ts
 import { SimplePath } from "solandra"
@@ -68,7 +68,7 @@ const triangle = SimplePath.withPoints([
 
 ## Smoothing with chaiken
 
-The `chaiken` method smooths a path by repeatedly cutting corners (Chaikin's algorithm). It's the easiest way to turn a jagged random walk into something organic. Pass `n` for the number of smoothing iterations, and `looped: true` for closed paths.
+`chaiken` smooths a path by cutting corners repeatedly (Chaikin's algorithm). Set `n` for the number of iterations and `looped: true` for a closed path.
 
 ```ts
 s.background(40, 40, 96)
@@ -100,11 +100,11 @@ s.times(5, (n) => {
 
 ## Measuring and sampling
 
-A `SimplePath` knows how long it is and what happens where along it, all measured by **distance travelled** rather than by point index, so evenly spaced proportions give evenly spaced results however lumpily the path's own points are spread.
+`SimplePath` measures positions by **distance along the path**. Sampling at equal intervals gives evenly spaced points, regardless of the spacing of the original vertices.
 
 - `path.length` &mdash; the total length
 - `path.pointAt(proportion)` &mdash; the point a proportion of the way along (0 is the start, 1 the end; anything outside is clamped)
-- `path.tangentAt(proportion)` &mdash; the unit vector the path is heading in there, so `v.heading(...)` gives an angle to rotate by
+- `path.tangentAt(proportion)` &mdash; the unit direction vector at that position; use `v.heading(...)` to get its angle
 - `path.pointsAlong({ n, inclusive })` &mdash; `n` evenly spaced points; pass `inclusive: false` for a closed path, where the end is the start again
 
 ```ts
@@ -153,18 +153,18 @@ wave.pointsAlong({ n: 30 }).forEach((at, i) => {
   }}
 />
 
-Doing this whilst drawing is common enough that `SCanvas` has [`alongPath`](/docs/iteration) for it, which hands you the point and the angle together.
+`SCanvas.alongPath` passes each point and its angle to a callback; see [Iteration](/docs/iteration).
 
-## Measuring shape: boxes, area and what is inside
+## Bounds, area and containment
 
-Sampling tells you where a path goes; these tell you what shape it is.
+These properties and methods treat the path as a shape:
 
-- `path.boundingBox` &mdash; the smallest box containing every point, given as `{ at, w, h }`, exactly what `Rect` takes, so `new Rect(path.boundingBox)` is the box itself
-- `path.area` &mdash; the area enclosed, taking the path as closed whether or not `close` was called, and always positive whichever way round the points go
-- `path.containsPoint(at)` &mdash; whether a point falls inside it, concave shapes and all
-- `path.convexHull` &mdash; the smallest convex path containing the whole thing, as if a rubber band were stretched around it (the standalone `convexHull` does the same for bare points)
+- `path.boundingBox` &mdash; the smallest axis-aligned box containing all points, as `{ at, w, h }`; pass it to `new Rect(...)`
+- `path.area` &mdash; the absolute signed area, treating the path as closed; regions traced in opposite directions cancel out
+- `path.containsPoint(at)` &mdash; whether a point is inside the closed path, including concave shapes
+- `path.convexHull` &mdash; the smallest convex path containing all points; the standalone `convexHull` works on an array of points
 
-Together they cover the usual jobs: framing something, sorting shapes by size, and scattering things inside an outline rather than merely near it.
+Use them to frame a shape, compare areas or place points inside an outline.
 
 ```ts
 const outline = new Star({ at: [0.5, 0.5], n: 7, r: 0.35, r2: 0.16 }).path
@@ -202,7 +202,7 @@ s.times(500, () => {
   }}
 />
 
-A convex hull wraps a scattered cloud of points in the shape they suggest, from the points alone:
+A convex hull encloses a set of scattered points:
 
 ```ts
 s.background(215, 35, 15)
@@ -232,9 +232,9 @@ s.forTiling({ n: 2, type: "square", margin: 0.05 }, (_at, [dX], c, i) => {
   }}
 />
 
-## Thinning paths out
+## Simplifying paths
 
-Chaikin smoothing, tracing a flow field or sampling a curve all leave paths with far more points than their shape needs. `simplified({ tolerance })` drops the ones that barely matter (the Ramer&ndash;Douglas&ndash;Peucker algorithm): everything left out lies within `tolerance` of the path that remains. That keeps later work &mdash; and exported SVG &mdash; manageable, and a heavy tolerance is an effect in its own right, faceting a smooth curve into something angular.
+`simplified({ tolerance })` removes points using the Ramer&ndash;Douglas&ndash;Peucker algorithm. Removed points lie within `tolerance` of the simplified path. Use a small tolerance to reduce point count, or a larger one for a more angular shape.
 
 ```ts
 s.background(40, 20, 95)
@@ -284,13 +284,13 @@ s.forHorizontal({ n: 3, margin: 0.05 }, (_at, [dX], c, i) => {
   }}
 />
 
-`SimplePath.flowLine`, another way to end up with more points than you need, is covered under [Randomness and Noise](/docs/randomness).
+See [Randomness and Noise](/docs/randomness) for `SimplePath.flowLine`, which traces paths through vector fields.
 
 ## Offsetting: ribbons and contours
 
-`offset({ distance })` gives back the **parallel path**: every point shifted sideways by the same amount. A positive distance moves a quarter turn clockwise from the direction of travel, as it appears on screen &mdash; so a path drawn left to right is offset downwards, and a closed path drawn clockwise (as the built-in shapes' paths are) is offset inwards.
+`offset({ distance })` creates a parallel path with mitred corners. Positive distances offset to the right of the direction of travel: downwards for a line drawn left to right, or inwards for a clockwise outline. Negative distances offset the other way.
 
-Offset a line each way and join the two up and you have a filled band, which is how you get a stroke whose width you control per line rather than per context:
+Offset a line in both directions and join the results to form a filled ribbon:
 
 ```ts
 s.background(205, 30, 12)
@@ -366,11 +366,11 @@ s.range({ from: 0, to: 0.26, n: 22 }, (d) => {
   }}
 />
 
-Every point moves, so a path offset by more than the radius of its own curves will fold over itself into little loops. That is sometimes the effect you want; when it is not, offset less far, or `simplified` first.
+Large offsets or self-intersecting paths can produce loops. Reduce the distance to limit these. `miterLimit` caps corner extensions at a multiple of the offset distance (default 4).
 
-## Path: curves made easy
+## Path: lines and curves
 
-`Path` supports cubic Bézier curves, but you never have to place control points by hand. Instead `addCurveTo` takes a target point and a _descriptive_ configuration:
+`Path.addCurveTo` creates a cubic Bézier curve from a target point and these options:
 
 - `curveSize` &mdash; how far the curve bulges (relative to the line length)
 - `polarity` &mdash; which side it bulges towards (`1` or `-1`)
@@ -427,7 +427,7 @@ s.forTiling({ n: 5, type: "square", margin: 0.05 }, ([x, y], [dX, dY]) => {
   }}
 />
 
-Mixing lines and curves, and closing back with a curve, makes leaf- and petal-like forms trivial:
+Join two curves to make a petal:
 
 ```ts
 s.background(120, 25, 94)
@@ -472,7 +472,7 @@ const curvy = SimplePath.withPoints(points).curvify((i) => ({
 
 ## Transforming paths
 
-Both `Path` and `SimplePath` support a family of (mostly immutable) transformations:
+These methods return transformed copies of a `Path` or `SimplePath`. The `centroid` getter returns the average vertex position:
 
 - `moved(delta)` &mdash; translate by a vector
 - `scaled(factor)` &mdash; scale around the centroid
@@ -503,9 +503,9 @@ s.times(20, (n) => {
   }}
 />
 
-## Cutting things up
+## Splitting paths
 
-Paths can be decomposed:
+Split paths into smaller pieces:
 
 - `segmented` splits a closed path into triangles around its centroid
 - `exploded({ magnitude, scale })` does the same but displaces (`magnitude`) and shrinks (`scale`) each piece
@@ -532,7 +532,7 @@ poly.exploded({ magnitude: 1.4, scale: 0.85 }).forEach((piece, i) => {
   }}
 />
 
-Recursive subdivision is a classic generative technique; `segmented` makes it a one-liner per level:
+Call `segmented` repeatedly to subdivide a shape:
 
 ```ts
 s.background(210, 40, 15)

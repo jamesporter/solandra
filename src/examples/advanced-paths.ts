@@ -315,7 +315,7 @@ const beadsOnAPath = (p: SCanvas) => {
   p.setStrokeColor(210, 30, 40)
   p.draw(wire)
 
-  // evenly spaced by distance, so the beads do not bunch up on the bends
+  // Space beads evenly by distance along the path.
   p.alongPath({ path: wire, n: 40 }, (at, angle, i) => {
     p.setFillColor(20 + i * 4, 75, 55)
     p.withTranslation(at, () => {
@@ -334,9 +334,7 @@ const alongAStar = (p: SCanvas) => {
   p.lineWidth = 0.002
   p.draw(star)
 
-  // a shape can be followed directly: Star (like Line, Rect, RegularPolygon
-  // and Spiral) has a path. Each tick is turned to sit across the outline,
-  // which is what the angle the callback gets is for.
+  // Star exposes a path. Use its tangent angle to draw ticks across the outline.
   p.alongPath({ path: star, n: 60, inclusive: false }, (at, angle, i) => {
     p.setFillColor(45 + i * 3, 85, 60)
     p.withTranslation(at, () => {
@@ -360,12 +358,12 @@ const insideAStar = (p: SCanvas) => {
 
   p.lineWidth = 0.003
   p.setStrokeColor(215, 30, 40, 0.5)
-  // boundingBox is in exactly the form Rect takes
+  // Pass the path bounds directly to Rect.
   p.draw(new Rect(outline.boundingBox))
   p.setStrokeColor(215, 30, 40)
   p.draw(outline)
 
-  // dots inside the star itself, not merely inside the box around it
+  // Keep only dots inside the star.
   p.times(2000, () => {
     const at = p.randomPoint()
     if (outline.containsPoint(at)) {
@@ -379,7 +377,7 @@ const hulls = (p: SCanvas) => {
   p.background(215, 35, 15)
 
   p.forTiling({ n: 3, type: "square", margin: 0.05 }, (_at, [dX], c, i) => {
-    // the shape a scattered set of points suggests, from the points alone
+    // Enclose the scattered points in their convex hull.
     const cloud = SimplePath.withPoints(
       p.build(p.times, 9, () => p.perturb({ at: c, magnitude: dX * 0.8 }))
     )
@@ -395,8 +393,7 @@ const faceted = (p: SCanvas) => {
   p.background(40, 20, 95)
   p.lineWidth = 0.004
 
-  // a smoothed loop carries far more points than its shape needs; dropping
-  // the ones that barely matter is a tidy up, and, done heavily, an effect
+  // Compare simplification tolerances on the same smoothed loop.
   const blob = SimplePath.withPoints(
     p.build(p.aroundCircle, { at: [0, 0], r: 0.4, n: 20 }, (at) =>
       p.perturb({ at, magnitude: 0.2 })
@@ -412,7 +409,7 @@ const faceted = (p: SCanvas) => {
       tolerance === 0 ? blob : blob.simplified({ tolerance })
     ).scaled(dX * 0.85)
     p.setStrokeColor(200 + i * 25, 60, 45)
-    // simplifying moves the centroid a little, so centre each one on its tile
+    // Re-centre each path because simplification changes its vertex centroid.
     p.draw(path.moved(v.subtract(c, path.centroid)))
   })
 }
@@ -429,8 +426,7 @@ const ribbons = (p: SCanvas) => {
       ])
     ).chaiken({ n: 3 })
 
-    // one edge out, the other back: offsetting a line each way and joining the
-    // two up turns it into a filled band
+    // Join opposite offsets, reversing one edge, to form a closed ribbon.
     const halfWidth = 0.006 + 0.016 * p.random()
     const ribbon = line
       .offset({ distance: halfWidth })
@@ -448,8 +444,7 @@ const contours = (p: SCanvas) => {
   p.background(35, 25, 96)
   p.lineWidth = 0.0025
 
-  // the built in shapes trace clockwise, so a positive offset works inwards;
-  // mitred corners keep the points sharp the whole way in
+  // Positive offsets move this clockwise outline inwards.
   const outline = new Star({ at: p.meta.center, n: 7, r: 0.3, r2: 0.21 }).path
   p.range({ from: 0, to: 0.18, n: 20 }, (d) => {
     p.setStrokeColor(20 + d * 260, 70, 45)
@@ -469,7 +464,7 @@ const offsetBlobs = (p: SCanvas) => {
       .close()
       .chaiken({ n: 3, looped: true })
 
-    // rings inside one another, each a step further in than the last
+    // Increase the inward offset for each contour.
     p.range({ from: 0, to: dX * 0.22, n: 6 }, (d) => {
       p.setStrokeColor(260 + i * 12, 70, 40 + d * 200, 0.9)
       p.lineWidth = 0.004

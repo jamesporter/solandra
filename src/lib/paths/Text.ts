@@ -34,14 +34,9 @@ export type TextConfigWithKind = {
 export type TextConfig = Omit<TextConfigWithKind, "kind">
 
 /**
- * The stack used when a caller does not name a font.
- *
- * `-apple-system` is quoted deliberately. Browsers accept it bare, but a
- * leading hyphen makes it an invalid font family token to stricter parsers
- * (node-canvas's among them) — and an invalid assignment to `ctx.font` is
- * required to be a no-op, so the whole declaration was silently dropped and
- * text kept whatever font, *and size*, the context happened to have. Quoting
- * is valid CSS everywhere and keeps the macOS system font.
+ * Default font stack.
+ * Quote `-apple-system` so node-canvas accepts the font declaration.
+ * An invalid declaration leaves both the previous font and size unchanged.
  */
 export const systemFont =
   "'-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
@@ -56,8 +51,7 @@ function configToFontSpecString({
   TextConfigWithKind,
   "style" | "variant" | "weight" | "size" | "font"
 >): string {
-  // Omitted parts are left out rather than written as empty strings: a font
-  // shorthand is all or nothing to parse, so the fewer moving parts the better.
+  // Omit unset options to keep the font shorthand valid.
   return [style, variant, weight, `${size}px`, font ?? systemFont]
     .filter(Boolean)
     .join(" ")
@@ -94,17 +88,10 @@ export class Text {
       return ctx.measureText(this.text)
     }
 
-    // Safari messes up for small sizes, so measure a 100x larger font and
-    // scale the metrics back down.
-    //
-    // Sketch coordinates are normalised, which means the context is scaled by
-    // the canvas size, which means that 100x lands somewhere around 20,000px
-    // once the transform is applied. Text metrics are defined in user space
-    // and so do not depend on the transform, but the font a renderer builds to
-    // produce them does: at that size node-canvas overflows the integer Pango
-    // keeps a font size in and measures with a font that failed to load. So
-    // measure with the transform reset, which changes nothing about the answer
-    // and everything about the font used to arrive at it.
+    // Measure at 100x size to avoid Safari errors with small fonts, then
+    // scale the metrics back down. Reset the transform during measurement
+    // to avoid oversized fonts overflowing Pango in node-canvas.
+    // Text metrics use user-space units, so resetting preserves the result.
     ctx.save()
     ctx.setTransform(1, 0, 0, 1, 0, 0)
     ctx.font = configToFontSpecString({ ...this.config, size: size * 100 })
@@ -118,7 +105,7 @@ export class Text {
       fontBoundingBoxAscent: m.fontBoundingBoxAscent / 100,
       fontBoundingBoxDescent: m.fontBoundingBoxDescent / 100,
       width: m.width / 100,
-      // TODO should check this is okay, newer TS not happy with original returned stuff, but for many purposes likely fine
+      // TODO: Verify that the returned object covers all TextMetrics fields.
     } as TextMetrics
 
     ctx.restore()

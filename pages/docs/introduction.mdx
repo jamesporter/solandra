@@ -4,11 +4,11 @@ import { Star } from "../../src/lib"
 
 # Introduction to Solandra
 
-Solandra is a library for creating generative art in JavaScript that tries to think a bit differently. It favours the concise and easy to change over the simple and verbose. It embraces TypeScript. And offers novel APIs around curves and iteration that are both powerful and much easier than creating yourself.
+Solandra is a TypeScript library for generative art. It provides shapes, curves, seeded randomness and loops that work in canvas coordinates.
 
-A simple example. Let's use the popular Poisson disk sampling approach to create a natural looking pattern of stars. Solandra offers the ability to iterate over those points as well as many other canvas-related schemes.
+This example draws stars at random points, using Poisson disk sampling to keep them apart.
 
-We set a background colour, a fill colour and then iterate over the points drawing a star at each. In just a few lines of code we have created.
+Set the background and fill colours, then draw a star at each point:
 
 <ExampleCanvas
   sketch={(s) => {
@@ -28,7 +28,7 @@ s.forPoissonDiskPoints({ minDist: 0.1 }, (at) => {
 })
 ```
 
-Solandra is concise. Like many graphics framework there is some state for things like fill colour. We can also easily get random angles or control parameters. TypeScript guides you. The conciseness and powerful helpers make it easy to change things. Let's vary the colour more and the size of the stars. This is just a few changes.
+To vary the stars, choose a new colour and radius inside the loop. The fill colour stays in effect until you change it.
 
 <ExampleCanvas
   sketch={(s) => {
@@ -59,6 +59,7 @@ s.forPoissonDiskPoints({ minDist: 0.1 }, (at) => {
       a: s.randomAngle(),
     })
   )
+})
 ```
 
 export default function Page({ children }) {

@@ -21,13 +21,12 @@ const QuickStart = () => (
         </div>
 
         <p className="p-4">
-          Recommended:{" "}
+          Browse{" "}
           <Link
             href="/main"
             className="text-blue-700 underline dark:text-sky-400"
           >
-            over 100 examples with source code to learn from (click on the
-            Source Code button).
+            the examples and select Source Code to see how each sketch works.
           </Link>
         </p>
       </div>
@@ -38,21 +37,21 @@ const QuickStart = () => (
       <h2>Talks</h2>
 
       <p>
-        On 28th October 2019, I gave a workshop/talk on Solandra which{" "}
+        My October 2019 workshop became{" "}
         <a href="https://algorithmicartmeetup.blogspot.com/2019/10/solandra-hands-on-tutorial-emergent.html">
-          Tariq Rashid wrote up as a introductory tutorial
+          an introductory tutorial by Tariq Rashid
         </a>
         .
       </p>
 
       <p>
-        On 6th November 2019 I&apos;ll gave a talk about TypeScript and Solandra
-        (at the London TypeScript Meetup).
+        I spoke about TypeScript and Solandra at the London TypeScript Meetup on
+        6 November 2019.
       </p>
 
       <p>
-        On 15th November 2019 I covered why I created Solandra and the
-        ideas/principles behind it at London Creative Code.
+        At London Creative Code on 15 November 2019, I talked about why I
+        created Solandra and the ideas behind it.
       </p>
 
       <h2>Code</h2>

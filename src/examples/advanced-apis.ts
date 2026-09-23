@@ -16,7 +16,7 @@ import {
 const compoundPath = (p: SCanvas) => {
   p.background(45, 80, 75)
   p.setFillColor(220, 9, 45, 0.4)
-  // To remove a shape from another shape the path winding order must be opposite (hence the reversed)
+  // Reverse the inner path to cut a hole using the non-zero winding rule.
   p.times(4, (n) => {
     p.fill(
       CompoundPath.withPaths(
@@ -299,7 +299,7 @@ const tri = (p: SCanvas) => {
 const rosette = (p: SCanvas) => {
   p.background(255, 30, 12)
 
-  // one petal, drawn twelve times round the centre
+  // Repeat one petal twelve times around the centre.
   p.withSymmetry({ n: 12 }, (i) => {
     p.setFillColor(280 + i * 4, 70, 55, 0.55)
     p.fill(new Ellipse({ at: [0.5, 0.16], w: 0.14, h: 0.34 }))
@@ -313,8 +313,7 @@ const kaleidoscope = (p: SCanvas) => {
   p.background(230, 25, 12)
   const [cX, cY] = p.meta.center
 
-  // the motif sits off the axis, so mirroring each of the six rotations (and
-  // hence drawing twelve copies) is what turns a pinwheel into a kaleidoscope
+  // Reflect each of six rotations to make twelve copies of the motif.
   p.withSymmetry({ type: "kaleidoscope", n: 6 }, (i, reflected) => {
     p.setFillColor(30 + i * 25, 75, 55, 0.5)
     p.fill(new Ellipse({ at: [cX + 0.06, cY - 0.16], w: 0.13, h: 0.22 }))
@@ -331,7 +330,7 @@ const kaleidoscope = (p: SCanvas) => {
 const mirrored = (p: SCanvas) => {
   p.background(190, 20, 92)
 
-  // a mirror pair around the vertical axis: draw half, get the whole
+  // Reflect the drawing across the vertical axis.
   p.withSymmetry({ type: "mirror", at: [0.5, 0.5] }, (_i, reflected) => {
     p.setFillColor(reflected ? 340 : 200, 60, 50, 0.75)
     p.forTiling({ n: 7, margin: 0.1 }, ([x, y], [dX, dY], _c, i) => {
@@ -344,8 +343,7 @@ const mirrored = (p: SCanvas) => {
 const dartboard = (p: SCanvas) => {
   p.background(0, 0, 8)
 
-  // a polar grid: rings of cells going out from the centre, each one a
-  // HollowArc ready to fill
+  // Each cell in the radial grid is a HollowArc.
   p.forRadialTiling(
     { n: 20, rings: 5, r: 0.32 },
     (_at, cell, { ring, sector }) => {
@@ -368,7 +366,7 @@ const roseWindow = (p: SCanvas) => {
       p.setFillColor(210 + ring * 40, 60, 25 + ring * 8, 0.9)
       p.fill(cell)
 
-      // the middle of the cell, turned to face outwards along it
+      // Place each petal at the cell centre, facing outwards.
       p.withTranslation(at, () => {
         p.withRotation((a + a2) / 2, () => {
           p.setFillColor(40 - ring * 10, 80, 60, 0.85)
@@ -385,8 +383,7 @@ const roseWindow = (p: SCanvas) => {
 const radialField = (p: SCanvas) => {
   p.background(195, 30, 96)
 
-  // noise sampled at the middle of each cell, so the field shows up in polar
-  // coordinates rather than square ones
+  // Sample noise at each radial cell centre.
   p.forRadialTiling(
     { n: 48, rings: 9, r: 0.32, innerRadius: 0.05 },
     (at, cell, { ring }) => {

@@ -1,7 +1,6 @@
 import type { NextPage } from "next"
 import Head from "next/head"
 
-// import CodeAndSketch from "../src/components/CodeAndSketch"
 import ExampleLinks from "../src/components/ExampleLinks"
 import Footer from "../src/components/Footer"
 import HLink from "../src/components/HLink"
@@ -61,7 +60,7 @@ const Home: NextPage = () => {
               Solandra
             </h1>
             <h2 className="text-sky-100 text-center text-[calc(max(4vh,16px))] drop-shadow-md">
-              Modern TypeScript-first Creative Coding
+              A human friendly framework for creative coding with TypeScript
             </h2>
             <div className="flex flex-row flex-wrap items-center justify-center pt-4">
               {headerLinks.map(({ href, name }, _i) => (
@@ -82,7 +81,7 @@ const Home: NextPage = () => {
         </div>
 
         <div className="mx-auto p-4 max-w-3xl article-page">
-          <h2>tl;dr</h2>
+          <h2>Start here</h2>
 
           <ol className="list-decimal list-inside">
             <li>
@@ -90,36 +89,32 @@ const Home: NextPage = () => {
                 href="/main"
                 className="font-bold text-emerald-600 hover:text-sky-500 dark:text-emerald-400 dark:hover:text-sky-300"
               >
-                Look at some examples
+                Browse the examples
               </Link>
-              . They all have source code. Might this concise, expressive way of
-              creative coding be for you?
+              . Each sketch includes its source code.
             </li>
             <li>
-              Have a look at these{" "}
+              Follow the{" "}
               <Link
                 href="/docs/quickstart"
                 className="font-bold text-emerald-600 hover:text-sky-500 dark:text-emerald-400 dark:hover:text-sky-300"
               >
-                getting started tutorials and examples
+                getting started guide
               </Link>
             </li>
             <li>
-              Use with AI/LLMs by dropping{" "}
+              For coding assistants, add the{" "}
               <a
                 href="https://github.com/jamesporter/solandra/blob/main/llm.md"
                 className="font-bold text-emerald-600 hover:text-sky-500 dark:text-emerald-400 dark:hover:text-sky-300"
                 target="_blank"
                 rel="noreferrer"
               >
-                this context
+                API reference
               </a>{" "}
-              into your project.
+              to your project.
             </li>
-            <li>
-              Or keep reading here for a mini introduction after the slideshow
-              and principles ...
-            </li>
+            <li>Or follow the tutorial below to build an animated sketch.</li>
           </ol>
 
           <h2>Slideshow</h2>
@@ -146,42 +141,41 @@ const Home: NextPage = () => {
           </div>
 
           <p className="py-2 pb-8 text-sm text-center">
-            Use Arrow keys or click to navigate
+            Use the arrow keys or click to change sketches.
           </p>
 
           <h2>Principles</h2>
 
           <p>
-            Opinionated, agile (code is easy to change) framework for
-            algorithmic art. See my{" "}
+            I built Solandra to make sketches easy to change and experiment
+            with. My{" "}
             <a
               href="https://www.amimetic.co.uk/art/"
               className="text-blue-700 underline dark:text-sky-400"
             >
               essays
             </a>{" "}
-            for research/plans that went into this.
+            describe the ideas behind it.
           </p>
           <ul className="list-inside list-disc">
             <li className="pb-1">
-              Leverage TypeScript: you shouldn&apos;t need to learn much,
-              autocomplete and type checking should have your back.
+              Use TypeScript for autocomplete and type checking.
             </li>
-            <li className="pb-1">Not for beginners.</li>
             <li className="pb-1">
-              Control flow at level of drawing (tiling, partitions etc).
+              Assume some JavaScript or TypeScript experience.
             </li>
-            <li className="pb-1">Performance is not the goal.</li>
             <li className="pb-1">
-              Common algorithmic art things (e.g. randomness) should be easy.
+              Work with tiles, rows and shapes in drawing loops.
             </li>
-            <li className="pb-1">Should feel fun/powerful.</li>
-            <li className="pb-1">Life is too short to compile things.</li>
-            <li className="pb-1">Rethink standard APIs</li>
             <li className="pb-1">
-              Declarative when possible (especially anything configuration-y),
-              procedural when pragmatic; make it easy to explore/change your
-              mind.
+              Prioritise quick experimentation over rendering speed.
+            </li>
+            <li className="pb-1">
+              Provide helpers for common tasks such as seeded randomness.
+            </li>
+            <li className="pb-1">
+              Describe shapes with configuration objects and draw them with
+              ordinary functions and loops.
             </li>
           </ul>
 
@@ -196,90 +190,72 @@ const Home: NextPage = () => {
             <li className="pb-1">Points are [number, number].</li>
             <li className="pb-1">Colours in hsl(a).</li>
             <li className="pb-1">
-              Novel curve drawing API, as standard bezier curve APIs make
-              absolutely no sense for humans to think about.
+              Describe curves by their size, direction and shape.
             </li>
           </ul>
 
           <h2>Tutorial</h2>
 
           <p>
-            Let&apos;s make the animated logo thing above to learn about how to
-            use Solandra. Let&apos;s start with the background. The only way to
-            do colours in Solandra is via HSL(A). Hue (0-360), Saturation
-            (0-100) and Brightness (0-100). Oh and alpha (0-1). RGB is for
-            computers not for you.
+            Build the animated logo above, starting with its background. Colours
+            use HSL: hue (0–360), saturation (0–100) and lightness (0–100), with
+            optional alpha (0–1) for opacity.
           </p>
 
           <p>
-            Every sketch is just a function on the main Solandra object (here
-            called p). So we get friendly autocompletion.
+            A sketch is a function that takes an SCanvas, called p in these
+            examples.
           </p>
 
           <One />
 
           <p>
-            That&apos;s a bit boring. Let&apos;s draw something. First we set a
-            fill colour. Then we use a fill call (to draw lines use draw
-            instead). Solandra comes with loads of standard built in shapes,
-            with clear, declarative APIs (you describe the shape).
+            Set a fill colour, then pass a shape to fill. To stroke its outline,
+            use draw instead.
           </p>
 
           <Two />
 
           <p>
-            What did we learn? Points are always of the form: [x,y]. We use
-            short names for common things (like width, w).
+            Points use [x, y] coordinates. Common options have short names, such
+            as w for width.
           </p>
 
-          <p>
-            Let&apos;s draw many shapes. But we&apos;ll make the computer do the
-            hard bit. What if we could just ask it to tile our canvas? We can.
-          </p>
+          <p>Use forTiling to repeat the shape across a grid:</p>
 
           <Three />
 
           <p>
-            First we configure out tiling: 10 tiles across, square shape.
-            Let&apos;s add a margin (that would be really tedious by hand).
+            The configuration sets ten square tiles across, with a margin around
+            the canvas.
           </p>
 
           <p>
-            Now let&apos;s use our tiling. That&apos;s a lot of arguments. But
-            it doesn&apos;t matter. TypeScript keeps track of them. They are the
-            position, tile size, tile centre and iteration count. We&apos;ll use
-            the last one to pick a colour.
+            The callback receives each tile&apos;s position, size, centre and
+            index. Here, the index determines its colour.
           </p>
 
           <p>
-            Let&apos;s draw polygons instead. Instead of tiling, let&apos;s move
-            across our canvas. The API is basically the same. Configuration goes
-            first (we can then easily tweak it).
+            Next, use forHorizontal to draw a row of polygons. It takes the same
+            callback arguments as forTiling:
           </p>
 
           <Four />
 
           <p>
-            We need one more thing before we can finish our drawing: time. But
-            it is really easy, usually just p.t gives the time in seconds. We
-            throw in some trigonometric stuff to make look more organic and:
+            Use p.t, the time in seconds, to animate the polygons. Sine and
+            cosine make their properties vary smoothly:
           </p>
 
           <Five />
 
-          <p>
-            Okay so let&apos;s put everything together and draw our animated
-            logo.
-          </p>
+          <p>Combine these steps to draw the animated logo:</p>
 
           <Six />
 
           <h2>Examples</h2>
 
-          <p>
-            This website has loads of examples of using Solandra, all with
-            source code.
-          </p>
+          <p>Explore more sketches and their source code:</p>
 
           <ExampleLinks />
 
