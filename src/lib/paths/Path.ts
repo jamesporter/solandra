@@ -58,12 +58,8 @@ export class Path implements Traceable {
   }
 
   /**
-   * Adds a curve to a point
-   * with optional configuration
-   *
-   * Admittedly this is inconsistent with APIs elsewhere (where typically config
-   * goes first) but I found in practice this is nice. addCurve is also available
-   * and more consistent.
+   * Add a curve to a target point with optional curve settings.
+   * Use addCurve to pass the target and settings in one object.
    */
   addCurveTo = (point: Point2D, config: CurveConfig = {}): Path => {
     const { curveSize = 1, bulbousness = 1, curveAngle = 0, twist = 0 } = config

@@ -12,9 +12,9 @@ import {
 
 # Animation and Time
 
-Solandra's model of animation is deliberately simple: a sketch is a pure function of a canvas, and the canvas carries the current **time in seconds** as `s.t`. To animate, re-run the sketch every frame with an advancing time; anything you derive from `s.t` moves.
+The current time is available as `s.t`, in seconds. To animate a sketch, redraw it each frame with a new time and use `s.t` to calculate positions, sizes or colours.
 
-This has a nice property: an animation is just a still image parameterised by time. Every frame is reproducible (time plus seed fully determine the picture), and any animated sketch is automatically a still-image sketch too.
+A sketch that depends only on its seed, time and canvas size can reproduce any frame. Fix the time to render a still image.
 
 ```ts
 const sketch = (s: SCanvas) => {
@@ -45,7 +45,7 @@ const sketch = (s: SCanvas) => {
 
 ## oscillate
 
-Raw trigonometry works, but `s.oscillate` is usually nicer: it smoothly bounces between two values, at a given `rate`:
+`s.oscillate` moves smoothly between two values. Set `rate` to control its speed:
 
 ```ts
 s.oscillate() // between 0 and 1
@@ -88,7 +88,7 @@ s.forHorizontal({ n: 14, margin: 0.1 }, ([x, y], [dX, dY], _c, i) => {
 
 ## Time plus noise
 
-Feeding `s.t` into [Perlin noise](/docs/randomness) gives drifting, organic motion rather than mechanical loops:
+Pass `s.t` into [Perlin noise](/docs/randomness) to create motion that varies smoothly over time:
 
 ```ts
 s.background(210, 50, 12)
@@ -131,7 +131,7 @@ s.times(24, (n) => {
 
 ## Randomness in animations
 
-Take care combining `s.random()` with animation: the random sequence restarts each frame (same seed), so random _choices_ are stable across frames as long as you make the same number of calls in the same order. That's usually exactly what you want; positions stay put while time-based properties move:
+The canvas components on this site create an `SCanvas` with the same seed each frame. Random values stay the same if you make the same calls in the same order. Here, positions stay fixed while radii change with time:
 
 ```ts
 s.background(260, 30, 10)
@@ -160,7 +160,7 @@ s.times(80, (n) => {
 
 ## Driving animation yourself
 
-If you're not using a ready-made canvas component, the loop is straightforward: create an `SCanvas` with a time (fourth constructor argument) and redraw with `requestAnimationFrame`. Reusing one instance and calling `updateTime` avoids re-allocating:
+To run your own animation loop, pass the time as the fourth `SCanvas` constructor argument and redraw with `requestAnimationFrame`. Creating an instance each frame also resets the random sequence:
 
 ```ts
 import { SCanvas } from "solandra"
@@ -180,7 +180,7 @@ const frame = (ms: number) => {
 requestAnimationFrame(frame)
 ```
 
-For interactive pieces there is also a `StatefulSketch` type: a sketch paired with an `initialState()` and a `handleMessage` reducer (for example for click events); the source of this site's [interactive examples](/main) shows the pattern in use.
+`StatefulSketch` adds an `initialState()` function and a `handleMessage` reducer for interactions such as clicks. See the source of the [interactive examples](/main).
 
 export default function Page({ children }) {
   return <DocPageLayout>{children}</DocPageLayout>

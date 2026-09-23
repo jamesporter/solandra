@@ -20,9 +20,9 @@ import {
 
 # Shapes
 
-Solandra ships with a collection of shape classes. They all implement the `Traceable` interface, so anything on this page can be passed to `s.draw(...)` (stroke the outline) or `s.fill(...)` (fill the interior).
+All shapes on this page implement `Traceable`. Pass them to `s.draw(...)` to stroke the outline or `s.fill(...)` to fill the interior.
 
-All are configured with a single object, using short, consistent names: `at` for position, `r` for radius, `w`/`h` for width/height, `a` for angle (radians), `n` for a count.
+Shape constructors take a configuration object. Common options are `at` (position), `r` (radius), `w`/`h` (width/height), `a` (angle in radians) and `n` (count).
 
 ## The gallery
 
@@ -121,7 +121,7 @@ s.forTiling(
 
 `Rect` is positioned by its top-left corner by default; pass `align: "center"` to position by center. `Square` is a `Rect` with a single size `s`, and `RoundedRect` adds a corner radius `r`.
 
-`Rect` also has a lovely `split` method that subdivides it, either in half, at a proportion, or into weighted pieces:
+`Rect.split` divides a rectangle into two parts or a set of weighted pieces:
 
 ```ts
 s.background(40, 30, 94)
@@ -174,7 +174,7 @@ columns.forEach((column, i) => {
 
 ## Circles, ellipses and arcs
 
-`Circle` is simply an `Ellipse` with `w = h = 2r`. Both are drawn with cubic Bézier approximations, and are positioned by center by default (`align: "topLeft"` is also available).
+`Circle` is an `Ellipse` with `w = h = 2r`. Both use cubic Bézier approximations and are positioned by centre. Pass `align: "topLeft"` to position by the top-left corner.
 
 `Arc` is a filled wedge (pie slice) from angle `a` to `a2`; `HollowArc` is a ring segment with outer radius `r` and inner radius `r2`. Angles are in radians, with 0 pointing right and increasing clockwise on screen.
 
@@ -218,7 +218,7 @@ s.times(12, (n) => {
 
 ## Polygons and stars
 
-`RegularPolygon` takes a number of sides `n`, radius `r` and optional rotation `a` (shapes start pointing "up"). `Hexagon` and `EquilateralTriangle` are convenient subclasses that work nicely with the [hex and triangle grid helpers](/docs/vectors-and-utilities). `Star` takes points `n`, outer radius `r` and optional inner radius `r2` (defaults to `r / 2`).
+`RegularPolygon` takes a side count `n`, radius `r` and optional rotation `a`. Its first vertex points up by default. `Hexagon` and `EquilateralTriangle` work with the [grid helpers](/docs/vectors-and-utilities). `Star` takes a point count `n`, outer radius `r` and inner radius `r2` (default `r / 2`).
 
 ```ts
 s.background(45, 40, 94)
@@ -316,7 +316,7 @@ s.fill(
 
 ## Converting shapes to paths
 
-Many shapes can be converted to a `SimplePath` (a list of points), unlocking all the [path transformations](/docs/paths):
+Convert a shape to a `SimplePath` to use its [path transformations](/docs/paths):
 
 - `Rect`, `RegularPolygon`, `Star` and `Line` have a `.path` getter (exact)
 - `Circle`, `Ellipse`, `Arc`, `HollowArc` and `RoundedRect` have `.toPath(detail)`, where `detail` controls how many points approximate the curves

@@ -70,8 +70,7 @@ const headingClasses =
 
 export function DocLinks() {
   const pathname = usePathname()
-  // Narrow viewports get the contents as a disclosure, collapsed by default, so
-  // that the page itself (rather than a long list of links) is what you land on.
+  // Collapse the contents on narrow screens to keep the article visible.
   const [open, setOpen] = useState(false)
 
   const current = links.find(({ href }) => pathname.includes(href))
@@ -138,9 +137,7 @@ export function DocPageLayout({ children }: { children: ReactNode }) {
     <div className="flex flex-col min-h-screen">
       <Header />
 
-      {/* The nav keeps a fixed width on wide viewports so that the article can
-          be centred in whatever space is left, rather than the gap all landing
-          between the nav and the content. */}
+      {/* Keep the sidebar width fixed and centre the article in the remaining space. */}
       <div className="flex flex-col flex-1 lg:flex-row lg:items-start lg:gap-4 lg:my-8 lg:px-4">
         <DocLinks />
         <div className="flex-1 min-w-0">

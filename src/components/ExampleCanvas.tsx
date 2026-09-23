@@ -1,7 +1,7 @@
 import { Sketch } from "../lib"
 import { Canvas } from "./Canvas"
 
-// Not really optimal, but simple responsive canvas for docs (rendering in mdx/don't want to have to worry about lots of props etc)
+// Responsive canvas with defaults for embedded documentation examples.
 export function ExampleCanvas({
   sketch,
   playing = false,

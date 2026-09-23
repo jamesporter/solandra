@@ -16,7 +16,7 @@ import {
 
 # Vectors and Utilities
 
-Points in Solandra are plain `[x, y]` tuples; no wrapper classes to construct or unwrap. All the geometry you need to manipulate them lives in the `v` namespace, alongside a set of numeric and grid utilities.
+Points are `[x, y]` tuples. The `v` namespace contains functions for working with them; Solandra also exports numeric, collection and grid helpers.
 
 ## Vector operations
 
@@ -38,7 +38,7 @@ v.pointAlong(a, b, 0.25) // 25% of the way from a to b
 v.polarToCartesian([0.5, 0.5], r, a) // point at radius r, angle a
 ```
 
-`polarToCartesian` and `pointAlong` do a lot of work in practice; here they build a web between two rings of points:
+This example uses `polarToCartesian` and `pointAlong` to connect two rings of points:
 
 ```ts
 s.background(230, 40, 12)
@@ -105,9 +105,9 @@ centroid([
 ]) // [0.5, 0.5]
 ```
 
-## Wrapping points up
+## Convex hulls
 
-`convexHull` gives the smallest convex polygon containing a set of points, as if a rubber band were stretched around them: the corners, starting from the leftmost and going round clockwise as drawn, with points inside (and points lying along an edge) left out.
+`convexHull` returns the smallest convex polygon enclosing a set of points. Vertices start at the leftmost point and run clockwise on screen. Interior points and points along straight edges are omitted.
 
 ```ts
 import { convexHull, SimplePath } from "solandra"
@@ -125,7 +125,7 @@ const cloud = s.build(s.times, 30, () => s.randomPoint())
 s.fill(SimplePath.withPoints(convexHull(cloud)).close())
 ```
 
-A `SimplePath` will do this for its own points, as [`path.convexHull`](/docs/paths).
+For a `SimplePath`, use [`path.convexHull`](/docs/paths).
 
 ## Collection helpers
 
@@ -141,7 +141,7 @@ sum([1, 2, 3, 4]) // 10
 arrayOf(3, () => s.randomPoint()) // 3 fresh random points
 ```
 
-`pairWise` turns a list of points into segments; handy for styling each edge of a path separately:
+`pairWise` returns adjacent pairs of points. Use it to style each segment separately:
 
 ```ts
 s.background(40, 30, 95)
@@ -175,7 +175,7 @@ pairWise(points).forEach(([from, to], i) => {
 
 ## Hexagonal grids
 
-`hexTransform({ r, vertical })` maps integer grid coordinates to hexagon centers in a proper hexagonal tiling, matched to the `Hexagon` shape. Combine with `forGrid` and a translation to the canvas center:
+`hexTransform({ r, vertical })` maps integer grid coordinates to hexagon centres. Use the same radius for `Hexagon`, then combine with `forGrid` and a translation:
 
 ```ts
 import { hexTransform, Hexagon } from "solandra"
@@ -207,7 +207,7 @@ s.withTranslation(s.meta.center, () => {
 
 ## Triangular grids
 
-`triTransform({ s })` does the same for equilateral triangle tilings; it returns both a position and whether the triangle should be `flipped`, spreading exactly onto the `EquilateralTriangle` configuration:
+`triTransform({ s })` maps integer coordinates to an equilateral triangle tiling. It returns a position and a `flipped` flag, ready to pass to `EquilateralTriangle`:
 
 ```ts
 import { triTransform, EquilateralTriangle } from "solandra"
@@ -239,7 +239,7 @@ s.withTranslation(s.meta.center, () => {
 
 ## Isometric projection
 
-`isoTransform(height)` returns a function from 3D coordinates `[x, y, z]` (with `y` up) to 2D isometric screen coordinates. Draw faces back-to-front (use `downFrom`) and you have instant axonometric worlds:
+`isoTransform(height)` maps 3D coordinates `[x, y, z]`, with `y` pointing up, to 2D isometric coordinates. Draw faces from back to front; `downFrom` helps set the order:
 
 ```ts
 import { isoTransform, clamp } from "solandra"

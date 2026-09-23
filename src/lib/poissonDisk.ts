@@ -1,7 +1,5 @@
 /**
- * Poisson disk sampling for generating evenly-distributed random points.
- * Creates points that maintain a minimum distance from each other, resulting in
- * a more uniform and visually pleasing distribution than pure random placement.
+ * Poisson disk sampling: random points separated by a minimum distance.
  * @module poissonDisk
  */
 

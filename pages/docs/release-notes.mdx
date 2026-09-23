@@ -4,15 +4,16 @@ import { DocPageLayout } from "../../src/components/DocPageLayout"
 
 ## Unreleased
 
-- `fbm2`, fractal (fractional Brownian motion) noise: several octaves of `perlin2` summed together, for noise with detail at every scale rather than at just one. Configurable `octaves`, `persistence` and `lacunarity`.
-- Measuring and sampling a `SimplePath`, all by distance travelled rather than by point index: `length`, `pointAt`, `tangentAt` and `pointsAlong`. Plus `alongPath`, which iterates over evenly spaced points along a path (or anything with one, e.g. `Star`), handing you the point and the angle the path heads in there.
-- `withSymmetry`, which draws its callback several times over with the canvas already rotated and/or reflected: `"rotational"`, `"mirror"` or `"kaleidoscope"`.
-- `curl2`, curl noise: a divergence free vector field taken from the curl of `perlin2`/`fbm2`, so lines following it swirl around each other instead of draining into the same few places as a naive noise-as-angle field does. Plus `SimplePath.flowLine`, which traces a path through any vector field.
-- Measuring a `SimplePath` as a shape: `boundingBox` (in the form `Rect` takes), `area`, `containsPoint` and `convexHull`, along with a standalone `convexHull` for bare points. And `simplified`, which drops the points that barely change a path's shape (Ramer-Douglas-Peucker).
-- `harmony`, which builds the classic colour schemes (complementary, analogous, triadic, tetradic, split complementary, monochrome) around a colour, and `mixColors`, which blends two colours the short way round the hue circle.
-- `worley2`, cellular noise: the distance to the nearest of a scattering of feature points, for the structured textures Perlin noise cannot give (scales, cobbles, cracked mud, stained glass). Configurable `feature` (`"f1"`, `"f2"` or `"difference"`, which draws the boundaries between cells), `metric` and `jitter`. Plus `worleyCell2`, which says which cell a point falls in, for colouring cells as a whole.
-- `offset` on a `SimplePath`: the parallel path, a fixed distance to one side, with mitred corners. Offset a line both ways and join the two up for a filled ribbon, or step the distance for contours inside a shape.
-- `forRadialTiling`, a polar `forTiling`: rings of cells going out from a centre, each ring divided into sectors, each cell a `HollowArc` ready to fill, with an optional hole in the middle and an optional partial turn for a fan.
+- `fbm2`: fractal noise with configurable octaves, persistence and lacunarity.
+- `SimplePath.length`, `pointAt`, `tangentAt` and `pointsAlong`: measure and sample paths by distance. `alongPath` passes each sampled point and angle to a callback.
+- `withSymmetry`: repeat a drawing with rotational, mirror or kaleidoscope symmetry.
+- `curl2`: a vector field derived from noise. `SimplePath.flowLine` traces paths through vector fields.
+- `SimplePath.boundingBox`, `area`, `containsPoint` and `convexHull`: measure and query shapes. A standalone `convexHull` accepts arrays of points.
+- `SimplePath.simplified`: reduce point count with a configurable tolerance.
+- `harmony`: create colour schemes. `mixColors`: blend colours along the shortest route around the hue circle.
+- `worley2`: cellular noise with configurable distance, metric and jitter. `worleyCell2` returns feature-point details and an ID for colouring cells.
+- `SimplePath.offset`: create parallel paths with mitred corners for ribbons and contours.
+- `forRadialTiling`: divide rings into sectors, returning a `HollowArc` for each cell. Supports a centre hole and partial circles.
 
 ## 0.20.0
 
@@ -20,22 +21,22 @@ import { DocPageLayout } from "../../src/components/DocPageLayout"
 
 ## 0.19.0
 
-- Support for using fragment shaders (see [some early docs](/shaders)).
+- Fragment shader support (see [shader examples](/shaders)).
   - Render a fragment shader to a texture (image) via `renderShader`
   - Render a Solandra sketch to a texture (image) via `render`
   - Pass images into shaders
-  - Render these images in sketches (so can combine in both directions) via `drawImage`
-  - Uses OffscreenCanvas (which is quite widely supported but not in Safari 16.x)
+  - Draw images in sketches with `drawImage`
+  - Requires OffscreenCanvas; unavailable in Safari 16.x at release
 - Poisson disc sampling iteration
 - Pseudorandom angle generation
-- `transformLoopedPoints` for non-determininistic transformations of looped points (basically make first and last point the same)
+- `transformLoopedPoints` keeps the first and last points together during non-deterministic transformations
 - `rotateAround` helper
-- remove hack in place to work around Safari bugs with rendering text at 'small' (point) sizes
-- cache `meta`
+- Removed a workaround for Safari text rendering at small font sizes
+- Cached `meta`
 
 ## 0.18.0
 
-- Following [https://iquilezles.org/articles/palettes/](https://iquilezles.org/articles/palettes/) adds support for generative palettes. Use `palettePreset` for convenient 'nice' palettes and `palette` for fuller control. See [an example](/view?sketch=44&category=API%20Samples).
+- Added generative palettes based on [Inigo Quilez's cosine palettes](https://iquilezles.org/articles/palettes/). Use `palettePreset` for named palettes or `palette` for custom coefficients. See [an example](/view?sketch=44&category=API%20Samples).
 
 export default function Page({ children }) {
   return <DocPageLayout>{children}</DocPageLayout>

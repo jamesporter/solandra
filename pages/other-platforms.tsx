@@ -18,7 +18,7 @@ const Other: NextPage = () => {
         <title>Solandra - Other Platforms</title>
         <meta
           name="description"
-          content="A human friendly, agile framework for creative coding"
+          content="Solandra for SVG graphics and Flutter apps."
         />
         <link rel="icon" type="image/png" href="/images/icon.png" />
       </Head>
@@ -28,10 +28,7 @@ const Other: NextPage = () => {
         <div className="mx-auto p-4 max-w-3xl article-page">
           <h1>Other Platforms</h1>
 
-          <p>
-            You can also use a version of solandra for SVG rendering and with
-            Flutter.
-          </p>
+          <p>Solandra also has versions for SVG graphics and Flutter apps.</p>
         </div>
 
         <div className="flex flex-row flex-wrap md:gap-4 justify-center mb-8">
@@ -40,11 +37,8 @@ const Other: NextPage = () => {
               Solandra Flutter
             </h3>
             <p>
-              Flutter is a cross platform framework for creating applications.
-              You can make native iOS, Android, Mac, Windows and Linux Apps. You
-              can also deploy to the web. Unlike most native app development
-              environments it supports hot (stateful) reload; which is great for
-              working on interactive applications.
+              Solandra Flutter brings the drawing API to Flutter apps. Use hot
+              reload to see changes as you work on a sketch.
             </p>
 
             <a
@@ -87,9 +81,8 @@ const Other: NextPage = () => {
               Solandra SVG
             </h3>
             <p>
-              Solandra SVG allows for the creation of vector graphics with many
-              of Solandra&apos;s APIs. I created it to make images for plotters
-              and experimented with a fluent/chained API.
+              Solandra SVG creates vector graphics with a chained drawing API. I
+              built it to make images for pen plotters.
             </p>
 
             <a

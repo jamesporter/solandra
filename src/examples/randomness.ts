@@ -589,12 +589,11 @@ const poissonPoints3 = (p: SCanvas) => {
 
 const fractalClouds = (p: SCanvas) => {
   const scale = 3
-  // a background in the middle of the range, so the tiles have something to
-  // blend into rather than leaving a faint grid of seams
+  // Match the background to the middle tone to hide seams between tiles.
   p.background(205, 45, 70)
 
   p.forTiling({ n: 120, type: "square" }, ([x, y], [dX, dY]) => {
-    // several octaves of noise, so there is detail at every scale
+    // Combine octaves to add finer detail.
     const n = fbm2(x * scale, y * scale, { octaves: 6, persistence: 0.55 })
     p.setFillColor(210 - n * 30, 40 + n * 20, 55 + n * 45)
     p.fill(new Rect({ at: [x, y], w: dX * 1.2, h: dY * 1.2 }))
@@ -633,7 +632,7 @@ const curlField = (p: SCanvas) => {
   p.background(220, 25, 12)
   p.lineWidth = 0.002
 
-  // the field itself: a short line in the flow direction at each point
+  // Draw a short line in the flow direction at each point.
   p.forTiling({ n: 40, type: "square" }, (_, [dX], [cX, cY]) => {
     const [uX, uY] = normalize(curl2(cX * 2.5, cY * 2.5))
     p.setStrokeColor(190 + uX * 60, 60, 70)
@@ -659,7 +658,7 @@ const curlStreamers = (p: SCanvas) => {
         field: ([x, y]) => curl2(x * 2.5, y * 2.5, { octaves: 2 }),
         n: 200,
         step: 0.004,
-        // no point drawing what has left the canvas
+        // Stop when the path leaves the canvas.
         until: (at) => !p.inDrawing(at),
       })
     )
@@ -670,8 +669,8 @@ const orbits = (p: SCanvas) => {
   p.background(45, 30, 95)
   p.lineWidth = 0.003
 
-  // nothing ties flowLine to noise: this field pulls things into an orbit,
-  // spiralling slowly inwards because it is not quite at right angles
+  // This field spirals inwards: its direction is slightly short of a right
+  // angle to the vector towards the centre.
   p.aroundCircle({ n: 60, r: 0.44 }, (from, i) => {
     p.setStrokeColor(10 + i * 5, 65, 50, 0.7)
     p.draw(
@@ -688,8 +687,7 @@ const orbits = (p: SCanvas) => {
 const cellular = (p: SCanvas) => {
   p.background(25, 20, 8)
 
-  // Worley noise: the distance to the nearest of a scattering of feature
-  // points, so each cell shades outwards from its own middle
+  // Shade by distance to the nearest Worley feature point.
   p.forTiling({ n: 150, type: "square" }, ([x, y], [dX, dY]) => {
     const d = worley2(x * 7, y * 7)
     p.setFillColor(25 + d * 25, 55, 12 + d * 55)
@@ -700,8 +698,7 @@ const cellular = (p: SCanvas) => {
 const cellWalls = (p: SCanvas) => {
   p.background(205, 25, 96)
 
-  // the gap between the two nearest feature points falls to zero exactly on
-  // the boundary between cells, so this draws the cracks rather than the cells
+  // Equal distances to the two nearest features mark cell boundaries.
   p.forTiling({ n: 200, type: "square" }, ([x, y], [dX, dY]) => {
     const d = worley2(x * 5, y * 5, { feature: "difference" })
     if (d > 0.14) return
@@ -715,9 +712,9 @@ const mosaic = (p: SCanvas) => {
 
   p.forTiling({ n: 160, type: "square" }, ([x, y], [dX, dY], at) => {
     const { id, f1, f2 } = worleyCell2(at[0] * 8, at[1] * 8, { jitter: 0.9 })
-    // grouting: leave the tiles either side of a boundary unpainted
+    // Leave gaps along cell boundaries for grout.
     if (f2 - f1 < 0.04) return
-    // every point in a cell shares an id, so each cell comes out one colour
+    // Use the shared cell ID to choose one colour per cell.
     p.setFillColor(190 + (id % 100), 55, 30 + (id % 45))
     p.fill(new Rect({ at: [x, y], w: dX, h: dY }))
   })
@@ -726,8 +723,7 @@ const mosaic = (p: SCanvas) => {
 const tiledCells = (p: SCanvas) => {
   p.background(175, 35, 12)
 
-  // measuring distance the Chebyshev way gives square cells, and keeping the
-  // jitter down holds them near their grid: tiles rather than pebbles
+  // Chebyshev distance and low jitter produce a pattern of square tiles.
   p.forTiling({ n: 160, type: "square" }, ([x, y], [dX, dY], at) => {
     const d = worley2(at[0] * 9, at[1] * 9, {
       metric: "chebyshev",

@@ -11,11 +11,11 @@ import {
 
 # Transforms, Clipping and State
 
-Canvas state (colours, line width, transforms, clipping, blend modes) is global and mutable, which is a classic source of bugs. Solandra's answer is a family of `with...` methods: each takes a callback, and **every change you make inside is automatically undone afterwards**. No manual save/restore, no leaking state.
+The `with...` methods save canvas drawing state before running a callback and restore it afterwards. This scopes colours, line widths, transforms, clipping and blend modes. Drawn pixels remain on the canvas.
 
 ## withContext
 
-The plainest one: `withContext` just scopes state changes:
+`withContext` scopes changes to the drawing state:
 
 ```ts
 s.background(0, 0, 95)
@@ -41,7 +41,7 @@ s.fill(new Circle({ at: [0.7, 0.5], r: 0.15 })) // back to blue
 
 ## Translation, rotation and scale
 
-`withTranslation(vector, cb)`, `withRotation(angle, cb)` and `withScale([sX, sY], cb)` transform the coordinate system inside their callback. Rotation and scaling happen around the _origin_, so the standard recipe for "rotate this thing in place" is: translate to where you want it, then rotate, then draw at `[0, 0]`:
+`withTranslation(vector, cb)`, `withRotation(angle, cb)` and `withScale([sX, sY], cb)` transform coordinates inside a callback. Rotation and scaling use the origin. To rotate a shape in place, translate to its position, rotate, then draw at `[0, 0]`:
 
 ```ts
 s.background(40, 30, 95)
@@ -84,7 +84,7 @@ s.forTiling(
   }}
 />
 
-Nesting transforms composes them, which makes recursive figures natural:
+Nest transforms to build recursive patterns:
 
 ```ts
 s.background(230, 40, 12)
@@ -126,7 +126,7 @@ For an arbitrary affine transform there is `withTransform({ hScale, hSkew, vSkew
 
 ## Clipping
 
-`withClipping(shape, cb)` restricts all drawing inside the callback to the area of any `Traceable`. Great for keeping wild textures inside tidy frames:
+`withClipping(shape, cb)` restricts drawing to the area enclosed by a `Traceable`:
 
 ```ts
 s.background(45, 30, 94)
@@ -172,7 +172,7 @@ s.withClipping(new Circle({ at: [0.5, 0.5], r: 0.4 }), () => {
 
 ## Blend modes
 
-`withBlendMode(mode, cb)` scopes a [globalCompositeOperation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation): `"multiply"`, `"screen"`, `"overlay"`, `"lighten"`, `"difference"` and friends.
+`withBlendMode(mode, cb)` sets [globalCompositeOperation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation) for the callback. Modes include `"multiply"`, `"screen"`, `"overlay"`, `"lighten"` and `"difference"`.
 
 ```ts
 s.background(0, 0, 98)
@@ -216,12 +216,12 @@ s.withBlendMode("multiply", () => {
 
 ## Symmetry
 
-`withSymmetry(config, cb)` runs the callback once per copy with the canvas already rotated and/or reflected around a centre, so drawing one thing gives you a symmetric arrangement of it. It is the `with...` idea applied to composition rather than to style: draw a petal, get a flower.
+`withSymmetry(config, cb)` repeats a drawing with rotations or reflections around a centre:
 
 - `type: "rotational"` (the default) &mdash; `n` copies, evenly spaced around a full turn
 - `type: "mirror"` &mdash; a reflected pair; `axis` is `"vertical"` (the default, flipping left to right) or `"horizontal"`
 - `type: "kaleidoscope"` &mdash; `n` rotations, each drawn twice, once reflected, so 2n copies
-- `at` &mdash; the centre of the symmetry, the middle of the canvas unless you say otherwise
+- `at` &mdash; the centre of symmetry; defaults to the canvas centre
 
 The callback is given the index of the copy and whether that copy is a reflection.
 
@@ -247,7 +247,7 @@ s.fill(new Circle({ at: s.meta.center, r: 0.06 }))
   }}
 />
 
-A motif placed off the axis is what makes a kaleidoscope look like one: each rotation appears twice, mirrored.
+Place the motif off the axis to see each rotation and its reflection:
 
 ```ts
 s.background(230, 25, 12)
@@ -275,11 +275,11 @@ s.withSymmetry({ type: "kaleidoscope", n: 6 }, (i, reflected) => {
   }}
 />
 
-Being a `with...` helper, each copy is drawn in its own saved state, so transforms and styles set inside one copy do not leak into the next, and symmetry nests inside (and around) everything else here.
+Each copy has its own saved drawing state. Transforms and styles in one callback do not affect later copies.
 
-## Everything composes
+## Combining helpers
 
-The scoped helpers nest freely; clip, then rotate, then blend, and it all unwinds correctly:
+Nest helpers to combine their effects. This example clips, rotates and blends:
 
 ```ts
 s.background(220, 40, 10)

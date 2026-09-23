@@ -4,7 +4,7 @@ import { Circle, Rect, Line, Star, SimplePath } from "../../src/lib"
 
 # Canvas Basics
 
-Everything in Solandra happens through an `SCanvas` (by convention called `s` or `p`). Your sketch is just a function that takes an `SCanvas` and draws with it:
+A sketch is a function that takes an `SCanvas` and draws with it. The examples call this argument `s` or `p`:
 
 ```ts
 import { SCanvas } from "solandra"
@@ -26,7 +26,7 @@ const sketch = (s: SCanvas) => {
 
 ## The coordinate system
 
-Solandra uses a normalized coordinate system: **the width of the canvas is always 1**, whatever the actual pixel size. The height is `1 / aspectRatio`. This means your sketches are resolution independent by default: the same code renders a thumbnail or a poster.
+The canvas width is always **1**, regardless of its pixel size. Its height is `1 / aspectRatio`, so the same sketch can render at different resolutions.
 
 The `meta` property tells you about the drawing area:
 
@@ -39,9 +39,9 @@ s.meta.center // [0.5, 0.5 / aspectRatio]
 s.meta.aspectRatio // width / height
 ```
 
-Points are just tuples of numbers, `[x, y]`, with `x` increasing rightwards and `y` increasing downwards (as is standard for canvases, if not mathematics).
+Points are `[x, y]` tuples. The origin is at the top left; `x` increases to the right and `y` increases downwards.
 
-A quick tour of the drawing area; here we mark the corners, edges and center:
+This example marks the corners, edges and centre:
 
 ```ts
 const { center, bottom, right } = s.meta
@@ -89,7 +89,7 @@ corners.forEach((at) => {
 
 ## Drawing and filling
 
-Solandra separates _what_ you draw from _how_ you draw it. Shapes (anything implementing `Traceable`, see [Shapes](/docs/shapes)) are passed to one of two methods:
+Pass a shape to `s.draw` or `s.fill`. Both accept anything that implements `Traceable`; see [Shapes](/docs/shapes).
 
 - `s.draw(shape)` strokes the outline with the current stroke colour and line width
 - `s.fill(shape)` fills the interior with the current fill colour (or gradient)
@@ -116,7 +116,7 @@ s.fill(new Rect({ at: [0.55, 0.55], w: 0.35, h: 0.35 }))
 
 ## Colours
 
-Colours in Solandra are HSLA: hue (0&ndash;360), saturation (0&ndash;100), lightness (0&ndash;100) and optional alpha (0&ndash;1). This makes it easy to programmatically vary colours in ways that look good; see [Colour](/docs/colors) for much more.
+Colours use HSLA: hue (0&ndash;360), saturation (0&ndash;100), lightness (0&ndash;100) and optional alpha (0&ndash;1). See [Colour](/docs/colors) for gradients, palettes and mixing.
 
 ```ts
 s.background(45, 20, 95) // hue, saturation, lightness
@@ -124,7 +124,7 @@ s.setFillColor(220, 70, 50, 0.5) // ...and optional alpha
 s.setStrokeColor(0, 0, 20)
 ```
 
-The state-based colour setters have `FromSpec` variants that take a `{ h, s, l, a }` object, which is handy when passing colours around:
+The `FromSpec` variants take a `{ h, s, l, a }` object:
 
 ```ts
 const brand = { h: 175, s: 80, l: 40 }
@@ -134,7 +134,7 @@ s.backgroundFromSpec({ h: 45, s: 20, l: 95 })
 
 ## Line style
 
-Line width is also in canvas units (so `0.01` is 1% of the width of your canvas). You can also control caps, joins and dashes:
+Line width uses canvas units: `0.01` is 1% of the canvas width. You can also set caps, joins and dashes:
 
 ```ts
 s.background(0, 0, 15)
@@ -168,11 +168,11 @@ s.draw(new Line([0.1, 0.8], [0.9, 0.8]))
   }}
 />
 
-The dash pattern is specified at the scale of the canvas (unlike raw HTML5 Canvas, where it would be in pixels).
+Dash lengths use canvas units, not pixels.
 
 ## Shadows
 
-Shadows are configured with a single setter (again scaled to canvas size, unlike the raw Canvas API) and removed with `clearShadow`:
+Set a shadow with `shadow` and remove it with `clearShadow`. Blur and offsets use canvas units:
 
 ```ts
 s.background(210, 20, 95)
@@ -208,7 +208,7 @@ s.fill(new Circle({ at: [0.7, 0.65], r: 0.15 }))
 
 ## Checking whether a point is visible
 
-`s.inDrawing(point)` returns whether a point lies inside the canvas; useful for terminating random walks or culling offscreen work:
+`s.inDrawing(point)` checks whether a point is inside the canvas. Use it to stop a random walk at the edge:
 
 ```ts
 s.background(0, 0, 10)
@@ -245,7 +245,7 @@ s.times(20, (n) => {
 ## Where next
 
 - [Shapes](/docs/shapes) for everything you can pass to `draw` and `fill`
-- [Iteration](/docs/iteration) for Solandra's signature looping helpers
+- [Iteration](/docs/iteration) for grids, tiling and loops
 - [Randomness](/docs/randomness) for the seeded random number APIs used above
 
 export default function Page({ children }) {

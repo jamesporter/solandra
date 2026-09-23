@@ -18,14 +18,8 @@ export class SimplePath implements Traceable {
   }
 
   /**
-   * Traces a path through a vector field, starting at a point and repeatedly
-   * stepping in whatever direction the field points in there.
-   *
-   * The field is sampled for direction only (the vector is normalized), so
-   * every step is the same length however strong the field is, and any
-   * function of a point will do: `curl2` noise, the tangent of another path,
-   * the pull towards an attractor. Where the field has no direction at all
-   * (the zero vector) the path can go no further, so it stops there.
+   * Traces a vector field with fixed-length steps from a starting point.
+   * Vectors are normalised before each step. A zero vector stops the path.
    *
    * @param config - Configuration
    * @param config.from - Where to start
@@ -34,8 +28,8 @@ export class SimplePath implements Traceable {
    * up to n + 1 points
    * @param config.step - How far to move each step (default: 0.01)
    * @param config.until - Optional stopping condition, called with each new
-   * point and its index; the path ends as soon as it returns true. Handy for
-   * stopping at the edge of the canvas, e.g. `(at) => !s.inDrawing(at)`.
+   * point and its index. Stops after adding the first point that returns true.
+   * Use `(at) => !s.inDrawing(at)` to stop at the canvas edge.
    * @throws Error if a negative number of steps is asked for
    * @example
    * ```ts
@@ -74,7 +68,7 @@ export class SimplePath implements Traceable {
 
     for (let i = 0; i < n; i++) {
       const direction = v.normalize(field(at))
-      // nowhere to go: a zero vector has no direction to follow
+      // Stop where the field has no direction.
       if (direction[0] === 0 && direction[1] === 0) break
       at = v.add(at, v.scale(direction, step))
       points.push(at)
@@ -95,8 +89,9 @@ export class SimplePath implements Traceable {
   }
 
   /**
-   * Smooth out path by adding more points to give curvy result
-   * @param iterations
+   * Smooth this path in place using Chaikin's corner-cutting algorithm.
+   * @param config.n Number of smoothing iterations (default: 1)
+   * @param config.looped Whether the path is closed (default: false)
    */
   chaiken({
     n = 1,
@@ -146,9 +141,9 @@ export class SimplePath implements Traceable {
   }
 
   /**
-   * If points are closed loop (repeat first and last) and transform is non deterministic use this to set the last point to the (transformed) first point
-   * @param transform
-   * @returns
+   * Transform this path in place, keeping the last point equal to the first.
+   * Use for closed paths when the transform can return different results
+   * for the same input.
    */
   transformLoopedPoints(transform: (point: Point2D) => Point2D): SimplePath {
     this.points = this.points.map(transform)
@@ -308,9 +303,7 @@ export class SimplePath implements Traceable {
   }
 
   /**
-   * The point a given proportion of the way along the path, measured by
-   * distance travelled (so evenly spaced proportions give evenly spaced
-   * points, however unevenly spaced the path's own points are).
+   * Returns a point at a proportion of the total path length.
    *
    * @param proportion Where along the path, 0 is the start and 1 the end.
    * Values outside that range are clamped.
@@ -327,11 +320,8 @@ export class SimplePath implements Traceable {
   }
 
   /**
-   * The unit tangent (the direction of travel) a given proportion of the way
-   * along the path. Use `v.heading` on it for the angle, e.g. to rotate
-   * something to follow the path.
-   *
-   * A path that goes nowhere has no direction, so that gives [0, 0].
+   * Returns the unit direction vector at a proportion of the path length.
+   * Use `v.heading` to get its angle. A zero-length path returns [0, 0].
    *
    * @param proportion Where along the path, 0 is the start and 1 the end.
    * Values outside that range are clamped.
@@ -349,8 +339,7 @@ export class SimplePath implements Traceable {
   }
 
   /**
-   * n points evenly spaced along the path by distance. Handy for scattering
-   * shapes along an outline, or resampling a path with uneven points.
+   * Returns n points spaced evenly by distance along the path.
    *
    * @param config.n Number of points (at least 1)
    * @param config.inclusive Whether to include the end point (default: true).
@@ -367,8 +356,8 @@ export class SimplePath implements Traceable {
   }
 
   /**
-   * The smallest axis aligned box containing every point of the path, in the
-   * form a `Rect` takes, so `new Rect(path.boundingBox)` is the box itself.
+   * Returns the smallest axis-aligned box containing all path points.
+   * The result can be passed to `new Rect(...)`.
    *
    * @throws Error if the path has no points
    * @example
@@ -397,12 +386,8 @@ export class SimplePath implements Traceable {
   }
 
   /**
-   * The area the path encloses, taking it as closed (the last point joined
-   * back to the first, whether or not `close` was called).
-   *
-   * Always positive, whichever way round the points go. A path that crosses
-   * itself has no one sensible area; the parts it winds around in opposite
-   * directions cancel out.
+   * Returns the absolute signed area, treating the path as closed.
+   * Regions traced in opposite directions cancel out in self-intersecting paths.
    *
    * @example
    * ```ts
@@ -424,13 +409,8 @@ export class SimplePath implements Traceable {
   }
 
   /**
-   * Whether a point falls inside the path, taking it as closed (as `area`
-   * does). Use it to scatter things within an outline, or to decide what a
-   * shape has caught.
-   *
-   * Points exactly on the outline may land either way, as floating point
-   * arithmetic decides; that is unavoidable, and rarely matters when the
-   * points being tested are random.
+   * Tests whether a point is inside the path, treating it as closed.
+   * Points on the boundary may fall on either side due to floating-point rounding.
    *
    * @param point - The point to test
    * @example
@@ -465,18 +445,13 @@ export class SimplePath implements Traceable {
   }
 
   /**
-   * A copy of the path with the points that barely change its shape dropped
-   * (the Ramer-Douglas-Peucker algorithm): every point left out lies within
-   * `tolerance` of the simplified line.
-   *
-   * Chaikin smoothing, tracing a flow field or sampling a curve all give paths
-   * with far more points than their shape needs. Thinning them out first keeps
-   * later work (and exported SVG) manageable, and a heavy tolerance is an
-   * effect in its own right, faceting a smooth curve.
+   * Returns a simplified copy using the Ramer-Douglas-Peucker algorithm.
+   * Removed points lie within `tolerance` of the simplified path.
+   * Larger tolerances reduce the point count and make curves more angular.
    *
    * @param config - Configuration
-   * @param config.tolerance - How far a point may sit from the simplified line
-   * before it has to be kept (default: 0.01, so 1% of the canvas width)
+   * @param config.tolerance - Maximum distance of removed points from the
+   * simplified line (default: 0.01, or 1% of the canvas width)
    * @throws Error if a negative tolerance is given
    * @example
    * ```ts
@@ -513,7 +488,7 @@ export class SimplePath implements Traceable {
         }
       }
 
-      // nothing in between strays far enough to be worth keeping
+      // All intermediate points are within tolerance.
       if (worst <= tolerance) return [a]
       return keep(from, worstAt).concat(keep(worstAt, to))
     }
@@ -524,9 +499,7 @@ export class SimplePath implements Traceable {
   }
 
   /**
-   * The convex hull of the path's points, as a closed path: the smallest
-   * convex shape containing the whole path, as if a rubber band were stretched
-   * around it.
+   * Returns the smallest convex polygon enclosing all path points, as a closed path.
    *
    * @throws Error if the path has no points
    * @example
@@ -544,30 +517,19 @@ export class SimplePath implements Traceable {
   }
 
   /**
-   * A copy of the path shifted sideways by a fixed distance: the parallel
-   * path, as an outline around a line or a contour inside a shape.
+   * Returns a parallel path with mitred corners.
+   * Positive distances offset to the right of the direction of travel: downwards
+   * for a line drawn left to right, or inwards for a clockwise outline.
+   * Negative distances offset to the other side.
    *
-   * A positive distance moves each point a quarter turn clockwise from the
-   * direction of travel, as it appears on screen (where y increases
-   * downwards): a path drawn left to right is offset downwards, and a closed
-   * path drawn clockwise, as the built in shapes' paths are, is offset
-   * inwards. A negative distance goes the other way, so drawing both gives a
-   * ribbon either side of the original.
-   *
-   * Corners are mitred: the offset points sit on the bisector of the angle,
-   * far enough out that both offset segments meet exactly there. A very sharp
-   * corner would throw that point a long way off, so `miterLimit` caps how
-   * far it can go, in multiples of the distance.
-   *
-   * Every point of the original is offset, so a path that crosses itself, or
-   * one offset by more than the radius of its own curves, will produce loops.
-   * `simplified` first, or a smaller distance, generally sorts it out.
+   * `miterLimit` caps corner extensions at a multiple of the offset distance.
+   * Large offsets and self-intersecting paths can produce loops.
    *
    * @param config - Configuration
    * @param config.distance - How far to move sideways, positive being a
    * quarter turn clockwise from the direction of travel
-   * @param config.miterLimit - How far a corner point may be thrown out, in
-   * multiples of the distance (default: 4)
+   * @param config.miterLimit - Maximum corner extension as a multiple of the
+   * offset distance (default: 4)
    * @throws Error if the path has fewer than two distinct points, or the miter
    * limit is less than 1
    * @example
@@ -595,8 +557,7 @@ export class SimplePath implements Traceable {
     const last = this.points[this.points.length - 1]
     const looped = first[0] === last[0] && first[1] === last[1]
 
-    // a repeated point has no direction, so it says nothing about which way
-    // this path is going and cannot be offset
+    // Remove repeated points before calculating segment directions.
     const points = (looped ? this.points.slice(0, -1) : this.points).filter(
       (point, i, all) => i === 0 || v.distance(point, all[i - 1]) > 0
     )

@@ -3,9 +3,9 @@ import { Traceable } from "./index.js"
 import { Align, boxCenter } from "./pathUtil.js"
 import { SimplePath } from "./SimplePath.js"
 /**
- * Technically you can't do ellipses/circles properly with cubic beziers, but you can come very, very close
+ * Approximate an ellipse with four cubic Bézier curves.
  *
- * Uses 4 point, cubic beziers, approximation of (4/3)*tan(pi/8) for control points
+ * Control points use the factor (4/3)*tan(pi/8).
  *
  * https://stackoverflow.com/questions/1734745/how-to-create-circle-with-bézier-curves
  */

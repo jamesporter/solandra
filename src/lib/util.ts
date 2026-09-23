@@ -295,17 +295,10 @@ export const evenProportions = ({
 }
 
 /**
- * The convex hull of a set of points: the smallest convex polygon containing
- * them all, as if a rubber band were stretched around the outside.
- *
- * Points are returned starting from the leftmost (the topmost of them, where
- * several share that x) and going round clockwise as drawn, y increasing
- * downwards as it does on a canvas. The first point is not repeated at the
- * end. Points inside the hull, and points lying along one of its edges, are
- * left out.
- *
- * Uses Andrew's monotone chain algorithm, so the cost is dominated by sorting
- * the points.
+ * Returns the smallest convex polygon enclosing the points.
+ * Vertices run clockwise on screen from the leftmost point (topmost on ties).
+ * The first point is not repeated. Interior and collinear edge points are omitted.
+ * Uses Andrew's monotone chain algorithm.
  *
  * @param points - The points to wrap
  * @returns The hull's corners, or the points themselves if there are fewer

@@ -16,9 +16,9 @@ import {
 
 # Randomness and Noise
 
-Randomness is the raw material of generative art, and Solandra builds it in properly: every `SCanvas` has a **seeded** pseudo-random number generator. The same seed always produces exactly the same picture, which means you can reproduce, iterate on, and export the exact variation you like. Change the seed, get a sibling artwork.
+Each `SCanvas` has a **seeded** pseudorandom number generator. The same seed produces the same sequence of values. Keep the seed to reproduce a sketch, or change it to try another variation.
 
-All the methods below live on `SCanvas` and draw from that seeded generator.
+The `SCanvas` methods below share this generator. The standalone noise functions use fixed noise patterns, independent of the sketch seed.
 
 ## The basics
 
@@ -97,7 +97,7 @@ s.forTiling({ n: 9, type: "square", margin: 0.05 }, ([x, y], [dX]) => {
 
 ## perturb
 
-`perturb({ at, magnitude })` nudges a point by a uniform random offset up to `magnitude / 2` in each direction; the quickest way to make something regular feel hand-made:
+`perturb({ at, magnitude })` offsets a point randomly by up to `magnitude / 2` in each direction:
 
 ```ts
 s.background(35, 40, 94)
@@ -139,7 +139,7 @@ s.forTiling({ n: 12, type: "square" }, ([x, y], [dX, dY]) => {
 
 ## Other distributions
 
-Uniform randomness often looks _too_ random. Solandra also offers:
+For values that cluster around a mean or represent counts, use:
 
 - `gaussian({ mean, sd })` &mdash; normally distributed values, which cluster around the mean
 - `poisson(lambda)` &mdash; non-negative integers with mean (and variance) `lambda`, good for "how many things here?" decisions
@@ -172,7 +172,7 @@ Also see `proportionately` and `doProportion` on the [Iteration](/docs/iteration
 
 ## Perlin noise
 
-Random numbers are independent of each other; **noise** is randomness with continuity: nearby inputs give nearby outputs. Solandra exports a 2D Perlin noise function, `perlin2(x, y)`, returning values in roughly [-1, 1]. Scale your inputs to control the frequency (zoomed-in inputs change slowly, zoomed-out ones quickly).
+`perlin2(x, y)` returns smooth 2D noise, approximately in [-1, 1]. Nearby inputs give similar values. Multiply coordinates by a larger factor for finer detail, or a smaller one for broader variation.
 
 ```ts
 import { perlin2 } from "solandra"
@@ -208,7 +208,7 @@ s.forTiling({ n: 30, type: "square" }, ([x, y], [dX], [cX, cY]) => {
   }}
 />
 
-A classic use is a _flow field_: use noise as an angle everywhere and let particles follow it:
+Use noise as an angle to guide lines through a flow field:
 
 ```ts
 s.background(220, 40, 14)
@@ -246,11 +246,11 @@ s.times(120, (i) => {
 
 ## Fractal noise
 
-Perlin noise is smooth at exactly one scale, which is why hand-rolled terrain and clouds tend to look soft and samey. `fbm2` (fractional Brownian motion) sums several **octaves** of `perlin2`, each one at a higher frequency and lower amplitude than the last, so the large shapes survive whilst fine detail piles up on top of them. The result is scaled back into roughly [-1, 1], so it drops into anywhere `perlin2` fits.
+`fbm2` (fractional Brownian motion) combines layers, or **octaves**, of `perlin2`. Each octave adds finer detail at a lower amplitude. The result is normalised to approximately [-1, 1].
 
 - `octaves` &mdash; how many layers (default 4); one octave is exactly `perlin2`
-- `persistence` &mdash; how much quieter each octave is than the last (default 0.5); higher is rougher
-- `lacunarity` &mdash; how much finer each octave is than the last (default 2)
+- `persistence` &mdash; amplitude multiplier per octave (default 0.5); higher values add stronger detail
+- `lacunarity` &mdash; frequency multiplier per octave (default 2)
 
 ```ts
 import { fbm2 } from "solandra"
@@ -274,7 +274,7 @@ s.forTiling({ n: 60, type: "square" }, ([x, y], [dX, dY]) => {
   }}
 />
 
-Side by side with a single octave the difference is the detail, not the shape: the same hills, but with texture on them.
+Compare a single octave with several octaves below:
 
 ```ts
 s.background(30, 30, 12)
@@ -308,13 +308,13 @@ s.range({ from: 0.1, to: 0.9, n: 24 }, (y) => {
   }}
 />
 
-Like `perlin2`, `fbm2` is a pure function of its coordinates, not of the sketch's random number generator: the same point always gives the same value.
+`perlin2` and `fbm2` depend only on their coordinates and options. Changing the sketch seed does not change them.
 
 ## Curl noise and flow fields
 
-The obvious way to build a flow field is to take a noise value as an angle and follow it. Do that and everything eventually drains into the same few places: such a field has sources and sinks. `curl2` takes the _curl_ of the noise instead, `(∂n/∂y, -∂n/∂x)`, which is divergence free &mdash; nothing accumulates anywhere, so lines following it swirl endlessly around each other.
+`curl2` returns `(∂n/∂y, -∂n/∂x)`, estimated from the noise field. The underlying curl field is divergence-free, making it useful for swirling flows without sources or sinks.
 
-It takes the same `octaves`, `persistence` and `lacunarity` as `fbm2` (one octave by default, i.e. plain `perlin2`), plus `epsilon`, the step used for the derivative. What matters is the vector's direction; its length depends on how fast the noise is changing.
+It accepts the same `octaves`, `persistence` and `lacunarity` options as `fbm2`, with one octave by default. `epsilon` sets the derivative sampling step. The vector's length depends on how quickly the noise changes.
 
 ```ts
 import { curl2, v } from "solandra"
@@ -350,7 +350,7 @@ s.forTiling({ n: 22, type: "square" }, (_, [dX], [cX, cY]) => {
   }}
 />
 
-Rather than drawing the field, follow it: `SimplePath.flowLine` starts somewhere and repeatedly steps in the direction the field points in. It samples the field for direction only, so every step is the same length and any function of a point will do. `until` stops a line early, most usefully when it wanders off the canvas.
+`SimplePath.flowLine` traces a vector field with fixed-length steps. Pass a function from position to direction, and use `until` to stop early, for example at the canvas edge.
 
 ```ts
 s.background(215, 30, 10)
@@ -390,7 +390,7 @@ s.times(120, () => {
   }}
 />
 
-Nothing ties `flowLine` to noise: the field is just a function from a point to a direction. This one pulls everything into a circling orbit around the centre.
+`flowLine` accepts any vector field. This example traces spirals around the centre:
 
 ```ts
 s.background(45, 30, 95)
@@ -429,9 +429,9 @@ s.aroundCircle({ n: 24, r: 0.42 }, (from, i) => {
 
 ## Worley noise
 
-Perlin and its fractal cousins give soft, cloudy noise. `worley2` gives **structure**. It divides space into cells, drops a feature point in each, and answers "how far is the nearest one?". That single idea produces scales, cobbles, cracked mud, stained glass and cells under a microscope.
+`worley2` returns distances to feature points scattered across a grid. Use it for cellular textures such as cobbles or stained glass.
 
-Coordinates are in cells, so `worley2(x * 8, y * 8)` puts eight cells across the canvas. The value is a distance, roughly in `[0, 1]`: zero on a feature point, largest in the awkward gaps between them.
+Coordinates use grid units: `worley2(x * 8, y * 8)` gives eight grid cells across the canvas. Distances are zero at feature points and increase away from them; they are not clamped to [0, 1].
 
 ```ts
 s.forTiling({ n: 150, type: "square" }, ([x, y], [dX, dY]) => {
@@ -451,7 +451,7 @@ s.forTiling({ n: 150, type: "square" }, ([x, y], [dX, dY]) => {
   }}
 />
 
-`feature` picks which distance you get. `"difference"` &mdash; the second nearest point minus the nearest &mdash; falls to zero exactly on the boundary between two cells, so it draws the cracks rather than the cells:
+`feature` selects the nearest distance (`"f1"`), second-nearest (`"f2"`) or their `"difference"`. The difference is zero where two feature points are equally near, outlining cell boundaries:
 
 ```ts
 s.background(205, 25, 96)
@@ -475,7 +475,7 @@ s.forTiling({ n: 200, type: "square" }, ([x, y], [dX, dY]) => {
   }}
 />
 
-Two more knobs change the character entirely. `metric` decides what "near" means: `"euclidean"` (the default) gives round cells, `"manhattan"` diamonds, `"chebyshev"` squares. `jitter` says how far a feature point may stray from the middle of its cell, from 1 (anywhere, the default) down to 0 (a perfectly regular grid).
+`metric` selects the distance measure: `"euclidean"` (default), `"manhattan"` or `"chebyshev"`. `jitter` controls feature-point placement, from 0 (cell centres) to 1 (anywhere in each grid cell, the default).
 
 ```ts
 s.background(175, 35, 12)
@@ -500,7 +500,7 @@ s.forTiling({ n: 160, type: "square" }, ([x, y], [dX, dY], at) => {
   }}
 />
 
-To colour each cell as a whole rather than shading by distance, ask which cell a point is in. `worleyCell2` gives the cell's coordinates, its feature point, a stable `id` (handy modulo something for a colour) and both distances &mdash; and every point in a cell gets the same answer.
+`worleyCell2` returns the nearest feature point, its grid coordinates, a stable `id` and the two nearest distances. Points nearest the same feature share its `id`; use that to give each cell a colour.
 
 ```ts
 s.background(0, 0, 10)
@@ -526,13 +526,13 @@ s.forTiling({ n: 160, type: "square" }, ([x, y], [dX, dY], at) => {
 
 ## Seeds and reproducibility
 
-The seed is supplied when the `SCanvas` is created (in this site's canvases there's a refresh control for it; with the raw API it's a constructor argument). Within a sketch you can also rewind determinism explicitly:
+Pass a seed to the `SCanvas` constructor, or use this site's refresh control to try another. Within a sketch, reset the random generator explicitly:
 
 ```ts
 s.resetRandomNumberGenerator(42) // restart the sequence from a known seed
 ```
 
-If you need seeded randomness _outside_ a sketch, the underlying generator is exported directly:
+For seeded randomness outside a sketch, use the exported generator:
 
 ```ts
 import { RNG } from "solandra"

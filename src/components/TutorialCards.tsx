@@ -9,10 +9,9 @@ export function TutorialCards() {
         />
 
         <p className="p-2">
-          Or an{" "}
+          Draw from{" "}
           <a href="https://www.amimetic.co.uk/art/solving-sol-with-solandra">
-            unconventional tutorial introduction based on instructions from Sol
-            LeWitt
+            instructions by Sol LeWitt
           </a>
         </p>
       </div>
@@ -24,9 +23,9 @@ export function TutorialCards() {
           className="w-full aspect-square"
         />
         <p className="p-2">
-          This tutorial shows how you might use Solandra as a way to do{" "}
+          Design{" "}
           <a href="https://www.amimetic.co.uk/art/generative-icon-design-a-solandra-tutorial/">
-            Generative design for App Icons
+            generative app icons
           </a>
         </p>
       </div>
@@ -38,9 +37,9 @@ export function TutorialCards() {
           alt="Wallpaper Solandra Tutorial"
         />
         <p className="p-2">
-          Alternatively, why not{" "}
+          Create{" "}
           <a href="https://www.amimetic.co.uk/art/apple-style-wallpaper/">
-            create iOS 13 style wallpapers with Solandra
+            wallpapers inspired by iOS 13
           </a>
           .
         </p>

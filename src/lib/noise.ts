@@ -1,5 +1,5 @@
 /**
- * 2D Perlin noise implementation for organic, natural-looking randomness.
+ * 2D Perlin, fractal, curl and cellular noise.
  * Adapted from public domain code: https://github.com/josephg/noisejs/blob/master/perlin.js
  * @module noise
  */
@@ -102,9 +102,8 @@ function seedNoise(seed: number) {
 seedNoise(0)
 
 /**
- * Generates 2D Perlin noise at the given coordinates.
- * Returns smooth, continuous noise values useful for organic patterns and textures.
- * The output range is approximately -1 to 1, though values at the extremes are rare.
+ * Returns smooth 2D Perlin noise, approximately in [-1, 1].
+ * Nearby coordinates produce similar values. The sketch seed has no effect.
  *
  * @param ax - X coordinate (can be any real number)
  * @param ay - Y coordinate (can be any real number)
@@ -150,30 +149,23 @@ export function perlin2(ax: number, ay: number) {
 }
 
 /**
- * Fractal (fractional Brownian motion) noise: several octaves of {@link perlin2}
- * summed together, each at a higher frequency and lower amplitude than the last.
- *
- * Plain Perlin noise is smooth at exactly one scale, which is why hand rolled
- * terrain and cloud textures tend to look soft and samey. Adding octaves keeps
- * the large scale shape whilst piling detail on top of it.
- *
- * The result is scaled by the total amplitude, so it stays in roughly the same
- * range as `perlin2` (approximately [-1, 1]) whatever the settings.
+ * Combines octaves of {@link perlin2} at different frequencies and amplitudes.
+ * The result is normalised by total amplitude to approximately [-1, 1].
  *
  * @param ax - X coordinate (can be any real number)
  * @param ay - Y coordinate (can be any real number)
  * @param config - Fractal configuration
  * @param config.octaves - How many layers of noise to sum (default: 4). One
  * octave is just `perlin2`; each further octave adds finer detail.
- * @param config.persistence - How much quieter each octave is than the last
+ * @param config.persistence - Amplitude multiplier per octave
  * (default: 0.5). Higher is rougher, lower is smoother.
- * @param config.lacunarity - How much finer each octave is than the last
+ * @param config.lacunarity - Frequency multiplier per octave
  * (default: 2, i.e. each octave has twice the frequency)
  * @returns A noise value approximately in the range [-1, 1]
  * @throws Error if fewer than one octave is requested
  * @example
  * ```ts
- * // Cloudy, multi-scale texture rather than smooth blobs
+ * // Cloud texture with five octaves
  * s.forTiling({ n: 100, type: "square" }, ([x, y], [dX, dY]) => {
  *   const n = fbm2(x * 4, y * 4, { octaves: 5 })
  *   s.setFillColor(210, 40, 50 + n * 40)
@@ -217,19 +209,10 @@ export function fbm2(
 }
 
 /**
- * Curl noise: a smooth vector field derived from {@link fbm2}, in which
- * nothing ever converges or piles up.
- *
- * The obvious way to make a flow field is to take a noise value as an angle,
- * but such fields have sources and sinks: follow them and everything drains
- * into the same few places. This instead takes the noise as a stream function
- * and returns its curl, `(∂n/∂y, -∂n/∂x)`, which is divergence free, so lines
- * following it swirl around each other indefinitely without collapsing
- * together.
- *
- * The vector's direction is what matters; its magnitude depends on how fast
- * the underlying noise is changing. `SimplePath.flowLine` normalizes it, and
- * `v.normalize` will do the same by hand.
+ * Estimates the curl of {@link fbm2} as `(∂n/∂y, -∂n/∂x)`.
+ * The underlying curl field is divergence-free and useful for swirling flows.
+ * Vector length depends on the noise gradient; `SimplePath.flowLine`
+ * normalises it for fixed-length steps.
  *
  * @param ax - X coordinate (can be any real number)
  * @param ay - Y coordinate (can be any real number)
@@ -239,8 +222,8 @@ export function fbm2(
  * precision.
  * @param config.octaves - Octaves of the underlying noise (default: 1, i.e.
  * plain `perlin2`). More octaves give a more turbulent field.
- * @param config.persistence - How much quieter each octave is (default: 0.5)
- * @param config.lacunarity - How much finer each octave is (default: 2)
+ * @param config.persistence - Amplitude multiplier per octave (default: 0.5)
+ * @param config.lacunarity - Frequency multiplier per octave (default: 2)
  * @returns A vector [x, y], the curl of the noise at that point
  * @example
  * ```ts
@@ -365,7 +348,7 @@ function worleyNearest(
   let at: [number, number] = [ax, ay]
   let id = 0
 
-  // a feature point never leaves its own cell, so the neighbours are enough
+  // Search this grid cell and its eight neighbours.
   for (let i = cX - 1; i <= cX + 1; i++) {
     for (let j = cY - 1; j <= cY + 1; j++) {
       const point = worleyPoint(i, j, jitter)
@@ -386,18 +369,10 @@ function worleyNearest(
 }
 
 /**
- * Worley (cellular) noise: space divided into cells, each with a feature point
- * somewhere inside it, and the value at a point given by how far away the
- * nearest of those points is.
- *
- * Where `perlin2` gives soft clouds, this gives structure - scales, cobbles,
- * cracked mud, stained glass, cells under a microscope. Coordinates are in
- * cells, so `worley2(x * 8, y * 8)` puts eight cells across the canvas.
- *
- * `"difference"` (the distance to the second nearest point minus the distance
- * to the nearest) is the useful one for outlines: it falls to zero exactly on
- * the boundaries between cells, drawing the cracks rather than filling the
- * cells.
+ * Returns distances to feature points scattered across a grid.
+ * Coordinates use grid units: `worley2(x * 8, y * 8)` gives eight grid cells
+ * across the canvas. Use `"difference"` to outline cell boundaries, where the
+ * two nearest feature points are equally distant.
  *
  * @param ax - X coordinate, in cells (can be any real number)
  * @param ay - Y coordinate, in cells (can be any real number)
@@ -409,7 +384,7 @@ function worleyNearest(
  * its cell, 0 (a regular grid) to 1 (anywhere in the cell, the default)
  * @param config.metric - `"euclidean"` (default) for round cells,
  * `"manhattan"` for diamonds, `"chebyshev"` for squares
- * @returns A distance in cells, roughly in the range [0, 1]
+ * @returns A distance in grid units, not clamped to [0, 1]
  * @throws Error if jitter is outside [0, 1]
  * @example
  * ```ts
@@ -446,12 +421,9 @@ export function worley2(
 }
 
 /**
- * The cell a point falls in, for colouring each cell as a whole rather than
- * shading by distance.
- *
- * Everywhere within one cell gets the same `id` and `at`, so a mosaic can be
- * built by asking for every pixel (or tile) and looking the colour up from the
- * id, and shapes can be placed on the feature points themselves.
+ * Returns the nearest feature point, its grid coordinates, ID and distances.
+ * Points nearest the same feature share its `id` and `at`.
+ * Use the ID to assign a colour to each cell.
  *
  * @param ax - X coordinate, in cells (can be any real number)
  * @param ay - Y coordinate, in cells (can be any real number)
@@ -460,7 +432,7 @@ export function worley2(
  * its cell, 0 to 1 (default: 1)
  * @param config.metric - How distance is measured (default: "euclidean")
  * @returns The cell's integer coordinates, its feature point, a stable id for
- * it (an integer in [0, 65535], handy modulo something for a colour), and the
+ * it (an integer in [0, 65535]), and the
  * distances to the nearest and second nearest feature points
  * @throws Error if jitter is outside [0, 1]
  * @example

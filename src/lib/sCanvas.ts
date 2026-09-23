@@ -18,18 +18,9 @@ export interface Gradientable {
 }
 
 /**
- * SCanvas (Solandra Canvas) - The main API for creating generative art.
- *
- * A normalized canvas where the width is always 1, with height determined by aspect ratio.
- * Provides human-friendly APIs for drawing, iteration, randomness, and transformations.
- *
- * Key Features:
- * - Normalized coordinate system (width = 1)
- * - Seeded randomness for reproducibility
- * - Iteration utilities (tiling, grids, circles)
- * - Transform helpers (rotation, scale, translation)
- * - Color management with HSLA
- * - Time-based animations
+ * The drawing context for a Solandra sketch.
+ * Canvas width is 1; height follows the aspect ratio. Provides shapes,
+ * HSLA colours, seeded randomness, iteration and scoped transforms.
  *
  * @example
  * ```ts
@@ -63,9 +54,9 @@ export default class SCanvas {
   ) {
     ctx.resetTransform()
     this.aspectRatio = width / height
-    // i.e. size 1 = entire width
+    // One canvas unit equals the full pixel width.
     this.originalScale = width
-    // i.e. size 1/100 of width
+    // Scale both axes equally to preserve shape proportions.
     ctx.scale(width, width)
     ctx.lineWidth = 0.01
     ctx.lineJoin = "round"
@@ -80,28 +71,24 @@ export default class SCanvas {
   }
 
   /**
-   * Allow for re-use of a single SCanvas
-   *
-   * In examples and most early use just recreated but this is somewhat wasteful
+   * Set the time in seconds without resetting the random generator.
    */
   updateTime(time: number) {
-    // @ts-ignore (sorry but don't want other people to do this!)
+    // @ts-ignore Updated internally; readonly for callers.
     this.t = time
   }
 
   /**
-   * Allow for re-use of a single SCanvas
-   *
-   * In examples and most early use just recreated but this is somewhat wasteful
+   * Update the canvas scale and bounds for a new pixel size.
    */
   updateSize({ width, height }: { width: number; height: number }) {
     this.ctx.resetTransform()
-    // @ts-ignore (sorry but don't want other people to do this!)
+    // @ts-ignore Updated internally; readonly for callers.
     this.aspectRatio = width / height
-    // i.e. size 1 = entire width
-    // @ts-ignore (sorry but don't want other people to do this!)
+    // One canvas unit equals the full pixel width.
+    // @ts-ignore Updated internally; readonly for callers.
     this.originalScale = width
-    // i.e. size 1/100 of width
+    // Scale both axes equally to preserve shape proportions.
     this.ctx.scale(width, width)
 
     this.meta = this.currentMeta()
@@ -141,7 +128,7 @@ export default class SCanvas {
   }
 
   /**
-   * The supplied pattern is at scale of canvas
+   * Dash lengths use canvas units.
    */
   set dash({
     pattern = [0.05, 0.05],
@@ -161,7 +148,7 @@ export default class SCanvas {
   }
 
   /**
-   * Shadow scale is at size of Canvas. (This is not how HTML 5 Canvas works.)
+   * Shadow blur and offsets use canvas units.
    */
   set shadow({
     size = 0.01,
@@ -505,8 +492,7 @@ export default class SCanvas {
   }
 
   /**
-   * Builds an array of values using iteration utilities instead of drawing directly.
-   * Useful for collecting data from iteration patterns for further processing.
+   * Collects an iteration callback's return values into an array.
    *
    * @template C - Configuration type for the iteration function
    * @template T - Tuple type of callback parameters
@@ -607,13 +593,9 @@ export default class SCanvas {
   }
 
   /**
-   * Iterates over a polar grid: rings of cells going out from a centre, each
-   * ring divided into the same number of sectors. The `forTiling` of circles,
-   * for dartboards, rose windows, sunbursts and radial charts.
-   *
-   * Each cell arrives as a `HollowArc`, ready to fill or draw, along with the
-   * point at the middle of it and its bounds, so things can be placed in a
-   * cell and, using the mid angle of `a` and `a2`, turned to face outwards.
+   * Divides concentric rings into sectors.
+   * Each callback receives a cell's centre, its HollowArc, its bounds and index.
+   * Use the midpoint of the bounds' angles to orient shapes outwards.
    *
    * @param config - Configuration
    * @param config.n - How many sectors each ring is divided into
@@ -733,8 +715,7 @@ export default class SCanvas {
   }
 
   /**
-   * Randomly selects and executes one case from weighted options.
-   * Each case has a weight (proportion) and a function to execute if selected.
+   * Chooses and runs one callback by weight. Weights need not sum to 1.
    *
    * @template T - Return type of the case functions
    * @param cases - Array of [weight, function] tuples
@@ -795,10 +776,8 @@ export default class SCanvas {
   }
 
   /**
-   * Iterates over points evenly spaced along a path, by distance travelled.
-   *
-   * The callback also gets the angle the path is heading in at each point, so
-   * things can be laid out following the path rather than just sitting on it.
+   * Visits points spaced evenly by distance along a path.
+   * The callback receives each point, its tangent angle in radians and its index.
    *
    * @param config - Configuration
    * @param config.path - The path to follow. A `SimplePath`, or anything with
@@ -946,10 +925,8 @@ export default class SCanvas {
   }
 
   /**
-   * Draws the same thing several times over, arranged symmetrically: the
-   * callback runs once per copy, with the canvas already rotated and/or
-   * reflected, so a single shape becomes a rosette, a mirrored pair or a
-   * kaleidoscope.
+   * Repeats a callback with rotations or reflections around a centre.
+   * Each copy has its own saved drawing state.
    *
    * @param config - Configuration
    * @param config.type - "rotational" (default) for `n` rotated copies,
@@ -1087,7 +1064,7 @@ export default class SCanvas {
   }
 
   /**
-   * n uniform samples from an array
+   * Return n uniform samples from an array, with replacement.
    */
   samples = <T>(n: number, from: T[]): T[] => {
     let res: T[] = []
@@ -1098,7 +1075,7 @@ export default class SCanvas {
   }
 
   /**
-   * Shuffle an array
+   * Shuffle an array in place.
    */
   shuffle = <T>(items: T[]): T[] => {
     let currentIndex = items.length
@@ -1119,9 +1096,8 @@ export default class SCanvas {
   }
 
   /**
-   * Perturb a point by a random amount (by default uniform random changes in
-   * -0.05 to 0.05, optional magnitude scales this e.g. magnitude 1 is perturbations
-   * of -0.5 to 0.5)
+   * Offset each coordinate uniformly by up to magnitude / 2.
+   * The default magnitude of 0.1 gives offsets from -0.05 to 0.05.
    */
   perturb = (config: { at: Point2D; magnitude?: number }): Point2D => {
     const {
@@ -1161,8 +1137,7 @@ export default class SCanvas {
   }
 
   /**
-   * Creates smooth oscillating values over time using cosine.
-   * Useful for animations that loop seamlessly.
+   * Returns a value that oscillates between two bounds using cosine and `this.t`.
    *
    * @param config - Oscillation parameters
    * @param config.from - Minimum value (default: 0)

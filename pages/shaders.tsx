@@ -68,7 +68,7 @@ void main() {
 }
 `
 
-// Just setting up something simpler for here... want to move this stuff into main mdx docs when stable
+// Fixed-size canvas for the shader examples below.
 function ShaderExampleCanvas({ sketch }: { sketch: Sketch }) {
   const ref = useRef<HTMLCanvasElement>(null)
   useEffect(() => {
@@ -99,28 +99,22 @@ export default function Shaders() {
           Shaders (Preview)
         </h1>
         <p>
-          Solandra can leverage GLSL fragment shaders, though this is not
-          intended to be for realtime rendering (for that you should think about
-          more efficient approaches). This offers an efficient per-pixel way of
-          drawing, in contrast to the standard vector and curve based approach
-          of most of Solandra. This can be combined interesting ways by drawing
-          rendered shader layers onto canvases. You can use blend modes for
-          control. We can also use rendered Solandra canvas or shader layers
-          within shaders themselves.
+          Render GLSL fragment shaders to images, then draw them in a sketch.
+          Use clipping and blend modes to combine them with shapes. You can also
+          pass rendered sketches or shader images into another shader.
         </p>
 
         <p>
-          This is a preview feature, but if you have a look a{" "}
+          See{" "}
           <a href="https://github.com/jamesporter/solandra/blob/main/pages/shaders.tsx">
             the source code for this page
           </a>{" "}
-          it will show the fundamentals.
+          for the full examples.
         </p>
 
         <p>
-          Here are a few simple examples. We create a couple of images and
-          render to canvas. In the third example we use a custom compositing
-          (blend) mode.
+          These examples draw a shader image, clip it to a polygon, and blend
+          noise with a background and star.
         </p>
 
         <ShaderExampleCanvas
