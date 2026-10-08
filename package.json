@@ -33,7 +33,7 @@
     "canvas": "^3.2.3",
     "classnames": "^2.5.1",
     "gray-matter": "^4.0.3",
-    "next": "^16.3.4",
+    "next": "^16.3.8",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-syntax-highlighter": "^16.1.1",
