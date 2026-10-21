@@ -58,7 +58,7 @@
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.13",
     "typescript": "7.0.2",
-    "vite": "^8.2.2",
+    "vite": "^8.2.4",
     "vitest": "^5.0.0"
   },
   "license": "MIT",
